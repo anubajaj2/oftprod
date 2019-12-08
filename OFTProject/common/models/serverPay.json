@@ -1,0 +1,88 @@
+{
+	"name": "ServerPay",
+	"plural": "ServerPays",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"Type": {
+			"type": "string",
+			"required": true,
+			"default": "Payment"
+		},
+		"PaymentDate": {
+			"type": "date",
+			"required": true
+		},
+		"StudentId": {
+			"type": "string",
+			"default": "null"
+		},
+		"ServerId": {
+			"type": "string",
+			"default": "null"
+		},
+		"Amount": {
+			"type": "number",
+			"required": true,
+			"default": 0
+		},
+		"Count": {
+			"type": "number",
+			"required": true,
+			"default": 0
+		},
+		"Remarks": {
+			"type": "string",
+			"default": "null"
+		},
+		"Update": {
+			"type": "string",
+			"default": "null"
+		},
+		"Extra": {
+			"type": "number",
+			"default": 0
+		},
+		"Extra1": {
+			"type": "string",
+			"default": "null"
+		},
+		"CreatedOn": {
+			"type": "date",
+			"default": "null"
+		},
+		"CreatedBy": {
+			"type": "string",
+			"default": "null"
+		},
+		"ChangedOn": {
+			"type": "date",
+			"default": "null"
+		},
+		"ChangedBy": {
+			"type": "string",
+			"default": "null"
+		}
+	},
+	"scope": {
+		"order": "CreatedOn DESC"
+	},
+	"validations": [],
+	"relations": {
+		 "Server":{
+			"type": "belongsTo",
+			"model": "Server",
+			"foreignKey": "ServerId"
+		 }
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}

@@ -1,0 +1,66 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc">
+	<Dialog title="Record Payment" afterClose="destoryDialog">
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm id="updPayment" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+				adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+				singleContainerFullSize="false">
+				<f:content>
+					<Label text="{i18n>customerId}"/>
+					<Input id="idCust_upd" value="{local>/newRegistration/StudentId}" enabled="false"></Input>
+					<Label text="{i18n>courseName}"/>
+					<Input id="idCourse_upd" value="{local>/newRegistration/CourseId}" enabled="false" showValueHelp="true"
+						 valueHelpRequest="onSelect" valueHelpOnly="true"></Input>
+					<Label text="Payment Date"/>
+					<!--<DatePicker id="idPayDate_upd" displayFormat="dd.MM.yyyy" required="true" value="{local>/newRegistration/PaymentDate}"-->
+					<!--	change="onPayDateChange"></DatePicker>-->
+					<DatePicker id="idPayDate_upd" displayFormat="dd.MM.yyyy" required="true" value="{local>/newRegistration/PaymentDate}" valueFormat="dd.MM.yyyy"
+							change="onPayDateChange"></DatePicker>
+					<Label text="Payment Due Date"/>
+					<!--<DatePicker id="idPayDueDate_upd" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/PaymentDueDate}" ></DatePicker>-->
+				    <DatePicker id="idPayDueDate_upd" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/PaymentDueDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+
+						<Label text="Blog End Date"/>
+							<DatePicker id="idEndDate_upd" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/EndDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+					<Label text="Payment Mode"/>
+					<Select id="paymentMode_upd" required="true" selectedKey="{local>/newRegistration/PaymentMode}">
+						<core:Item key="IMPS" text="Internet Banking"></core:Item>
+						<core:Item key="PAYTM" text="PayTM"></core:Item>
+						<core:Item key="PAYPAL" text="Paypal/Xoom"></core:Item>
+						<core:Item key="USA" text="Wire Transfer"></core:Item>
+					</Select>
+					<Label text="Account Details"/>
+					<!--<Input id="accountDetails" type="Email" required="true" value="{local>/newRegistration/AccountName}" showValueHelp="true"-->
+					<Input id="accountDetails_upd" required="false" value="{local>/newRegistration/AccountName}" showValueHelp="true" valueHelpOnly="true"
+						valueHelpRequest="onSelect"/>
+					<Text id="accountDetails_name" text="{local>/BeneficiaryName}"/>
+					<Label id="idAmount_Txt" text="Amount(Pending from previous payment)"/>
+					<Input id="idAmount_upd" type="Number" value="{local>/newRegistration/Amount}" liveChange="onAmountChange"></Input>
+					<Label text="Pending Amount"/>
+					<Input id="idPendingAmount_upd" type="Number" value="{local>/newRegistration/PendingAmount}" liveChange="onPendingAmountChange"></Input>
+					<Label text="Remarks"/>
+					<Input id="idRemarks_upd" value="{local>/newRegistration/Remarks}"></Input>
+					<Label text="Reference No"/>
+					<Input id="idReference_upd" value="{local>/newRegistration/Reference}"></Input>
+					<!--<Label text="Waiver Provided"></Label>-->
+					<!--<CheckBox id="idWaiver_upd" selected="{local>/newRegistration/Waiver}" select="onWaiver"></CheckBox>-->
+					<!--<Label text="Attachments"/>-->
+					<!--<u:FileUploader id="imageUploader_upd" placeholder="Payment Screenshot"></u:FileUploader>-->
+					<!--<Button width="33%" padding="0px" margin="0px" text="Upload" press="onUpload" icon="sap-icon://upload"></Button>-->
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<buttons>
+		<Button id="idPortSubs" text="Port" icon="sap-icon://car-rental" press="onPortSubs"></Button>
+    <Button id="idExtendSubs" text="Extend" icon="sap-icon://write-new-document" press="onExtendSubs"></Button>
+    <Button id="updPay" text="Save" icon="sap-icon://save" press="onCreateNewPayment" type="Accept"></Button>
+		<Button id="closeFrag" text="Close" press="onClose"></Button>
+		</buttons>
+		<!-- <beginButton>
+			<Button id="updPay" text="Save" icon="sap-icon://save" press="onCreateNewPayment" type="Accept"></Button>
+		</beginButton>
+		<endButton>
+			<Button id="closeFrag" text="Close" press="onClose"></Button>
+		</endButton> -->
+	</Dialog>
+</core:FragmentDefinition>

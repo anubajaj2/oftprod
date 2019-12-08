@@ -1,0 +1,59 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+              	xmlns:f="sap.ui.layout.form">
+				<f:SimpleForm id="serverSubs"
+				editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
+				labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+				singleContainerFullSize="false">
+				<f:content>
+					<Label text="{i18n>payDate}" />
+					<DatePicker id="payDate" required="true" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" type="sap.ui.model.type.Date" value="{}"></DatePicker>
+
+					<Label text="{i18n>user}"/>
+					<Input id="serverUId" required="true" value="{}"/>
+
+					<Label text="{i18n>customerId}"/>
+					<Input id="customerId" required="true" value="{}" showValueHelp="true"
+						   valueHelpRequest="onSelect" valueHelpOnly="true"/>
+
+					<Text id="name" text=""/>
+
+					<Label text="{i18n>startDate}/{i18n>endDate}" />
+					<DatePicker id="startDate" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" value="{}" change="onStartChange"></DatePicker>
+
+					<!--<Label text="{i18n>endDate}" />-->
+					<DatePicker id="endDate" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" value="{}" ></DatePicker>
+
+					<Label text="{i18n>UserEndDate}" />
+					<DatePicker id="userEndDate" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" value="{}"></DatePicker>
+
+					<Label text="{i18n>RDPGUIPwd}"/>
+					<Input id="rdpPass"  value="{}"/>
+
+					<Input id="passGui" value="{}"/>
+
+					<Label text="{i18n>amount}/{i18n>Usage}"/>
+					<Input id="amount" type="Number" value="{}"></Input>
+
+					<Input id="usage" type="Number" placeholder="{i18n>Usage}" value="{}"></Input>
+
+          <Label text="Account details"/>
+					<ComboBox id="accountNo" items="{local>/accountSet}">
+            <items>
+              <core:Item key="{local>key}" text="{local>value}" selectedKey="50180025252811"/>
+            </items>
+          </ComboBox>
+
+					<Label text="{i18n>freeAccess}"></Label>
+					<CheckBox id="freeAccess" select="onWaiver"></CheckBox>
+
+					<Label text="{i18n>extended}"></Label>
+					<CheckBox id="extended"  ></CheckBox>
+
+					<Input id="cid" value="{StudentId}" visible="false"></Input>
+					<Input id="Rid" value="{StudentId}" visible="false"></Input>
+					<Label text="{i18n>Remarks}"></Label>
+					<TextArea id="Remarks" value="{}"></TextArea>
+
+				</f:content>
+			</f:SimpleForm>
+</core:FragmentDefinition>

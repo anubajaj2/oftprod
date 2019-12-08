@@ -1,0 +1,95 @@
+{
+  "name": "Inquiry",
+  "plural": "Inquries",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "EmailId": {
+      "type": "string",
+      "required": true
+    },
+    "CourseName": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "FirstName": {
+      "type": "string",
+      "default": "null"
+    },
+    "LastName": {
+      "type": "string",
+      "default": "null"
+    },
+    "Date": {
+      "type": "date"
+    },
+    "Country": {
+      "type": "string",
+      "default": "null"
+    },
+    "Phone": {
+      "type": "number",
+      "default":0
+    },
+    "Subject": {
+      "type": "string",
+      "default": "null"
+    },
+    "Message": {
+      "type": "string",
+      "default": "null"
+    },
+    "SoftDelete": {
+      "type": "boolean",
+      "default": false
+    },
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "fees":{
+      "type": "string",
+      "default": "18000"
+    },
+    "currency":{
+      "type": "string",
+      "default": "INR"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "CreatedByTo": {
+			"type": "belongsTo",
+			"model": "AppUser",
+			"foreignKey": "CreatedBy"
+		},
+    "ChangedByTo": {
+			"type": "belongsTo",
+			"model": "AppUser",
+			"foreignKey": "ChangedBy"
+		}
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

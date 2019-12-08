@@ -1,0 +1,18 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory",
+    "file": "storage/data.json"
+  },
+  "db_productive": {
+    "name": "db_productive",
+    "connector": "memory",
+    "file": "storage/data_dbprod.json"
+  },
+  "mongoatlasx": {
+    "url": "mongodb://anubhav:GbPOHnk2JSfbe44g@oft-shard-00-00-kyg3j.mongodb.net:27017,oft-shard-00-01-kyg3j.mongodb.net:27017,oft-shard-00-02-kyg3j.mongodb.net:27017/test?ssl=true&replicaSet=oft-shard-0&authSource=admin&retryWrites=true",
+    "database": "test",
+    "name": "mongoatlas",
+    "connector": "mongodb"
+  }
+}

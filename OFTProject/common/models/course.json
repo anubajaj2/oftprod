@@ -1,0 +1,122 @@
+{
+  "name": "Course",
+  "plural": "Courses",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "Name": {
+      "type": "string",
+      "required": true,
+      "default": "SAP UI5 and Fiori"
+    },
+    "BatchNo": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "DemoStartDate": {
+      "type": "date",
+      "required": true
+    },
+    "StartDate": {
+      "type": "date",
+      "required": true
+    },
+    "EndDate": {
+      "type": "date",
+      "required": true
+    },
+    "ReminderDate": {
+      "type": "date",
+      "required": false
+    },
+    "BlogEndDate": {
+      "type": "date",
+      "required": true
+    },
+    "Link": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "Weekend": {
+      "type": "boolean",
+      "default": false
+    },
+    "Timings": {
+      "type": "string",
+      "default": "null"
+    },
+    "Fee": {
+      "type": "number",
+      "required": true,
+      "default": 15000
+    },
+    "Extra": {
+      "type": "string",
+      "default": "null"
+    },
+    "Extra1": {
+      "type": "string",
+      "default": "null"
+    },
+    "CalendarId": {
+      "type": "string",
+      "default": "null"
+    },
+    "EventId": {
+      "type": "string",
+      "default": "null"
+    },
+    "DriveId": {
+      "type": "string",
+      "default": "null"
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false
+    },
+    "analysis": {
+      "type": "boolean",
+      "default": false
+    },
+    "status":{
+      "type": "string",
+      "default": " "
+    },
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+      "default": "null"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "Subscriptions": {
+      "type": "hasMany",
+      "model": "Sub",
+      "foreignKey": "CourseId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

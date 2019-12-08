@@ -1,0 +1,152 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="oft.fiori.controller.BankAccount" xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page>
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<!--<Button text="call" press="super"></Button>-->
+
+				<f:SimpleForm>
+					<f:content>
+						<Label text="Entry Date"/>
+						<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy"
+							value="{local>/accountBalance/CreatedOn}" valueFormat="dd.MM.yyyy"
+							></DatePicker>
+						<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+						id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+
+						<Label text="Account No"/>
+						<Input id="accountDetails" required="false"
+							value="{local>/accountBalance/AccountNo}"
+							showValueHelp="true" valueHelpOnly="true"
+							valueHelpRequest="onSelect"/>
+
+						<Label text="Amount"/>
+						<Input id="idAmount" value="{local>/accountBalance/Amount}" type="Number"/>
+
+						<Label text="Remarks"/>
+						<Input id="idRemark" value="{local>/accountBalance/Remarks}"/>
+						<Button id="sendData" text="Send" press="onSend" />
+					</f:content>
+				</f:SimpleForm>
+
+				<Panel title="Account Entry">
+					<Table id="idAcEntry" items="{/AccountBalances}" growing="true"
+						 growingThreshold="10"
+						growingScrollToLoad="false" mode="MultiSelect"
+			      class="sapUiSizeCompact"
+						showRowCount="true"  updateFinished="onUpdateFinished" >
+						<headerToolbar>
+							<Toolbar>
+							<Title
+									id="titletext11" text="Account Entry"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<Button icon="sap-icon://refresh" press="onRefresh"/>
+						</Toolbar>
+							</headerToolbar>
+							<columns>
+							<Column>
+								<Label text="{i18n>EntryDate}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="{i18n>AccountName}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="{i18n>amount}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="{i18n>Remarks}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="delete" class="columnLabelStyle"/>
+							</Column>
+
+						</columns>
+						<items>
+							<ColumnListItem id="idColumnlist" press="onItemPress"  type="Active" >
+								<cells>
+									<Text text="{CreatedOn}" modelContextChange="onStudentIdChange" ></Text>
+									<HBox>
+										<Text text="{AccountNo}" ></Text>
+									</HBox>
+									<Text text="{Amount}" ></Text>
+									<Text text="{Remarks}"></Text>
+									<Button tooltip="delete" icon="sap-icon://delete" press="onDelete" />
+									<!--<Text visible="{= ${local>/Role} === 'Admin'}"
+														  text="{Remarks}" />-->
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+				<Panel title="Summary">
+					<Table id="idSummary" items="{viewModel>/records}" growing="true"
+						growingScrollToLoad="false" mode="MultiSelect"
+			      class="sapUiSizeCompact"
+						showRowCount="true"  updateFinished="onUpdateFinished" >
+						<headerToolbar>
+							<Toolbar>
+							<Title
+									id="newtitle" text="Account Summary"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<Button text="getNextAc" press="onGetNext" />
+						</Toolbar>
+							</headerToolbar>
+							<columns>
+							<Column>
+								<Label text="AcNo" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="{i18n>AccountName}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="ThisFY" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="{i18n>Amount}" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Mark" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Bank" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Counter" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="AllCounter" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Key" class="columnLabelStyle"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem id="idColumnlistSumm" press="onItemPress"  type="Active" >
+								<cells>
+									<Text text="{viewModel>AccountNo}"  ></Text>
+									<Text text="{viewModel>AccountName}"  ></Text>
+
+									<Text text="{path: 'viewModel>NewDeposit',
+										formatter: '.formatter.getIndianCurr'}"  ></Text>
+
+									<Text text="{path: 'viewModel>Amount',
+										formatter: '.formatter.getIndianCurr'}"  ></Text>
+
+									<CheckBox selected="{viewModel>current}" select="onAcSelect"/>
+									<Button visible="{= ${local>/Role} === 'Admin'}"
+										icon="sap-icon://loan" press="onBank"></Button>
+									<Text text="{viewModel>counter}" />
+									<Link text="{viewModel>counterall}" press="MResetCounter"/>
+									<Link text="{viewModel>key}" press="MSetKey"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+		</content>
+	</Page>
+</mvc:View>

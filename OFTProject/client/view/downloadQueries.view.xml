@@ -1,0 +1,91 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout"
+	xmlns:u="sap.ui.unified" controllerName="oft.fiori.controller.downloadQueries"
+	xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Reports and Queries" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>		
+		<content>
+			<HBox>
+				<RadioButton groupName="GroupA" text="Display Result" selected="{local>/reports/display}"/>
+				<RadioButton groupName="GroupA" text="Download Excel" selected="{local>/reports/pdf}"/>
+				<RadioButton groupName="GroupA" text="Download Pdf"   selected="{local>/reports/excel}"/>
+			</HBox>
+			<VBox  class="sapUiSmallMargin">
+				<l:VerticalLayout>
+					<u:FileUploader
+						id="fileUploader"
+						name="myFileUpload"
+						uploadUrl="/upload"
+						tooltip="Upload your file to the local server"
+						uploadComplete="handleUploadComplete"/>
+					<!--<Button
+						text="Upload File"
+						press="handleUploadPress"/>-->
+					<Button
+							text="Update Inquiry"
+							press="updateInq"/>
+					<!--<Button
+									text="Fill Coll"
+									press="fillColl"/>
+					<Button text="Take backup" press="TakeBackup" />-->
+
+				</l:VerticalLayout>
+			</VBox>
+			<VBox class="sapUiSmallMargin">
+				<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
+					labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+					singleContainerFullSize="false" ariaLabelledBy="New Inquiry">
+					<f:toolbar>
+						<Toolbar id="TB1">
+							<Title id="Choose" text="Choose Options" level="H4" titleStyle="H4"/>
+							<ToolbarSpacer/>
+						</Toolbar>
+					</f:toolbar>
+					<f:content>
+						<Label text="Report Name"/>
+						<Select required="true" id="course" selectedKey="{local>/reports/reportType}">
+							<core:Item text="Students" key="Students"/>
+							<core:Item text="Courses" key="Courses"/>
+							<core:Item text="Batches" key="Batches"/>
+							<core:Item text="Subscriptions" key="Subs"/>
+							<core:Item text="Server Usage" key="Server"/>
+							<core:Item text="Pending Payments" key="Pendings"/>
+							<core:Item text="On going Batches" key="Batch"/>
+							<core:Item text="Same Server" key="ServerUsage"/>
+						</Select>
+						<Label text="Manual Query"/>
+						<TextArea id="queryStr" value="{local>/reports/query}" width="500px" height="200px"></TextArea>
+						<Label text=""/>
+						<Button text="Execute" press="onExecute"></Button>
+					</f:content>
+				</f:SimpleForm>
+			</VBox>
+			<VBox>
+				<Table noDataText="Data will display here" class="sapUiSmallMarginBegin sapUiSmallMarginEnd">
+					<columns>
+						<Column><header>
+							<Text text="dynamic Column"/>
+						</header></Column>
+						<Column><header>
+							<Text text="dynamic Column"/>
+						</header></Column>
+						<Column><header>
+							<Text text="dynamic Column"/>
+						</header></Column>
+						<Column><header>
+							<Text text="dynamic Column"/>
+						</header></Column>
+					</columns>
+				</Table>
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<!--<Button text="Save" type="Accept" press="onSave" id="idBatch"></Button>-->
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,107 @@
+{
+  "name": "Account",
+  "plural": "Accounts",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "accountName": {
+      "type": "string",
+      "required": true
+    },
+    "ifsc": {
+      "type": "string",
+      "required": true
+    },
+    "accountNo": {
+      "type": "string",
+      "required": true
+    },
+    "limit": {
+      "type": "number",
+      "required": true
+    },
+    "white": {
+      "type": "boolean",
+      "required": true,
+      "default":false
+    },
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "registeredNo": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "counter": {
+      "type": "number",
+      "required": true,
+      "default":0
+    },
+    "counterall":{
+      "type": "number",
+      "required": true,
+      "default":0
+    },
+    "key":{
+      "type": "string",
+      "required": true,
+      "default":"null"
+    },
+    "current": {
+      "type": "boolean",
+      "required": true,
+      "default":false
+    },
+    "server": {
+      "type": "boolean",
+      "required": true,
+      "default":false
+    },
+    "extra1": {
+      "type": "string",
+      "required": true,
+      "default":"null"
+    },
+    "extra2": {
+      "type": "string",
+      "required": true,
+      "default":"null"
+    },
+    "deleted":{
+      "type":"boolean",
+      "default":false
+    },
+    "isNext": {
+      "type": "boolean",
+      "default":false
+    },
+    "BankName":{
+      "type": "string",
+      "required": true,
+      "default":"null"
+    }
+  },
+  "scope":{
+
+  },
+  "validations": [],
+  "relations": {
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

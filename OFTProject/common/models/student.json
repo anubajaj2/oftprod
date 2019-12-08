@@ -1,0 +1,112 @@
+{
+  "name": "Student",
+  "plural": "Students",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "Name": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "GmailId": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "CompanyMail": {
+      "type": "string",
+      "default": "null"
+    },
+    "OtherEmail1": {
+      "type": "string",
+      "default": "null"
+    },
+    "OtherEmail2": {
+      "type": "string",
+      "default": "null"
+    },
+    "ContactNo": {
+      "type": "number",
+      "default": 0
+    },
+    "Country": {
+      "type": "string",
+      "default": "null"
+    },
+    "Designation": {
+      "type": "string",
+      "default": "null"
+    },
+    "Star": {
+      "type": "boolean",
+      "default": false
+    },
+    "Defaulter": {
+      "type": "boolean",
+      "default": false
+    },
+    "HighServerUsage": {
+      "type": "boolean",
+      "default": false
+    },
+    "Skills": {
+      "type": "string",
+      "default": "null"
+    },
+    "Resume": {
+      "type": "string",
+      "default": "null"
+    },
+    "Extra1": {
+      "type": "string",
+      "default": "null"
+    },
+    "Extra2": {
+      "type": "string",
+      "default": "null"
+    },
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+      "default": "null"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "Subscriptions": {
+      "type": "hasMany",
+      "model": "Sub",
+      "foreignKey": "StudentId"
+    },
+    "Servers": {
+      "type": "hasMany",
+      "model": "Server",
+      "foreignKey": "StudentId"
+    }
+  },
+   "scope":{
+  	"order":"CreatedOn DESC"
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

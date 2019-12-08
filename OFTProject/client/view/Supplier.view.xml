@@ -1,0 +1,17 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.Supplier"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page>
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<ObjectHeader title="{name}" intro="{contactPersonName}">
+				<attributes>
+					<ObjectAttribute title="{i18n>contactNo}" text="{contacNumber}"></ObjectAttribute>
+					<ObjectAttribute title="{i18n>city}" text="{city}"></ObjectAttribute>
+				</attributes>
+			</ObjectHeader>
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "../common/models/tammenit",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongoatlas",
+    "public": true,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "AccessToken": {
+    "dataSource": "mongoatlas",
+    "public": true,
+    "options": {
+      "strictObjectIDCoercion": true
+    },
+    "acls":[
+      {
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "r_admin",
+        "permission": "ALLOW"
+      }
+    ]
+  },
+  "ACL": {
+    "dataSource": "mongoatlas",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongoatlas",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "mongoatlas",
+    "public": false
+  },
+  "NpmjsDownload": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "BusinessTrip": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Course": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Student": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Sub": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Server": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Inquiry": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "ServerPay": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "AppUser": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "Account": {
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "AccountBalance":{
+    "dataSource": "mongoatlas",
+    "public": true
+  }
+}

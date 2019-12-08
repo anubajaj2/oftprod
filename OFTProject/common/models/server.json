@@ -1,0 +1,129 @@
+{
+	"name": "Server",
+	"plural": "Servers",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"User": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"StudentId": {
+			"type": "string",
+			"required": true,
+			"default": "null"
+		},
+		"PaymentDate": {
+			"type": "date",
+			"required": true
+		},
+		"StartDate": {
+			"type": "date",
+			"required": true
+		},
+		"EndDate": {
+			"type": "date",
+			"required": true
+		},
+		"UserEndDate": {
+			"type": "date",
+			"required": true
+		},
+		"Amount": {
+			"type": "number",
+			"required": true
+		},
+		"Usage": {
+			"type": "number",
+		    "default": 0
+		},
+		"Mode": {
+			"type": "string",
+			"default": "null"
+		},
+		"FreeAccess": {
+			"type": "boolean",
+			"default": false
+		},
+		"Extended": {
+			"type": "boolean",
+			"default": false
+		},
+		"PassRDP": {
+			"type": "string",
+			"default": "null"
+		},
+		"PassSAP": {
+			"type": "string",
+			"default": "null"
+		},
+		"Remarks": {
+			"type": "string",
+			"default": "null"
+		},
+		"Update": {
+			"type": "string",
+			"default": "null"
+		},
+		"Extra1": {
+			"type": "string",
+			"default": "null"
+		},
+		"Extra2": {
+			"type": "string",
+			"default": "null"
+		},
+		"ExtraN1": {
+			"type": "number",
+			"default": 0
+		},
+		"CreatedOn": {
+			"type": "date",
+			"default": "null"
+		},
+		"CreatedBy": {
+			"type": "string",
+			"default": "null"
+		},
+		"ChangedOn": {
+			"type": "date",
+			"default": "null"
+		},
+		"ChangedBy": {
+			"type": "string",
+			"default": "null"
+		},
+		"ReassignStd": {
+			"type": "string",
+			"required": true,
+			"default": "null"
+		}
+	},
+	"scope": {
+		"order": "CreatedOn DESC"
+	},
+	"validations": [],
+  	"relations": {
+		"Student": {
+			"type": "belongsTo",
+			"model": "Student",
+			"foreignKey": "StudentId"
+		},
+	   "ServerPay":{
+			"type": "hasOne",
+			"model": "ServerPay",
+			"foreignKey": "ServerId"
+	   }
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}

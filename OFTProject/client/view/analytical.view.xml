@@ -1,0 +1,121 @@
+<mvc:View
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	displayBlock="true"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	controllerName="oft.fiori.controller.analytical"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="Analytical View">
+				<headerContent>
+					<Text id="idUser"></Text>
+					<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+				</headerContent>
+				<content>
+					<l:BlockLayout background="Dashboard" visible="true">
+						<l:content>
+							<l:BlockLayoutRow scrollable="false">
+								<l:content>
+									<l:BlockLayoutCell id="Cell1" width="1">
+										<l:content>
+											<!-- Bar Chart-->
+											<!-- <viz:Popover id="idPopOver"></viz:Popover> -->
+											<viz:VizFrame id="idVizFrame1" uiConfig="{applicationSet:'fiori'}"  vizType="bar">
+												<viz:dataset>
+													<viz.data:FlattenedDataset data="{BarChartModel>/BarData}">
+														<viz.data:dimensions>
+															<viz.data:DimensionDefinition name="BatchName" value="{BatchName}"/>
+														</viz.data:dimensions>
+														<viz.data:measures>
+															<viz.data:MeasureDefinition name="Count" value="{Count}"/>
+														</viz.data:measures>
+													</viz.data:FlattenedDataset>
+												</viz:dataset>
+												<viz:feeds>
+													<viz.feeds:FeedItem id="valueAxisFeedBar" uid="valueAxis" type="Measure" values="Count"/>
+													<viz.feeds:FeedItem id="categoryAxisFeedBar" uid="categoryAxis" type="Dimension" values="BatchName"/>
+												</viz:feeds>
+											</viz:VizFrame>
+										</l:content>
+									</l:BlockLayoutCell>
+									<l:BlockLayoutCell id="Cell2" width="1">
+										<l:content>
+											<!-- Pie Chart - 1-->
+											<viz:VizFrame id="idVizFrame2" uiConfig="{applicationSet:'fiori'}" vizType="pie">
+												<viz:dataset>
+													<viz.data:FlattenedDataset data="{PieChartModel>/PieData}">
+														<viz.data:dimensions>
+															<viz.data:DimensionDefinition name="CourseName" value="{CourseName}"/>
+														</viz.data:dimensions>
+														<viz.data:measures>
+															<viz.data:MeasureDefinition name="Count" value="{Count}"/>
+														</viz.data:measures>
+													</viz.data:FlattenedDataset>
+												</viz:dataset>
+												<viz:feeds>
+													<viz.feeds:FeedItem id="valueAxisFeedPie" uid="size" type="Measure" values="Count"/>
+													<viz.feeds:FeedItem id="categoryAxisFeedPie" uid="color" type="Dimension" values="CourseName"/>
+												</viz:feeds>
+											</viz:VizFrame>
+										</l:content>
+									</l:BlockLayoutCell>
+								</l:content>
+							</l:BlockLayoutRow>
+							<l:BlockLayoutRow scrollable="false">
+								<l:content>
+									<l:BlockLayoutCell id="Cell3" width="1">
+										<l:content>
+											<!-- Pie Chart - 2-->
+											<viz:VizFrame id="idVizFrame3" uiConfig="{applicationSet:'fiori'}" vizType="pie">
+												<viz:dataset>
+													<viz.data:FlattenedDataset data="{Pie2ChartModel>/PieData}">
+														<viz.data:dimensions>
+															<viz.data:DimensionDefinition name="CourseName" value="{CourseName}"/>
+														</viz.data:dimensions>
+														<viz.data:measures>
+															<viz.data:MeasureDefinition name="Count" value="{Count}"/>
+														</viz.data:measures>
+													</viz.data:FlattenedDataset>
+												</viz:dataset>
+												<viz:feeds>
+													<viz.feeds:FeedItem id="valueAxisFeedPie2" uid="size" type="Measure" values="Count"/>
+													<viz.feeds:FeedItem id="categoryAxisFeedPie2" uid="color" type="Dimension" values="CourseName"/>
+												</viz:feeds>
+											</viz:VizFrame>
+										</l:content>
+									</l:BlockLayoutCell>
+									<l:BlockLayoutCell id="Cell4" width="1">
+										<l:content>
+											<!-- Line Chart-->
+											<viz:VizFrame id="idVizFrame4" uiConfig="{applicationSet:'fiori'}" vizType="line">
+												<viz:dataset>
+													<viz.data:FlattenedDataset data="{LineChartModel>/LineData}">
+														<viz.data:dimensions>
+															<viz.data:DimensionDefinition name="Month" value="{Month}"/>
+														</viz.data:dimensions>
+														<viz.data:measures>
+															<viz.data:MeasureDefinition name="Count" value="{Count}"/>
+														</viz.data:measures>
+													</viz.data:FlattenedDataset>
+												</viz:dataset>
+												<viz:feeds>
+													<viz.feeds:FeedItem id="valueAxisFeedLine" uid="valueAxis" type="Measure" values="Count"/>
+													<viz.feeds:FeedItem id="categoryAxisFeedLine" uid="categoryAxis" type="Dimension" values="Month"/>
+												</viz:feeds>
+											</viz:VizFrame>
+										</l:content>
+									</l:BlockLayoutCell>
+								</l:content>
+							</l:BlockLayoutRow>
+						</l:content>
+					</l:BlockLayout>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

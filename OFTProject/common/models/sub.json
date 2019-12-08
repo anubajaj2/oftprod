@@ -1,0 +1,156 @@
+{
+	"name": "Sub",
+	"plural": "Subs",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"StudentId": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"CourseId": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"PaymentDate": {
+			"type": "date",
+			"required": true
+		},
+		"Mode": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"StartDate": {
+			"type": "date",
+			"required": true
+		},
+		"EndDate": {
+			"type": "date",
+			"required": true
+		},
+		"PaymentMode": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"BankName": {
+			"type": "string",
+			"default": "null"
+		},
+		"AccountName": {
+			"type": "string",
+			"default": "null"
+		},
+		"Amount": {
+			"type": "number",
+			"default": 0
+		},
+		"Reference": {
+			"type": "string",
+			"default": "null"
+		},
+		"Remarks": {
+			"type": "string",
+			"default": "null"
+		},
+		"PendingAmount": {
+			"type": "number",
+			"default": 0
+		},
+		"Waiver": {
+			"type": "boolean",
+			"default": false
+		},
+		"DropOut": {
+			"type": "boolean",
+			"default": false
+		},
+		"PaymentScreenshot": {
+			"type": "string",
+			"default": "null"
+		},
+		"PartialPayment": {
+			"type": "boolean",
+			"default": false
+		},
+		"Extended":  {
+			"type": "boolean",
+			"default": false
+		},
+		"PaymentDueDate": {
+			"type": "date"
+		},
+		"Extra1": {
+			"type": "string",
+			"default": "null"
+		},
+		"Extra2": {
+			"type": "string",
+			"default": "null"
+		},
+		"ExtraN1": {
+			"type": "number",
+			"default": 0
+		},
+		"ExtraN2": {
+			"type": "number",
+			"default": 0
+		},
+		"ExtraN3": {
+			"type": "number",
+			"default": 0
+		},
+		"UpdatePayment": {
+			"type": "boolean",
+			"default": false
+		},
+		"MostRecent": {
+			"type": "boolean",
+			"default": false
+		},
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+			"default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+			"default": "null"
+    },
+		"Status":{
+			"type": "string",
+			"default": "null"
+		}
+	},
+	"validations": [],
+	"relations": {
+		"Student": {
+			"type": "belongsTo",
+			"model": "Student",
+			"foreignKey": "StudentId"
+		},
+		"Course": {
+			"type": "belongsTo",
+			"model": "Course",
+			"foreignKey": "CourseId"
+		}
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}

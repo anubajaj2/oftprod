@@ -1,0 +1,308 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.subsSearch"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Manage Subscriptions" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<!-- <smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="Subs" search="onSearchSmart" persistencyKey="SmartFilter_Explored"> <smartFilterBar:controlConfiguration> <smartFilterBar:ControlConfiguration key="id" visibleInAdvancedArea="true"
+			preventInitialDataFetchInValueHelpDialog="false"></smartFilterBar:ControlConfiguration> <smartFilterBar:ControlConfiguration key="StudentId" visibleInAdvancedArea="true"
+			preventInitialDataFetchInValueHelpDialog="false"></smartFilterBar:ControlConfiguration> <smartFilterBar:ControlConfiguration key="CourseId" visibleInAdvancedArea="true"
+			preventInitialDataFetchInValueHelpDialog="false"></smartFilterBar:ControlConfiguration> <smartFilterBar:ControlConfiguration key="PaymentDate" visibleInAdvancedArea="true"
+			preventInitialDataFetchInValueHelpDialog="false"></smartFilterBar:ControlConfiguration> <smartFilterBar:ControlConfiguration key="PartialPayment" visibleInAdvancedArea="true" preventInitialDataFetchInValueHelpDialog="false">
+			</smartFilterBar:ControlConfiguration> <smartFilterBar:ControlConfiguration key="PaymentDueDate" visibleInAdvancedArea="true" preventInitialDataFetchInValueHelpDialog="false"></smartFilterBar:ControlConfiguration>
+			</smartFilterBar:controlConfiguration> </smartFilterBar:SmartFilterBar> -->
+			<!-- <smartFilterBar:defaultFilterValues> <smartFilterBar:SelectOption low="true"></smartFilterBar:SelectOption> </smartFilterBar:defaultFilterValues> -->
+			<!-- <l:VerticalLayout width="100%"> <Label text="FilterBar"/> <fb:FilterBar id="idFilterBar" reset="onResetFilter" search="onSearchFilter" clear="onClearFilter" showRestoreButton="true" showClearButton="true"> <fb:filterItems> <fb:FilterItem
+			name="PaymentDate" label="Payment Date"> <fb:control> <DatePicker/> </fb:control> </fb:FilterItem> <fb:FilterItem name="PaymentDueDate" label="Payment Due Date"> <fb:control> <DatePicker/> </fb:control> </fb:FilterItem> <fb:FilterItem
+			name="PartialPayment" label="Partial Payment"> <fb:control> <ComboBox type="Text"> <items> <core:Item key="001" text=" "/> <core:Item key="002" text="true"/> <core:Item key="003" text="false"/> </items> </ComboBox> </fb:control> </fb:FilterItem>
+			</fb:filterItems> <fb:filterGroupItems> <fb:FilterGroupItem groupName="G1" groupTitle="Group1" name="A" label="Student"> <fb:control> <Input type="Text"/> </fb:control> </fb:FilterGroupItem> <fb:FilterGroupItem groupName="G1" groupTitle="Group1"
+			name="B" label="Course"> <fb:control> <Input type="Text"/> </fb:control> </fb:FilterGroupItem> </fb:filterGroupItems> </fb:FilterBar> </l:VerticalLayout> -->
+			<!-- <Label text="{i18n>customerId}"/> <Input id="id_student" showValueHelp="true"></Input> <Label text="{i18n>courseName}"/> <Input id="id_course" showValueHelp="true"></Input> <Label text="Payment Date"/> <DatePicker id="id_PayDate"
+			displayFormat="dd.MM.yyyy" required="true" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker> <Label text="Payment Due Date"/> <DatePicker id="id_PayDueDate" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy"></DatePicker> -->
+			<SearchField search="onTabSearch" icon="sap-icon://search" width="100%" height="30%"/>
+			<Panel expandable="true" expanded="false" headerText="Search Filters" width="auto" class="sapUiResponsiveMargin">
+				<Label text="Batch End Date"/>
+				<DatePicker id="idBatchEndate" displayFormat="dd.MM.yyyy" placeholder="Batch End Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
+				<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+				id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+
+				<Label text="Student Email"/>
+				<Input id="idStuSearch" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select student email"/>
+
+				<Label text="Batch"/>
+				<Input id="idCourseSearch" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>
+				<Label text="Partial Payment : "/>
+				<ToolbarSpacer/>
+				<Select id="idPartPaySearch" items="{local>/trueOrFalse}" change="onChangePartPay" width="100%">
+					<items>
+						<core:Item text="{local>value}" key="{local>value}"/>
+					</items>
+				</Select>
+
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>
+
+				<Label text="Pending Payment : "/>
+				<ToolbarSpacer/>
+				<!-- <Select id="idPendingPayment" items="{local>/trueOrFalse}" change="onChangePendingPay" width="100%"> -->
+				<Select id="idPendingPayment" items="{local>/trueOrFalse}"  width="100%">
+					<items>
+						<core:Item text="{local>value}" key="{local>value}"/>
+					</items>
+				</Select>
+
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>
+				<Button press="onSearchManageSubs" text="Search" icon="sap-icon://search"/>
+
+
+				<Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/>
+			</Panel>
+			<Table id="manageSubsTable" items="{/Subs}" growing="true"
+				growingThreshold="50"
+				growingScrollToLoad="false"
+				 mode="MultiSelect" class="sapUiSizeCompact"
+				 showRowCount="true" updateFinished="onUpdateFinished">
+				<!--class="tableStyle" -->
+				<headerToolbar>
+					<Toolbar>
+						<Title id="titletext"/>
+						<ToolbarSpacer/>
+						<Button press="onTableSettings" icon="sap-icon://drop-down-list" tooltip="Settings"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://synchronize"
+							id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+						<ToolbarSpacer/>
+						<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" tooltip="Include in CC" text="cc"/>
+						<Button icon="sap-icon://delete" press="onDelete"/>
+						<Button icon="sap-icon://download" tooltip="All" press="onDataExport"/>
+						<Button icon="sap-icon://download" tooltip="Exclude Expired" press="onExpiredExport"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://action"
+							id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
+						<Text text="Display Most Recent records?"/>
+						<HBox>
+							<Switch idstate="true" customTextOn="Yes" customTextOff="No" change="onSwitchToggle">
+								<layoutData>
+									<FlexItemData growFactor="1"/>
+								</layoutData>
+							</Switch>
+						</HBox>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<!-- <Column> <Text text="SubGuid"/> </Column> -->
+					<Column>
+						<Label text="{i18n>customerId}" class="columnLabelStyle"/>
+					</Column>
+					<Column hAlign="Center">
+						<Label text="Status" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>courseName}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>payDate}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>payDueDate}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>PartPay}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Batch End Date" class="columnLabelStyle"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem id="idColumnlist" press="onItemPress" type="Active" highlight="{path:'PartialPayment', formatter:'.formatRowHighlight'}">
+						<cells>
+							<!-- <Text text="{id}"></Text> -->
+							<Text text="{StudentId}"></Text>
+							<core:Icon
+								src="sap-icon://status-positive"
+								size="1.5rem"
+								color="{path:'PartialPayment', formatter:'.formatter.formatIconColor'}"
+								activeColor=""
+								width=""
+								height=""
+								backgroundColor=""
+								hoverBackgroundColor=""
+								activeBackgroundColor=""
+								decorative="true"
+								press="fnOnValidate"/>
+							<!-- <Text text="{CourseId}" modelContextChange="onCourseIdChange" ></Text> <Text text="{StudentId}" ></Text> -->
+							<Text text="{CourseId}"></Text>
+							<Text text="{ path: 'PaymentDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<Text text="{ path: 'PaymentDueDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<CheckBox selected="{PartialPayment}" editable="false"></CheckBox>
+							<Text text="{ path: 'EndDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<!-- <smartTable:SmartTable id="smartTable_ResponsiveTable" smartFilterId="smartFilterBar" tableType="ResponsiveTable" editable="false"-->
+			<!-- entitySet="Subs" useVariantManagement="true" useTablePersonalisation="true" header="Display Subscription" showRowCount="true"-->
+			<!-- useExportToExcel="true" beforeExport="onBeforeExport" enableAutoBinding="true" beforeRebindTable="onDataReceive"-->
+			<!-- persistencyKey="SmartTableRefApp_Explored">-->
+			<!-- <Table mode="SingleSelectLeft" selectionChange="selectListItem" itemPress="selectListItem" dataReceived="onDataReceive">-->
+			<!-- <columns>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData" value='\{"columnKey": "id","leadingProperty": "id","sortProperty": "id","filterProperty": "id"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Subs Guid"/>-->
+			<!-- </Column>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "StudentId","leadingProperty": "StudentId","sortProperty": "StudentId","filterProperty": "StudentId"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Student Id"/>-->
+			<!-- </Column>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "CourseId","leadingProperty": "CourseId","sortProperty": "CourseId","filterProperty": "CourseId"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Course Id"/>-->
+			<!-- </Column>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "PaymentDate","leadingProperty": "PaymentDate","sortProperty": "PaymentDate","filterProperty": "PaymentDate"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Payment Date"/>-->
+			<!-- </Column>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "PartialPayment","leadingProperty": "PartialPayment","sortProperty": "PartialPayment","filterProperty": "PartialPayment"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Partial"/>-->
+			<!-- </Column>-->
+			<!-- <Column>-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "PaymentDueDate","leadingProperty": "PaymentDueDate","sortProperty": "PaymentDueDate","filterProperty": "PaymentDueDate"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Due Date"/>-->
+			<!-- </Column>-->
+			<!--<Column >-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "PaymentMode","leadingProperty": "PaymentMode","sortProperty": "PaymentMode","filterProperty": "PaymentMode"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="PaymentMode"/>-->
+			<!--</Column>-->
+			<!--<Column visible="false">-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "AccountName","leadingProperty": "AccountName","sortProperty": "AccountName","filterProperty": "AccountName"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="AccountName"/>-->
+			<!--</Column>-->
+			<!--<Column visible="false">-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "Amount","leadingProperty": "Amount","sortProperty": "Amount","filterProperty": "Amount"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Amount"/>-->
+			<!--</Column>-->
+			<!--<Column visible="false">-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "PendingAmount","leadingProperty": "PendingAmount","sortProperty": "PendingAmount","filterProperty": "PendingAmount"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Pending Amount"/>-->
+			<!--</Column>-->
+			<!--<Column visible="false">-->
+			<!-- <customData>-->
+			<!-- <core:CustomData key="p13nData"-->
+			<!-- value='\{"columnKey": "Reference","leadingProperty": "Reference","sortProperty": "Reference","filterProperty": "Reference"}'/>-->
+			<!-- </customData>-->
+			<!-- <Label text="Reference"/>-->
+			<!--</Column>-->
+			<!-- </columns>-->
+			<!-- <items>-->
+			<!--<ColumnListItem type="Navigation" highlight="{path:'PartialPayment', formatter:'.formatRowHighlight'}">-->
+			<!-- <ColumnListItem highlight="{path:'PartialPayment', formatter:'.formatRowHighlight'}"> -->
+			<!-- <cells>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{id}"/>-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{StudentId}" modelContextChange="onStudentIdChange" />-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{CourseId}" modelContextChange="onCourseIdChange"/>-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{PaymentDate}"/>-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{PartialPayment}"/>-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!-- <l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{PaymentDueDate}"/>-->
+			<!-- </l:content>-->
+			<!-- </l:VerticalLayout>-->
+			<!--<l:VerticalLayout class="sapUiContentPadding" width="100%">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{PaymentMode}"/>-->
+			<!-- </l:content>-->
+			<!--</l:VerticalLayout>-->
+			<!--<l:VerticalLayout class="sapUiContentPadding" width="100%" visible="false">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{AccountName}"/>-->
+			<!-- </l:content>-->
+			<!--</l:VerticalLayout>-->
+			<!--<l:VerticalLayout class="sapUiContentPadding" width="100%" visible="false">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{Amount}"/>-->
+			<!-- </l:content>-->
+			<!--</l:VerticalLayout>-->
+			<!--<l:VerticalLayout class="sapUiContentPadding" width="100%" visible="false">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{PendingAmount}"/>-->
+			<!-- </l:content>-->
+			<!--</l:VerticalLayout>-->
+			<!--<l:VerticalLayout class="sapUiContentPadding" width="100%" visible="false">-->
+			<!-- <l:content>-->
+			<!-- <ObjectIdentifier title="{Reference}"/>-->
+			<!-- </l:content>-->
+			<!--</l:VerticalLayout>-->
+			<!-- </cells>-->
+			<!-- </ColumnListItem>-->
+			<!-- </items>-->
+			<!-- </Table>-->
+			<!-- </smartTable:SmartTable>-->
+		</content>
+	</Page>
+</mvc:View>
