@@ -722,7 +722,7 @@ sap.ui.define([
 				oTable.getHeaderToolbar().getContent()[0].setText("Today : " + noOfItems);
 
 			}
-			debugger;
+			var allStudents = [];
 			for (var i = 0; i < noOfItems; i++) {
 				var vCourse = itemList[i].getCells()[1].getText();
 				var oCourseId = 'Courses(\'' + vCourse + '\')';
@@ -731,13 +731,18 @@ sap.ui.define([
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[1].setText(CourseName);
 				}
-				var vStudent = itemList[i].getCells()[0].getText();
-				var oStudentId = 'Students(\'' + vStudent + '\')';
-				var vModel = this.getView().getModel().oData[oStudentId];
-				if (vModel) {
-					var StudMail = vModel.GmailId;
-					itemList[i].getCells()[0].setText(StudMail);
+				if(itemList[i].getCells()[0].getText().indexOf("@") === -1){
+					allStudents.push(itemList[i].getCells()[0].getText());
 				}
+
+
+				// var vStudent = itemList[i].getCells()[0].getText();
+				// var oStudentId = 'Students(\'' + vStudent + '\')';
+				// var vModel = this.getView().getModel().oData[oStudentId];
+				// if (vModel) {
+				// 	var StudMail = vModel.GmailId;
+				// 	itemList[i].getCells()[0].setText(StudMail);
+				// }
 				//var vButtonTxt = itemList[i].getCells()[2].getText();
 				var vButtonTxt = itemList[i].getCells()[2].getItems()[0].getText();
 				if (vButtonTxt == "Approved") {
@@ -768,6 +773,35 @@ sap.ui.define([
 					itemList[i].getCells()[4].setText(value1);
 				}
 			}
+			if(allStudents){
+				var loginPayload = {
+						allStudents : allStudents
+				};
+
+				$.post('/getAllStudents', loginPayload)
+					.done(function(data, status) {
+						for (var i = 0; i < noOfItems; i++) {
+							var vStudent = itemList[i].getCells()[0].getText();
+							for (var j = 0; j < data.length; j++) {
+								if(data[j].id === vStudent){
+									try {
+										itemList[i].getCells()[0].setText(data[j].GmailId);
+
+									} catch (e) {
+
+									} finally {
+
+									}
+								}
+							}
+
+						}
+					})
+					.fail(function(xhr, status, error) {
+						sap.m.MessageBox.error("Login Failed, Please enter correct credentials");
+					});
+			}
+
 
 
 		},

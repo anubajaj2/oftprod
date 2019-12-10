@@ -932,6 +932,32 @@ app.start = function() {
 				});
 			});
 
+			app.post('/getAllStudents',
+				function(req, res) {
+					var app = require('../server/server');
+					var colls = req.body.allStudents;
+					var Students = app.models.Student;
+					var Courses = app.models.Course;
+					this.students = [];
+					this.courses = [];
+					Students.find({
+						where: {
+							id:{
+								inq: colls
+							}
+						},
+					  fields: {
+							id: true,
+							GmailId: true
+						}
+					}).then(function(students) {
+						return res.send(students);
+					});
+
+
+
+				});
+
 			app.post('/markCheckedAccount',
 					function(req, res) {
 						var app = require('../server/server');
