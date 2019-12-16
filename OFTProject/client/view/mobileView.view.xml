@@ -35,6 +35,7 @@
 			<f:content>
 				<Label text="Phone" />
 				<Input  value="{local>/newLead/phone}" submit="onSearchNo" />
+        <CheckBox selected="false" id="keySearch" text="Key Search" />
 			</f:content>
 		</f:SimpleForm>
 	</VBox>

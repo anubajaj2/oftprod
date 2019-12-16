@@ -1349,6 +1349,8 @@ app.start = function() {
 							}
 							var nodemailer = require('nodemailer');
 							var smtpTransport = require('nodemailer-smtp-transport');
+							///anurag
+
 							var transporter = nodemailer.createTransport(smtpTransport({
 								service: 'Godaddy',
 								host: 'smtpout.secureserver.net',
@@ -1367,6 +1369,10 @@ app.start = function() {
 								ccs.push("install.abap@gmail.com");
 							}else if (that2.includeX === "Renewal") {
 									//change content of the email here - anu
+							}
+							if(courseStr.Name === "Hybris C4C" ||
+							courseStr.Name === "HANA Cloud Integration"){
+									ccs.push("sam4dsouza@gmail.com");
 							}
 							var mailOptions = {
 								from: 'no-reply@anubhavtrainings.com',

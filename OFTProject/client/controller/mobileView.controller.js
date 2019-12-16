@@ -29,7 +29,7 @@ sap.ui.define([
 			//Restore the state of UI by fruitId
 			//
 			var oList = this.getView().byId("idRecent");
-			if(cellNo.indexOf("@") != -1){
+			if(cellNo.indexOf("@") != -1 || this.getView().byId("keySearch").getSelected()){
 				oList.bindAggregation("items", {
 					path: '/Inquries',
 					template: new sap.m.DisplayListItem({
