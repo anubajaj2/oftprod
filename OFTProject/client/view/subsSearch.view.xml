@@ -31,7 +31,7 @@
 			<!-- <Label text="{i18n>customerId}"/> <Input id="id_student" showValueHelp="true"></Input> <Label text="{i18n>courseName}"/> <Input id="id_course" showValueHelp="true"></Input> <Label text="Payment Date"/> <DatePicker id="id_PayDate"
 			displayFormat="dd.MM.yyyy" required="true" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker> <Label text="Payment Due Date"/> <DatePicker id="id_PayDueDate" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy"></DatePicker> -->
 			<SearchField search="onTabSearch" icon="sap-icon://search" width="100%" height="30%"/>
-			<Panel expandable="true" expanded="false" headerText="Search Filters" width="auto" class="sapUiResponsiveMargin">
+			<Panel visible="{= ${local>/Role} === 'Admin'}" expandable="true" expanded="false" headerText="Search Filters" width="auto" class="sapUiResponsiveMargin">
 				<Label text="Batch End Date"/>
 				<DatePicker id="idBatchEndate" displayFormat="dd.MM.yyyy" placeholder="Batch End Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
 				<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
@@ -71,14 +71,14 @@
 
 				<Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/>
 			</Panel>
-			<Table id="manageSubsTable" items="{/Subs}" growing="true"
+			<Table id="manageSubsTable" growing="true"
 				growingThreshold="50"
 				growingScrollToLoad="false"
 				 mode="MultiSelect" class="sapUiSizeCompact"
 				 showRowCount="true" updateFinished="onUpdateFinished">
 				<!--class="tableStyle" -->
 				<headerToolbar>
-					<Toolbar>
+					<Toolbar visible="{= ${local>/Role} === 'Admin'}">
 						<Title id="titletext"/>
 						<ToolbarSpacer/>
 						<Button press="onTableSettings" icon="sap-icon://drop-down-list" tooltip="Settings"/>
@@ -92,7 +92,6 @@
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://action"
 							id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
-
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
 						<Text text="Display Most Recent records?"/>

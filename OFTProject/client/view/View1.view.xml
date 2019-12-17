@@ -18,14 +18,14 @@
 					<StandardListItem id="serverPayment" icon="sap-icon://batch-payments" title="Server Payments" description=""></StandardListItem>
 					<StandardListItem id="ServerOverview" icon="sap-icon://customer-view" title="Server Overview" description=""></StandardListItem>
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="batch" icon="sap-icon://sys-add" title="New Batch" description=""></StandardListItem>
-					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="subsSearch" icon="sap-icon://crm-sales" title="Manage Subscriptions" description=""></StandardListItem>
+					<StandardListItem id="subsSearch" icon="sap-icon://crm-sales" title="Manage Subscriptions" description=""></StandardListItem>
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="dataMaintenance" icon="sap-icon://database" title="Data Maintenance" description=""></StandardListItem>
 					<!--<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="downloadQueries" icon="sap-icon://business-by-design" title="Reports and Run Queries" description=""></StandardListItem>-->
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="adminPanel" icon="sap-icon://key-user-settings" title="Admin Panel" description=""></StandardListItem>
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="analytical" icon="sap-icon://bar-chart" title="Analytical Panel" description=""></StandardListItem>
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="BankAccount" icon="sap-icon://money-bills" title="Accounts" description=""></StandardListItem>
 					<StandardListItem  id="mobileView" icon="sap-icon://iphone" title="Inquiry Search" description=""></StandardListItem>
-					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="accessProcessor" icon="sap-icon://key-user-settings"
+					<StandardListItem  id="accessProcessor" icon="sap-icon://key-user-settings"
 						 title="Access Manager" description=""></StandardListItem>
 
 				</items>

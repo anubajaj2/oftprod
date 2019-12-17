@@ -36,13 +36,15 @@
 				<Label text="Batch Select" />
 				<Select items="{/Courses}" change="onSearchNo" id="courseSel">
           <core:Item text="{BatchNo}" key="{id}" />
+
         </Select>
+        <Button press="onShooter" icon="sap-icon://heating-cooling"/>
 			</f:content>
 		</f:SimpleForm>
 	</VBox>
 	<VBox>
 		<List id="idRecent" growing="true" mode="SingleSelectMaster"
-			growingThreshold="100" growingScrollToLoad="false"
+			growingThreshold="100" growingScrollToLoad="false" visible="{= ${local>/Role} === 'Admin'}"
 			class="sapUiSizeCompact">
       <headerToolbar>
 				<Toolbar>
@@ -50,7 +52,7 @@
             id="titletext2"/>
 				<ToolbarSpacer></ToolbarSpacer>
         <Button press="onFilters"  icon="sap-icon://filter"/>
-        <Button press="onShooter"  icon="sap-icon://heating-cooling"/>
+
 			</Toolbar>
 			</headerToolbar>
 		</List>
