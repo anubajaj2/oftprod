@@ -91,5 +91,9 @@
   "AccountBalance":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "Template":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }

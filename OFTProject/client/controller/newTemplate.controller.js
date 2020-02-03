@@ -7,7 +7,7 @@ sap.ui.define([
 ], function(Controller, MessageBox, MessageToast, Formatter, Filter) {
 	"use strict";
 
-	return Controller.extend("oft.fiori.controller.newLead", {
+	return Controller.extend("oft.fiori.controller.newTemplate", {
 		formatter: Formatter,
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -66,7 +66,7 @@ sap.ui.define([
 			    });
 		},
 		clearForm: function() {
-			// this.getView().getModel("local").setProperty("/newLead",{
+			// this.getView().getModel("local").setProperty("/template",{
 			// 	"emailId": "",
 			// 	"course": " ",
 			// 	"date": "",
@@ -94,8 +94,6 @@ sap.ui.define([
 				}
 				loginPayload.password = this.passwords;
 				loginPayload.DollerQuote = this.getView().byId("doller").getSelected();
-				var x = this.getView().byId("rbg");
-				loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
 				$.post('/sendInquiryEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");
@@ -164,8 +162,8 @@ sap.ui.define([
 			if(country === "IN"){
 				for (var i = 0; i < allCourses.length; i++) {
 					if (allCourses[i].courseName === courseName) {
-						this.getView().getModel("local").setProperty("/newLead/fees",allCourses[i].fee);
-						this.getView().getModel("local").setProperty("/newLead/currency", "INR");
+						this.getView().getModel("local").setProperty("/template/fees",allCourses[i].fee);
+						this.getView().getModel("local").setProperty("/template/currency", "INR");
 						break;
 					}
 				}
@@ -173,32 +171,25 @@ sap.ui.define([
 			}else{
 				for (var i = 0; i < allCourses.length; i++) {
 					if (allCourses[i].courseName === courseName) {
-						this.getView().getModel("local").setProperty("/newLead/fees",allCourses[i].usdFee);
-						this.getView().getModel("local").setProperty("/newLead/currency", "USD");
+						this.getView().getModel("local").setProperty("/template/fees",allCourses[i].usdFee);
+						this.getView().getModel("local").setProperty("/template/currency", "USD");
 						break;
 					}
 				}
 			}
 		},
 		herculis: function(oEvent) {
-			if(oEvent.getParameter("name") !== "newlead"){
+			if(oEvent.getParameter("name") !== "newTemplate"){
 				return;
 			}
-			//Restore the state of UI by fruitId
-			this.getView().getModel("local").setProperty("/newLead/date", this.formatter.getFormattedDate(0));
-			this.getView().getModel("local").setProperty("/newLead/country", "IN");
-			var newDate = new Date();
-			newDate.setHours(0, 0, 0, 0);
-			var oSorter = new sap.ui.model.Sorter("CreatedOn", true);
+
 			var oList = this.getView().byId("idRecent");
 			oList.bindAggregation("items", {
-				path: '/Inquries',
+				path: '/Templates',
 				template: new sap.m.DisplayListItem({
-					label: "{EmailId} - {CourseName} - {Country}",
-					value: "{fees} {currency} / {CreatedOn}-{CreatedBy}"
-				}),
-				filters: [new Filter("CreatedOn", "GE", newDate)],
-				sorter: oSorter
+					label: "{CourseName} - {Type} - {DemoDate}",
+					value: "{ClassTiming} / {NextClass}"
+				})
 			});
 			oList.attachUpdateFinished(this.counter);
 
@@ -290,64 +281,13 @@ sap.ui.define([
 		},
 		onSave: function(oEvent) {
 			var oLocal = oEvent;
-			console.log(this.getView().getModel("local").getProperty("/newLead"));
+			console.log(this.getView().getModel("local").getProperty("/template"));
 			var that = this;
 			that.getView().setBusy(true);
-			var leadData = this.getView().getModel("local").getProperty("/newLead");
-			if (!this.getView().byId("inqDate").getDateValue()) {
-				sap.m.MessageToast.show("Enter a valid Date");
-				return "";
-			}
-
-			var payload = {
-				"EmailId": leadData.emailId.toLowerCase(),
-				"CourseName": leadData.course,
-				"FirstName": leadData.FirstName,
-				"LastName": leadData.LastName,
-				"Date": this.getView().byId("inqDate").getDateValue(),
-				"Country": leadData.country,
-				"Phone": leadData.phone,
-				"Subject": leadData.subject,
-				"Message": leadData.message,
-				"fees": leadData.fees,
-				"currency": leadData.currency,
-				"CreatedOn": new Date(),
-				"CreatedBy": "Minakshi",
-				"SoftDelete": false
-			};
-			// var oDataModel = this.getView().getModel();
-			// oDataModel.create("/Inquries",payload,null, function(){
-			// 					sap.m.MessageBox.alert("done");
-			// 				},
-			// 				 function(){
-			// 					sap.m.MessageBox.alert("err");
-			// 				}
-			// 			);
-			if(leadData.country === "IN" && leadData.phone !== "null" && leadData.phone !== "0" && leadData.phone !== ""){
-				try {
-					var userName = leadData.FirstName;
-					var MobileNo = leadData.phone;
-					var loginPayload = {};
-					loginPayload.msgType =  "inquiry";
-					loginPayload.userName =  userName;
-					loginPayload.courseName = leadData.course;
-					loginPayload.Number =  MobileNo;
-					$.post('/requestMessage', loginPayload)
-						.done(function(data, status) {
-							sap.m.MessageToast.show("Message sent successfully");
-						})
-						.fail(function(xhr, status, error) {
-							//that.passwords = "";
-							sap.m.MessageBox.error(xhr.responseText);
-						});
-				} catch (e) {
-
-				} finally {
-
-				}
-			}
-
-			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Inquries", "POST", {},
+			var leadData = this.getView().getModel("local").getProperty("/template");
+			var payload = leadData;
+			payload.DemoDate = this.getView().byId("inqDate").getDateValue();
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "POST", {},
 					payload, this)
 				.then(function(oData) {
 					that.getView().setBusy(false);
@@ -356,111 +296,7 @@ sap.ui.define([
 					if (that.getView().byId("idRecent").getBinding("items")) {
 						that.getView().byId("idRecent").getBinding("items").refresh();
 					}
-				}).catch(function(oError) {
-					that.getView().setBusy(false);
-					// var oPopover = that.getErrorMessage(oError);
-					if(oError.responseText.indexOf(":") !== -1){
-						var sText = "Inquiry already Exists";
-						var userId = oError.responseText.split(":")[oError.responseText.split(":").length - 1].replace(" ","");
-						try {
-							var userName = that.getView().getModel("local").getProperty("/AppUsers")[userId].UserName
-
-						} catch (e) {
-							userName = "unknown";
-						}
-						try {
-							var ctry = oError.responseText.split(":")[oError.responseText.split(":").length - 2].replace(" ","").replace(" & Created by ","");
-						} catch (e) {
-							ctry = "US";
-						}
-						sText = oError.responseText.replace(userId,userName) + "Do you want to send again?";
-					}
-
-					if (that.oLeadDuplicate === undefined) {
-						var oLeadDuplicate
-						that.oLeadDuplicate = oLeadDuplicate = new sap.ui.xmlfragment("oft.fiori.fragments.Dialog", this);
-						that.getView().addDependent(oLeadDuplicate);
-						oLeadDuplicate.setTitle("Already Exist");
-						var that2 = that;
-						oLeadDuplicate.addButton(new sap.m.Button({
-							text: "Yes",
-							press: function() {
-								if (that2.passwords === "") {
-									that2.passwords = prompt("Please enter your password", "");
-									if (that2.passwords === "") {
-										sap.m.MessageBox.error("Blank Password not allowed");
-										return;
-									}
-								}
-								var loginPayload = payload;
-								if (payload.EmailId === "") {
-									sap.m.MessageBox.error("Email id is empty, please contact ANubhav");
-								}
-								loginPayload.password = that2.passwords;
-								loginPayload.DollerQuote = that2.getView().byId("doller").getSelected();
-								loginPayload.Country = ctry;
-								//read old inquiry country and update the new price only
-								var allCourses = that2.getView().getModel("local").getProperty("/courses");
-								if( loginPayload.Country === "IN" ){
-									for (var i = 0; i < allCourses.length; i++) {
-										if (allCourses[i].courseName === loginPayload.CourseName) {
-											loginPayload.fees = allCourses[i].fee;
-										  loginPayload.currency = "INR";
-											break;
-										}
-									}
-
-								}else{
-									for (var i = 0; i < allCourses.length; i++) {
-										if (allCourses[i].courseName === loginPayload.CourseName) {
-											loginPayload.fees = allCourses[i].usdFee;
-										  loginPayload.currency = "USD";
-											break;
-										}
-									}
-								}
-								var x = that2.getView().byId("rbg");
-								loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
-								$.post('/sendInquiryEmail', loginPayload)
-									.done(function(data, status) {
-										sap.m.MessageToast.show("Email sent successfully");
-									})
-									.fail(function(xhr, status, error) {
-										that2.passwords = "";
-										sap.m.MessageBox.error(xhr.responseText);
-									});
-								oLeadDuplicate.close();
-								oLeadDuplicate.destroyContent();
-							}
-						}));
-						oLeadDuplicate.addButton(new sap.m.Button({
-							text: "Close",
-							press: function() {
-								oLeadDuplicate.close();
-								oLeadDuplicate.destroyContent();
-							}
-						}));
-					}
-					//that.getView().getModel("local").getProperty("/AppUsers")["5c6d68266e62cf4cac9d8262"].UserName
-
-					if(oError.responseText.indexOf(":") !== -1){
-						that.oLeadDuplicate.addContent(new sap.m.Text({
-							text: sText
-						}));
-						that.oLeadDuplicate.open();
-					}else{
-						this.getErrorMessage(oError);
-						that.oLeadDuplicate.destroyContent();
-					}
-
-
-					// this.oLeadDuplicate.
-
 				});
-			// $.post("/api/Inquries",payload,
-			// function(data, status){
-			//     sap.m.MessageBox.confirm("Wallah! Posted");
-			// });
 		},
 		onApprove: function() {
 

@@ -1,0 +1,89 @@
+{
+	"name": "Template",
+	"plural": "Templates",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"CourseName": {
+			"type": "string",
+			"required": true
+		},
+		"Type": {
+			"type": "string",
+			"default": "R",
+			"required": true
+		},
+		"Template": {
+			"type": "string",
+			"required": true
+		},
+		"DemoDate": {
+			"type": "date",
+			"required": true
+		},
+		"DemoInvite": {
+			"type": "string",
+			"default": "null"
+		},
+		"VideoLink": {
+			"type": "string"
+		},
+		"CoursePage": {
+			"type": "string"
+		},
+		"ClassTiming": {
+			"type": "string"
+		},
+		"NextClass": {
+			"type": "string"
+		},
+		"Extra1": {
+			"type": "string",
+			"default": "null"
+		},
+		"Extra2": {
+			"type": "string",
+			"default": "null"
+		},
+		"ExtraN1": {
+			"type": "number",
+			"default": 0
+		},
+		"ExtraN2": {
+			"type": "number",
+			"default": 0
+		},
+		"ExtraN3": {
+			"type": "number",
+			"default": 0
+		},
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+			"default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+			"default": "null"
+    }
+	},
+	"validations": [],
+	"relations": {
+
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}

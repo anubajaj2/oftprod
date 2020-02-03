@@ -1226,46 +1226,98 @@ app.start = function() {
 				if (req.body.FirstName === "" || req.body.FirstName == "null") {
 					req.body.FirstName = "Sir";
 				}
-				var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
-				var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
-				req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
-				contents = contents.replace('$$Name$$', req.body.FirstName)
-				debugger;
-				if(req.body.fees !== "null" && req.body.fees !== ""){
- 				 contents = contents.replace("$$fees$$", req.body.fees);
-  				 contents = contents.replace("$$currency$$", req.body.currency);
- 			 }
 
 
-
-				var ccs = [];
-				if(req.body.CourseName === "SimpleLogistics"){
-						ccs.push("paramsaddy@gmail.com");
-				}else if (req.body.CourseName === "SimpleFinance") {
-					ccs.push("info@gaurav-consulting.com");
+				if(req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined){
+					req.body.mailType = "R";
+				}
+				if(req.body.CourseName === "Generic"){
+					req.body.CourseName = "Other";
 				}
 
-				var mailOptions = {
-					from: 'install.abap@gmail.com',
-					to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-					cc: ccs,
-					subject: 'Re: ' + Subject,
-					html: contents
-				};
-
-				transporter.sendMail(mailOptions, function(error, info) {
-					if (error) {
-						console.log(error);
-						if(error.code === "EAUTH"){
-								res.status(500).send('Username and Password not accepted, Please try again.');
-						}else{
-							res.status(500).send('Internal Error while Sending the email, Please try again.');
-						}
-					} else {
-						console.log('Email sent: ' + info.response);
-						res.send("email sent");
+				var app = require('../server/server');
+				var Template = app.models.Template;
+				debugger;
+				Template.findOne({
+					where: {and: [{
+													Type : req.body.mailType
+												}, {
+													CourseName: req.body.CourseName
+												}]
 					}
+				}).then(function(data){
+					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
+					debugger;
+					if (!data) {
+						res.status(500).send('Template Not found for the course');
+					}
+					var contents = data.Template;
+					var demoDate = new Date(data.DemoDate);
+					Date.prototype.toShortFormat = function() {
+						var month_names = ["Jan", "Feb", "Mar",
+							"Apr", "May", "Jun",
+							"Jul", "Aug", "Sep",
+							"Oct", "Nov", "Dec"
+						];
+
+						var day = this.getDate();
+						var month_index = this.getMonth();
+						var year = this.getFullYear();
+
+						return "" + day + "-" + month_names[month_index] + "-" + year;
+					}
+					if (req.body.mailType === "A") {
+						contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+						contents = contents.replace('$$DemoLink$$', data.VideoLink);
+						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
+   					contents = contents.replace('$$NextClass$$', data.NextClass);
+					}else if(req.body.mailType === "B"){
+						//yet to code
+						contents = contents.replace('$$BatchDate$$', data.FirstName);
+						contents = contents.replace('$$BatchTime$$', data.FirstName);
+						contents = contents.replace('$$DemoLink$$', data.DemoInvite);
+						contents = contents.replace('%24%24DemoLink%24%24', data.DemoInvite);
+						contents = contents.replace('$$NextClass$$', data.FirstName);
+					}
+
+					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
+					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
+					contents = contents.replace('$$Name$$', req.body.FirstName)
+					debugger;
+					if(req.body.fees !== "null" && req.body.fees !== ""){
+	 				 contents = contents.replace("$$fees$$", req.body.fees);
+	  				 contents = contents.replace("$$currency$$", req.body.currency);
+	 			  }
+					var ccs = [];
+					if(req.body.CourseName === "SimpleLogistics"){
+							ccs.push("paramsaddy@gmail.com");
+					}else if (req.body.CourseName === "SimpleFinance") {
+						ccs.push("info@gaurav-consulting.com");
+					}
+					var mailOptions = {
+						from: 'install.abap@gmail.com',
+						to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+						cc: ccs,
+						subject: 'Re: ' + Subject,
+						html: contents
+					};
+					transporter.sendMail(mailOptions, function(error, info) {
+						if (error) {
+							console.log(error);
+							if(error.code === "EAUTH"){
+									res.status(500).send('Username and Password not accepted, Please try again.');
+							}else{
+								res.status(500).send('Internal Error while Sending the email, Please try again.');
+							}
+						} else {
+							console.log('Email sent: ' + info.response);
+							res.send("email sent");
+						}
+					});
 				});
+
+
 
 			});
 		mailContent: "",
@@ -1349,7 +1401,7 @@ app.start = function() {
 							}
 							var nodemailer = require('nodemailer');
 							var smtpTransport = require('nodemailer-smtp-transport');
-							///anurag
+
 
 							var transporter = nodemailer.createTransport(smtpTransport({
 								service: 'Godaddy',

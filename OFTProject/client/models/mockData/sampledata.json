@@ -16,6 +16,22 @@
 				"value": false
 			}
 	],
+	"template":{
+		"CourseName": "",
+		"Type": "R",
+		"Template": "",
+		"DemoDate": "",
+		"DemoInvite": "",
+		"VideoLink": "",
+		"CoursePage": "",
+		"ClassTiming": "",
+		"NextClass": "",
+		"Extra1": "",
+		"Extra2": "",
+		"ExtraN1": "",
+		"ExtraN2": "",
+		"ExtraN3": ""
+	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",
 			"fee": "18 k",
@@ -48,8 +64,8 @@
 		},
 		{
 			"courseName": "Hybris C4C",
-			"fee": "18 k",
-			"usdFee": 300
+			"fee": "22 k",
+			"usdFee": 350
 		},
 		{
 			"courseName": "SAP Cloud Platform",

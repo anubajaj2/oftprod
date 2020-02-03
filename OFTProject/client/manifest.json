@@ -189,6 +189,11 @@
 								"target": ["donald", "mobileView"]
 							},
 							{
+								"pattern": "newTemplate",
+								"name": "newTemplate",
+								"target": ["donald", "newTemplate"]
+							},
+							{
 								"pattern": "accessProcessor",
 								"name": "accessProcessor",
 								"target": ["donald", "accessProcessor"]
@@ -348,6 +353,15 @@
 					"clearAggregation": true,
 					"viewName": "mobileView",
 					"viewId": "idMobileView",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"newTemplate":{
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "newTemplate",
+					"viewId": "idNewTemplate",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
