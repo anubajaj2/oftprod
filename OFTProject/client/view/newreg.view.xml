@@ -109,7 +109,7 @@
 					<Toolbar>
 					<Title
 							id="titletext11"/>
-					<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://synchronize"
+					<Button icon="sap-icon://synchronize"
 								id="clearToken" tooltip="Clear Token" press="onClearToken"/>
 					<ToolbarSpacer></ToolbarSpacer>
 
@@ -117,7 +117,7 @@
 					<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" text="cc"/>
 					<Button  icon="sap-icon://action"
 						id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
-					<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+					<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
 					<Button icon="sap-icon://refresh" press="onRefresh"/>
 				</Toolbar>
 					</headerToolbar>
