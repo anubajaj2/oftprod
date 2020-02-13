@@ -73,7 +73,7 @@
 			</Panel>
 			<Table id="manageSubsTable" growing="true"
 				growingThreshold="50"
-				growingScrollToLoad="false"
+				growingScrollToLoad="false" items="{/Subs}"
 				 mode="MultiSelect" class="sapUiSizeCompact"
 				 showRowCount="true" updateFinished="onUpdateFinished">
 				<!--class="tableStyle" -->
