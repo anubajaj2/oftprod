@@ -15,7 +15,7 @@ sap.ui.define([
 	"sap/ui/model/Filter"
 ], function(Controller, MessageBox, MessageToast, Formatter, FilterOperator, Filter) {
 	"use strict";
-
+ 
 	return Controller.extend("oft.fiori.controller.subsSearch", {
 			formatter: Formatter,
 			/**
@@ -688,10 +688,10 @@ sap.ui.define([
 					}
 				} else {
 					debugger;
-					if(that.getView().getModel("local").getProperty("/Role") === 'Admin'){
+					if(this.getView().getModel("local").getProperty("/Role") === 'Admin'){
 
 						this.getView().byId("manageSubsTable").getBinding("items").filter([]);
-						
+
 					}
 
 				}
