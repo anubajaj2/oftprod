@@ -78,24 +78,24 @@
 				 showRowCount="true" updateFinished="onUpdateFinished">
 				<!--class="tableStyle" -->
 				<headerToolbar>
-					<Toolbar visible="{= ${local>/Role} === 'Admin'}">
+					<Toolbar>
 						<Title id="titletext"/>
 						<ToolbarSpacer/>
-						<Button press="onTableSettings" icon="sap-icon://drop-down-list" tooltip="Settings"/>
-						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://synchronize"
+						<Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/>
+						<Button icon="sap-icon://synchronize"
 							id="clearToken" tooltip="Clear Token" press="onClearToken"/>
 						<ToolbarSpacer/>
-						<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" tooltip="Include in CC" text="cc"/>
-						<Button icon="sap-icon://delete" press="onDelete"/>
-						<Button icon="sap-icon://download" tooltip="All" press="onDataExport"/>
-						<Button icon="sap-icon://download" tooltip="Exclude Expired" press="onExpiredExport"/>
-						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://action"
+						<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
+						<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
+						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExport"/>
+						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
+						<Button icon="sap-icon://action"
 							id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
-						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
 						<Text text="Display Most Recent records?"/>
-						<HBox>
+						<HBox visible="{= ${local>/Role} === 'Admin'}">
 							<Switch idstate="true" customTextOn="Yes" customTextOff="No" change="onSwitchToggle">
 								<layoutData>
 									<FlexItemData growFactor="1"/>

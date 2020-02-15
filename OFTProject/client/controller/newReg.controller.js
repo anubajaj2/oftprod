@@ -358,6 +358,30 @@ sap.ui.define([
 
 
 		},
+		onRate: function(oEvent){
+
+						this.oEvent_approve = oEvent;
+						var sPath = oEvent.getSource().getBindingContext().sPath;
+						var that = this;
+						if(oEvent.getSource().getValue() === 0){
+							var payload3 = {
+								"ExtraN1": ""
+							};
+						}else{
+							var payload3 = {
+								"ExtraN1": oEvent.getSource().getValue()
+							};
+						}
+
+						this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload3, this)
+							.then(function(oData) {
+								sap.m.MessageToast.show("Star mark success");
+							}).catch(function(oError) {
+								that.getView().setBusy(false);
+								var oPopover = that.getErrorMessage(oError);
+
+							});
+		},
 		onSaveSubs: function(oEvent) {
 			//TODO: Save to Coustomer Reg. table
 			//console.log(this.getView().getModel("local").getProperty("/newRegistration"));
@@ -469,12 +493,12 @@ sap.ui.define([
 			}
 
 			var vStatus = null;
-			if (this.UserRole == "Admin") {
+			if (this.UserRole == "Admin" || this.getModel("local").getData().CurrentUser === "5c187036dba2681834ffe305") {
 				vStatus = "Approved";
 			} else {
 				vStatus = "Pending";
 			}
-			debugger;
+
 			that.getView().setBusy(true);
 
 			var payload = {

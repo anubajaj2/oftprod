@@ -162,7 +162,9 @@
 							<Text text="{ path: 'CreatedOn', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }" > </Text>
 							<Text text="{CreatedBy}"> </Text>
 							<!-- <Button text="{CourseId}" press="onScreenShot"></Button> -->
-							<Link text="Payment Proof" href="" press="onScreenShot" />
+							<!-- <Link text="Payment Proof" href="" press="onScreenShot" /> -->
+							<RatingIndicator id="RI_L" maxValue="2" class="sapUiSmallMarginBottom" change="onRate"
+								value="{path: 'ExtraN1'}" iconSize="32px" tooltip="Follow Up" />
 							<Text visible="{= ${local>/Role} === 'Admin'}"
 									  text="{Amount}" />
 							<Text visible="{= ${local>/Role} === 'Admin'}"
