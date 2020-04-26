@@ -103,8 +103,17 @@
         id="fileUploader"
         name="myFileUpload"
         uploadUrl="/upload"
+        uploadPress="handleUploadPress"
         tooltip="Upload your file to the local server"
-        uploadComplete="handleUploadComplete"/>
+        uploadComplete="handleUploadComplete">
+        <u:parameters>
+          <u:FileUploaderParameter
+            name="createdBy"
+            />
+        </u:parameters>
+      </u:FileUploader>
+
+
       <Button
         text="Upload File"
         press="handleUploadPress"/>

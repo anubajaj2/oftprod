@@ -24,14 +24,31 @@ sap.ui.define([
 				this.getView().byId("idUser").setText(loginUser);
 			}
 		},
+		getUserId: function(usr){
+			return this.getModel("local").getData().CurrentUser;
+		},
+		handleUploadPress: function() {
+			var oFileUploader = this.byId("fileUploader");
+			if (!oFileUploader.getValue()) {
+				MessageToast.show("Choose a file first");
+				return;
+			}
+			oFileUploader.getAggregation("parameters")[0].setValue(
+																				this.getModel("local").getData().CurrentUser)
+			oFileUploader.upload();
+		},
 		handleUploadComplete: function(oEvent) {
 			var sResponse = oEvent.getParameter("response");
+			var oFiler = oEvent.getSource();
 			if (sResponse) {
 				var sMsg = "";
 				debugger;
 				var m = /^\[(\d\d\d)\]:(.*)$/.exec(sResponse);
 				if (m[1] == "200") {
-					$.post('/upload', {
+					console.log(this.getModel("local").getData().CurrentUser);
+					oEvent.getSource().getAggregation("parameters")[0].setValue(
+    																				this.getModel("local").getData().CurrentUser)
+   				$.post('/upload', {
 						files: oEvent.getSource().getFocusDomRef().files[0]
 					})
 						.done(function(data, status){
@@ -50,10 +67,10 @@ sap.ui.define([
 			}
 		},
 
-		handleUploadPress: function(oEvent) {
-			var oFileUploader = this.byId("fileUploader");
-			oFileUploader.upload();
-		},
+		// handleUploadPress: function(oEvent) {
+		// 	var oFileUploader = this.byId("fileUploader");
+		// 	oFileUploader.upload();
+		// },
 		updateInq: function(){
 				var that = this;
 				//gtest
