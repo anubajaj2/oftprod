@@ -344,7 +344,7 @@ app.start = function() {
 					},
 					function(accountRecords, accountBalances, callback) {
 						// arg1 now equals 'three'
-						var date = new Date("2019-04-01");
+						var date = new Date("2020-04-01");
 						date.setHours(0,0,0,0);
 						Subs.find({
 							where: {
