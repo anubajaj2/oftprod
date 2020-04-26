@@ -322,7 +322,7 @@ app.start = function() {
 					},
 					function(accountRecords, callback) {
 						// arg1 now equals 'one' and arg2 now equals 'two'
-						var date = new Date("2019-04-01");
+						var date = new Date("2020-04-01");
 						date.setHours(0,0,0,0);
 						AccountEntry.find({
 							where: {
