@@ -43,25 +43,30 @@ sap.ui.define([
 			if (sResponse) {
 				var sMsg = "";
 				debugger;
-				var m = /^\[(\d\d\d)\]:(.*)$/.exec(sResponse);
-				if (m[1] == "200") {
-					console.log(this.getModel("local").getData().CurrentUser);
-					oEvent.getSource().getAggregation("parameters")[0].setValue(
-    																				this.getModel("local").getData().CurrentUser)
-   				$.post('/upload', {
-						files: oEvent.getSource().getFocusDomRef().files[0]
-					})
-						.done(function(data, status){
-									sap.m.MessageBox.error("Done");
-						})
-						.fail(function(xhr, status, error) {
-									sap.m.MessageBox.error("Error in upload");
-						});
-					sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Success)";
-					oEvent.getSource().setValue("");
-				} else {
-					sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Error)";
+				if(JSON.parse(sResponse.split("\">")[1].replace("</pre>","")).error_code !== 0){
+					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>","")).err_desc;
+				}else{
+					sMsg = "Uploaded Successfully";
 				}
+				// var m = /^\[(\d\d\d)\]:(.*)$/.exec(sResponse);
+				// if (m[1] == "200") {
+				// 	console.log(this.getModel("local").getData().CurrentUser);
+				// 	oEvent.getSource().getAggregation("parameters")[0].setValue(
+    		// 																		this.getModel("local").getData().CurrentUser)
+   			// 	$.post('/upload', {
+				// 		files: oEvent.getSource().getFocusDomRef().files[0]
+				// 	})
+				// 		.done(function(data, status){
+				// 					sap.m.MessageBox.error("Done");
+				// 		})
+				// 		.fail(function(xhr, status, error) {
+				// 					sap.m.MessageBox.error("Error in upload");
+				// 		});
+				// 	sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Success)";
+				// 	oEvent.getSource().setValue("");
+				// } else {
+				// 	sMsg = "Return Code: " + m[1] + "\n" + m[2] + "(Upload Error)";
+				// }
 
 				MessageToast.show(sMsg);
 			}

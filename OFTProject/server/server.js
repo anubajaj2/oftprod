@@ -2146,6 +2146,13 @@ debugger;
 
 				sampleFile = req.files.myFileUpload;
 				var createdBy = req.body.createdBy;
+				if (createdBy === "" || createdBy === null) {
+					res.json({
+						error_code: 1,
+						err_desc: "Name is empty"
+					});
+					return "Error";
+				}
 				sampleFile.mv('./uploads/' + req.files.myFileUpload.name, function(err) {
 					if (err) {
 						console.log("eror saving");
