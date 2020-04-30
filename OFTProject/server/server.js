@@ -475,17 +475,19 @@ app.start = function() {
 									}
 
 								}
+								if(accountRecords[i].key !== 'Check Nahi Karna'){
+									responseData.push({ "AccountNo": accountRecords[i].accountNo,
+																			 "AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
+																			 "NewDeposit": newDeposits,
+																			 "Amount": totalAmount,
+																			 "current": accountRecords[i].current,
+																			 "counter":accountRecords[i].counter,
+																			 "counterall":accountRecords[i].counterall,
+																			 "key":accountRecords[i].key,
+																			 "id":accountRecords[i].id
+									});
+								}
 
-								responseData.push({ "AccountNo": accountRecords[i].accountNo,
-																		 "AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
-																		 "NewDeposit": newDeposits,
-																		 "Amount": totalAmount,
-																		 "current": accountRecords[i].current,
-																		 "counter":accountRecords[i].counter,
-																		 "counterall":accountRecords[i].counterall,
-																		 "key":accountRecords[i].key,
-																		 "id":accountRecords[i].id
-								});
 								totalAmount, newDeposits = 0;
 							} catch (e) {
 
