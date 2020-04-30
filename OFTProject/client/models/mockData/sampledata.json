@@ -46,6 +46,14 @@
 			"courseName": "Launchpad",
 			"fee": "25 k",
 			"usdFee": 400
+		},{
+			"courseName": "ABAP on Cloud",
+			"fee": "18 k",
+			"usdFee": 350
+		},{
+			"courseName": "Analytics Cloud",
+			"fee": "22 k",
+			"usdFee": 400
 		},
 		{
 			"courseName": "S4HANA Extension",
@@ -128,10 +136,6 @@
 			"courseName": "Google Blockly",
 			"fee": "8 k",
 			"usdFee": 150
-		},{
-			"courseName": "ABAP on Cloud",
-			"fee": "18 k",
-			"usdFee": 350
 		}
 	],
 	"newBatch": {

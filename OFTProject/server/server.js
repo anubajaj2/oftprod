@@ -1319,6 +1319,7 @@ app.start = function() {
 					&&  req.body.CourseName != "HANA Cloud Integration"
 					&& req.body.CourseName != "SimpleLogistics"
 					&& req.body.CourseName != "ABAP on Cloud"
+					&& req.body.CourseName != "Analytics Cloud"
 					&& req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 
@@ -2516,6 +2517,16 @@ debugger;
 													newRec.currency = "INR";
 												}else{
 													newRec.fees = "280";
+													newRec.currency = "USD";
+												}
+											}
+											else if (singleRec.url.indexOf("sap-analytics-cloud-training") !== -1){
+ 												singleRec.url = "Analytics Cloud";
+												if (singleRec.country_code === "IN") {
+													newRec.fees = "22 k";
+													newRec.currency = "INR";
+												}else{
+													newRec.fees = "400";
 													newRec.currency = "USD";
 												}
 											}else if (singleRec.url.indexOf("hana-cloud-integration-training") !== -1){
