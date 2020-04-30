@@ -3,8 +3,10 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
 	"oft/fiori/models/formatter",
-	"sap/ui/model/Filter"
-], function(Controller, MessageBox, MessageToast, Formatter, Filter) {
+	"sap/ui/model/Filter",
+	'sap/viz/ui5/format/ChartFormatter',
+  'sap/viz/ui5/api/env/Format'
+], function(Controller, MessageBox, MessageToast, Formatter, Filter, ChartFormatter, Format) {
 	"use strict";
 
 	return Controller.extend("oft.fiori.controller.newLead", {
@@ -22,6 +24,61 @@ sap.ui.define([
 			if (currentUser) {
 				var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
 				this.getView().byId("idUser").setText(loginUser);
+			}
+		},
+		setCountryData: function(text, oCountry){
+			var arr = text.split(", ");
+			var lv_text = "";
+			var arr = arr.filter(function (el) {
+								  return el != null;
+								}).filter(function () { return true });
+			var uniqueNames = [];
+			var arr = $.each(arr, function(i, el){
+					    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+					});
+		 for (var i = 0; i < uniqueNames.length; i++) {
+			 if(i>0){
+				 	lv_text =   uniqueNames[i] + ", " + lv_text;
+			 }else{
+				 lv_text =   uniqueNames[i];
+			 }
+
+		 }
+		 if (lv_text === "") {
+		 	lv_text = "no past history found";
+		 }
+		 oCountry.setText(lv_text);
+		},
+		onSplitName: function(oEvent){
+			var text = oEvent.getParameter("value");
+			if(text.indexOf(" ") !== -1){
+				var first = text.split(" ")[0];
+				var second = text.split(" ")[1];
+				this.getView().getModel("local").setProperty("/newLead/FirstName", first);
+				this.getView().getModel("local").setProperty("/newLead/LastName", second);
+			}
+		},
+		onLiveChange: function(oEvent){
+			var text = oEvent.getParameter("value");
+			var that = this;
+			var oCountry = this.getView().byId("countrydata");
+			//if valid email, check
+			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(text))
+		  {
+				oCountry.setText("");
+				$.post('/checkStudentById', { emailId : text })
+			    .done(function(data, status){
+								//sap.m.MessageBox.error(data);
+								if (data) {
+									that.setCountryData(data, oCountry);
+								}
+					})
+			    .fail(function(xhr, status, error) {
+								//sap.m.MessageBox.error("Error in upload");
+								oCountry.setText("no past history");
+			    });
+		  }else{
+
 			}
 		},
 		getUserId: function(usr){
@@ -223,7 +280,38 @@ sap.ui.define([
 				sorter: oSorter
 			});
 			oList.attachUpdateFinished(this.counter);
-
+			var that = this;
+			Format.numericFormatter(ChartFormatter.getInstance());
+      var formatPattern = ChartFormatter.DefaultPattern;
+			var oVizFrame =  this.getView().byId("idVizFrame");
+        oVizFrame.setVizProperties({
+            plotArea: {
+                dataLabel: {
+                    formatString:formatPattern.SHORTFLOAT_MFD2,
+                    visible: true
+                }
+            },
+            valueAxis: {
+                label: {
+                    formatString: formatPattern.SHORTFLOAT
+                },
+                title: {
+                    visible: false
+                }
+            },
+            categoryAxis: {
+                title: {
+                    visible: false
+                }
+            },
+            title: {
+                visible: false,
+                text: 'Total Inquiry'
+            }
+        });
+			$.get("/todayInquiry").then(function(data){
+				that.getView().getModel("local").setProperty("/AllInq",  data );
+			});
 		},
 		counter: function(oEvent) {
 			var oList = oEvent.getSource();

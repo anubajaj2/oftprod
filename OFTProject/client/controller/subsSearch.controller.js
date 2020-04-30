@@ -15,7 +15,7 @@ sap.ui.define([
 	"sap/ui/model/Filter"
 ], function(Controller, MessageBox, MessageToast, Formatter, FilterOperator, Filter) {
 	"use strict";
- 
+
 	return Controller.extend("oft.fiori.controller.subsSearch", {
 			formatter: Formatter,
 			/**
@@ -600,7 +600,8 @@ sap.ui.define([
 									// var that2 = that;
 									debugger;
 									var aFilter = [new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'")];
-									if(that.getView().getModel("local").getProperty("/Role") !== 'Admin'){
+									if(that.getView().getModel("local").getProperty("/Role") !== 'Admin' &&
+									 	 that.getView().getModel("local").getProperty("/CurrentUser") !== '5c187036dba2681834ffe305' ){
 										that.getView().byId("manageSubsTable").bindItems({
 											path: "/Subs",
 											template: new sap.m.ColumnListItem({

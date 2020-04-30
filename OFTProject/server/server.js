@@ -66,7 +66,89 @@ app.start = function() {
 
 				);
 		});
+		app.get("/todayInquiry",function(req,res){
 
+			var date = new Date();
+			date.setDate( date.getDate() - 1 );
+			date.setHours(24,0,0,0);
+			var Inquiry = app.models.Inquiry;
+			Inquiry.find({
+				where: {
+					and: [{
+						CreatedOn: {
+							gte: date
+						}
+					}]
+				},
+				fields:{
+					"CreatedBy": true
+				}
+			})
+			.then(function(all){
+
+				// 5c187036dba2681834ffe305 --> sonal
+				// 5c187035dba2681834ffe301 --> ANubhav
+				// 5d947c3dab189706a40faade --> Servers
+				// 5dd6a6aea5f9e83c781b7ac0 --> shanu
+				// 5ea2f01d7854a13c148f18cd	 --> Manish
+				// 5db594b9b06bff3ffcbba53c --> shalu
+				// 5dcf9f7183f22e7da0acdfe4 --> vaishali
+				var lv_manish = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0;
+				for (var i = 0; i < all.length; i++) {
+					switch (all[i].CreatedBy.toString()) {
+						case "5dd6a6aea5f9e83c781b7ac0":
+							lv_shanu = lv_shanu + 1;
+							break;
+						case "5dcf9f7183f22e7da0acdfe4":
+							lv_vaishali = lv_vaishali + 1;
+								break;
+						case "5db594b9b06bff3ffcbba53c":
+							lv_shalu = lv_shalu + 1;
+								break;
+						case "5c187036dba2681834ffe305":
+							lv_sonal = lv_sonal + 1;
+								break;
+						case "5ea2f01d7854a13c148f18cd":
+								lv_manish = lv_manish + 1;
+								break;
+						default:
+
+					}
+				}
+				var coll = [{ "name" : "shanu", count: lv_shanu },
+										{ "name" : "vaishali", count: lv_vaishali },
+										{ "name" : "shalu", count: lv_shalu },
+										{ "name" : "sonal", count: lv_sonal },
+										{ "name" : "manish", count: lv_manish }];
+				res.send(coll);
+			});
+		});
+		app.post('/checkStudentById', function(req, res) {
+			debugger;
+			var emailId = req.body.emailId;
+			var lv_countries = "";
+			var Inquiry = app.models.Inquiry;
+			Inquiry.find( { where : { EmailId : emailId } } )
+					.then(function(Records, err) {
+									if (Records) {
+										for (var i = 0; i < Records.length; i++) {
+											lv_countries = lv_countries + ", " + Records[i].Country;
+										}
+									}
+									var Subs = app.models.Student;
+									Subs.find( { where : { GmailId : emailId } } )
+											.then(function(Records, err) {
+															if (Records) {
+																for (var i = 0; i < Records.length; i++) {
+																	lv_countries = lv_countries + ", " + Records[i].Country;
+																}
+															}
+															res.send(lv_countries);
+											});
+					});
+
+
+		});
 		app.get('/ServerDownloadAct', function(req, res) {
 			var date = new Date();
 			Server.find({
@@ -1054,6 +1136,9 @@ app.start = function() {
 							}
 						})
 							.then(function(allAc) {
+								allAc = allAc.sort(function(a, b){
+								  return a.counterall > b.counterall;
+								});
 								allAc = allAc.sort(function(a, b){
 								  return a.counterall > b.counterall;
 								});
