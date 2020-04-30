@@ -1207,74 +1207,90 @@ app.start = function() {
 				var payload = req.body;
 				var that = this;
 				this.password = req.body.password;
-				this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'server.html', 'utf8');
-				//if partial payment is true update the due amount and due values
-				Date.prototype.toShortFormat = function() {
-					var month_names = ["Jan", "Feb", "Mar",
-						"Apr", "May", "Jun",
-						"Jul", "Aug", "Sep",
-						"Oct", "Nov", "Dec"
-					];
-
-					var day = this.getDate();
-					var month_index = this.getMonth();
-					var year = this.getFullYear();
-
-					return "" + day + "-" + month_names[month_index] + "-" + year;
-				}
-				var x = new Date(payload.EndDate);
-				this.mailContent = this.mailContent.replace("$$EndDate$$", x.toShortFormat());
-				this.mailContent = this.mailContent.replace("$$UserName$$", '<b href="http://www.anubhavtrainings.com">' + payload.User + '</a>');
-				this.mailContent = this.mailContent.replace("$$Password$$", '<b href="http://www.anubhavtrainings.com/sap-technical-training">' + payload.PassRDP + '</a>');
-				var app = require('../server/server');
-				var Student = app.models.Student;
-				this.StudentId = req.body.StudentId;
-				Student.findById(this.StudentId).then(function(singleStu) {
-					that.studentEmailId = singleStu.GmailId;
-					that.studentName = singleStu.Name.split(" ")[0];
-					///Replace the link in the contents
-					that.studentName = that.studentName.replace(/([A-Z])/g, " $1");
-					that.studentName = that.studentName.charAt(0).toUpperCase() + that.studentName.slice(1);
-					if (studentName === "" || studentName === undefined || studentName === "null") {
-						studentName = "Sir";
+				var Template = app.models.Template;
+				debugger;
+				Template.findOne({
+					where: {and: [{
+													CourseName: 'Server'
+												}]
 					}
-					var nodemailer = require('nodemailer');
-					var smtpTransport = require('nodemailer-smtp-transport');
-					var transporter = nodemailer.createTransport(smtpTransport({
-						service: 'Godaddy',
-						host: 'smtpout.secureserver.net',
-						secureConnection: true,
-						auth: {
-							user: 'server@anubhavtrainings.com',
-							pass: that.password
-						}
-					}));
-					var Subject = "[CONFIDENTIAL] SAP Server Subscription";
-					//https://myaccount.google.com/lesssecureapps?pli=1
-					that.mailContent = that.mailContent.replace('$$Name$$', that.studentName)
-					var ccs = ["install.abap@gmail.com"];
-					var mailOptions = {
-						from: 'server@anubhavtrainings.com',
-						cc: ccs,
-						to: that.studentEmailId, //that2.studentEmailId
-						subject: Subject,
-						html: that.mailContent
-					};
+				}).then(function(data){
+					if (!data) {
+						res.status(500).send('Template Not found for the course');
+					}
+					this.mailContent = data.Template;
+					//this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'server.html', 'utf8');
+					//if partial payment is true update the due amount and due values
+					Date.prototype.toShortFormat = function() {
+						var month_names = ["Jan", "Feb", "Mar",
+							"Apr", "May", "Jun",
+							"Jul", "Aug", "Sep",
+							"Oct", "Nov", "Dec"
+						];
 
-					transporter.sendMail(mailOptions, function(error, info) {
-						if (error) {
-							console.log(error);
-							if(error.code === "EAUTH"){
-									res.status(500).send('Username and Password not accepted, Please try again.');
-							}else{
-								res.status(500).send('Internal Error while Sending the email, Please try again.');
-							}
-						} else {
-							console.log('Email sent: ' + info.response);
-							res.send("email sent");
+						var day = this.getDate();
+						var month_index = this.getMonth();
+						var year = this.getFullYear();
+
+						return "" + day + "-" + month_names[month_index] + "-" + year;
+					}
+					var x = new Date(payload.EndDate);
+					this.mailContent = this.mailContent.replace("$$IP_ADDRESS$$", data.DemoInvite);
+					this.mailContent = this.mailContent.replace("$$EndDate$$", x.toShortFormat());
+					this.mailContent = this.mailContent.replace("$$UserName$$", '<b href="http://www.anubhavtrainings.com">' + payload.User + '</a>');
+					this.mailContent = this.mailContent.replace("$$Password$$", '<b href="http://www.anubhavtrainings.com/sap-technical-training">' + payload.PassRDP + '</a>');
+					var app = require('../server/server');
+					var Student = app.models.Student;
+					this.StudentId = req.body.StudentId;
+					Student.findById(this.StudentId).then(function(singleStu) {
+						that.studentEmailId = singleStu.GmailId;
+						that.studentName = singleStu.Name.split(" ")[0];
+						///Replace the link in the contents
+						that.studentName = that.studentName.replace(/([A-Z])/g, " $1");
+						that.studentName = that.studentName.charAt(0).toUpperCase() + that.studentName.slice(1);
+						if (studentName === "" || studentName === undefined || studentName === "null") {
+							studentName = "Sir";
 						}
+						var nodemailer = require('nodemailer');
+						var smtpTransport = require('nodemailer-smtp-transport');
+						var transporter = nodemailer.createTransport(smtpTransport({
+							service: 'Godaddy',
+							host: 'smtpout.secureserver.net',
+							secureConnection: true,
+							auth: {
+								user: 'server@anubhavtrainings.com',
+								pass: that.password
+							}
+						}));
+						var Subject = "[CONFIDENTIAL] SAP Server Subscription";
+						//https://myaccount.google.com/lesssecureapps?pli=1
+						that.mailContent = that.mailContent.replace('$$Name$$', that.studentName)
+						var ccs = ["install.abap@gmail.com"];
+						var mailOptions = {
+							from: 'server@anubhavtrainings.com',
+							cc: ccs,
+							to: that.studentEmailId, //that2.studentEmailId
+							subject: Subject,
+							html: that.mailContent
+						};
+
+						transporter.sendMail(mailOptions, function(error, info) {
+							if (error) {
+								console.log(error);
+								if(error.code === "EAUTH"){
+										res.status(500).send('Username and Password not accepted, Please try again.');
+								}else{
+									res.status(500).send('Internal Error while Sending the email, Please try again.');
+								}
+							} else {
+								console.log('Email sent: ' + info.response);
+								res.send("email sent");
+							}
+						});
 					});
 				});
+
+
 
 			});
 
