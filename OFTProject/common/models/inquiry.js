@@ -8,11 +8,11 @@ module.exports = function(Inquiry) {
     Inquiry.validatesPresenceOf('FirstName', {message: 'Name Cannot be blank'});
 
     Inquiry.validatesFormatOf('EmailId', {with: re, message: 'invalid email id'});
-    Inquiry.validatesInclusionOf('CourseName', {
-        in: ["UI5 and Fiori", "ABAP on HANA", "Launchpad", "HANA XS",  "Hybris C4C",
-             ,"HANA Cloud Integration","SAP Cloud Platform","ABAP", "OOPS ABAP", "Webdynpro", "Workflow", "FPM", "Other"
-             ,"ABAP on Cloud","S4HANA Extension","BRF", "SimpleLogistics","SimpleFinance", "Google Blockly", "Leonardo ML"], message: 'Course Name is not allowed'
-    });
+    // Inquiry.validatesInclusionOf('CourseName', {
+    //     in: ["UI5 and Fiori", "ABAP on HANA", "Launchpad", "HANA XS",  "Hybris C4C",
+    //          ,"HANA Cloud Integration","SAP Cloud Platform","ABAP", "OOPS ABAP", "Webdynpro", "Workflow", "FPM", "Other"
+    //          ,"ABAP on Cloud","S4HANA Extension","BRF", "SimpleLogistics","SimpleFinance", "Google Blockly", "Leonardo ML"], message: 'Course Name is not allowed'
+    // });
     //anubhav push from atom
     ///Parse microsoft ISO Date while read : /Date(1540319400000)/
     //jsonDate = "/Date(1540319400000)/"; var date = new Date(parseInt(jsonDate.substr(6)));
