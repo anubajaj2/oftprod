@@ -10,11 +10,11 @@ module.exports = function(Course) {
       Course.validatesPresenceOf('Fee', {message: 'Fee Cannot be blank'});
 
     // Course.validatesFormatOf('EmailId', {with: re, message: 'invalid email id'});
-    Course.validatesInclusionOf('Name', {
-        in: ["UI5 and Fiori", "ABAP on HANA", "Launchpad", "HANA XS",  "Hybris C4C",
-             "HANA Cloud Integration","S4HANA Extension","Adobe Forms","SAP Cloud Platform",
-             "ABAP", "OOPS ABAP", "Webdynpro", "Workflow", "FPM","BRF", "Other", "ABAP on Cloud"], message: 'Course Name is not allowed'
-    });
+    // Course.validatesInclusionOf('Name', {
+    //     in: ["UI5 and Fiori", "ABAP on HANA", "Launchpad", "HANA XS",  "Hybris C4C",
+    //          "HANA Cloud Integration","S4HANA Extension","Adobe Forms","SAP Cloud Platform",
+    //          "ABAP", "OOPS ABAP", "Webdynpro", "Workflow", "FPM","BRF", "Other", "ABAP on Cloud"], message: 'Course Name is not allowed'
+    // });
     ///Parse microsoft ISO Date while read : /Date(1540319400000)/
     //jsonDate = "/Date(1540319400000)/"; var date = new Date(parseInt(jsonDate.substr(6)));
     Course.observe("before save",function(ctx, next){
