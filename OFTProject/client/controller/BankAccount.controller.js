@@ -199,6 +199,8 @@ sap.ui.define([
 				.then(function(oData) {
 					that.getView().setBusy(false);
 					sap.m.MessageToast.show("Account entry Saved successfully");
+					//this.getView().byId("idRegDate").setDateValue(new Date());
+					that.getView().getModel("local").setProperty("/accountBalance/CreatedOn", that.formatter.getFormattedDate(0));
 				}).catch(function(oError) {
 					that.getView().setBusy(false);
 					var oPopover = that.getErrorMessage(oError);
