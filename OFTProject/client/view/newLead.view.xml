@@ -52,7 +52,7 @@
               <Label text="Currency" />
       				<Input value="{local>/newLead/currency}" />
       				<Label text="Phone" />
-      				<Input type="Number" value="{local>/newLead/phone}">
+      				<Input value="{local>/newLead/phone}">
       				</Input>
       				<Label text="Subject" />
       				<Input value="{local>/newLead/subject}">

@@ -127,12 +127,14 @@ app.start = function() {
 			debugger;
 			var emailId = req.body.emailId;
 			var lv_countries = "";
+			var completeData = {};
 			var Inquiry = app.models.Inquiry;
 			Inquiry.find( { where : { EmailId : emailId } } )
 					.then(function(Records, err) {
 									if (Records) {
 										for (var i = 0; i < Records.length; i++) {
 											lv_countries = lv_countries + ", " + Records[i].Country;
+											completeData = Records[i];
 										}
 									}
 									var Subs = app.models.Student;
@@ -141,9 +143,10 @@ app.start = function() {
 															if (Records) {
 																for (var i = 0; i < Records.length; i++) {
 																	lv_countries = lv_countries + ", " + Records[i].Country;
+																	completeData.subs = Records[i];
 																}
 															}
-															res.send(lv_countries);
+															res.send({country: lv_countries, inq: completeData});
 											});
 					});
 

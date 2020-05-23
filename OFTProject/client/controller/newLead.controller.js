@@ -58,6 +58,23 @@ sap.ui.define([
 				this.getView().getModel("local").setProperty("/newLead/LastName", second);
 			}
 		},
+		setOtherData: function(data){
+			if (data.FirstName !== "" || data.FirstName !== "null") {
+					this.getView().getModel("local").setProperty("/newLead/FirstName", data.FirstName);
+			}
+			if (data.LastName !== "" || data.LastName !== "null") {
+				this.getView().getModel("local").setProperty("/newLead/LastName", data.LastName);
+			}
+			if (data.Country !== "" || data.Country !== "null") {
+				//this.getView().getModel("local").setProperty("/newLead/Country", data.Country);
+				this.getView().byId("country").setSelectedKey(data.Country);
+			}
+			if (data.Phone !== 0) {
+				this.getView().getModel("local").setProperty("/newLead/Phone", data.Phone);
+			}
+
+
+		},
 		onLiveChange: function(oEvent){
 			var text = oEvent.getParameter("value");
 			var that = this;
@@ -70,7 +87,11 @@ sap.ui.define([
 			    .done(function(data, status){
 								//sap.m.MessageBox.error(data);
 								if (data) {
-									that.setCountryData(data, oCountry);
+									that.setCountryData(data.country, oCountry);
+									if (data.inq) {
+										that.setOtherData(data.inq);
+									}
+
 								}
 					})
 			    .fail(function(xhr, status, error) {
@@ -400,7 +421,7 @@ sap.ui.define([
 		},
 		onSave: function(oEvent) {
 			var oLocal = oEvent;
-			console.log(this.getView().getModel("local").getProperty("/newLead"));
+			//console.log(this.getView().getModel("local").getProperty("/newLead"));
 			var that = this;
 			that.getView().setBusy(true);
 			var leadData = this.getView().getModel("local").getProperty("/newLead");
@@ -408,7 +429,9 @@ sap.ui.define([
 				sap.m.MessageToast.show("Enter a valid Date");
 				return "";
 			}
-
+			if(leadData.phone){
+				leadData.phone = this.formatter.extractNo(leadData.phone).replace(/,/g, '');
+			}
 			var payload = {
 				"EmailId": leadData.emailId.toLowerCase(),
 				"CourseName": leadData.course,

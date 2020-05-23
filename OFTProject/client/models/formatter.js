@@ -65,6 +65,18 @@ sap.ui.define([], function() {
 			}
 			return dd + '.' + mm + '.' + yyyy;
 		},
+		removeSpecialChars: function(str){
+			if(str){
+				return str.replace(/[^a-zA-Z ]/g, "");
+			}
+
+		},
+		extractNo: function(val) {
+			if(val){
+					return val.match(/\d/g).join();
+			}
+
+		},
 		getIndianCurr: function(value){
 			var x=value;
 			x=x.toString();
