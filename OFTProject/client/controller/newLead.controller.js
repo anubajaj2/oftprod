@@ -59,18 +59,26 @@ sap.ui.define([
 			}
 		},
 		setOtherData: function(data){
-			if (data.FirstName !== "" || data.FirstName !== "null") {
+			if (data.FirstName !== "" && data.FirstName !== "null" && data.FirstName !== undefined) {
 					this.getView().getModel("local").setProperty("/newLead/FirstName", data.FirstName);
+			}else{
+				this.getView().getModel("local").setProperty("/newLead/FirstName", "");
 			}
-			if (data.LastName !== "" || data.LastName !== "null") {
+			if (data.LastName !== "" && data.LastName !== "null" && data.LastName !== undefined) {
 				this.getView().getModel("local").setProperty("/newLead/LastName", data.LastName);
+			}else{
+				this.getView().getModel("local").setProperty("/newLead/LastName","");
 			}
-			if (data.Country !== "" || data.Country !== "null") {
+			if (data.Country !== "" && data.Country !== "null" && data.Country !== undefined) {
 				//this.getView().getModel("local").setProperty("/newLead/Country", data.Country);
-				this.getView().byId("country").setSelectedKey(data.Country);
+					this.getView().byId("country").setSelectedKey(data.Country);
+			}else{
+					this.getView().byId("country").setSelectedKey("IN");
 			}
-			if (data.Phone !== 0) {
+			if (data.Phone !== "" && data.Phone !== 0 && data.Phone !== undefined) {
 				this.getView().getModel("local").setProperty("/newLead/Phone", data.Phone);
+			}else{
+				this.getView().getModel("local").setProperty("/newLead/Phone", "");
 			}
 
 
