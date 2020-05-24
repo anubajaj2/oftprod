@@ -63,7 +63,7 @@
               <Label />
               <RadioButtonGroup id="rbg" columns="3" class="sapUiMediumMarginBottom">
           			<RadioButton id="R" text="Regular" />
-          			<!-- <RadioButton id="B" text="Before Demo" /> -->
+          			<RadioButton id="B" text="Before Demo" />
           			<RadioButton id="A" text="After Demo" />
         		   </RadioButtonGroup>
       			</f:content>

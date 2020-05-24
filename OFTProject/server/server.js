@@ -1379,13 +1379,16 @@ app.start = function() {
 						contents = contents.replace('$$DemoLink$$', data.VideoLink);
 						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
    					contents = contents.replace('$$NextClass$$', data.NextClass);
+
 					}else if(req.body.mailType === "B"){
 						//yet to code
-						contents = contents.replace('$$BatchDate$$', data.FirstName);
-						contents = contents.replace('$$BatchTime$$', data.FirstName);
-						contents = contents.replace('$$DemoLink$$', data.DemoInvite);
-						contents = contents.replace('%24%24DemoLink%24%24', data.DemoInvite);
+						contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+						contents = contents.replace('$$DemoLink$$', data.VideoLink);
+						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
 						contents = contents.replace('$$NextClass$$', data.FirstName);
+						contents = contents.replace('$$CALLink$$', data.Extra1);
+						contents = contents.replace('%24%24CALLink%24%24', data.Extra1);
 					}
 
 					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
