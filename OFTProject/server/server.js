@@ -2372,6 +2372,7 @@ debugger;
 														newRecord.Mode = "Online";
 														newRecord.PassRDP = this.allResult[stu.GmailId].password;
 														newRecord.Remarks = "Created by Anubhav";
+														newRecord.source = "P";
 														newRecord.Extr1 = this.allResult[stu.GmailId].email
 														Server.findOrCreate({
 																"where": {

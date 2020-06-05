@@ -303,7 +303,7 @@ sap.ui.define([
 				path: '/Inquries',
 				template: new sap.m.DisplayListItem({
 					label: "{EmailId} - {CourseName} - {Country}",
-					value: "{fees} {currency} / {CreatedOn}-{CreatedBy}"
+					value: "{fees} {currency} / {source} / {CreatedOn}-{CreatedBy}"
 				}),
 				filters: [new Filter("CreatedOn", "GE", newDate)],
 				sorter: oSorter
@@ -341,6 +341,20 @@ sap.ui.define([
 			$.get("/todayInquiry").then(function(data){
 				that.getView().getModel("local").setProperty("/AllInq",  data );
 			});
+
+			this.setConfig();
+
+		},
+		setConfig: function(){
+			if(this.getModel("local").getData().CurrentUser === "5d947c3dab189706a40faade" ||
+				 this.getModel("local").getData().CurrentUser === "5dd6a6aea5f9e83c781b7ac0" ||
+			 	 this.getModel("local").getData().CurrentUser === "5ecc968586321064989cdc3f" ){
+					 this.getView().byId("source").setSelectedKey("L");
+					 console.log("linkedin");
+		 }else{
+			 		this.getView().byId("source").setSelectedKey("R");
+					console.log("Regular");
+		 }
 		},
 		counter: function(oEvent) {
 			var oList = oEvent.getSource();
@@ -454,7 +468,8 @@ sap.ui.define([
 				"currency": leadData.currency,
 				"CreatedOn": new Date(),
 				"CreatedBy": "Minakshi",
-				"SoftDelete": false
+				"SoftDelete": false,
+				"source": leadData.source,
 			};
 			// var oDataModel = this.getView().getModel();
 			// oDataModel.create("/Inquries",payload,null, function(){

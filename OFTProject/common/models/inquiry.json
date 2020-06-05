@@ -68,6 +68,10 @@
     "currency":{
       "type": "string",
       "default": "INR"
+    },
+    "source":{
+      "type": "string",
+      "default": "R"
     }
   },
   "validations": [],

@@ -66,6 +66,19 @@
           			<RadioButton id="B" text="Before Demo" />
           			<RadioButton id="A" text="After Demo" />
         		   </RadioButtonGroup>
+               <Label text="Source" />
+       				 <Select  id="source"
+       						  selectedKey="{local>/newLead/source}">
+       					 <items>
+       						 <core:Item text="Website" key="R"/>
+                   <core:Item text="Linkedin" key="L"/>
+                   <core:Item text="Chatbot" key="C"/>
+                   <core:Item text="Privy" key="P"/>
+                   <core:Item text="Whatsapp" key="W"/>
+                   <core:Item text="Reference" key="R"/>
+                   <core:Item text="Other" key="O"/>
+       					 </items>
+       				 </Select>
       			</f:content>
       		</f:SimpleForm>
 
