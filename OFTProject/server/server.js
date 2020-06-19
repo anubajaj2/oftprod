@@ -1390,7 +1390,7 @@ app.start = function() {
 						contents = contents.replace('$$CALLink$$', data.Extra1);
 						contents = contents.replace('%24%24CALLink%24%24', data.Extra1);
 					}
-
+					contents = contents.replace('$$Extra1$$', data.Extra2);
 					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
 					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
 					contents = contents.replace('$$Name$$', req.body.FirstName)
