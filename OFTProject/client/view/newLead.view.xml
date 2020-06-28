@@ -67,6 +67,8 @@
                   <core:Item text="Other" key="O"/>
                 </items>
               </Select>
+              <Label text="Use Gmail Only" />
+              <CheckBox tooltip="Is Minakshi" id="isMinakshi" />
       				<Label text="Subject" />
       				<Input value="{local>/newLead/subject}">
       				</Input>

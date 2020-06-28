@@ -1302,14 +1302,29 @@ app.start = function() {
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				console.log(req.body);
-				var transporter = nodemailer.createTransport(smtpTransport({
-					service: 'gmail',
-					host: 'smtp.gmail.com',
-					auth: {
-						user: 'install.abap@gmail.com',
-						pass: req.body.password
-					}
-				}));
+
+				if(req.body.IsMinakshi === "X"){
+					var transporter = nodemailer.createTransport(smtpTransport({
+						service: 'gmail',
+						host: 'smtp.gmail.com',
+						auth: {
+							user: 'install.abap@gmail.com',
+							pass: req.body.password
+						}
+					}));
+				}else{
+					var transporter = nodemailer.createTransport(smtpTransport({
+									service: 'Godaddy',
+									host: 'smtpout.secureserver.net',
+									secureConnection: true,
+									auth: {
+										user: 'info@anubhavtrainings.com',
+										pass: req.body.password
+									}
+								}));
+				}
+
+
 				var Subject = req.body.Subject;
 				if (Subject === "" || Subject === "null") {
 					Subject = req.body.CourseName + " training";
@@ -1405,13 +1420,30 @@ app.start = function() {
 					}else if (req.body.CourseName === "SimpleFinance") {
 						ccs.push("info@gaurav-consulting.com");
 					}
-					var mailOptions = {
-						from: 'install.abap@gmail.com',
-						to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-						cc: ccs,
-						subject: 'Re: ' + Subject,
-						html: contents
-					};
+					var mailOptions = {};
+					if(req.body.IsMinakshi === "X"){
+						ccs.push("info@anubhavtrainings.com");
+						mailOptions = {
+							//'install.abap@gmail.com',
+							from: 'info@anubhavtrainings.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							cc: ccs,
+							subject: 'Re: ' + Subject,
+							html: contents
+						};
+					}else{
+						ccs.push("install.abap@gmail.com");
+						mailOptions = {
+							//'install.abap@gmail.com',
+							from: 'info@anubhavtrainings.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							cc: ccs,
+							subject: 'Re: ' + Subject,
+							html: contents
+						};
+					}
+
+
 					transporter.sendMail(mailOptions, function(error, info) {
 						if (error) {
 							console.log(error);
@@ -1430,7 +1462,7 @@ app.start = function() {
 
 
 			});
-		mailContent: "",
+			mailContent: "",
 			app.post('/sendSubscriptionEmail',
 				function(req, res) {
 

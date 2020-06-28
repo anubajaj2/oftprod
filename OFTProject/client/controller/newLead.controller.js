@@ -202,6 +202,12 @@ sap.ui.define([
 				}
 				loginPayload.password = this.passwords;
 				loginPayload.DollerQuote = this.getView().byId("doller").getSelected();
+				if(this.getView().byId("isMinakshi").getSelected()){
+						loginPayload.IsMinakshi = "X";
+				}else{
+					loginPayload.IsMinakshi = "";
+				}
+
 				var x = this.getView().byId("rbg");
 				loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
 				$.post('/sendInquiryEmail', loginPayload)
@@ -577,6 +583,11 @@ sap.ui.define([
 								}
 								var x = that2.getView().byId("rbg");
 								loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
+								if(that2.getView().byId("isMinakshi").getSelected()){
+										loginPayload.IsMinakshi = "X";
+								}else{
+									loginPayload.IsMinakshi = "";
+								}
 								$.post('/sendInquiryEmail', loginPayload)
 									.done(function(data, status) {
 										sap.m.MessageToast.show("Email sent successfully");
