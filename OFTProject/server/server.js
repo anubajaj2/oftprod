@@ -206,14 +206,14 @@ app.start = function() {
 					var typeMsg = req.body.msgType;
 					switch (typeMsg) {
 						case "inquiry":
-							msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, #COURSE# details sent to your email id, please write to us on install.abap@gmail.com.";
+							msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, #COURSE# details sent to your email id, please write to us on contact@anubhavtrainings.com.";
 							msg = msg.replace("#COURSE#", req.body.courseName);
 							break;
 						case "courseapprove":
-								msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on install.abap@gmail.com for more queries';;
+								msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on contact@anubhavtrainings.com for more queries';;
 								break;
 						case "courseextend":
-								msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com, the course is extended till #EXTENDDATE#. mail us on install.abap@gmail.com for more queries";
+								msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com, the course is extended till #EXTENDDATE#. mail us on contact@anubhavtrainings.com for more queries";
 								msg = msg.replace("#EXTENDDATE#", req.body.extendDate);
 							  break;
 						default:
@@ -1268,7 +1268,7 @@ app.start = function() {
 						var Subject = "[CONFIDENTIAL] SAP Server Subscription";
 						//https://myaccount.google.com/lesssecureapps?pli=1
 						that.mailContent = that.mailContent.replace('$$Name$$', that.studentName)
-						var ccs = ["install.abap@gmail.com"];
+						var ccs = ["contact@anubhavtrainings.com"];
 						var mailOptions = {
 							from: 'server@anubhavtrainings.com',
 							cc: ccs,
@@ -1432,7 +1432,6 @@ app.start = function() {
 					if(req.body.IsMinakshi === "X"){
 						ccs.push("contact@anubhavtrainings.com");
 						mailOptions = {
-							//'install.abap@gmail.com',
 							from: 'install.abap@gmail.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
@@ -1440,9 +1439,7 @@ app.start = function() {
 							html: contents
 						};
 					}else{
-						//ccs.push("install.abap@gmail.com");
 						mailOptions = {
-							//'install.abap@gmail.com',
 							from: 'contact@anubhavtrainings.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
@@ -1554,8 +1551,8 @@ app.start = function() {
 
 
 							var transporter = nodemailer.createTransport(smtpTransport({
-								service: 'Godaddy',
-								host: 'smtpout.secureserver.net',
+								service: 'gmail',
+								host: 'smtp.gmail.com',
 								secureConnection: true,
 								auth: {
 									user: 'no-reply@anubhavtrainings.com',
@@ -1568,7 +1565,7 @@ app.start = function() {
 							that2.mailContent = that2.mailContent.replace('$$Name$$', that2.studentName)
 							var ccs = ["anubhav.abap@gmail.com"];
 							if (that2.includeX === "true" || that2.includeX === "Renewal-true") {
-								ccs.push("install.abap@gmail.com");
+								ccs.push("contact@anubhavtrainings.com");
 							}else if (that2.includeX === "Renewal") {
 									//change content of the email here - anu
 							}
