@@ -1311,22 +1311,14 @@ app.start = function() {
 									  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
 									  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-email%40aerobic-gift-281811.iam.gserviceaccount.com"
 									};
-				 var key2  = {
-											"web": {
-												"client_id": "25903670476-ags2m71c6f2unjk315phpl2efsqjekmq.apps.googleusercontent.com",
-												"project_id": "quickstart-1593441271140",
-												"auth_uri": "https://accounts.google.com/o/oauth2/auth",
-												"token_uri": "https://oauth2.googleapis.com/token",
-												"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-												"client_secret": "QlXJ1bvyLLrMSfgxMRam8nWP"
-											}
-										};
-
+				//https://developers.google.com/oauthplayground/
+				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+				//
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				console.log(req.body);
 
-				// if(req.body.IsMinakshi === "X"){
+				if(req.body.IsMinakshi === "X"){
 					var transporter = nodemailer.createTransport(smtpTransport({
 						service: 'gmail',
 						host: 'smtp.gmail.com',
@@ -1335,61 +1327,22 @@ app.start = function() {
 							pass: req.body.password
 						}
 					}));
-				// }else{
-					// var transporter = nodemailer.createTransport(smtpTransport({
-					// 				service: 'Godaddy',
-					// 				host: 'smtpout.secureserver.net',
-					// 				secureConnection: true,
-					// 				auth: {
-					// 					user: 'info@anubhavtrainings.com',
-					// 					pass: req.body.password
-					// 				}
-					// 			}));
-							// console.log(req.body.password);
-							// var transporter = nodemailer.createTransport(smtpTransport({
-							// 	service: 'gmail',
-							// 	host: 'smtp.gmail.com',
-							// 	auth: {
-							// 		user: 'contact@anubhavtrainings.com',
-							// 		pass: req.body.password
-							// 	}
-							// }));
-							// console.log(key);
-							// let transporter = nodemailer.createTransport({
-							//     host: 'smtp.gmail.com',
-							//     port: 465,
-							//     secure: true,
-							//     auth: {
-							//         type: 'OAuth2',
-							//         clientId: key.client_id,
-							//         clientSecret: key.private_key
-							//     }
-							// });
-							//
-							// transporter.sendMail({
-							//     from: 'contact@anubhavtrainings.com',
-							//     to: 'anubhav.abap@gmail.com',
-							//     subject: 'Message',
-							//     text: 'I hope this message gets through!'
-							// });
-							// return "";
-							// var transporter = nodemailer.createTransport({
-							// 	//service: 'gmail',
-							// 	host: 'smtp.gmail.com',
-							// 	port : 465,
-							// 	secure: true,
-							// 	auth: {
-							// 		type: 'OAuth2',
-							// 		user: 'contact@anubhavtrainings.com',
-							// 		serviceClient: key.client_id,
-							// 		privateKey: key.private_key,
-							// 		accessToken: 'ya29.a0AfH6SMCcXWVyd6dfwwJirnS836Pz0kaRzDjkdjr5jdO0UZ1WkEJ05oDG3JYROBf-RXa3Fgsconus_rONmyyNNQwYbgNRH6aHZxD26rC0DiOtZlPk3l8_txCqUYfflV4LVpDnMYf6H3vRlIpnRi-S8MD-yVmFeSJdNsk'
-							// 		//pass: req.body.password
-							// 	},
-							// });
-
-							// transporter.verify();
-				// }
+				}else{
+							var transporter = nodemailer.createTransport({
+								//service: 'gmail',
+								host: 'smtp.gmail.com',
+								port : 465,
+								secure: true,
+								auth: {
+									type: 'OAuth2',
+									user: 'contact@anubhavtrainings.com',
+									serviceClient: key.client_id,
+									privateKey: key.private_key,
+									accessToken: 'ya29.a0AfH6SMCcXWVyd6dfwwJirnS836Pz0kaRzDjkdjr5jdO0UZ1WkEJ05oDG3JYROBf-RXa3Fgsconus_rONmyyNNQwYbgNRH6aHZxD26rC0DiOtZlPk3l8_txCqUYfflV4LVpDnMYf6H3vRlIpnRi-S8MD-yVmFeSJdNsk'
+									//pass: req.body.password
+								},
+							});
+				}
 
 
 				var Subject = req.body.Subject;
@@ -1488,8 +1441,8 @@ app.start = function() {
 						ccs.push("info@gaurav-consulting.com");
 					}
 					var mailOptions = {};
-					// if(req.body.IsMinakshi === "X"){
-						// ccs.push("contact@anubhavtrainings.com");
+					if(req.body.IsMinakshi === "X"){
+						ccs.push("contact@anubhavtrainings.com");
 						mailOptions = {
 							//'install.abap@gmail.com',
 							from: 'install.abap@gmail.com',
@@ -1498,17 +1451,17 @@ app.start = function() {
 							subject: 'Re: ' + Subject,
 							html: contents
 						};
-					// }else{
-					// 	ccs.push("install.abap@gmail.com");
-					// 	mailOptions = {
-					// 		//'install.abap@gmail.com',
-					// 		from: 'contact@anubhavtrainings.com',
-					// 		to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-					// 		cc: ccs,
-					// 		subject: 'Re: ' + Subject,
-					// 		html: contents
-					// 	};
-					// }
+					}else{
+						ccs.push("install.abap@gmail.com");
+						mailOptions = {
+							//'install.abap@gmail.com',
+							from: 'contact@anubhavtrainings.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							cc: ccs,
+							subject: 'Re: ' + Subject,
+							html: contents
+						};
+					}
 
 
 					transporter.sendMail(mailOptions, function(error, info) {
