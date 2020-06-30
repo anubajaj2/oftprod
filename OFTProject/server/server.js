@@ -1316,6 +1316,7 @@ app.start = function() {
 				//
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
+				const xoauth2 = require('xoauth2');
 				console.log(req.body);
 
 				if(req.body.IsMinakshi === "X"){
@@ -1328,20 +1329,32 @@ app.start = function() {
 						}
 					}));
 				}else{
-							var transporter = nodemailer.createTransport({
-								//service: 'gmail',
-								host: 'smtp.gmail.com',
-								port : 465,
-								secure: true,
-								auth: {
-									type: 'OAuth2',
-									user: 'contact@anubhavtrainings.com',
-									serviceClient: key.client_id,
-									privateKey: key.private_key,
-									accessToken: 'ya29.a0AfH6SMCcXWVyd6dfwwJirnS836Pz0kaRzDjkdjr5jdO0UZ1WkEJ05oDG3JYROBf-RXa3Fgsconus_rONmyyNNQwYbgNRH6aHZxD26rC0DiOtZlPk3l8_txCqUYfflV4LVpDnMYf6H3vRlIpnRi-S8MD-yVmFeSJdNsk'
-									//pass: req.body.password
-								},
-							});
+							var transporter = nodemailer.createTransport(smtpTransport({
+							    service: 'gmail',
+							    host: 'smtp.gmail.com',
+							    auth: {
+							        xoauth2: xoauth2.createXOAuth2Generator({
+							            user: 'contact@anubhavtrainings.com',
+							            clientId: '275646007499-2hfmo1j4ot1ds89saqrk8pn1pdh4v5sp.apps.googleusercontent.com',
+							            clientSecret: 'WIajP-Wif3OWVahkRt--aj73',
+							            refreshToken: '1//04hBvLq6qONfDCgYIARAAGAQSNwF-L9Ir6rhFpmkpn4nU1PDdZ_CTZKVZK-YPX2cp6f2TWoRaVq692hP0wofSvxOlLOJnzEhq7HY'
+							        })
+							    }
+							}));
+							// var transporter = nodemailer.createTransport({
+							// 	//service: 'gmail',
+							// 	host: 'smtp.gmail.com',
+							// 	port : 465,
+							// 	secure: true,
+							// 	auth: {
+							// 		type: 'OAuth2',
+							// 		user: 'contact@anubhavtrainings.com',
+							// 		serviceClient: key.client_id,
+							// 		privateKey: key.private_key,
+							// 		accessToken: 'ya29.a0AfH6SMCcXWVyd6dfwwJirnS836Pz0kaRzDjkdjr5jdO0UZ1WkEJ05oDG3JYROBf-RXa3Fgsconus_rONmyyNNQwYbgNRH6aHZxD26rC0DiOtZlPk3l8_txCqUYfflV4LVpDnMYf6H3vRlIpnRi-S8MD-yVmFeSJdNsk'
+							// 		//pass: req.body.password
+							// 	},
+							// });
 				}
 
 
