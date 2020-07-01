@@ -1256,10 +1256,18 @@ app.start = function() {
 						}
 						var nodemailer = require('nodemailer');
 						var smtpTransport = require('nodemailer-smtp-transport');
+						// var transporter = nodemailer.createTransport(smtpTransport({
+						// 	service: 'Godaddy',
+						// 	host: 'smtpout.secureserver.net',
+						// 	secureConnection: true,
+						// 	auth: {
+						// 		user: 'server@anubhavtrainings.com',
+						// 		pass: that.password
+						// 	}
+						// }));
 						var transporter = nodemailer.createTransport(smtpTransport({
-							service: 'Godaddy',
-							host: 'smtpout.secureserver.net',
-							secureConnection: true,
+							service: 'gmail',
+							host: 'smtp.gmail.com',
 							auth: {
 								user: 'server@anubhavtrainings.com',
 								pass: that.password
