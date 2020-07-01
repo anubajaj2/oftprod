@@ -601,7 +601,8 @@ sap.ui.define([
 									debugger;
 									var aFilter = [new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'")];
 									if(that.getView().getModel("local").getProperty("/Role") !== 'Admin' &&
-									 	 that.getView().getModel("local").getProperty("/CurrentUser") !== '5c187036dba2681834ffe305' ){
+									 	 that.getView().getModel("local").getProperty("/CurrentUser") !== '5c187036dba2681834ffe305' &&
+	 									 	 that.getView().getModel("local").getProperty("/CurrentUser") !== '5ecc968586321064989cdc3f'  ){
 										that.getView().byId("manageSubsTable").bindItems({
 											path: "/Subs",
 											template: new sap.m.ColumnListItem({
