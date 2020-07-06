@@ -1358,7 +1358,7 @@ app.start = function() {
 					req.body.CourseName = "Generic";
 
 					if (Subject === "" || Subject === "null") {
-						Subject = "[REPLY] Regarding SAP training";
+						Subject = "[REPLY] 🟢 Regarding SAP training";
 					}
 				}
 				if (req.body.FirstName === "" || req.body.FirstName == "null") {
@@ -1443,7 +1443,7 @@ app.start = function() {
 							from: 'install.abap@gmail.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
-							subject: 'Re: ' + Subject,
+							subject: 'Re: 🟢' + Subject,
 							html: contents
 						};
 					}else{
@@ -1451,7 +1451,7 @@ app.start = function() {
 							from: 'contact@anubhavtrainings.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
-							subject: 'Re: ' + Subject,
+							subject: 'Re: 🟢' + Subject,
 							html: contents
 						};
 					}
