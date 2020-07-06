@@ -1273,7 +1273,7 @@ app.start = function() {
 								pass: that.password
 							}
 						}));
-						var Subject = "[CONFIDENTIAL] SAP Server Subscription";
+						var Subject = "[CONFIDENTIAL] 🚀 SAP Server Subscription";
 						//https://myaccount.google.com/lesssecureapps?pli=1
 						that.mailContent = that.mailContent.replace('$$Name$$', that.studentName)
 						var ccs = ["contact@anubhavtrainings.com"];
@@ -1568,7 +1568,7 @@ app.start = function() {
 								}
 							}));
 
-							var Subject = "[Welcome Onboard] " + courseStr.Name + " Training Subscription";
+							var Subject = "[Welcome Onboard] ✈️" + courseStr.Name + " Training Subscription";
 							//https://myaccount.google.com/lesssecureapps?pli=1
 							that2.mailContent = that2.mailContent.replace('$$Name$$', that2.studentName)
 							var ccs = ["anubhav.abap@gmail.com"];
