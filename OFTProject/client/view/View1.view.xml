@@ -25,6 +25,7 @@
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="analytical" icon="sap-icon://bar-chart" title="Analytical Panel" description=""></StandardListItem>
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="BankAccount" icon="sap-icon://money-bills" title="Accounts" description=""></StandardListItem>
 					<StandardListItem  id="mobileView" icon="sap-icon://iphone" title="Inquiry Search" description=""></StandardListItem>
+					<StandardListItem  id="blacklisted" icon="sap-icon://cancel" title="Blacklisted Users" description=""></StandardListItem>
 					<StandardListItem  id="newTemplate" icon="sap-icon://activity-items" title="Templates" description=""></StandardListItem>
 					<StandardListItem  id="accessProcessor" icon="sap-icon://key-user-settings"
 						 title="Access Manager" description=""></StandardListItem>

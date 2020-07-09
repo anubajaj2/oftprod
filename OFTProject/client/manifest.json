@@ -197,6 +197,11 @@
 								"pattern": "accessProcessor",
 								"name": "accessProcessor",
 								"target": ["donald", "accessProcessor"]
+							},
+							{
+								"pattern": "blacklisted",
+								"name": "blacklisted",
+								"target": ["donald", "blacklisted"]
 							}
 
 
@@ -227,6 +232,15 @@
 					"clearAggregation": true,
 					"viewName": "newLead",
 					"viewId": "idNewLead",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"blacklisted":{
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "blacklisted",
+					"viewId": "idBlack",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},

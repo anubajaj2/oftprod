@@ -770,7 +770,35 @@ app.start = function() {
 
 				);
 		});
+		var Block = app.models.Block;
+		app.get('/BlackDownload', function(req, res) {
 
+			Block.find({})
+				.then(function(Records, err) {
+						if (Records) {
+
+							var excel = require('exceljs');
+							var workbook = new excel.Workbook(); //creating workbook
+							var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
+							sheet.addRow().values = Object.keys(Records[0].__data);
+							for (var i = 0; i < Records["length"]; i++) {
+								sheet.addRow().values = Object.values(Records[i].__data);
+							}
+							var tempfile = require('tempfile');
+							var tempFilePath = tempfile('.xlsx');
+							console.log("tempFilePath : ", tempFilePath);
+							workbook.xlsx.writeFile(tempFilePath).then(function() {
+								res.sendFile(tempFilePath, function(err) {
+									console.log('---------- error downloading file: ', err);
+								});
+								console.log('file is written @ ' + tempFilePath);
+							});
+
+						}
+					}
+
+				);
+		});
 		app.get('/SubNotExpired', function(req, res) {
 
 			var app = require('../server/server');

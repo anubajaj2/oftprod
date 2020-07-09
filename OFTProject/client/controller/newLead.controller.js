@@ -537,7 +537,10 @@ sap.ui.define([
 						}
 						sText = oError.responseText.replace(userId,userName) + "Do you want to send again?";
 					}
-
+					if(sText.indexOf("Fraud") != -1){
+						MessageBox.error("Emaild id is Fraud");
+						return;
+					}
 					if (that.oLeadDuplicate === undefined) {
 						var oLeadDuplicate
 						that.oLeadDuplicate = oLeadDuplicate = new sap.ui.xmlfragment("oft.fiori.fragments.Dialog", this);

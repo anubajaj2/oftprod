@@ -1,0 +1,79 @@
+{
+  "name": "Block",
+  "plural": "Blocks",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "EmailId": {
+      "type": "string",
+      "required": true
+    },
+    "CourseName": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "FirstName": {
+      "type": "string",
+      "default": "null"
+    },
+    "LastName": {
+      "type": "string",
+      "default": "null"
+    },
+    "Date": {
+      "type": "date"
+    },
+    "Country": {
+      "type": "string",
+      "default": "null"
+    },
+    "Phone": {
+      "type": "number",
+      "default":0
+    },
+    "Message": {
+      "type": "string",
+      "default": "null"
+    },
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+      "default": "null"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "CreatedByTo": {
+			"type": "belongsTo",
+			"model": "AppUser",
+			"foreignKey": "CreatedBy"
+		},
+    "ChangedByTo": {
+			"type": "belongsTo",
+			"model": "AppUser",
+			"foreignKey": "ChangedBy"
+		}
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

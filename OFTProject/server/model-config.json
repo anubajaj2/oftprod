@@ -95,5 +95,9 @@
   "Template":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "Block":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }
