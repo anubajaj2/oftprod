@@ -158,6 +158,7 @@ sap.ui.define([
 			}
 			//Restore the state of UI by fruitId
 			this.getView().getModel("local").setProperty("/block/date", this.formatter.getFormattedDate(0));
+			this.getView().byId("inqDate").setValue(this.formatter.getFormattedDate(0));
 			this.getView().getModel("local").setProperty("/block/country", "IN");
 			var newDate = new Date();
 			newDate.setHours(0, 0, 0, 0);

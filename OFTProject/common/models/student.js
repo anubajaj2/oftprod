@@ -10,21 +10,33 @@ module.exports = function(Student) {
 
     Student.observe("before save",function(ctx, next){
       if(ctx.instance && ctx.instance.GmailId){
- 
-        Student.findOne({where: {and: [{GmailId: ctx.instance.GmailId}]}, limit: 1})
-          .then(function (stu) {
-            console.log(ctx.instance.GmailId );
-            if (stu) {
-              console.log(JSON.stringify(stu));
-              var err = new Error(".Customer already exist, Added on "+ stu.CreatedOn.toString()+ ' Created by : '+ stu.CreatedBy.toString());
-              err.statusCode = 400;
-              //console.log(err.toString());
-              next(err);
-            }
-            else {
-              //do nothing
-              return next();
-            }});
+        var app = require('../../server/server');
+        var Block = app.models.Block;
+        Block.findOne({where: {EmailId: ctx.instance.EmailId}, limit: 1})
+          .then(function (block) {
+              if (!block) {
+                Student.findOne({where: {and: [{GmailId: ctx.instance.GmailId}]}, limit: 1})
+                  .then(function (stu) {
+                    console.log(ctx.instance.GmailId );
+                    if (stu) {
+                      console.log(JSON.stringify(stu));
+                      var err = new Error(".Customer already exist, Added on "+ stu.CreatedOn.toString()+ ' Created by : '+ stu.CreatedBy.toString());
+                      err.statusCode = 400;
+                      //console.log(err.toString());
+                      next(err);
+                    }
+                    else {
+                      //do nothing
+                      return next();
+                    }});
+              }else{
+                var err = new Error(".Emaild id is Fraud, Inquired on " + block.CreatedOn + ' From Country  : ' +  block.Country + ' & Created by : ' +  block.CreatedBy);
+                err.statusCode = 400;
+                console.log(err);
+                next(err);
+              }
+        });
+
       }
       else{
         next();
