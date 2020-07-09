@@ -12,7 +12,7 @@ module.exports = function(Student) {
       if(ctx.instance && ctx.instance.GmailId){
         var app = require('../../server/server');
         var Block = app.models.Block;
-        Block.findOne({where: {EmailId: ctx.instance.EmailId}, limit: 1})
+        Block.findOne({where: {EmailId: ctx.instance.GmailId}, limit: 1})
           .then(function (block) {
               if (!block) {
                 Student.findOne({where: {and: [{GmailId: ctx.instance.GmailId}]}, limit: 1})
