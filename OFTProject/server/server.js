@@ -1478,7 +1478,7 @@ app.start = function() {
 							from: 'install.abap@gmail.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
-							subject: 'Re:' + Subject + " 🟢",
+							subject: 'Re: ' + Subject + " 🟢",
 							html: contents
 						};
 					}else{
@@ -1486,7 +1486,7 @@ app.start = function() {
 							from: 'contact@anubhavtrainings.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
 							cc: ccs,
-							subject: 'Re:' + Subject + " 🟢",
+							subject: 'Re: ' + Subject + " 🟢",
 							html: contents
 						};
 					}
