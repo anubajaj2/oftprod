@@ -193,13 +193,19 @@ sap.ui.define([
 
 			for (var i = 0; i < items["length"]; i++) {
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
-				if (this.passwords === "") {
-					this.passwords = prompt("Please enter your password", "");
+
+				if(this.getView().byId("isMinakshi").getSelected()){
 					if (this.passwords === "") {
-						sap.m.MessageBox.error("Blank Password not allowed");
-						return;
+						this.passwords = prompt("Please enter your password", "");
+						if (this.passwords === "") {
+							sap.m.MessageBox.error("Blank Password not allowed");
+							return;
+						}
 					}
+				}else{
+					this.passwords = "na";
 				}
+
 				loginPayload.password = this.passwords;
 				loginPayload.DollerQuote = this.getView().byId("doller").getSelected();
 				if(this.getView().byId("isMinakshi").getSelected()){

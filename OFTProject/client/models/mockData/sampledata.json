@@ -56,6 +56,11 @@
 			"usdFee": 400
 		},
 		{
+			"courseName": "SAC Premium",
+			"fee": "12 k",
+			"usdFee": 150
+		},
+		{
 			"courseName": "S4HANA Extension",
 			"fee": "25 k",
 			"usdFee": 400

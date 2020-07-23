@@ -93,7 +93,9 @@ app.start = function() {
 				// 5ea2f01d7854a13c148f18cd	 --> Manish
 				// 5db594b9b06bff3ffcbba53c --> shalu
 				// 5dcf9f7183f22e7da0acdfe4 --> vaishali
-				var lv_manish = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0;
+				// 5ecc968586321064989cdc3f --> kajol
+				// 5f1331f2e0b8524af830fa20 --> shalini
+				var lv_manish = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0, lv_kajol = 0;
 				for (var i = 0; i < all.length; i++) {
 					switch (all[i].CreatedBy.toString()) {
 						case "5dd6a6aea5f9e83c781b7ac0":
@@ -108,8 +110,11 @@ app.start = function() {
 						case "5c187036dba2681834ffe305":
 							lv_sonal = lv_sonal + 1;
 								break;
-						case "5ea2f01d7854a13c148f18cd":
+						case "5f1331f2e0b8524af830fa20":
 								lv_manish = lv_manish + 1;
+								break;
+						case "5ecc968586321064989cdc3f":
+								lv_kajol = lv_kajol + 1;
 								break;
 						default:
 
@@ -119,7 +124,8 @@ app.start = function() {
 										{ "name" : "vaishali", count: lv_vaishali },
 										{ "name" : "shalu", count: lv_shalu },
 										{ "name" : "sonal", count: lv_sonal },
-										{ "name" : "manish", count: lv_manish }];
+										{ "name" : "shalini", count: lv_manish },
+										{ "name" : "kajol", count: lv_kajol }];
 				res.send(coll);
 			});
 		});
@@ -1382,6 +1388,7 @@ app.start = function() {
 					&& req.body.CourseName != "SimpleLogistics"
 					&& req.body.CourseName != "ABAP on Cloud"
 					&& req.body.CourseName != "Analytics Cloud"
+					&& req.body.CourseName != "SAC Premium"
 					&& req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 
