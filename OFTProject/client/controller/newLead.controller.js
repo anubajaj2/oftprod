@@ -563,7 +563,7 @@ sap.ui.define([
 										return;
 									}
 								}
-								var loginPayload = payload;
+								var loginPayload = JSON.parse(JSON.stringify(payload));
 								if (payload.EmailId === "") {
 									sap.m.MessageBox.error("Email id is empty, please contact ANubhav");
 								}
@@ -572,6 +572,7 @@ sap.ui.define([
 								loginPayload.Country = ctry;
 								//read old inquiry country and update the new price only
 								var allCourses = that2.getView().getModel("local").getProperty("/courses");
+								loginPayload.CourseName = that2.getModel("local").getProperty("/newLead/course");
 								if( loginPayload.Country === "IN" ){
 									for (var i = 0; i < allCourses.length; i++) {
 										if (allCourses[i].courseName === loginPayload.CourseName) {

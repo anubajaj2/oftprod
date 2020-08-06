@@ -1377,7 +1377,48 @@ app.start = function() {
 
 				var Subject = req.body.Subject;
 				if (Subject === "" || Subject === "null") {
-					Subject = req.body.CourseName + " training";
+					//Subject = req.body.CourseName + " training";
+					switch (req.body.CourseName) {
+						case "ABAP on HANA":
+							Subject = "AoH CDS and S4 technical training";
+							break;
+						case "UI5 and Fiori":
+							Subject = "UI5 WebIDE and OData training";
+							break;
+						case "HANA XS":
+							Subject = "XS and Native xsodata training";
+							break;
+						case "Launchpad":
+							Subject = "Launchpad, Security & Extensions training";
+							break;
+						case "Hybris C4C":
+							Subject = "C4 Customer Experience training";
+							break;
+						case "S4HANA Extension":
+							Subject = "S4 Cloud Extensions training";
+							break;
+						case "HANA Cloud Integration":
+							Subject = "Cloud Platform Integration training";
+							break;
+						case "ABAP on Cloud":
+							Subject = "RESTful Programming in Cloud training";
+							break;
+						case "Analytics Cloud":
+							Subject = "Analytics Cloud training";
+							break;
+						case "SAC Premium":
+							Subject = "SAC Premium training";
+							break;
+						case "":
+							Subject = req.body.CourseName + " training";
+							break;
+						case "":
+							Subject = req.body.CourseName + " training";
+							break;
+						default:
+							Subject = req.body.CourseName + " training";
+							break;
+					}
 				}
 				//https://myaccount.google.com/lesssecureapps?pli=1
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
@@ -1393,7 +1434,7 @@ app.start = function() {
 					req.body.CourseName = "Generic";
 
 					if (Subject === "" || Subject === "null") {
-						Subject = "[REPLY] Regarding SAP training 🟢";
+						Subject = "[REPLY] Regarding training Course 🟢";
 					}
 				}
 				if (req.body.FirstName === "" || req.body.FirstName == "null") {
@@ -1472,6 +1513,7 @@ app.start = function() {
 						ccs.push("info@gaurav-consulting.com");
 					}
 					var mailOptions = {};
+
 					if(req.body.IsMinakshi === "X"){
 						ccs.push("contact@anubhavtrainings.com");
 						mailOptions = {
