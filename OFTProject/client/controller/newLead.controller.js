@@ -216,6 +216,7 @@ sap.ui.define([
 
 				var x = this.getView().byId("rbg");
 				loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
+				loginPayload.source = this.getView().byId("source").getSelectedKey();
 				$.post('/sendInquiryEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");
@@ -573,6 +574,10 @@ sap.ui.define([
 								//read old inquiry country and update the new price only
 								var allCourses = that2.getView().getModel("local").getProperty("/courses");
 								loginPayload.CourseName = that2.getModel("local").getProperty("/newLead/course");
+								loginPayload.EmailId = that2.getModel("local").getProperty("/newLead/emailId");
+								loginPayload.FirstName = that2.getModel("local").getProperty("/newLead/FirstName");
+								loginPayload.fees = that2.getModel("local").getProperty("/newLead/fees");
+								loginPayload.currency = that2.getModel("local").getProperty("/newLead/currency");
 								if( loginPayload.Country === "IN" ){
 									for (var i = 0; i < allCourses.length; i++) {
 										if (allCourses[i].courseName === loginPayload.CourseName) {
@@ -598,6 +603,7 @@ sap.ui.define([
 								}else{
 									loginPayload.IsMinakshi = "";
 								}
+								loginPayload.source = "";
 								$.post('/sendInquiryEmail', loginPayload)
 									.done(function(data, status) {
 										sap.m.MessageToast.show("Email sent successfully");

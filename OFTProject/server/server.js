@@ -1344,6 +1344,7 @@ app.start = function() {
 				//https://developers.google.com/oauthplayground/
 				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
 				//
+				debugger;
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				const xoauth2 = require('xoauth2');
@@ -1503,8 +1504,16 @@ app.start = function() {
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 					debugger;
 					if(req.body.fees !== "null" && req.body.fees !== ""){
-	 				 contents = contents.replace("$$fees$$", req.body.fees);
-	  				 contents = contents.replace("$$currency$$", req.body.currency);
+						if(req.body.source === "L"){
+							contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
+							contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
+						}else{
+							contents = contents.replace("$$fees$$", req.body.fees);
+							contents = contents.replace("$$currency$$", req.body.currency);
+						}
+
 	 			  }
 					var ccs = [];
 					if(req.body.CourseName === "SimpleLogistics"){
