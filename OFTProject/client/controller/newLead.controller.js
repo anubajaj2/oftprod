@@ -354,17 +354,25 @@ sap.ui.define([
 			$.get("/todayInquiry").then(function(data){
 				that.getView().getModel("local").setProperty("/AllInq",  data );
 			});
-
+			debugger;
 			this.setConfig();
 
 		},
 		setConfig: function(){
+			debugger;
 			if(this.getModel("local").getData().CurrentUser === "5d947c3dab189706a40faade" ||
 				 this.getModel("local").getData().CurrentUser === "5dd6a6aea5f9e83c781b7ac0" ||
-			 	 this.getModel("local").getData().CurrentUser === "5ecc968586321064989cdc3f" ){
+			 	 this.getModel("local").getData().CurrentUser === "5ecc968586321064989cdc3f" ||
+			   this.getModel("local").getData().CurrentUser === "5dcf9f7183f22e7da0acdfe4" ||
+		     this.getModel("local").getData().CurrentUser === "5ea2f01d7854a13c148f18cd" ){
 					 this.getView().byId("source").setSelectedKey("L");
 					 console.log("linkedin");
-		 }else{
+				 }
+		 else if (this.getModel("local").getData().CurrentUser === "5f1331f2e0b8524af830fa20"){
+					this.getView().byId("source").setSelectedKey("F");
+					console.log("facebook");
+		 }
+		 else{
 			 		this.getView().byId("source").setSelectedKey("R");
 					console.log("Regular");
 		 }

@@ -60,6 +60,7 @@
                 <items>
                   <core:Item text="Website" key="R"/>
                   <core:Item text="Linkedin" key="L"/>
+                  <core:Item text="Facebook" key="F"/>
                   <core:Item text="Chatbot" key="C"/>
                   <core:Item text="Privy" key="P"/>
                   <core:Item text="Whatsapp" key="W"/>
