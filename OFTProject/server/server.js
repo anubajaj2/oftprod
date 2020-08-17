@@ -1515,6 +1515,7 @@ app.start = function() {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
 							contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+							Subject = "Hey " + req.body.FirstName  +"!!, Boost your skills"
 						}else{
 							contents = contents.replace("$$fees$$", req.body.fees);
 							contents = contents.replace("$$currency$$", req.body.currency);
