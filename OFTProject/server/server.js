@@ -1377,6 +1377,7 @@ app.start = function() {
 
 
 				var Subject = req.body.Subject;
+
 				if (Subject === "" || Subject === "null") {
 					//Subject = req.body.CourseName + " training";
 					switch (req.body.CourseName) {
@@ -1453,11 +1454,15 @@ app.start = function() {
 				var app = require('../server/server');
 				var Template = app.models.Template;
 				debugger;
+				var CourseName = req.body.CourseName;
+				// if(req.body.source === "L" || req.body.source === "F"){
+				// 	CourseName = "Linkedin";
+				// }
 				Template.findOne({
 					where: {and: [{
 													Type : req.body.mailType
 												}, {
-													CourseName: req.body.CourseName
+													CourseName: CourseName
 												}]
 					}
 				}).then(function(data){
@@ -1505,10 +1510,11 @@ app.start = function() {
 					debugger;
 					if(req.body.fees !== "null" && req.body.fees !== ""){
 						if(req.body.source === "L" || req.body.source === "F"){
-							contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
-							contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
-							contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
-							contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
+							contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
 						}else{
 							contents = contents.replace("$$fees$$", req.body.fees);
 							contents = contents.replace("$$currency$$", req.body.currency);
