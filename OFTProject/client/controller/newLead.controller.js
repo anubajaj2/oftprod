@@ -532,6 +532,13 @@ sap.ui.define([
 					that.destroyMessagePopover();
 					if (that.getView().byId("idRecent").getBinding("items")) {
 						that.getView().byId("idRecent").getBinding("items").refresh();
+						setTimeout(function(){
+							if(this.getView().byId("autoMail").getState()){
+								this.getView().byId("idRecent").setSelectedItem(that.getView().byId("idRecent").getItems()[0]);
+								this.onEmail();
+								this.getView().byId("idRecent").removeSelections();
+							}
+						}.bind(that),2000).bind(this);
 					}
 				}).catch(function(oError) {
 					that.getView().setBusy(false);

@@ -1411,11 +1411,23 @@ app.start = function() {
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
-						case "":
-							Subject = req.body.CourseName + " training";
+						case "ABAP":
+							Subject = "Core ABAP Training";
 							break;
-						case "":
-							Subject = req.body.CourseName + " training";
+						case "OOPS ABAP":
+							Subject = "OOPS ABAP and Design pattern Training";
+							break;
+						case "Webdynpro":
+							Subject = "Webdynrpo training";
+							break;
+						case "Workflow":
+							Subject = "Workflow training";
+							break;
+						case "FPM":
+							Subject = "FPM training";
+							break;
+						case "BRF":
+							Subject = "BRF+ training";
 							break;
 						default:
 							Subject = req.body.CourseName + " training";
@@ -1432,9 +1444,15 @@ app.start = function() {
 					&& req.body.CourseName != "ABAP on Cloud"
 					&& req.body.CourseName != "Analytics Cloud"
 					&& req.body.CourseName != "SAC Premium"
+
+					&&  req.body.CourseName != "ABAP"
+					&&  req.body.CourseName != "OOPS ABAP"
+					&& req.body.CourseName != "Webdynpro"
+					&& req.body.CourseName != "Workflow"
+					&& req.body.CourseName != "FPM"
+					&& req.body.CourseName != "BRF"
 					&& req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
-
 					if (Subject === "" || Subject === "null") {
 						Subject = "[REPLY] Regarding training Course 🟢";
 					}
@@ -1455,9 +1473,9 @@ app.start = function() {
 				var Template = app.models.Template;
 				debugger;
 				var CourseName = req.body.CourseName;
-				// if(req.body.source === "L" || req.body.source === "F"){
-				// 	CourseName = "Linkedin";
-				// }
+				if(req.body.source === "L" || req.body.source === "F"){
+					CourseName = "Linkedin";
+				}
 				Template.findOne({
 					where: {and: [{
 													Type : req.body.mailType
@@ -1514,7 +1532,7 @@ app.start = function() {
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
-							contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+							//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
 							Subject = "Hey " + req.body.FirstName  +"!! Boost your skills"
 						}else{
 							contents = contents.replace("$$fees$$", req.body.fees);
