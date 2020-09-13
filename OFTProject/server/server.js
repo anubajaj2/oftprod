@@ -484,7 +484,7 @@ app.start = function() {
 									}
 
 								}
-								if(accountRecords[i].key !== 'Check Nahi Karna'){
+								if(accountRecords[i].key.indexOf('Check Nahi Karna')  !== -1){
 									responseData.push({ "AccountNo": accountRecords[i].accountNo,
 																			 "AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
 																			 "NewDeposit": newDeposits,
