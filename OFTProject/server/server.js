@@ -95,7 +95,8 @@ app.start = function() {
 				// 5dcf9f7183f22e7da0acdfe4 --> vaishali
 				// 5ecc968586321064989cdc3f --> kajol
 				// 5f1331f2e0b8524af830fa20 --> shalini
-				var lv_manish = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0, lv_kajol = 0;
+				// 5f4d01c50815a314ec9238d2 --> khushbu
+				var lv_manish = 0, lv_khushbu = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0, lv_kajol = 0;
 				for (var i = 0; i < all.length; i++) {
 					switch (all[i].CreatedBy.toString()) {
 						case "5dd6a6aea5f9e83c781b7ac0":
@@ -116,6 +117,9 @@ app.start = function() {
 						case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;
+						case "5f4d01c50815a314ec9238d2":
+								lv_khushbu = lv_khushbu + 1;
+								break;
 						default:
 
 					}
@@ -125,7 +129,8 @@ app.start = function() {
 										{ "name" : "shalu", count: lv_shalu },
 										{ "name" : "sonal", count: lv_sonal },
 										{ "name" : "shalini", count: lv_manish },
-										{ "name" : "kajol", count: lv_kajol }];
+										{ "name" : "kajol", count: lv_kajol },
+										{ "name" : "khushbu", count: lv_khushbu }];
 				res.send(coll);
 			});
 		});
@@ -484,7 +489,7 @@ app.start = function() {
 									}
 
 								}
-								if(accountRecords[i].key.indexOf('Check Nahi Karna')  !== -1){
+								if(accountRecords[i].key  !== "Check Nahi Karna"){
 									responseData.push({ "AccountNo": accountRecords[i].accountNo,
 																			 "AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
 																			 "NewDeposit": newDeposits,

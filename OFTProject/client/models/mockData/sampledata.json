@@ -34,12 +34,12 @@
 	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",
-			"fee": "18 k",
+			"fee": "20 k",
 			"usdFee": 350
 		},
 		{
 			"courseName": "ABAP on HANA",
-			"fee": "18 k",
+			"fee": "20 k",
 			"usdFee": 350
 		},
 		{
@@ -48,7 +48,7 @@
 			"usdFee": 400
 		},{
 			"courseName": "ABAP on Cloud",
-			"fee": "18 k",
+			"fee": "20 k",
 			"usdFee": 350
 		},{
 			"courseName": "Analytics Cloud",
@@ -57,7 +57,7 @@
 		},
 		{
 			"courseName": "SAC Premium",
-			"fee": "12 k",
+			"fee": "15 k",
 			"usdFee": 150
 		},
 		{
@@ -92,32 +92,32 @@
 		},
 		{
 			"courseName": "ABAP",
-			"fee": "7 k",
+			"fee": "9 k",
 			"usdFee": 150
 		},
 		{
 			"courseName": "OOPS ABAP",
-			"fee": "12 k",
+			"fee": "14 k",
 			"usdFee": 250
 		},
 		{
 			"courseName": "Webdynpro",
-			"fee": "12 k",
+			"fee": "15 k",
 			"usdFee": 250
 		},
 		{
 			"courseName": "Workflow",
-			"fee": "12 k",
+			"fee": "15 k",
 			"usdFee": 180
 		},
 		{
 			"courseName": "FPM",
-			"fee":  "12 k",
+			"fee":  "15 k",
 			"usdFee": 250
 		},
 		{
 			"courseName": "BRF",
-			"fee": "5 k",
+			"fee": "7 k",
 			"usdFee": 150
 		},
 		{
@@ -127,7 +127,7 @@
 		},
 		{
 			"courseName": "Other",
-			"fee": "18 k",
+			"fee": "20 k",
 			"usdFee": 350
 		},{
 			"courseName": "SimpleLogistics",
