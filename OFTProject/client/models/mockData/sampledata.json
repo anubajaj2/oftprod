@@ -358,7 +358,11 @@
 		"Resume": "",
 		"Extra1": "",
 		"Extra2": "",
-		"id": ""
+		"id": "",
+		"Address": "",
+		"City": "",
+		"GSTIN": "",
+		"GSTCharge": false
 	},
 	"newServer": {
 		"PaymentDate": "",

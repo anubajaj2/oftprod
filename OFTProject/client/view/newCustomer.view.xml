@@ -61,8 +61,18 @@
 						<Input id="idOtherEmail11" type="Email" required="false" value="{local>/newCustomer/OtherEmail1}"/>
 						<Label text="Other Email 2"/>
 						<Input id="idOtherEmail21" type="Email" required="false" value="{local>/newCustomer/OtherEmail2}"/>
-						<Label text="Skills"/>
 
+						<Label text="Address"/>
+						<Input id="idAddress" required="false" value="{local>/newCustomer/Address}"/>
+						<Label text="City"/>
+						<Input id="idCity" required="false" value="{local>/newCustomer/City}"/>
+						<Label text="GSTIN"/>
+						<Input id="idGSTIN" required="false" value="{local>/newCustomer/GSTIN}"/>
+						<Label text="GST Charge"/>
+						<CheckBox id="idGSTCharge" required="false"
+							checked="{local>/newCustomer/GSTCharge}"/>
+
+						<Label text="Skills"/>
 						<!-- <MultiInput id="multiInputID" width="350px" suggestionItems="{local>/skills}" showValueHelp="false" value="{local>/newCustomer/Skills}"> <core:Item key="{local>key}" text="{local>text}"/> </MultiInput> -->
 						<MultiComboBox id="idSkills1" selectionChange="handleSkillChange" selectionFinish="handleSkillFinish" width="350px" items="{
                 path: 'local>/skills',

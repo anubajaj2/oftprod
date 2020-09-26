@@ -39,6 +39,12 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newCustomer/OtherEmail1", null);
 			this.getView().getModel("local").setProperty("/newCustomer/OtherEmail2", null);
 			this.getView().getModel("local").setProperty("/newCustomer/Skills", null);
+
+			this.getView().getModel("local").setProperty("/newCustomer/Address", "");
+			this.getView().getModel("local").setProperty("/newCustomer/City", "");
+			this.getView().getModel("local").setProperty("/newCustomer/GSTIN", "");
+			this.getView().getModel("local").setProperty("/newCustomer/GSTCharge", false);
+
 			this.getView().getModel("local").setProperty("/newCustomer/Star", false);
 			this.getView().getModel("local").setProperty("/newCustomer/Defaulter", false);
 			this.getView().getModel("local").setProperty("/newCustomer/HighServerUsage", false);
@@ -482,6 +488,10 @@ sap.ui.define([
 					"HighServerUsage": leadData.HighServerUsage,
 					"Skills": leadData.Skills,
 					"Resume": this.FileContent, //.Resume,
+					"Address": leadData.Address,
+					"City": leadData.City,
+					"GSTIN": leadData.GSTIN,
+					"GSTCharge": leadData.GSTCharge,
 					"Extra1": "EExtra1",
 					"Extra2": "EExtra2",
 					"CreatedOn": new Date(),
@@ -547,6 +557,10 @@ sap.ui.define([
 					"HighServerUsage": vSrvrUsage, //leadData.HighServerUsage,
 					"Skills": leadData.Skills,
 					"Resume": this.FileContent, //.Resume,
+					"Address": leadData.Address,
+					"City": leadData.City,
+					"GSTIN": leadData.GSTIN,
+					"GSTCharge": leadData.GSTCharge,
 					"Extra1": "EExtra1",
 					"Extra2": "EExtra2",
 					"ChangedOn": new Date(),
@@ -647,6 +661,11 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newCustomer/Star", false);
 			this.getView().getModel("local").setProperty("/newCustomer/Defaulter", false);
 			this.getView().getModel("local").setProperty("/newCustomer/HighServerUsage", false);
+			this.getView().getModel("local").setProperty("/newCustomer/Address", "");
+			this.getView().getModel("local").setProperty("/newCustomer/City", "");
+			this.getView().getModel("local").setProperty("/newCustomer/GSTIN", "");
+			this.getView().getModel("local").setProperty("/newCustomer/GSTCharge", false);
+
 			this.getView().byId("idSkills1").clearSelection();
 			this.getView().byId("createNew1").setText("Create");
 			this.getView().byId("idSubs").destroyItems();
@@ -782,7 +801,9 @@ sap.ui.define([
 						if (oData.results.length != 0) {
 							that.getView().byId("idEmailCust1").setValue(oData.results[0].GmailId);
 							that.getView().byId("idName1").setValue(oData.results[0].Name);
-
+							that.getView().getModel("local").setProperty("/newCustomer",
+							oData.results[0]
+							);
 							if (oData.results[0].ContactNo) {
 								that.getView().byId("idPhone1").setValue(oData.results[0].ContactNo);
 							} else {

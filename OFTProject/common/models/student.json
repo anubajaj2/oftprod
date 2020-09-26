@@ -69,6 +69,22 @@
       "type": "string",
       "default": "null"
     },
+    "Address": {
+      "type": "string",
+      "default": "null"
+    },
+    "City": {
+      "type": "string",
+      "default": "null"
+    },
+    "GSTIN": {
+      "type": "string",
+      "default": "null"
+    },
+    "GSTCharge": {
+      "type": "boolean",
+      "default": false
+    },
     "CreatedOn": {
       "type": "date"
     },
