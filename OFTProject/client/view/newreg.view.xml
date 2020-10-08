@@ -59,6 +59,7 @@
 							<core:Item key="IMPS" text="Internet Banking"></core:Item>
 							<core:Item key="PAYTM" text="PayTM"></core:Item>
 							<core:Item key="PAYPAL" text="Paypal/Xoom"></core:Item>
+							<core:Item key="PAYU" text="PayUMoney"></core:Item>
 							<core:Item key="USA" text="Wire Transfer"></core:Item>
 						</Select>
 						<Label text="Account Details"/>

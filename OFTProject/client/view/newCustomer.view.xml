@@ -59,7 +59,11 @@
 						<Input id="idPhone1" type="number" value="{local>/newCustomer/ContactNo}"></Input>
 						<Label text="Other Email 1"/>
 						<Input id="idOtherEmail11" type="Email" required="false" value="{local>/newCustomer/OtherEmail1}"/>
-						<Label text="Other Email 2"/>
+
+						<Label text="Company Name"/>
+						<Input id="idCompany" required="false" value="{local>/newCustomer/Company}"/>
+
+						<Label text="HR/Corporate Mail"/>
 						<Input id="idOtherEmail21" type="Email" required="false" value="{local>/newCustomer/OtherEmail2}"/>
 
 						<Label text="Address"/>

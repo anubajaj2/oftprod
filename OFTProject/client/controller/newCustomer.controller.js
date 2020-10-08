@@ -44,6 +44,7 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newCustomer/City", "");
 			this.getView().getModel("local").setProperty("/newCustomer/GSTIN", "");
 			this.getView().getModel("local").setProperty("/newCustomer/GSTCharge", false);
+			this.getView().getModel("local").setProperty("/newCustomer/Company", false);
 
 			this.getView().getModel("local").setProperty("/newCustomer/Star", false);
 			this.getView().getModel("local").setProperty("/newCustomer/Defaulter", false);
@@ -492,6 +493,7 @@ sap.ui.define([
 					"City": leadData.City,
 					"GSTIN": leadData.GSTIN,
 					"GSTCharge": leadData.GSTCharge,
+					"Company" : leadData.Company,
 					"Extra1": "EExtra1",
 					"Extra2": "EExtra2",
 					"CreatedOn": new Date(),
@@ -561,6 +563,7 @@ sap.ui.define([
 					"City": leadData.City,
 					"GSTIN": leadData.GSTIN,
 					"GSTCharge": leadData.GSTCharge,
+					"Company": leadData.Company,
 					"Extra1": "EExtra1",
 					"Extra2": "EExtra2",
 					"ChangedOn": new Date(),
@@ -665,6 +668,7 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newCustomer/City", "");
 			this.getView().getModel("local").setProperty("/newCustomer/GSTIN", "");
 			this.getView().getModel("local").setProperty("/newCustomer/GSTCharge", false);
+			this.getView().getModel("local").setProperty("/newCustomer/Company", "");
 
 			this.getView().byId("idSkills1").clearSelection();
 			this.getView().byId("createNew1").setText("Create");
