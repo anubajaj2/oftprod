@@ -672,13 +672,29 @@ sap.ui.define([
 		onGetNext: function(){
 			$.post('/MoveNextAc', {})
 				.done(function(data, status) {
-					sap.m.MessageBox.confirm(
-						"Bank Name    : " + data.BankName + "\n" +
-						"Account Name : " + data.accountName + "\n" +
-						"Account No   : " + data.accountNo + "\n" +
-						"IFSC Code    : " + data.ifsc + "\n" + "\n" +
-						"Note: Please send the screenshot of payment once done."
-					);
+					if(data.accountNo === "114705500444"){
+						sap.m.MessageBox.confirm(
+							"Hello ," + "\n" + "\n" +
+							"Thanks for your confirmation, Please transfer the funds using to below bank account" + "\n" + "\n" +
+							"Bank Name    : " + data.BankName + "\n" +
+							"Account Name : " + data.accountName + "\n" +
+							"Account No   : " + data.accountNo + "\n" +
+							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
+							"You can also pay with barcode scan of UPI https://anubhavtrainings.com/upipayment-anubhav-training" + "\n" + "\n" +
+							"Note: Please share the screenshot of payment once done."
+  					);
+					}else{
+						sap.m.MessageBox.confirm(
+							"Hello ," + "\n" + "\n" +
+							"Thanks for your confirmation, Please transfer the funds using to below bank account" + "\n" + "\n" +
+							"Bank Name    : " + data.BankName + "\n" +
+							"Account Name : " + data.accountName + "\n" +
+							"Account No   : " + data.accountNo + "\n" +
+							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
+							"Note: Please share the screenshot of payment once done."
+						);
+					}
+
 				})
 				.fail(function(xhr, status, error) {
 					sap.m.MessageBox.error(xhr.responseText);
