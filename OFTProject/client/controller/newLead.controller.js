@@ -680,7 +680,7 @@ sap.ui.define([
 							"Account Name : " + data.accountName + "\n" +
 							"Account No   : " + data.accountNo + "\n" +
 							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
-							"You can also pay with barcode scan of UPI https://anubhavtrainings.com/upipayment-anubhav-training" + "\n" + "\n" +
+							"You can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway" + "\n" + "\n" +
 							"Note: Please share the screenshot of payment once done."
   					);
 					}else{
