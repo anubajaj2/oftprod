@@ -686,7 +686,7 @@ sap.ui.define([
 					}else{
 						sap.m.MessageBox.confirm(
 							"Hello ," + "\n" + "\n" +
-							"Thanks for your confirmation, Please transfer the funds using to below bank account" + "\n" + "\n" +
+							"Thanks for your confirmation, Please transfer the funds to below bank account" + "\n" + "\n" +
 							"Bank Name    : " + data.BankName + "\n" +
 							"Account Name : " + data.accountName + "\n" +
 							"Account No   : " + data.accountNo + "\n" +
