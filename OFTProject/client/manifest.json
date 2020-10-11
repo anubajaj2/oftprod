@@ -112,6 +112,11 @@
 								"target": ["donald", "newlead"]
 							},
 							{
+									"pattern": "GSTInvoices",
+									"name": "GSTInvoices",
+									"target": ["donald", "GSTInvoices"]
+							},
+							{
 								"pattern": "newreg",
 								"name": "newreg",
 
@@ -232,6 +237,15 @@
 					"clearAggregation": true,
 					"viewName": "newLead",
 					"viewId": "idNewLead",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"GSTInvoices":{
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "GSTInvoices",
+					"viewId": "idGSTInvoices",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},

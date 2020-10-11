@@ -1,0 +1,23 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+    controllerName="oft.fiori.controller.GSTInvoices" xmlns:viz="sap.viz.ui5.controls"
+     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="GST invoices" navButtonPress="onBack">
+		<headerContent>
+	    <Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+      <Text text="Search fields with Date Range, Account No" />
+      <Text text="Table with Email  ||   Name ||  Course name ||  Type of Payment ||  Amount Paid  || SGST (9%)  || CGST (9%) || Reference No." />
+      <Text text="Download table data to excel" />
+  	</content>
+		<footer>
+			<Toolbar>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>
