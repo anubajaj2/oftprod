@@ -14,5 +14,5 @@
     "database": "test",
     "name": "mongoatlas",
     "connector": "mongodb"
-  }    
+  }
 }
