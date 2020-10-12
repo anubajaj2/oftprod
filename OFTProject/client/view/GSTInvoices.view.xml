@@ -11,9 +11,90 @@
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
 		</headerContent>
 		<content>
-      <Text text="Search fields with Date Range, Account No" />
-      <Text text="Table with Email  ||   Name ||  Course name ||  Type of Payment ||  Amount Paid  || SGST (9%)  || CGST (9%) || Reference No." />
-      <Text text="Download table data to excel" />
+  				<f:SimpleForm>
+  					<f:content>
+  						<Label text="Date Range"/>
+  						<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy"
+  							value="{local>/GSTInvoices/CreatedOn}" valueFormat="dd.MM.yyyy"
+  							></DatePicker>
+                <DatePicker id="idRegDateTo" displayFormat="dd.MM.yyyy"
+    							value="{local>/GSTInvoices/CreatedOn}" valueFormat="dd.MM.yyyy"
+    							></DatePicker>
+  						<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+  						id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+
+  						<Label text="Account No"/>
+  						<Input id="accountDetails" required="false"
+  							value="{local>/GSTInvoices/AccountNo}"
+  							showValueHelp="true" valueHelpOnly="true"
+  							valueHelpRequest="onSelect"/>
+  					</f:content>
+  				</f:SimpleForm>
+  				<Panel title="Summary">
+  					<Table id="idSummary" items="{viewModel>/records}" growing="true"
+  						growingScrollToLoad="false" mode="MultiSelect"
+  			      class="sapUiSizeCompact"
+  						showRowCount="true"  updateFinished="onUpdateFinished" >
+  						<headerToolbar>
+  							<Toolbar>
+  							<Title
+  									id="newtitle" text="Account Summary"/>
+  							<ToolbarSpacer></ToolbarSpacer>
+  							<Button text="getNextAc" press="onGetNext" />
+  						</Toolbar>
+  							</headerToolbar>
+  							<columns>
+  							<Column>
+  								<Label text="AcNo" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="{i18n>AccountName}" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="ThisFY" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="{i18n>Amount}" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="Mark" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="Bank" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="Counter" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="AllCounter" class="columnLabelStyle"/>
+  							</Column>
+  							<Column>
+  								<Label text="Key" class="columnLabelStyle"/>
+  							</Column>
+  						</columns>
+  						<items>
+  							<ColumnListItem id="idColumnlistSumm" press="onItemPress"  type="Active" >
+  								<cells>
+  									<Text text="{viewModel>AccountNo}"  ></Text>
+  									<Text text="{viewModel>AccountName}"  ></Text>
+
+  									<Text text="{path: 'viewModel>NewDeposit',
+  										formatter: '.formatter.getIndianCurr'}"  ></Text>
+
+  									<Text text="{path: 'viewModel>Amount',
+  										formatter: '.formatter.getIndianCurr'}"  ></Text>
+
+  									<CheckBox selected="{viewModel>current}" select="onAcSelect"/>
+  									<Button visible="{= ${local>/Role} === 'Admin'}"
+  										icon="sap-icon://loan" press="onBank"></Button>
+  									<Text text="{viewModel>counter}" />
+  									<Link text="{viewModel>counterall}" press="MResetCounter"/>
+  									<Link text="{viewModel>key}" press="MSetKey"/>
+  								</cells>
+  							</ColumnListItem>
+  						</items>
+  					</Table>
+  				</Panel>
   	</content>
 		<footer>
 			<Toolbar>

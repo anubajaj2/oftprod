@@ -311,7 +311,136 @@ app.start = function() {
 
 				);
 		});
+		app.get('/getAmountForAccount', function(req, res) {
+			 var responseData = [];
+			 var oSubCounter = {};
+			 var Subs = app.models.Sub;
+			 var Account = app.models.Account;
+			 var AccountEntry = app.models.AccountBalance;
 
+			 var async = require('async');
+			 debugger;
+			 async.waterfall([
+				 function(callback) {
+					 Account.find({
+						 fields:{
+							 "accountName": true,
+							 "accountNo": true,
+							 "ifsc": true,
+							 "current": true,
+							 "counter": true,
+							 "counterall": true,
+							 "key": true,
+							 "id":true
+						 }
+					 }).then(function(accountRecords){
+							 callback(null, accountRecords);
+					 });
+				 },
+				 function(accountRecords, callback) {
+					 // arg1 now equals 'one' and arg2 now equals 'two'
+					 var date = new Date("2020-04-01");
+					 date.setHours(0,0,0,0);
+					 AccountEntry.find({
+						 where: {
+							 and: [{
+								 CreatedOn: {
+									 gte: date
+								 }
+							 }]
+						 },
+						 fields:{
+							 "AccountNo": true,
+							 "Amount": true
+						 }
+					 })
+					 .then(function(accountBalances, err) {
+						 callback(null, accountRecords, accountBalances);
+					 });
+
+				 },
+				 function(accountRecords, accountBalances, callback) {
+					 // arg1 now equals 'three'
+					 var date = new Date("2020-04-01");
+					 date.setHours(0,0,0,0);
+					 Subs.find({
+						 where: {
+							 and: [{
+								 PaymentDate: {
+									 gte: date
+								 }
+							 }]
+						 },
+						 fields:{
+							 "AccountName": true,
+							 "Amount": true
+
+						 }
+					 })
+						 .then(function(Records, err) {
+
+
+						 callback(null, accountRecords, accountBalances, Records);
+					 });
+				 }
+			 ],
+			 function(err, accountRecords, accountBalances, Records) {
+				 // result now equals 'done'
+				 debugger;
+				 try {
+					 var responseData = [];
+					 for (var i = 0; i < accountRecords.length; i++) {
+						 try {
+							 var totalAmount = 0, newDeposits = 0;
+							 for (var j = 0; j < accountBalances.length; j++) {
+
+								 if(accountBalances[j].AccountNo.toString() === accountRecords[i].accountNo.toString()){
+									 totalAmount
+									 = totalAmount +
+										 accountBalances[j].Amount;
+								 }
+
+							 }
+							 for (var k = 0; k < Records.length; k++) {
+								 if(Records[k].AccountName.toString() === accountRecords[i].accountNo.toString()){
+									 totalAmount
+									 = totalAmount +
+										 Records[k].Amount;
+									 newDeposits = Records[k].Amount + newDeposits;
+								 }
+
+							 }
+							 if(accountRecords[i].key  !== "Check Nahi Karna"){
+								 responseData.push({ "AccountNo": accountRecords[i].accountNo,
+																			"AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
+																			"NewDeposit": newDeposits,
+																			"Amount": totalAmount,
+																			"current": accountRecords[i].current,
+																			"counter":accountRecords[i].counter,
+																			"counterall":accountRecords[i].counterall,
+																			"key":accountRecords[i].key,
+																			"id":accountRecords[i].id
+								 });
+							 }
+
+							 totalAmount, newDeposits = 0;
+						 } catch (e) {
+
+						 } finally {
+
+						 }
+					 }
+
+					 res.send(responseData);
+				 } catch (e) {
+
+				 } finally {
+
+				 }
+			 }
+		 );
+		});
+		
 		app.get('/getStudentPerBatch', function(req, res) {
 			var responseData = [];
 			var app = require('../server/server');
@@ -370,27 +499,6 @@ app.start = function() {
 		});
 
 		app.get('/getAmountPerAccount', function(req, res) {
-
-			// Courses.find().then(function(data) {
-			// 	// console.log("Test Course")
-			// 	aCourses = data;
-			// 	aCources.courses.forEach(function(oRec) {
-			// 		oSubCounter[oRec.courseName] = 0;
-			// 	})
-			//
-			// 	Object.keys(oSubCounter).forEach(function(key) {
-			//
-			// 		var oCount = data.filter(function(oRec) {
-			// 			return key === oRec.Name;
-			// 		})
-			//
-			// 		responseData.push({
-			// 			"CourseName": key,
-			// 			"Count": oCount.length
-			// 		})
-			//
-			// 	})
-				//--- Calculate total per batch, prepare json and return
 				var responseData = [];
 				var oSubCounter = {};
 				var Subs = app.models.Sub;

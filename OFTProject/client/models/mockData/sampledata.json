@@ -391,6 +391,12 @@
 		"Amount": "0",
 		"Remarks":""
 	},
+	"GSTInvoices":{
+		"CreatedOn": "",
+		"AccountNo": "",
+		"Amount": "0",
+		"Remarks":""
+	},
 	"countries": [{
 		"name": "Afghanistan",
 		"dial_code": "+93",
