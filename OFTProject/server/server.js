@@ -311,126 +311,133 @@ app.start = function() {
 
 				);
 		});
-		app.get('/getAmountForAccount', function(req, res) {
+		app.post('/getAmountForAccount', function(req, res) {
 			 var responseData = [];
-			 var oSubCounter = {};
+			 var accountNo = req.body.AccountNo;
+			 var startDate = new Date(req.body.StartDate);
+			 var endDate = new Date(req.body.EndDate);
 			 var Subs = app.models.Sub;
-			 var Account = app.models.Account;
-			 var AccountEntry = app.models.AccountBalance;
-
+			 var Students = app.models.Student;
+			 var Courses = app.models.Course;
+			 var subsMap = new Map();
+			 subsMap.set("subs",new Map());
+			 subsMap.set("course", new Map());
+			 subsMap.set("student", new Map());
 			 var async = require('async');
-			 debugger;
 			 async.waterfall([
 				 function(callback) {
-					 Account.find({
-						 fields:{
-							 "accountName": true,
-							 "accountNo": true,
-							 "ifsc": true,
-							 "current": true,
-							 "counter": true,
-							 "counterall": true,
-							 "key": true,
-							 "id":true
-						 }
-					 }).then(function(accountRecords){
-							 callback(null, accountRecords);
-					 });
-				 },
-				 function(accountRecords, callback) {
-					 // arg1 now equals 'one' and arg2 now equals 'two'
-					 var date = new Date("2020-04-01");
-					 date.setHours(0,0,0,0);
-					 AccountEntry.find({
-						 where: {
-							 and: [{
-								 CreatedOn: {
-									 gte: date
-								 }
-							 }]
-						 },
-						 fields:{
-							 "AccountNo": true,
-							 "Amount": true
-						 }
-					 })
-					 .then(function(accountBalances, err) {
-						 callback(null, accountRecords, accountBalances);
-					 });
-
-				 },
-				 function(accountRecords, accountBalances, callback) {
-					 // arg1 now equals 'three'
-					 var date = new Date("2020-04-01");
-					 date.setHours(0,0,0,0);
 					 Subs.find({
-						 where: {
-							 and: [{
-								 PaymentDate: {
-									 gte: date
-								 }
-							 }]
+						 where :{
+							 "AccountName" : accountNo,
+							 "PaymentDate" : {gte : startDate, lte : endDate},
 						 },
 						 fields:{
 							 "AccountName": true,
-							 "Amount": true
-
+							 "StudentId": true,
+							 "CourseId": true,
+							 "PaymentDate": true,
+							 "Reference" : true,
+							 "PaymentMode" : true,
+							 "Amount" : true,
+							 "id":true
+						 }
+					 }).then(function(subcriptions){
+						 subcriptions.forEach((item)=>{
+							subsMap.get("subs").set(item.id.toString(),{
+								"AccountName": item.AccountName,
+								"StudentId": item.StudentId.toString(),
+								"CourseId": item.CourseId.toString(),
+								"PaymentDate": item.PaymentDate,
+								"Reference" : item.Reference,
+								"PaymentMode" : item.PaymentMode,
+								"Amount" : item.Amount,
+								"id" : item.id
+							});
+							subsMap.get("course").set(item.CourseId.toString(), null);
+							subsMap.get("student").set(item.StudentId.toString(), null);
+						 });
+							 callback(null,subcriptions);
+					 });
+				 },
+				 function(subcriptions, callback) {
+					 // arg1 now equals 'one' and arg2 now equals 'two'
+					 // var date = new Date("2020-04-01");
+					 // date.setHours(0,0,0,0);
+					 Courses.find({
+						 // where: {
+							//  or: []
+						 // },
+						 fields:{
+							 "Name": true,
+							 "id" : true
 						 }
 					 })
-						 .then(function(Records, err) {
+					 .then(function(courses, err) {
+						 courses.forEach((item)=>{
+							 if(subsMap.get("course").has(item.id.toString())){
+								 subsMap.get("course").set(item.id.toString(),{"Name" : item.Name});
+							 }
+						 });
+						 callback(null,subcriptions, courses);
+					 });
 
-
-						 callback(null, accountRecords, accountBalances, Records);
+				 },
+				 function(subcriptions, courses, callback) {
+					 // arg1 now equals 'three'
+					 // var date = new Date("2020-04-01");
+					 // date.setHours(0,0,0,0);
+					 Students.find({
+						 // where: {
+							//  and: [{
+							// 	 PaymentDate: {
+							// 		 gte: date
+							// 	 }
+							//  }]
+						 // },
+						 fields:{
+							 "GmailId": true,
+							 "Name": true,
+							 "id" : true
+						 }
+					 })
+						 .then(function(students, err) {
+							 students.forEach((item)=>{
+								 if(subsMap.get("student").has(item.id.toString())){
+									 subsMap.get("student").set(item.id.toString(),{"Name" : item.Name, "GmailId" : item.GmailId});
+								 }
+							 });
+						 callback(null, subcriptions, courses, students);
 					 });
 				 }
 			 ],
 			 function(err, accountRecords, accountBalances, Records) {
 				 // result now equals 'done'
-				 debugger;
+				 var responseData = [];
 				 try {
-					 var responseData = [];
-					 for (var i = 0; i < accountRecords.length; i++) {
-						 try {
-							 var totalAmount = 0, newDeposits = 0;
-							 for (var j = 0; j < accountBalances.length; j++) {
-
-								 if(accountBalances[j].AccountNo.toString() === accountRecords[i].accountNo.toString()){
-									 totalAmount
-									 = totalAmount +
-										 accountBalances[j].Amount;
-								 }
-
-							 }
-							 for (var k = 0; k < Records.length; k++) {
-								 if(Records[k].AccountName.toString() === accountRecords[i].accountNo.toString()){
-									 totalAmount
-									 = totalAmount +
-										 Records[k].Amount;
-									 newDeposits = Records[k].Amount + newDeposits;
-								 }
-
-							 }
-							 if(accountRecords[i].key  !== "Check Nahi Karna"){
-								 responseData.push({ "AccountNo": accountRecords[i].accountNo,
-																			"AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
-																			"NewDeposit": newDeposits,
-																			"Amount": totalAmount,
-																			"current": accountRecords[i].current,
-																			"counter":accountRecords[i].counter,
-																			"counterall":accountRecords[i].counterall,
-																			"key":accountRecords[i].key,
-																			"id":accountRecords[i].id
-								 });
-							 }
-
-							 totalAmount, newDeposits = 0;
-						 } catch (e) {
-
-						 } finally {
-
+					 subsMap.get("subs").forEach((item)=>{
+						 if(item.PaymentMode==="PAYPAL" || item.PaymentMode==="XOOM")
+						 {
+							 var amount = item.Amount;
+							 var gst = 0.00;
 						 }
-					 }
-
+						 else{
+							 var amount = item.Amount*100/118;
+							 var gst = item.Amount*9/118;
+						 }
+							 responseData.push({
+								 "Email" : subsMap.get("student").get(item.StudentId).GmailId,
+								 "Name" : subsMap.get("student").get(item.StudentId).Name,
+								 "CourseName" : subsMap.get("course").get(item.CourseId).Name,
+								 "PaymentMode" : item.PaymentMode,
+								 "PaymentDate" : item.PaymentDate,
+								 "FullAmount" : item.Amount,
+								 "Amount" : amount.toFixed(2),
+								 "SGST" : gst.toFixed(2),
+								 "CGST" : gst.toFixed(2),
+								 "Reference" : item.Reference,
+								 "id" : item.id
+							 });
+					 });
 					 res.send(responseData);
 				 } catch (e) {
 
@@ -440,7 +447,7 @@ app.start = function() {
 			 }
 		 );
 		});
-		
+
 		app.get('/getStudentPerBatch', function(req, res) {
 			var responseData = [];
 			var app = require('../server/server');
