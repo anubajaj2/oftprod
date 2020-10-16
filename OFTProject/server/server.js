@@ -329,7 +329,7 @@ app.start = function() {
 					 Subs.find({
 						 where :{
 							 "AccountName" : accountNo,
-							 "PaymentDate" : {gte : startDate, lte : endDate},
+							 and : [{"PaymentDate" : {gte : startDate}},{"PaymentDate" : {lte : endDate}}],
 						 },
 						 fields:{
 							 "AccountName": true,
@@ -347,7 +347,7 @@ app.start = function() {
 								"AccountName": item.AccountName,
 								"StudentId": item.StudentId.toString(),
 								"CourseId": item.CourseId.toString(),
-								"PaymentDate": item.PaymentDate,
+								"PaymentDate": item.PaymentDate.toString().slice(4,16),
 								"Reference" : item.Reference,
 								"PaymentMode" : item.PaymentMode,
 								"Amount" : item.Amount,
@@ -1225,33 +1225,18 @@ app.start = function() {
 							});
 					}
 				);
-				app.post('/getAllForAccount',
+				app.post('/updateSubcriptionAmount',
 						function(req, res) {
 							var app = require('../server/server');
 							var Sub = app.models.Sub;
-							var date = new Date();
-							date.setDate( date.getDate() - 7 );
-							Sub.find({
-									where: {
-										and: [{
-											AccountName: req.body.AccountNo
-										}
-										// ,
-										// {
-										// 	PaymentDate: {
-										// 		gt: date
-										// 	}
-										// }
-									]
-									},
-								  fields:{
-										"PaymentDate": true,
-										"Amount": true,
-										"Remarks": true
-									}
-								}
-						).then(function(data) {
-								res.send(data);
+							var id = req.body.id;
+							var updateObj = {
+									Amount: req.body.Amount
+							};
+							Sub.findById(id).then(function(instance) {
+								 instance.updateAttributes(updateObj);
+								 console.log("done");
+								 res.send("done");
 							});
 						}
 					);

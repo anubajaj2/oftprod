@@ -15,10 +15,10 @@
   					<f:content>
   						<Label text="Date Range"/>
   						<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy"
-  							value="" valueFormat="dd.MM.yyyy"
+  							value="" valueFormat="dd.MM.yyyy" change="onStartDate"
   							></DatePicker>
                 <DatePicker id="idRegDateTo" displayFormat="dd.MM.yyyy"
-    							value="" valueFormat="dd.MM.yyyy"
+    							value="" valueFormat="dd.MM.yyyy" change="onEndDate"
     							></DatePicker>
   						<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
   						id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
@@ -32,7 +32,7 @@
   				</f:SimpleForm>
   				<Panel title="Summary">
   					<Table id="idSummary" items="{viewModel>/records}" growing="true"
-  						growingScrollToLoad="false" mode="MultiSelect"
+  						growingScrollToLoad="false"
   			      class="sapUiSizeCompact"
   						showRowCount="true"  updateFinished="onUpdateFinished" >
   						<headerToolbar>
@@ -56,6 +56,9 @@
   							<Column>
   								<Label text="Type of Payment" class="columnLabelStyle"/>
   							</Column>
+                <Column>
+  								<Label text="Payment Date" class="columnLabelStyle"/>
+  							</Column>
   							<Column>
   								<Label text="Amount Paid" class="columnLabelStyle"/>
   							</Column>
@@ -68,9 +71,9 @@
   							<Column>
   								<Label text="Reference No." class="columnLabelStyle"/>
   							</Column>
-  							<!-- <Column>
-  								<Label text="Date" class="columnLabelStyle"/>
-  							</Column> -->
+  							<Column>
+  								<Label text="Invoice" class="columnLabelStyle"/>
+  							</Column>
   						</columns>
   						<items>
   							<ColumnListItem id="idColumnlistSumm" press="onItemPress"  type="Active" >
@@ -80,6 +83,7 @@
 
   									<Text text="{viewModel>CourseName}"  ></Text>
                     <Text text="{viewModel>PaymentMode}"  ></Text>
+                    <Text text="{viewModel>PaymentDate}"  ></Text>
   									<Text text="{path: 'viewModel>Amount',
   										formatter: '.formatter.getIndianCurr'}"  ></Text>
                     <Text text="{path: 'viewModel>SGST',
@@ -87,7 +91,7 @@
                     <Text text="{path: 'viewModel>CGST',
     									formatter: '.formatter.getIndianCurr'}"  ></Text>
                     <Text text="{viewModel>Reference}"  ></Text>
-                    <!-- <Text text="{viewModel>PaymentDate}"  ></Text> -->
+                    <Button icon="sap-icon://download" press = "onDownloadInvoice" ></Button>
   								</cells>
   							</ColumnListItem>
   						</items>
