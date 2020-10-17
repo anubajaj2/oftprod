@@ -62,11 +62,11 @@
   							<Column>
   								<Label text="Amount Paid" class="columnLabelStyle"/>
   							</Column>
-  							<Column>
-  								<Label text="SGST (9%)" class="columnLabelStyle"/>
+                <Column>
+  								<Label text="CGST (9%)" class="columnLabelStyle"/>
   							</Column>
   							<Column>
-  								<Label text="CGST (9%)" class="columnLabelStyle"/>
+  								<Label text="SGST (9%)" class="columnLabelStyle"/>
   							</Column>
   							<Column>
   								<Label text="Reference No." class="columnLabelStyle"/>
@@ -86,9 +86,9 @@
                     <Text text="{viewModel>PaymentDate}"  ></Text>
   									<Text text="{path: 'viewModel>Amount',
   										formatter: '.formatter.getIndianCurr'}"  ></Text>
-                    <Text text="{path: 'viewModel>SGST',
-    									formatter: '.formatter.getIndianCurr'}"  ></Text>
                     <Text text="{path: 'viewModel>CGST',
+    									formatter: '.formatter.getIndianCurr'}"  ></Text>
+                    <Text text="{path: 'viewModel>SGST',
     									formatter: '.formatter.getIndianCurr'}"  ></Text>
                     <Text text="{viewModel>Reference}"  ></Text>
                     <Button icon="sap-icon://download" press = "onDownloadInvoice" ></Button>

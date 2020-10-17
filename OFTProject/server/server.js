@@ -66,73 +66,101 @@ app.start = function() {
 
 				);
 		});
-		app.get("/todayInquiry",function(req,res){
+		app.get("/todayInquiry", function(req, res) {
 
 			var date = new Date();
-			date.setDate( date.getDate() - 1 );
-			date.setHours(24,0,0,0);
+			date.setDate(date.getDate() - 1);
+			date.setHours(24, 0, 0, 0);
 			var Inquiry = app.models.Inquiry;
 			Inquiry.find({
-				where: {
-					and: [{
-						CreatedOn: {
-							gte: date
-						}
-					}]
-				},
-				fields:{
-					"CreatedBy": true
-				}
-			})
-			.then(function(all){
+					where: {
+						and: [{
+							CreatedOn: {
+								gte: date
+							}
+						}]
+					},
+					fields: {
+						"CreatedBy": true
+					}
+				})
+				.then(function(all) {
 
-				// 5c187036dba2681834ffe305 --> sonal
-				// 5c187035dba2681834ffe301 --> ANubhav
-				// 5d947c3dab189706a40faade --> Servers
-				// 5dd6a6aea5f9e83c781b7ac0 --> shanu
-				// 5ea2f01d7854a13c148f18cd	 --> Manish
-				// 5db594b9b06bff3ffcbba53c --> shalu
-				// 5dcf9f7183f22e7da0acdfe4 --> vaishali
-				// 5ecc968586321064989cdc3f --> kajol
-				// 5f1331f2e0b8524af830fa20 --> shalini
-				// 5f4d01c50815a314ec9238d2 --> khushbu
-				var lv_manish = 0, lv_khushbu = 0, lv_shalu = 0, lv_shanu = 0, lv_sonal = 0, lv_vaishali = 0, lv_kajol = 0;
-				for (var i = 0; i < all.length; i++) {
-					switch (all[i].CreatedBy.toString()) {
-						case "5dd6a6aea5f9e83c781b7ac0":
-							lv_shanu = lv_shanu + 1;
-							break;
-						case "5dcf9f7183f22e7da0acdfe4":
-							lv_vaishali = lv_vaishali + 1;
+					// 5c187036dba2681834ffe305 --> sonal
+					// 5c187035dba2681834ffe301 --> ANubhav
+					// 5d947c3dab189706a40faade --> Servers
+					// 5dd6a6aea5f9e83c781b7ac0 --> shanu
+					// 5ea2f01d7854a13c148f18cd	 --> Manish
+					// 5db594b9b06bff3ffcbba53c --> shalu
+					// 5dcf9f7183f22e7da0acdfe4 --> vaishali
+					// 5ecc968586321064989cdc3f --> kajol
+					// 5f1331f2e0b8524af830fa20 --> shalini
+					// 5f4d01c50815a314ec9238d2 --> khushbu
+					var lv_manish = 0,
+						lv_khushbu = 0,
+						lv_shalu = 0,
+						lv_shanu = 0,
+						lv_sonal = 0,
+						lv_vaishali = 0,
+						lv_kajol = 0;
+					for (var i = 0; i < all.length; i++) {
+						switch (all[i].CreatedBy.toString()) {
+							case "5dd6a6aea5f9e83c781b7ac0":
+								lv_shanu = lv_shanu + 1;
 								break;
-						case "5db594b9b06bff3ffcbba53c":
-							lv_shalu = lv_shalu + 1;
+							case "5dcf9f7183f22e7da0acdfe4":
+								lv_vaishali = lv_vaishali + 1;
 								break;
-						case "5c187036dba2681834ffe305":
-							lv_sonal = lv_sonal + 1;
+							case "5db594b9b06bff3ffcbba53c":
+								lv_shalu = lv_shalu + 1;
 								break;
-						case "5f1331f2e0b8524af830fa20":
+							case "5c187036dba2681834ffe305":
+								lv_sonal = lv_sonal + 1;
+								break;
+							case "5f1331f2e0b8524af830fa20":
 								lv_manish = lv_manish + 1;
 								break;
-						case "5ecc968586321064989cdc3f":
+							case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;
-						case "5f4d01c50815a314ec9238d2":
+							case "5f4d01c50815a314ec9238d2":
 								lv_khushbu = lv_khushbu + 1;
 								break;
-						default:
+							default:
 
+						}
 					}
-				}
-				var coll = [{ "name" : "shanu", count: lv_shanu },
-										{ "name" : "vaishali", count: lv_vaishali },
-										{ "name" : "shalu", count: lv_shalu },
-										{ "name" : "sonal", count: lv_sonal },
-										{ "name" : "shalini", count: lv_manish },
-										{ "name" : "kajol", count: lv_kajol },
-										{ "name" : "khushbu", count: lv_khushbu }];
-				res.send(coll);
-			});
+					var coll = [{
+							"name": "shanu",
+							count: lv_shanu
+						},
+						{
+							"name": "vaishali",
+							count: lv_vaishali
+						},
+						{
+							"name": "shalu",
+							count: lv_shalu
+						},
+						{
+							"name": "sonal",
+							count: lv_sonal
+						},
+						{
+							"name": "shalini",
+							count: lv_manish
+						},
+						{
+							"name": "kajol",
+							count: lv_kajol
+						},
+						{
+							"name": "khushbu",
+							count: lv_khushbu
+						}
+					];
+					res.send(coll);
+				});
 		});
 		app.post('/checkStudentById', function(req, res) {
 			debugger;
@@ -140,26 +168,37 @@ app.start = function() {
 			var lv_countries = "";
 			var completeData = {};
 			var Inquiry = app.models.Inquiry;
-			Inquiry.find( { where : { EmailId : emailId } } )
-					.then(function(Records, err) {
-									if (Records) {
-										for (var i = 0; i < Records.length; i++) {
-											lv_countries = lv_countries + ", " + Records[i].Country;
-											completeData = Records[i];
-										}
-									}
-									var Subs = app.models.Student;
-									Subs.find( { where : { GmailId : emailId } } )
-											.then(function(Records, err) {
-															if (Records) {
-																for (var i = 0; i < Records.length; i++) {
-																	lv_countries = lv_countries + ", " + Records[i].Country;
-																	completeData.subs = Records[i];
-																}
-															}
-															res.send({country: lv_countries, inq: completeData});
-											});
-					});
+			Inquiry.find({
+					where: {
+						EmailId: emailId
+					}
+				})
+				.then(function(Records, err) {
+					if (Records) {
+						for (var i = 0; i < Records.length; i++) {
+							lv_countries = lv_countries + ", " + Records[i].Country;
+							completeData = Records[i];
+						}
+					}
+					var Subs = app.models.Student;
+					Subs.find({
+							where: {
+								GmailId: emailId
+							}
+						})
+						.then(function(Records, err) {
+							if (Records) {
+								for (var i = 0; i < Records.length; i++) {
+									lv_countries = lv_countries + ", " + Records[i].Country;
+									completeData.subs = Records[i];
+								}
+							}
+							res.send({
+								country: lv_countries,
+								inq: completeData
+							});
+						});
+				});
 
 
 		});
@@ -211,57 +250,57 @@ app.start = function() {
 
 
 
-				app.post('/requestMessage', function(req, res) {
-					debugger;
-					var msg = "";
-					var typeMsg = req.body.msgType;
-					switch (typeMsg) {
-						case "inquiry":
-							msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, #COURSE# details sent to your email id, please write to us on contact@anubhavtrainings.com.";
-							msg = msg.replace("#COURSE#", req.body.courseName);
-							break;
-						case "courseapprove":
-								msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on contact@anubhavtrainings.com for more queries';;
-								break;
-						case "courseextend":
-								msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com, the course is extended till #EXTENDDATE#. mail us on contact@anubhavtrainings.com for more queries";
-								msg = msg.replace("#EXTENDDATE#", req.body.extendDate);
-							  break;
-						default:
-							return;
+		app.post('/requestMessage', function(req, res) {
+			debugger;
+			var msg = "";
+			var typeMsg = req.body.msgType;
+			switch (typeMsg) {
+				case "inquiry":
+					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, #COURSE# details sent to your email id, please write to us on contact@anubhavtrainings.com.";
+					msg = msg.replace("#COURSE#", req.body.courseName);
+					break;
+				case "courseapprove":
+					msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on contact@anubhavtrainings.com for more queries';;
+					break;
+				case "courseextend":
+					msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com, the course is extended till #EXTENDDATE#. mail us on contact@anubhavtrainings.com for more queries";
+					msg = msg.replace("#EXTENDDATE#", req.body.extendDate);
+					break;
+				default:
+					return;
 
-					}
-						msg = msg.replace("#FirstName#", req.body.userName);
-						var http = require('http');
-						var urlencode = require('urlencode');
-						msg=urlencode(msg);
-						var number=req.body.Number;
-						//var username='anubhav.abap@gmail.com';
-						var username='anubhav.abap@gmail.com';
-						var hash='faffa687d5142e5af59d8e892b9802651a63fd3185d4fdcc5aad716065320bf7'; // The hash key could be found under Help->All Documentation->Your hash key. Alternatively you can use your Textlocal password in plain text.
-						//var hash = 'eef684d01be7535d39d7f409a1b8e888f874e9a05243b4fb3db2426f99aed5ba';
-						//var sender='ONLTRN';
-						var sender = "ONLTRN";
-						var data='username='+username+'&hash='+hash+'&sender='+sender+'&numbers='+number+'&message='+msg
-						var options = {
-				 				 host: 'api.textlocal.in',
-					  	 	 path: '/send?'+data
-						};
-						callback = function(response) {
-						  var str = '';
-						  response.on('data', function (chunk) {
-						  str += chunk;
-						  });
-
-						  //the whole response has been recieved, so we just print it out here
-						  response.on('end', function () {
-								res.send("message sent");
-						  	console.log(str);
-						  });
-						}
-						//console.log('hello js'))
-						http.request(options, callback).end();
+			}
+			msg = msg.replace("#FirstName#", req.body.userName);
+			var http = require('http');
+			var urlencode = require('urlencode');
+			msg = urlencode(msg);
+			var number = req.body.Number;
+			//var username='anubhav.abap@gmail.com';
+			var username = 'anubhav.abap@gmail.com';
+			var hash = 'faffa687d5142e5af59d8e892b9802651a63fd3185d4fdcc5aad716065320bf7'; // The hash key could be found under Help->All Documentation->Your hash key. Alternatively you can use your Textlocal password in plain text.
+			//var hash = 'eef684d01be7535d39d7f409a1b8e888f874e9a05243b4fb3db2426f99aed5ba';
+			//var sender='ONLTRN';
+			var sender = "ONLTRN";
+			var data = 'username=' + username + '&hash=' + hash + '&sender=' + sender + '&numbers=' + number + '&message=' + msg
+			var options = {
+				host: 'api.textlocal.in',
+				path: '/send?' + data
+			};
+			callback = function(response) {
+				var str = '';
+				response.on('data', function(chunk) {
+					str += chunk;
 				});
+
+				//the whole response has been recieved, so we just print it out here
+				response.on('end', function() {
+					res.send("message sent");
+					console.log(str);
+				});
+			}
+			//console.log('hello js'))
+			http.request(options, callback).end();
+		});
 
 
 
@@ -312,140 +351,160 @@ app.start = function() {
 				);
 		});
 		app.post('/getAmountForAccount', function(req, res) {
-			 var responseData = [];
-			 var accountNo = req.body.AccountNo;
-			 var startDate = new Date(req.body.StartDate);
-			 var endDate = new Date(req.body.EndDate);
-			 var Subs = app.models.Sub;
-			 var Students = app.models.Student;
-			 var Courses = app.models.Course;
-			 var subsMap = new Map();
-			 subsMap.set("subs",new Map());
-			 subsMap.set("course", new Map());
-			 subsMap.set("student", new Map());
-			 var async = require('async');
-			 async.waterfall([
-				 function(callback) {
-					 Subs.find({
-						 where :{
-							 "AccountName" : accountNo,
-							 and : [{"PaymentDate" : {gte : startDate}},{"PaymentDate" : {lte : endDate}}],
-						 },
-						 fields:{
-							 "AccountName": true,
-							 "StudentId": true,
-							 "CourseId": true,
-							 "PaymentDate": true,
-							 "Reference" : true,
-							 "PaymentMode" : true,
-							 "Amount" : true,
-							 "id":true
-						 }
-					 }).then(function(subcriptions){
-						 subcriptions.forEach((item)=>{
-							subsMap.get("subs").set(item.id.toString(),{
-								"AccountName": item.AccountName,
-								"StudentId": item.StudentId.toString(),
-								"CourseId": item.CourseId.toString(),
-								"PaymentDate": item.PaymentDate.toString().slice(4,16),
-								"Reference" : item.Reference,
-								"PaymentMode" : item.PaymentMode,
-								"Amount" : item.Amount,
-								"id" : item.id
+			var responseData = [];
+			var accountNo = req.body.AccountNo;
+			var startDate = new Date(req.body.StartDate);
+			var endDate = new Date(req.body.EndDate);
+			var Subs = app.models.Sub;
+			var Students = app.models.Student;
+			var Courses = app.models.Course;
+			var subsMap = new Map();
+			subsMap.set("subs", new Map());
+			subsMap.set("course", new Map());
+			subsMap.set("student", new Map());
+			var async = require('async');
+			async.waterfall([
+					function(callback) {
+						Subs.find({
+							where: {
+								"AccountName": accountNo,
+								and: [{
+									"PaymentDate": {
+										gte: startDate
+									}
+								}, {
+									"PaymentDate": {
+										lte: endDate
+									}
+								}],
+							},
+							fields: {
+								"AccountName": true,
+								"StudentId": true,
+								"CourseId": true,
+								"PaymentDate": true,
+								"Reference": true,
+								"PaymentMode": true,
+								"Amount": true,
+								"id": true
+							}
+						}).then(function(subcriptions) {
+							subcriptions.forEach((item) => {
+								subsMap.get("subs").set(item.id.toString(), {
+									"AccountName": item.AccountName,
+									"StudentId": item.StudentId.toString(),
+									"CourseId": item.CourseId.toString(),
+									"PaymentDate": item.PaymentDate.toString().slice(4, 16),
+									"Reference": item.Reference,
+									"PaymentMode": item.PaymentMode,
+									"Amount": item.Amount,
+									"id": item.id
+								});
+								subsMap.get("course").set(item.CourseId.toString(), null);
+								subsMap.get("student").set(item.StudentId.toString(), null);
 							});
-							subsMap.get("course").set(item.CourseId.toString(), null);
-							subsMap.get("student").set(item.StudentId.toString(), null);
-						 });
-							 callback(null,subcriptions);
-					 });
-				 },
-				 function(subcriptions, callback) {
-					 // arg1 now equals 'one' and arg2 now equals 'two'
-					 // var date = new Date("2020-04-01");
-					 // date.setHours(0,0,0,0);
-					 Courses.find({
-						 // where: {
-							//  or: []
-						 // },
-						 fields:{
-							 "Name": true,
-							 "id" : true
-						 }
-					 })
-					 .then(function(courses, err) {
-						 courses.forEach((item)=>{
-							 if(subsMap.get("course").has(item.id.toString())){
-								 subsMap.get("course").set(item.id.toString(),{"Name" : item.Name});
-							 }
-						 });
-						 callback(null,subcriptions, courses);
-					 });
+							callback(null, subcriptions);
+						});
+					},
+					function(subcriptions, callback) {
+						// arg1 now equals 'one' and arg2 now equals 'two'
+						// var date = new Date("2020-04-01");
+						// date.setHours(0,0,0,0);
+						Courses.find({
+								// where: {
+								//  or: []
+								// },
+								fields: {
+									"Name": true,
+									"BatchNo": true,
+									"id": true
+								}
+							})
+							.then(function(courses, err) {
+								courses.forEach((item) => {
+									if (subsMap.get("course").has(item.id.toString())) {
+										subsMap.get("course").set(item.id.toString(), {
+											"Name": item.Name,
+											"BatchNo": item.BatchNo
+										});
+									}
+								});
+								callback(null, subcriptions, courses);
+							});
 
-				 },
-				 function(subcriptions, courses, callback) {
-					 // arg1 now equals 'three'
-					 // var date = new Date("2020-04-01");
-					 // date.setHours(0,0,0,0);
-					 Students.find({
-						 // where: {
-							//  and: [{
-							// 	 PaymentDate: {
-							// 		 gte: date
-							// 	 }
-							//  }]
-						 // },
-						 fields:{
-							 "GmailId": true,
-							 "Name": true,
-							 "id" : true
-						 }
-					 })
-						 .then(function(students, err) {
-							 students.forEach((item)=>{
-								 if(subsMap.get("student").has(item.id.toString())){
-									 subsMap.get("student").set(item.id.toString(),{"Name" : item.Name, "GmailId" : item.GmailId});
-								 }
-							 });
-						 callback(null, subcriptions, courses, students);
-					 });
-				 }
-			 ],
-			 function(err, accountRecords, accountBalances, Records) {
-				 // result now equals 'done'
-				 var responseData = [];
-				 try {
-					 subsMap.get("subs").forEach((item)=>{
-						 if(item.PaymentMode==="PAYPAL" || item.PaymentMode==="XOOM")
-						 {
-							 var amount = item.Amount;
-							 var gst = 0.00;
-						 }
-						 else{
-							 var amount = item.Amount*100/118;
-							 var gst = item.Amount*9/118;
-						 }
-							 responseData.push({
-								 "Email" : subsMap.get("student").get(item.StudentId).GmailId,
-								 "Name" : subsMap.get("student").get(item.StudentId).Name,
-								 "CourseName" : subsMap.get("course").get(item.CourseId).Name,
-								 "PaymentMode" : item.PaymentMode,
-								 "PaymentDate" : item.PaymentDate,
-								 "FullAmount" : item.Amount,
-								 "Amount" : amount.toFixed(2),
-								 "SGST" : gst.toFixed(2),
-								 "CGST" : gst.toFixed(2),
-								 "Reference" : item.Reference,
-								 "id" : item.id
-							 });
-					 });
-					 res.send(responseData);
-				 } catch (e) {
+					},
+					function(subcriptions, courses, callback) {
+						// arg1 now equals 'three'
+						// var date = new Date("2020-04-01");
+						// date.setHours(0,0,0,0);
+						Students.find({
+								// where: {
+								//  and: [{
+								// 	 PaymentDate: {
+								// 		 gte: date
+								// 	 }
+								//  }]
+								// },
+								fields: {
+									"GmailId": true,
+									"Name": true,
+									"ContactNo" : true,
+									"Country" : true,
+									"id": true
+								}
+							})
+							.then(function(students, err) {
+								students.forEach((item) => {
+									if (subsMap.get("student").has(item.id.toString())) {
+										subsMap.get("student").set(item.id.toString(), {
+											"Name": item.Name,
+											"GmailId": item.GmailId,
+											"ContactNo" : item.ContactNo,
+											"Country" : item.Country
+										});
+									}
+								});
+								callback(null, subcriptions, courses, students);
+							});
+					}
+				],
+				function(err, accountRecords, accountBalances, Records) {
+					// result now equals 'done'
+					var responseData = [];
+					try {
+						subsMap.get("subs").forEach((item) => {
+							if (item.PaymentMode === "PAYPAL" || item.PaymentMode === "XOOM") {
+								var amount = item.Amount;
+								var gst = 0.00;
+							} else {
+								var amount = item.Amount * 100 / 118;
+								var gst = item.Amount * 9 / 118;
+							}
+							responseData.push({
+								"Email": subsMap.get("student").get(item.StudentId).GmailId,
+								"Name": subsMap.get("student").get(item.StudentId).Name,
+								"Country" : subsMap.get("student").get(item.StudentId).Country,
+								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
+								"CourseName": subsMap.get("course").get(item.CourseId).Name,
+								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
+								"PaymentMode": item.PaymentMode,
+								"PaymentDate": item.PaymentDate,
+								"FullAmount": item.Amount,
+								"Amount": amount.toFixed(2),
+								"SGST": gst.toFixed(2),
+								"CGST": gst.toFixed(2),
+								"Reference": item.Reference,
+								"id": item.id
+							});
+						});
+						res.send(responseData);
+					} catch (e) {
 
-				 } finally {
+					} finally {
 
-				 }
-			 }
-		 );
+					}
+				}
+			);
 		});
 
 		app.get('/getStudentPerBatch', function(req, res) {
@@ -506,18 +565,18 @@ app.start = function() {
 		});
 
 		app.get('/getAmountPerAccount', function(req, res) {
-				var responseData = [];
-				var oSubCounter = {};
-				var Subs = app.models.Sub;
-				var Account = app.models.Account;
-				var AccountEntry = app.models.AccountBalance;
+			var responseData = [];
+			var oSubCounter = {};
+			var Subs = app.models.Sub;
+			var Account = app.models.Account;
+			var AccountEntry = app.models.AccountBalance;
 
-				var async = require('async');
-				debugger;
-				async.waterfall([
+			var async = require('async');
+			debugger;
+			async.waterfall([
 					function(callback) {
 						Account.find({
-						  fields:{
+							fields: {
 								"accountName": true,
 								"accountNo": true,
 								"ifsc": true,
@@ -525,57 +584,57 @@ app.start = function() {
 								"counter": true,
 								"counterall": true,
 								"key": true,
-								"id":true
+								"id": true
 							}
-						}).then(function(accountRecords){
-								callback(null, accountRecords);
+						}).then(function(accountRecords) {
+							callback(null, accountRecords);
 						});
 					},
 					function(accountRecords, callback) {
 						// arg1 now equals 'one' and arg2 now equals 'two'
 						var date = new Date("2020-04-01");
-						date.setHours(0,0,0,0);
+						date.setHours(0, 0, 0, 0);
 						AccountEntry.find({
-							where: {
-								and: [{
-									CreatedOn: {
-										gte: date
-									}
-								}]
-							},
-						  fields:{
-								"AccountNo": true,
-								"Amount": true
-							}
-						})
-						.then(function(accountBalances, err) {
-							callback(null, accountRecords, accountBalances);
-						});
+								where: {
+									and: [{
+										CreatedOn: {
+											gte: date
+										}
+									}]
+								},
+								fields: {
+									"AccountNo": true,
+									"Amount": true
+								}
+							})
+							.then(function(accountBalances, err) {
+								callback(null, accountRecords, accountBalances);
+							});
 
 					},
 					function(accountRecords, accountBalances, callback) {
 						// arg1 now equals 'three'
 						var date = new Date("2020-04-01");
-						date.setHours(0,0,0,0);
+						date.setHours(0, 0, 0, 0);
 						Subs.find({
-							where: {
-								and: [{
-									PaymentDate: {
-										gte: date
-									}
-								}]
-							},
-							fields:{
-								"AccountName": true,
-								"Amount": true
+								where: {
+									and: [{
+										PaymentDate: {
+											gte: date
+										}
+									}]
+								},
+								fields: {
+									"AccountName": true,
+									"Amount": true
 
-							}
-						})
+								}
+							})
 							.then(function(Records, err) {
 
 
-							callback(null, accountRecords, accountBalances, Records);
-						});
+								callback(null, accountRecords, accountBalances, Records);
+							});
 					}
 				],
 				function(err, accountRecords, accountBalances, Records) {
@@ -585,35 +644,37 @@ app.start = function() {
 						var responseData = [];
 						for (var i = 0; i < accountRecords.length; i++) {
 							try {
-								var totalAmount = 0, newDeposits = 0;
+								var totalAmount = 0,
+									newDeposits = 0;
 								for (var j = 0; j < accountBalances.length; j++) {
 
-									if(accountBalances[j].AccountNo.toString() === accountRecords[i].accountNo.toString()){
+									if (accountBalances[j].AccountNo.toString() === accountRecords[i].accountNo.toString()) {
 										totalAmount
-										= totalAmount +
+											= totalAmount +
 											accountBalances[j].Amount;
 									}
 
 								}
 								for (var k = 0; k < Records.length; k++) {
-									if(Records[k].AccountName.toString() === accountRecords[i].accountNo.toString()){
+									if (Records[k].AccountName.toString() === accountRecords[i].accountNo.toString()) {
 										totalAmount
-										= totalAmount +
+											= totalAmount +
 											Records[k].Amount;
 										newDeposits = Records[k].Amount + newDeposits;
 									}
 
 								}
-								if(accountRecords[i].key  !== "Check Nahi Karna"){
-									responseData.push({ "AccountNo": accountRecords[i].accountNo,
-																			 "AccountName":  accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
-																			 "NewDeposit": newDeposits,
-																			 "Amount": totalAmount,
-																			 "current": accountRecords[i].current,
-																			 "counter":accountRecords[i].counter,
-																			 "counterall":accountRecords[i].counterall,
-																			 "key":accountRecords[i].key,
-																			 "id":accountRecords[i].id
+								if (accountRecords[i].key !== "Check Nahi Karna") {
+									responseData.push({
+										"AccountNo": accountRecords[i].accountNo,
+										"AccountName": accountRecords[i].accountName + " - " + accountRecords[i].ifsc,
+										"NewDeposit": newDeposits,
+										"Amount": totalAmount,
+										"current": accountRecords[i].current,
+										"counter": accountRecords[i].counter,
+										"counterall": accountRecords[i].counterall,
+										"key": accountRecords[i].key,
+										"id": accountRecords[i].id
 									});
 								}
 
@@ -633,7 +694,7 @@ app.start = function() {
 					}
 				}
 			);
-		 });
+		});
 
 		app.get('/getBatchPerCourse', function(req, res) {
 			var responseData = [];
@@ -696,7 +757,7 @@ app.start = function() {
 				}).then(function(data) {
 
 					for (i = 0; i < aCourseFinal.length; i++) {
-            var aSubBatches = [];
+						var aSubBatches = [];
 						for (j = 0; j < aCourseFinal[i].Batches.length; j++) {
 							aSubBatches = data.filter(function(oRec) {
 								return aCourseFinal[i].Batches[j].id.toString() === oRec.CourseId.toString();
@@ -1173,138 +1234,140 @@ app.start = function() {
 				});
 			});
 
-			app.post('/getAllStudents',
-				function(req, res) {
-					var app = require('../server/server');
-					var colls = req.body.allStudents;
-					var Students = app.models.Student;
-					var Courses = app.models.Course;
-					this.students = [];
-					this.courses = [];
-					Students.find({
-						where: {
-							id:{
-								inq: colls
-							}
-						},
-					  fields: {
-							id: true,
-							GmailId: true
+		app.post('/getAllStudents',
+			function(req, res) {
+				var app = require('../server/server');
+				var colls = req.body.allStudents;
+				var Students = app.models.Student;
+				var Courses = app.models.Course;
+				this.students = [];
+				this.courses = [];
+				Students.find({
+					where: {
+						id: {
+							inq: colls
 						}
-					}).then(function(students) {
-						return res.send(students);
-					});
-
-
-
+					},
+					fields: {
+						id: true,
+						GmailId: true
+					}
+				}).then(function(students) {
+					return res.send(students);
 				});
 
-			app.post('/markCheckedAccount',
-					function(req, res) {
-						var app = require('../server/server');
-						var Account = app.models.Account;
-						var boolVal = req.body.State;
-						Account.findOne({where: {
+
+
+			});
+
+		app.post('/markCheckedAccount',
+			function(req, res) {
+				var app = require('../server/server');
+				var Account = app.models.Account;
+				var boolVal = req.body.State;
+				Account.findOne({
+						where: {
 							accountNo: req.body.AccountNo
-						}}).then(function(item) {
-								if(item){
-									var app = require('../server/server');
-									var Account = app.models.Account;
-									var id = item.id;
-									var updateObj = {
-										current: boolVal
-									};
-									Account.findById(id).then(function(instance) {
-										 instance.updateAttributes(updateObj);
-										 return res.send("done");
-									});
-								}
-							})
-							.catch(function(err) {
-								console.log(err);
-							});
-					}
-				);
-				app.post('/updateSubcriptionAmount',
-						function(req, res) {
+						}
+					}).then(function(item) {
+						if (item) {
 							var app = require('../server/server');
-							var Sub = app.models.Sub;
-							var id = req.body.id;
+							var Account = app.models.Account;
+							var id = item.id;
 							var updateObj = {
-									Amount: req.body.Amount
+								current: boolVal
 							};
-							Sub.findById(id).then(function(instance) {
-								 instance.updateAttributes(updateObj);
-								 console.log("done");
-								 res.send("done");
+							Account.findById(id).then(function(instance) {
+								instance.updateAttributes(updateObj);
+								return res.send("done");
 							});
 						}
-					);
-					app.post('/ResetPassword',
-							function(req, res) {
-								var app = require('../server/server');
-								var Account = app.models.Account;
-								var id = req.body.id;
-								var updateObj = {
-										key: req.body.key
-								};
-								Account.findById(id).then(function(instance) {
-									 instance.updateAttributes(updateObj);
-									 console.log("done");
-									 res.send("done");
-								});
-							}
-						);
-						app.post('/ResetCounter',
-								function(req, res) {
-									var app = require('../server/server');
-									var Account = app.models.Account;
-									var id = req.body.id;
-									var updateObj = {
-										counterall: 0
-									};
-									Account.findById(id).then(function(instance) {
-										 instance.updateAttributes(updateObj);
-										 console.log("done");
-										 res.send("done");
-									});
-								}
-							);
-			app.post('/MoveNextAc',
-					function(req, res) {
+					})
+					.catch(function(err) {
+						console.log(err);
+					});
+			}
+		);
+		app.post('/updateSubcriptionAmount',
+			function(req, res) {
+				var app = require('../server/server');
+				var Sub = app.models.Sub;
+				var id = req.body.id;
+				var updateObj = {
+					Amount: req.body.Amount
+				};
+				Sub.findById(id).then(function(instance) {
+					instance.updateAttributes(updateObj);
+					console.log("done");
+					res.send("done");
+				});
+			}
+		);
+		app.post('/ResetPassword',
+			function(req, res) {
+				var app = require('../server/server');
+				var Account = app.models.Account;
+				var id = req.body.id;
+				var updateObj = {
+					key: req.body.key
+				};
+				Account.findById(id).then(function(instance) {
+					instance.updateAttributes(updateObj);
+					console.log("done");
+					res.send("done");
+				});
+			}
+		);
+		app.post('/ResetCounter',
+			function(req, res) {
+				var app = require('../server/server');
+				var Account = app.models.Account;
+				var id = req.body.id;
+				var updateObj = {
+					counterall: 0
+				};
+				Account.findById(id).then(function(instance) {
+					instance.updateAttributes(updateObj);
+					console.log("done");
+					res.send("done");
+				});
+			}
+		);
+		app.post('/MoveNextAc',
+			function(req, res) {
+				var app = require('../server/server');
+				var Account = app.models.Account;
+				Account.find({
+						where: {
+							current: true
+						}
+					})
+					.then(function(allAc) {
+						allAc = allAc.sort(function(a, b) {
+							return a.counterall > b.counterall;
+						});
+						allAc = allAc.sort(function(a, b) {
+							return a.counterall > b.counterall;
+						});
+						var item = allAc[0];
 						var app = require('../server/server');
 						var Account = app.models.Account;
-						Account.find({
-							where:{
-								current: true
-							}
-						})
-							.then(function(allAc) {
-								allAc = allAc.sort(function(a, b){
-								  return a.counterall > b.counterall;
-								});
-								allAc = allAc.sort(function(a, b){
-								  return a.counterall > b.counterall;
-								});
-								var item = allAc[0];
-								var app = require('../server/server');
-								var Account = app.models.Account;
-								var id = item.id;
-								var updateObj = {
-									counter: item.counter + 1,
-									counterall: item.counterall + 1
-								};
-								Account.findById(id).then(function(instance) {
-									 instance.updateAttributes(updateObj);
-									 console.log(instance);
-									 res.send(instance);
-								});
-							})
-							.catch(function(err) {
-								console.log(err);
-							});
-					}
-				);
+						var id = item.id;
+						var updateObj = {
+							counter: item.counter + 1,
+							counterall: item.counterall + 1
+						};
+						Account.findById(id).then(function(instance) {
+							instance.updateAttributes(updateObj);
+							console.log(instance);
+							res.send(instance);
+						});
+					})
+					.catch(function(err) {
+						console.log(err);
+					});
+			}
+		);
 		app.post('/updateInq',
 			function(req, res) {
 				var app = require('../server/server');
@@ -1352,11 +1415,12 @@ app.start = function() {
 				var Template = app.models.Template;
 				debugger;
 				Template.findOne({
-					where: {and: [{
-													CourseName: 'Server'
-												}]
+					where: {
+						and: [{
+							CourseName: 'Server'
+						}]
 					}
-				}).then(function(data){
+				}).then(function(data) {
 					if (!data) {
 						res.status(500).send('Template Not found for the course');
 					}
@@ -1427,9 +1491,9 @@ app.start = function() {
 						transporter.sendMail(mailOptions, function(error, info) {
 							if (error) {
 								console.log(error);
-								if(error.code === "EAUTH"){
-										res.status(500).send('Username and Password not accepted, Please try again.');
-								}else{
+								if (error.code === "EAUTH") {
+									res.status(500).send('Username and Password not accepted, Please try again.');
+								} else {
 									res.status(500).send('Internal Error while Sending the email, Please try again.');
 								}
 							} else {
@@ -1456,7 +1520,7 @@ app.start = function() {
 				const key = require('./samples.json');
 				console.log(req.body);
 
-				if(req.body.IsMinakshi === "X"){
+				if (req.body.IsMinakshi === "X") {
 					var transporter = nodemailer.createTransport(smtpTransport({
 						service: 'gmail',
 						host: 'smtp.gmail.com',
@@ -1465,19 +1529,19 @@ app.start = function() {
 							pass: req.body.password
 						}
 					}));
-				}else{
-							var transporter = nodemailer.createTransport(smtpTransport({
-							    service: 'gmail',
-							    host: 'smtp.gmail.com',
-							    auth: {
-							        xoauth2: xoauth2.createXOAuth2Generator({
-							            user: key.user,
-							            clientId: key.clientId,
-							            clientSecret: key.clientSecret,
-							            refreshToken: key.refreshToken
-							        })
-							    }
-							}));
+				} else {
+					var transporter = nodemailer.createTransport(smtpTransport({
+						service: 'gmail',
+						host: 'smtp.gmail.com',
+						auth: {
+							xoauth2: xoauth2.createXOAuth2Generator({
+								user: key.user,
+								clientId: key.clientId,
+								clientSecret: key.clientSecret,
+								refreshToken: key.refreshToken
+							})
+						}
+					}));
 				}
 
 
@@ -1542,21 +1606,22 @@ app.start = function() {
 				//https://myaccount.google.com/lesssecureapps?pli=1
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
 					req.body.CourseName != "HANA XS" &&
-					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C"
-					&&  req.body.CourseName != "S4HANA Extension"
-					&&  req.body.CourseName != "HANA Cloud Integration"
-					&& req.body.CourseName != "SimpleLogistics"
-					&& req.body.CourseName != "ABAP on Cloud"
-					&& req.body.CourseName != "Analytics Cloud"
-					&& req.body.CourseName != "SAC Premium"
+					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
+					req.body.CourseName != "S4HANA Extension" &&
+					req.body.CourseName != "HANA Cloud Integration" &&
+					req.body.CourseName != "SimpleLogistics" &&
+					req.body.CourseName != "ABAP on Cloud" &&
+					req.body.CourseName != "Analytics Cloud" &&
+					req.body.CourseName != "SAC Premium"
 
-					&&  req.body.CourseName != "ABAP"
-					&&  req.body.CourseName != "OOPS ABAP"
-					&& req.body.CourseName != "Webdynpro"
-					&& req.body.CourseName != "Workflow"
-					&& req.body.CourseName != "FPM"
-					&& req.body.CourseName != "BRF"
-					&& req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
+					&&
+					req.body.CourseName != "ABAP" &&
+					req.body.CourseName != "OOPS ABAP" &&
+					req.body.CourseName != "Webdynpro" &&
+					req.body.CourseName != "Workflow" &&
+					req.body.CourseName != "FPM" &&
+					req.body.CourseName != "BRF" &&
+					req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 					if (Subject === "" || Subject === "null") {
 						Subject = "[REPLY] Regarding training Course 🟢";
@@ -1567,10 +1632,10 @@ app.start = function() {
 				}
 
 
-				if(req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined){
+				if (req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined) {
 					req.body.mailType = "R";
 				}
-				if(req.body.CourseName === "Generic"){
+				if (req.body.CourseName === "Generic") {
 					req.body.CourseName = "Other";
 				}
 
@@ -1578,17 +1643,18 @@ app.start = function() {
 				var Template = app.models.Template;
 				debugger;
 				var CourseName = req.body.CourseName;
-				if(req.body.source === "L" || req.body.source === "F"){
+				if (req.body.source === "L" || req.body.source === "F") {
 					CourseName = "Linkedin";
 				}
 				Template.findOne({
-					where: {and: [{
-													Type : req.body.mailType
-												}, {
-													CourseName: CourseName
-												}]
+					where: {
+						and: [{
+							Type: req.body.mailType
+						}, {
+							CourseName: CourseName
+						}]
 					}
-				}).then(function(data){
+				}).then(function(data) {
 					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
 					debugger;
 					if (!data) {
@@ -1614,9 +1680,9 @@ app.start = function() {
 						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
 						contents = contents.replace('$$DemoLink$$', data.VideoLink);
 						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
-   					contents = contents.replace('$$NextClass$$', data.NextClass);
+						contents = contents.replace('$$NextClass$$', data.NextClass);
 
-					}else if(req.body.mailType === "B"){
+					} else if (req.body.mailType === "B") {
 						//yet to code
 						contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
 						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
@@ -1631,29 +1697,29 @@ app.start = function() {
 					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 					debugger;
-					if(req.body.fees !== "null" && req.body.fees !== ""){
-						if(req.body.source === "L" || req.body.source === "F"){
+					if (req.body.fees !== "null" && req.body.fees !== "") {
+						if (req.body.source === "L" || req.body.source === "F") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
 							//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
-							Subject = "Hey " + req.body.FirstName  +"!! Boost your skills"
-						}else{
+							Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
+						} else {
 							contents = contents.replace("$$fees$$", req.body.fees);
 							contents = contents.replace("$$currency$$", req.body.currency);
 						}
 
-	 			  }
+					}
 					var ccs = [];
-					if(req.body.CourseName === "SimpleLogistics"){
-							ccs.push("paramsaddy@gmail.com");
-					}else if (req.body.CourseName === "SimpleFinance") {
+					if (req.body.CourseName === "SimpleLogistics") {
+						ccs.push("paramsaddy@gmail.com");
+					} else if (req.body.CourseName === "SimpleFinance") {
 						ccs.push("info@gaurav-consulting.com");
 					}
 					var mailOptions = {};
 
-					if(req.body.IsMinakshi === "X"){
+					if (req.body.IsMinakshi === "X") {
 						ccs.push("contact@anubhavtrainings.com");
 						mailOptions = {
 							from: 'install.abap@gmail.com',
@@ -1662,7 +1728,7 @@ app.start = function() {
 							subject: 'Re: ' + Subject + " 🟢",
 							html: contents
 						};
-					}else{
+					} else {
 						mailOptions = {
 							from: 'contact@anubhavtrainings.com',
 							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
@@ -1676,9 +1742,9 @@ app.start = function() {
 					transporter.sendMail(mailOptions, function(error, info) {
 						if (error) {
 							console.log(error);
-							if(error.code === "EAUTH"){
-									res.status(500).send('Username and Password not accepted, Please try again.');
-							}else{
+							if (error.code === "EAUTH") {
+								res.status(500).send('Username and Password not accepted, Please try again.');
+							} else {
 								res.status(500).send('Internal Error while Sending the email, Please try again.');
 							}
 						} else {
@@ -1691,7 +1757,7 @@ app.start = function() {
 
 
 			});
-			mailContent: "",
+		mailContent: "",
 			app.post('/sendSubscriptionEmail',
 				function(req, res) {
 
@@ -1713,7 +1779,7 @@ app.start = function() {
 					var payload = req.body;
 					var that = this;
 					this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
-					if(payload.includeX.indexOf("Renewal") !== -1){
+					if (payload.includeX.indexOf("Renewal") !== -1) {
 						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
 						var x = new Date(payload.EndDate);
 						this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
@@ -1751,7 +1817,7 @@ app.start = function() {
 								courseStr.Name === "Workflow" ||
 								courseStr.Name === "FPM" ||
 								courseStr.Name === "BRF" ||
-							  courseStr.Name === "Adobe Forms") {
+								courseStr.Name === "Adobe Forms") {
 								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayment.html', 'utf8');;
 								that2.mailContent = that2.mailContent.replace("$$MLink$$", '<a href="' + courseStr.DriveId + '">' + courseStr.DriveId + '</a>');
 							}
@@ -1765,8 +1831,8 @@ app.start = function() {
 							if (abhi > endDate) {
 								that2.isCalRequire = false;
 								//delete line for calendar invite
-								that2.mailContent = that2.mailContent.replace("<p>Additionally, google <a href=\"http://calendar.google.com\">calendar invite</a> is also sent to your email id.", "").replace("<em>Please note that, We have given you access of latest content (on going batch), So more videos will come as we progress with regular classes.</em>","");
-								that2.mailContent = that2.mailContent.replace("<p>Additionally, google <a href='http://calendar.google.com'>calendar invite</a> is also sent to your email id. <em>Please note that it is an ongoing LIVE batch hence more videos will be added to the blog as and when course progress. You can cover the available videos and by that time you will get new videos</em>.</p>","");
+								that2.mailContent = that2.mailContent.replace("<p>Additionally, google <a href=\"http://calendar.google.com\">calendar invite</a> is also sent to your email id.", "").replace("<em>Please note that, We have given you access of latest content (on going batch), So more videos will come as we progress with regular classes.</em>", "");
+								that2.mailContent = that2.mailContent.replace("<p>Additionally, google <a href='http://calendar.google.com'>calendar invite</a> is also sent to your email id. <em>Please note that it is an ongoing LIVE batch hence more videos will be added to the blog as and when course progress. You can cover the available videos and by that time you will get new videos</em>.</p>", "");
 							} else {
 								that2.isCalRequire = true;
 							}
@@ -1790,12 +1856,12 @@ app.start = function() {
 							var ccs = ["anubhav.abap@gmail.com"];
 							if (that2.includeX === "true" || that2.includeX === "Renewal-true") {
 								ccs.push("contact@anubhavtrainings.com");
-							}else if (that2.includeX === "Renewal") {
-									//change content of the email here - anu
+							} else if (that2.includeX === "Renewal") {
+								//change content of the email here - anu
 							}
-							if(courseStr.Name === "Hybris C4C" ||
-							courseStr.Name === "HANA Cloud Integration"){
-									ccs.push("sam4dsouza@gmail.com");
+							if (courseStr.Name === "Hybris C4C" ||
+								courseStr.Name === "HANA Cloud Integration") {
+								ccs.push("sam4dsouza@gmail.com");
 							}
 							var mailOptions = {
 								from: 'no-reply@anubhavtrainings.com',
@@ -1808,9 +1874,9 @@ app.start = function() {
 							transporter.sendMail(mailOptions, function(error, info) {
 								if (error) {
 									console.log(error);
-									if(error.code === "EAUTH"){
-											res.status(500).send('Username and Password not accepted, Please try again.');
-									}else{
+									if (error.code === "EAUTH") {
+										res.status(500).send('Username and Password not accepted, Please try again.');
+									} else {
 										res.status(500).send('Internal Error while Sending the email, Please try again.');
 									}
 								} else {
@@ -1827,7 +1893,7 @@ app.start = function() {
 
 				});
 
-		app.post("/clearToken", function(req,res){
+		app.post("/clearToken", function(req, res) {
 
 			const sampleClient = require('../google/sampleclient');
 			sampleClient.clearToken();
@@ -1857,7 +1923,7 @@ app.start = function() {
 					that.DriveId = courseDetails.DriveId;
 					Subs.find({
 						where: {
-							CourseId : that.CourseId
+							CourseId: that.CourseId
 						}
 					}).then(function(allSubscriptions) {
 						var that3 = that2;
@@ -1872,7 +1938,9 @@ app.start = function() {
 						Student.find({
 							where: {
 								//student belongs to this courses
-								id : {inq : studentsOfBatch}
+								id: {
+									inq: studentsOfBatch
+								}
 								//and course access has not yet expired
 							}
 
@@ -1886,7 +1954,7 @@ app.start = function() {
 							var prepared = [];
 							for (var i = 0; i < that3.allSubscriptions.length; i++) {
 								for (var j = 0; j < allStudents.length; j++) {
-									if(allStudents[j].id.toString() === that3.allSubscriptions[i].StudentId.toString()){
+									if (allStudents[j].id.toString() === that3.allSubscriptions[i].StudentId.toString()) {
 										var endDate = new Date(that3.allSubscriptions[i].EndDate);
 										var abhi = new Date();
 										var lvended = false;
@@ -1903,8 +1971,8 @@ app.start = function() {
 											endDate: that3.allSubscriptions[i].EndDate,
 											ended: lvended,
 											partialPayment: that3.allSubscriptions[i].PartialPayment,
-											PendingAmount : that3.allSubscriptions[i].PendingAmount,
-											MostRecent : that3.allSubscriptions[i].MostRecent
+											PendingAmount: that3.allSubscriptions[i].PendingAmount,
+											MostRecent: that3.allSubscriptions[i].MostRecent
 										});
 										break;
 									}
@@ -1917,91 +1985,94 @@ app.start = function() {
 					});
 				});
 			});
-			app.post('/loadBatchHoldersLink',
-				function(req, res) {
+		app.post('/loadBatchHoldersLink',
+			function(req, res) {
+				var app = require('../server/server');
+				var Course = app.models.Course;
+				this.CourseId = req.body.CourseId;
+				var that = this;
+				Course.findById(this.CourseId).then(function(courseDetails) {
 					var app = require('../server/server');
-					var Course = app.models.Course;
-					this.CourseId = req.body.CourseId;
-					var that = this;
-					Course.findById(this.CourseId).then(function(courseDetails) {
-						var app = require('../server/server');
-						var Subs = app.models.Sub;
-						var that2 = that;
-						var endDatex = new Date(courseDetails.EndDate);
-						var abhix = new Date();
-						if (abhix > endDatex) {
-							that2.isCalRequire = false;
-						} else {
-							that2.isCalRequire = true;
-						}
-						that.CalendarId = courseDetails.CalendarId;
-						that.EventId = courseDetails.EventId;
-						that.DriveId = courseDetails.DriveId;
-						Subs.find({
-							where: {and: [{
-								CourseId : that.CourseId
+					var Subs = app.models.Sub;
+					var that2 = that;
+					var endDatex = new Date(courseDetails.EndDate);
+					var abhix = new Date();
+					if (abhix > endDatex) {
+						that2.isCalRequire = false;
+					} else {
+						that2.isCalRequire = true;
+					}
+					that.CalendarId = courseDetails.CalendarId;
+					that.EventId = courseDetails.EventId;
+					that.DriveId = courseDetails.DriveId;
+					Subs.find({
+						where: {
+							and: [{
+								CourseId: that.CourseId
 							}, {
 								PartialPayment: false
 							}]
 						}
-						}).then(function(allSubscriptions) {
-							var that3 = that2;
-							that2.allSubscriptions = allSubscriptions;
-							var Student = app.models.Student;
+					}).then(function(allSubscriptions) {
+						var that3 = that2;
+						that2.allSubscriptions = allSubscriptions;
+						var Student = app.models.Student;
 
 
-							var studentsOfBatch = [];
-							for (var i = 0; i < allSubscriptions.length; i++) {
-								studentsOfBatch.push(allSubscriptions[i].StudentId);
+						var studentsOfBatch = [];
+						for (var i = 0; i < allSubscriptions.length; i++) {
+							studentsOfBatch.push(allSubscriptions[i].StudentId);
+						}
+						Student.find({
+							where: {
+								//student belongs to this courses
+								id: {
+									inq: studentsOfBatch
+								}
+								//and course access has not yet expired
 							}
-							Student.find({
-								where:  {
-									//student belongs to this courses
-									id : {inq : studentsOfBatch}
-									//and course access has not yet expired
-								}
 
-							}).then(function(allStudents) {
-								if (that3.isCalRequire === true &&
-									(that3.CalendarId != "null" && that3.CalendarId != "" &&
-										that3.EventId != "null" && that3.EventId != "")
-								) {
+						}).then(function(allStudents) {
+							if (that3.isCalRequire === true &&
+								(that3.CalendarId != "null" && that3.CalendarId != "" &&
+									that3.EventId != "null" && that3.EventId != "")
+							) {
 
-								}
-								var prepared = [];
-								for (var i = 0; i < that3.allSubscriptions.length; i++) {
-									for (var j = 0; j < allStudents.length; j++) {
-										if(allStudents[j].id.toString() === that3.allSubscriptions[i].StudentId.toString()){
-											var endDate = new Date(that3.allSubscriptions[i].EndDate);
-											var abhi = new Date();
-											var lvended = false;
-											//if student expiry end date is grater than today's date he still has access
-											if (abhi > endDate) {
-												lvended = true;
-											}
-											prepared.push({
-												name: allStudents[j].name,
-												gmailid: allStudents[j].GmailId,
-												country: allStudents[j].Country,
-												defaulter: allStudents[j].Defaulter,
-												startDate: that3.allSubscriptions[i].StartDate,
-												endDate: that3.allSubscriptions[i].EndDate,
-												ended: lvended,
-												partialPayment: that3.allSubscriptions[i].PartialPayment,
-												PendingAmount : that3.allSubscriptions[i].PendingAmount,
-												MostRecent : that3.allSubscriptions[i].MostRecent
-											});
-											break;
+							}
+							var prepared = [];
+							for (var i = 0; i < that3.allSubscriptions.length; i++) {
+								for (var j = 0; j < allStudents.length; j++) {
+									if (allStudents[j].id.toString() === that3.allSubscriptions[i].StudentId.toString()) {
+										var endDate = new Date(that3.allSubscriptions[i].EndDate);
+										var abhi = new Date();
+										var lvended = false;
+										//if student expiry end date is grater than today's date he still has access
+										if (abhi > endDate) {
+											lvended = true;
 										}
+										prepared.push({
+											name: allStudents[j].name,
+											gmailid: allStudents[j].GmailId,
+											country: allStudents[j].Country,
+											defaulter: allStudents[j].Defaulter,
+											startDate: that3.allSubscriptions[i].StartDate,
+											endDate: that3.allSubscriptions[i].EndDate,
+											ended: lvended,
+											partialPayment: that3.allSubscriptions[i].PartialPayment,
+											PendingAmount: that3.allSubscriptions[i].PendingAmount,
+											MostRecent: that3.allSubscriptions[i].MostRecent
+										});
+										break;
 									}
-
 								}
-								res.send(prepared);
 
-							});
+							}
+							res.send(prepared);
+
 						});
 					});
 				});
+			});
 
 		app.post('/refreshAccess',
 			function(req, res) {
@@ -2024,12 +2095,13 @@ app.start = function() {
 					that.EventId = courseDetails.EventId;
 					that.DriveId = courseDetails.DriveId;
 					Subs.find({
-						where: { and: [{
-							CourseId : that.CourseId
-						}, {
-							PartialPayment: false
-						}]
-					}
+						where: {
+							and: [{
+								CourseId: that.CourseId
+							}, {
+								PartialPayment: false
+							}]
+						}
 					}).then(function(allSubscriptions) {
 						var that3 = that2;
 						var Student = app.models.Student;
@@ -2050,7 +2122,9 @@ app.start = function() {
 						Student.find({
 							where: {
 								//student belongs to this courses
-								id : {inq : studentsOfBatch}
+								id: {
+									inq: studentsOfBatch
+								}
 								//and course access has not yet expired
 							}
 
@@ -2076,163 +2150,163 @@ app.start = function() {
 							}
 							var that4 = that3;
 							that3.allStudents = allStudents;
+
 							function runSample(query) {
-   								//grant the drive access
-									var async = require('async');
+								//grant the drive access
+								var async = require('async');
 
-   						    async.waterfall([
-													function retrievePermissions(callback) {
-													  drive.permissions.list({
-														    'fileId': that3.DriveId
-														  }).then(function(resp) {
-														    callback(null, resp.data.permissions);
-														  },
-															function(err){
+								async.waterfall([
+									function retrievePermissions(callback) {
+										drive.permissions.list({
+											'fileId': that3.DriveId
+										}).then(function(resp) {
+												callback(null, resp.data.permissions);
+											},
+											function(err) {
 
-															}
-														);
-													},
-													function _function0 (items, callback) {
-														var fileId = that3.DriveId;
-														var permissions = [];
-														for (var i = 0; i < items.length; i++) {
-															if(items[i].role !== "owner"){
-																	permissions.push(items[i].id);
-															}
-														}
-														async.eachSeries(permissions, function (permission, permissionCallback) {
-															drive.permissions.delete({
-																fileId : fileId,
-																permissionId: permission,
-																sendNotificationEmail: false
-															}, function (err, res) {
-														    if (err) {
-														      // Handle error...
-														      console.error(err);
-														      permissionCallback(err);
-														    } else {
-														      //console.log('Permission ID: ', res.id)
-														      permissionCallback();
-														    }
-														  });
-														}, function (err) {
-														  if (err) {
-														    // Handle error
-																console.log("Deletion of permission failed");
-																callback (err, null, null);
-														  } else {
-														    // All permissions inserted
-																console.error("All permissions deleted");
-																callback (null, null, null);
-														  }
-														});
+											}
+										);
+									},
+									function _function0(items, callback) {
+										var fileId = that3.DriveId;
+										var permissions = [];
+										for (var i = 0; i < items.length; i++) {
+											if (items[i].role !== "owner") {
+												permissions.push(items[i].id);
+											}
+										}
+										async.eachSeries(permissions, function(permission, permissionCallback) {
+											drive.permissions.delete({
+												fileId: fileId,
+												permissionId: permission,
+												sendNotificationEmail: false
+											}, function(err, res) {
+												if (err) {
+													// Handle error...
+													console.error(err);
+													permissionCallback(err);
+												} else {
+													//console.log('Permission ID: ', res.id)
+													permissionCallback();
+												}
+											});
+										}, function(err) {
+											if (err) {
+												// Handle error
+												console.log("Deletion of permission failed");
+												callback(err, null, null);
+											} else {
+												// All permissions inserted
+												console.error("All permissions deleted");
+												callback(null, null, null);
+											}
+										});
 
-													},
-													function _function1 (oErr, args2, callback) {
+									},
+									function _function1(oErr, args2, callback) {
 
-														var fileId = that3.DriveId;
-														var permissions = [];
-														for (var i = 0; i < allStudents.length; i++) {
-															var perms =
-															  {
-															    'type': 'user',
-															    'role': 'reader',
-															    'emailAddress': allStudents[i].GmailId
-															  };
-														  permissions.push(perms);
-														}
-														// Using the NPM module 'async'
-														async.eachSeries(permissions, function (permission, permissionCallback) {
-														  drive.permissions.create({
-														    resource: permission,
-														    fileId: fileId,
-																sendNotificationEmail: false
-														    //fields: 'id',
-														  }, function (err, res) {
-														    if (err) {
-														      // Handle error...
-														      console.error(err);
-														      permissionCallback(err);
-														    } else {
-														      //console.log('Permission ID: ', res.id)
-														      permissionCallback();
-														    }
-														  });
-														}, function (err) {
-														  if (err) {
-														    // Handle error
-														    console.error(err);
-																callback (err, null , null, null);
-														  } else {
-														    // All permissions inserted
-																console.log("All permissions inserted ");
-																callback (null, null , null, null);
-														  }
-														});
-													},
-													function _function2(oErr, args2, args3, args4, callback){
+										var fileId = that3.DriveId;
+										var permissions = [];
+										for (var i = 0; i < allStudents.length; i++) {
+											var perms = {
+												'type': 'user',
+												'role': 'reader',
+												'emailAddress': allStudents[i].GmailId
+											};
+											permissions.push(perms);
+										}
+										// Using the NPM module 'async'
+										async.eachSeries(permissions, function(permission, permissionCallback) {
+											drive.permissions.create({
+												resource: permission,
+												fileId: fileId,
+												sendNotificationEmail: false
+												//fields: 'id',
+											}, function(err, res) {
+												if (err) {
+													// Handle error...
+													console.error(err);
+													permissionCallback(err);
+												} else {
+													//console.log('Permission ID: ', res.id)
+													permissionCallback();
+												}
+											});
+										}, function(err) {
+											if (err) {
+												// Handle error
+												console.error(err);
+												callback(err, null, null, null);
+											} else {
+												// All permissions inserted
+												console.log("All permissions inserted ");
+												callback(null, null, null, null);
+											}
+										});
+									},
+									function _function2(oErr, args2, args3, args4, callback) {
 
-															if (that3.isCalRequire === true &&
-																(that3.CalendarId != "null" && that3.CalendarId != "" &&
-																	that3.EventId != "null" && that3.EventId != "")) {
-																that3.calendar.events.get({
-																	calendarId: that3.CalendarId + 'roup.calendar.google.com',
-																	eventId: that3.EventId
-																}, function(err, something) {
-																	if (err) {
-																		console.log("CALENDAR NOT FOUND");
-																		res.send("access has been provided, with calendar not found");
-																		//return;
-																	}
-																	something.data.attendees = [];
-																	for (var i = 0; i < allStudents.length; i++) {
-																		something.data.attendees.push({
-																			"email": allStudents[i].GmailId
-																		});
-																	}
-																	that3.calendar.events.patch({
-																		calendarId: that3.CalendarId + 'roup.calendar.google.com',
-																		eventId: that3.EventId,
-																		resource: {
-																			attendees: something.data.attendees,
-																			recurrence: something.data.recurrence,
-																			end: something.data.end,
-																			start: something.data.start
-																		}
-																	}, function(err, args1, args2, args3, args4) {
-																		if (err) {
-																			console.error(err);
-																			//callback(null);
-																		} else {
-																			//res.send("calendar access granted");
-																			console.log("access granted for calendar to All");
-																			//callback(null);
-																		}
-																	});
-																});
-															}
-
-
+										if (that3.isCalRequire === true &&
+											(that3.CalendarId != "null" && that3.CalendarId != "" &&
+												that3.EventId != "null" && that3.EventId != "")) {
+											that3.calendar.events.get({
+												calendarId: that3.CalendarId + 'roup.calendar.google.com',
+												eventId: that3.EventId
+											}, function(err, something) {
+												if (err) {
+													console.log("CALENDAR NOT FOUND");
+													res.send("access has been provided, with calendar not found");
+													//return;
+												}
+												something.data.attendees = [];
+												for (var i = 0; i < allStudents.length; i++) {
+													something.data.attendees.push({
+														"email": allStudents[i].GmailId
+													});
+												}
+												that3.calendar.events.patch({
+													calendarId: that3.CalendarId + 'roup.calendar.google.com',
+													eventId: that3.EventId,
+													resource: {
+														attendees: something.data.attendees,
+														recurrence: something.data.recurrence,
+														end: something.data.end,
+														start: something.data.start
 													}
-									    ], function (error) {
-												//grant the access of calendarId
-												res.send("access has been provided");
-									    });
+												}, function(err, args1, args2, args3, args4) {
+													if (err) {
+														console.error(err);
+														//callback(null);
+													} else {
+														//res.send("calendar access granted");
+														console.log("access granted for calendar to All");
+														//callback(null);
+													}
+												});
+											});
+										}
+
+
+									}
+								], function(error) {
+									//grant the access of calendarId
+									res.send("access has been provided");
+								});
 
 
 
 
 							}
-								if (module === require.main) {
-									const scopes = [
-										'https://www.googleapis.com/auth/drive',
-										'https://www.googleapis.com/auth/calendar.events'
-									];
-									sampleClient
-										.authenticate(scopes)
-										.then(runSample)
-										.catch(console.error);
-								}
+							if (module === require.main) {
+								const scopes = [
+									'https://www.googleapis.com/auth/drive',
+									'https://www.googleapis.com/auth/calendar.events'
+								];
+								sampleClient
+									.authenticate(scopes)
+									.then(runSample)
+									.catch(console.error);
+							}
 
 
 						});
@@ -2480,7 +2554,7 @@ app.start = function() {
 						AccountBalance.findById(id).then(function(instance) {
 							return instance.updateAttributes(updateObj);
 						});
-					}else{
+					} else {
 						var newRec = {};
 						newRec.CreatedOn = new Date();
 						newRec.AccountNo = that.accountNo;
@@ -2499,14 +2573,14 @@ app.start = function() {
 							.catch(function(err) {
 								console.log(err);
 							});
-					}}
-			);
+					}
+				});
 
 
 		});
 		app.post('/upload',
 			function(req, res) {
-debugger;
+				debugger;
 				if (!req.files.myFileUpload) {
 					res.send('No files were uploaded.');
 					return;
@@ -2767,69 +2841,68 @@ debugger;
 											// }
 											/////****Code to update Inquiries one by one file and also created
 											///cusromer based on TRUE flag
-											var newRec ={};
+											var newRec = {};
 											newRec.EmailId = singleRec.email.toLowerCase();
 											if (singleRec.url.indexOf("abap-on-hana-training") !== -1) {
- 												singleRec.url = "ABAP on HANA";
+												singleRec.url = "ABAP on HANA";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "18 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "350";
 													newRec.currency = "USD";
 												}
-											}else if (singleRec.url.indexOf("abap-on-cloud-training") !== -1){
- 												singleRec.url = "ABAP on Cloud";
+											} else if (singleRec.url.indexOf("abap-on-cloud-training") !== -1) {
+												singleRec.url = "ABAP on Cloud";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "15 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "280";
 													newRec.currency = "USD";
 												}
-											}
-											else if (singleRec.url.indexOf("sap-analytics-cloud-training") !== -1){
- 												singleRec.url = "Analytics Cloud";
+											} else if (singleRec.url.indexOf("sap-analytics-cloud-training") !== -1) {
+												singleRec.url = "Analytics Cloud";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "22 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "400";
 													newRec.currency = "USD";
 												}
-											}else if (singleRec.url.indexOf("hana-cloud-integration-training") !== -1){
- 												singleRec.url = "HANA Cloud Integration";
+											} else if (singleRec.url.indexOf("hana-cloud-integration-training") !== -1) {
+												singleRec.url = "HANA Cloud Integration";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "22 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "400";
 													newRec.currency = "USD";
 												}
-											}else if (singleRec.url.indexOf("launchpad") !== -1){
- 												singleRec.url = "Launchpad";
+											} else if (singleRec.url.indexOf("launchpad") !== -1) {
+												singleRec.url = "Launchpad";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "25 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "400";
 													newRec.currency = "USD";
 												}
-											}else if (singleRec.url.indexOf("hybris-c4c-training") !== -1){
- 												singleRec.url = "Hybris C4C";
+											} else if (singleRec.url.indexOf("hybris-c4c-training") !== -1) {
+												singleRec.url = "Hybris C4C";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "22 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "400";
 													newRec.currency = "USD";
 												}
-											}else{
- 												singleRec.url = "UI5 and Fiori";
+											} else {
+												singleRec.url = "UI5 and Fiori";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "18 k";
 													newRec.currency = "INR";
-												}else{
+												} else {
 													newRec.fees = "350";
 													newRec.currency = "USD";
 												}
