@@ -1,0 +1,48 @@
+{
+	"name": "InvoiceNo",
+	"plural": "InvoiceNos",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"Year": {
+			"type": "string",
+			"required": true
+		},
+		"Month": {
+			"type": "string",
+			"required": true
+		},
+		"InvoiceNo": {
+			"type": "number",
+			"required": true
+		},
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+			"default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+			"default": "null"
+    }
+	},
+	"validations": [],
+	"relations": {
+
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}

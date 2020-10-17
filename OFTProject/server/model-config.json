@@ -99,5 +99,9 @@
   "Block":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "InvoiceNo":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }
