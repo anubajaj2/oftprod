@@ -86,6 +86,22 @@
 		"PaymentDueDate": {
 			"type": "date"
 		},
+		"InvoiceNo":{
+			"type": "string",
+			"default": "null"
+		},
+		"USDAmount":{
+			"type": "number",
+			"default": 0
+		},
+		"Exchange":{
+			"type": "number",
+			"default": 0
+		},
+		"Charges":{
+			"type": "number",
+			"default": 0
+		},
 		"Extra1": {
 			"type": "string",
 			"default": "null"
