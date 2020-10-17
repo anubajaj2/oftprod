@@ -94,6 +94,10 @@
 			"type": "number",
 			"default": 0
 		},
+		"CurrencyCode": {
+			"type": "string",
+			"default": "USD"
+		},
 		"Exchange":{
 			"type": "number",
 			"default": 0
