@@ -102,6 +102,13 @@
 			"type": "number",
 			"default": 0
 		},
+		"SettleDate":{
+			"type": "date"
+		},
+		"SettleAmount":{
+			"type": "number",
+			"default": 0
+		},
 		"Extra1": {
 			"type": "string",
 			"default": "null"
