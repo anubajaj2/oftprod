@@ -71,6 +71,10 @@ sap.ui.define([], function() {
 			}
 
 		},
+
+		getDateObject : function(value){
+			return (value ? new Date(value) : "");
+		},
 		extractNo: function(val) {
 			if(val){
 					return val.match(/\d/g).join();

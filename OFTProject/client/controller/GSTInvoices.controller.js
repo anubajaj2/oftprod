@@ -28,8 +28,9 @@ sap.ui.define([
 			var rangeDate = new Date();
 			var month = rangeDate.getMonth() + 1;
 			var year = rangeDate.getFullYear();
-			this.getView().byId("idRegDate").setValue('01.' + month + '.' + year);
-			this.getView().byId("idRegDateTo").setValue(rangeDate.getDate() + '.' + month + '.' + year);
+			var startDate = new Date(year + " " + month);
+			this.getView().byId("idRegDate").setValue(startDate.toDateString().slice(4));
+			this.getView().byId("idRegDateTo").setValue(rangeDate.toDateString().slice(4));
 			// this.super("123456789", month+'.'+'01.'+year, month+'.'+rangeDate.getDate()+'.'+year);
 		},
 		onConfirm: function(oEvent) {
@@ -39,49 +40,91 @@ sap.ui.define([
 				var accountNo = oEvent.getParameter("selectedItem").getValue();
 
 				this.getView().getModel("local").setProperty("/GSTInvoices/AccountNo", accountNo);
-				var startDate = this.getView().byId("idRegDate").getValue().split('.');
-				var endDate = this.getView().byId("idRegDateTo").getValue().split('.');
-				this.super(accountNo, startDate[1] + '.' + startDate[0] + '.' + startDate[2], endDate[1] + '.' + endDate[0] + '.' + endDate[2]);
+				var startDate = this.getView().byId("idRegDate").getValue();
+				var endDate = this.getView().byId("idRegDateTo").getValue();
+				this.super(accountNo, startDate, endDate);
 				// var oFilter = new sap.ui.model.Filter("AccountNo", "EQ", bankName);
 				// this.getView().byId("idSummary").getBinding("items").filter(oFilter);
 			}
 		},
 		onStartDate: function(oEvent) {
 			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
-			var startDate = this.getView().byId("idRegDate").getValue().split('.');
-			var endDate = this.getView().byId("idRegDateTo").getValue().split('.');
-			this.super(accountNo, startDate[1] + '.' + startDate[0] + '.' + startDate[2], endDate[1] + '.' + endDate[0] + '.' + endDate[2]);
+			var startDate = this.getView().byId("idRegDate").getValue();
+			var endDate = this.getView().byId("idRegDateTo").getValue();
+			this.super(accountNo, startDate, endDate);
 		},
 		onEndDate: function(oEvent) {
 			this.onStartDate();
 		},
-		onItemPress: function(oEvent) {
+		onEditInfo: function(oEvent) {
 			var that = this;
-			var id = oEvent.getSource().getModel("viewModel").getProperty(oEvent.getSource().getBindingContextPath()).id;
-			var amount = oEvent.getSource().getModel("viewModel").getProperty(oEvent.getSource().getBindingContextPath()).FullAmount;
+			var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
+			var id = oSub.id;
+			var amount = oSub.FullAmount;
 			var oAmountDialog = new sap.m.Dialog({
 				type: sap.m.DialogType.Message,
-				title: "Change Amount",
+				title: "Modify : "+oSub.Email,
+				contentWidth : "450px",
 				content: [
-					new sap.ui.layout.HorizontalLayout({
-						content: [
-							new sap.ui.layout.VerticalLayout({
-								width: "140px",
-								content: [
-									new sap.m.Text({
-										text: "Current Total :      " + amount
-									})
-								]
-							})
-						]
-					}),
-					new sap.m.Input("confirmationNote", {
-						width: "100%",
-						placeholder: "Enter Amount to Change",
+					new sap.m.Label({
+								text: "Amount: "
+							}),
+					new sap.m.Input("idAmount",{
 						type: "Number",
-						liveChange: function(oEvent) {
-							var sText = oEvent.getParameter("value");
-							oAmountDialog.getBeginButton().setEnabled(sText.length > 0);
+						value : amount
+					}),
+					new sap.m.Label({
+								text: "USD Amount: "
+							}),
+					new sap.m.Input("idUSDAmount",{
+						type: "Number",
+						value : oSub.USDAmount
+					}),
+					new sap.m.Label({
+								text: "Currency Code: "
+							}),
+					new sap.m.Input("idCurrencyCode",{
+						value : oSub.CurrencyCode
+					}),
+					new sap.m.Label({
+								text: "Exchange: "
+							}),
+					new sap.m.Input("idExchange",{
+						type: "Number",
+						value : oSub.Exchange
+					}),
+					new sap.m.Label({
+								text: "Charges: "
+							}),
+					new sap.m.Input("idCharges",{
+						type: "Number",
+						value : oSub.Charges
+					}),
+					new sap.m.Label({
+								text: "SettleDate: "
+							}),
+					new sap.m.DatePicker("idSettleDate",{
+						displayFormat : "dd-MMM-yyyy",
+						valueFormat : "MMM dd yyyy",
+						value : oSub.SettleDate
+					}),
+					new sap.m.Label({
+								text: "SettleAmount: "
+							}),
+					new sap.m.Input("idSettleAmount",{
+						type: "Number",
+						value : oSub.SettleAmount
+					}),
+					new sap.m.Label({
+								text: "Reference: "
+							}),
+					new sap.m.Input("idReference",{
+						value : oSub.Reference
+					}),
+					new sap.m.CheckBox("idConfirm",{
+						text : "Confirm",
+						select : function(oEvent){
+							oAmountDialog.getBeginButton().setEnabled(oEvent.getParameter("selected"));
 						}.bind(this)
 					})
 				],
@@ -90,42 +133,68 @@ sap.ui.define([
 					enabled: false,
 					text: "Submit",
 					press: function() {
-						var sAmount = Core.byId("confirmationNote").getValue();
+						var sAmount = Core.byId("idAmount").getValue();
+						var usdAmount = Core.byId("idUSDAmount").getValue();
+						var currencyCode = Core.byId("idCurrencyCode").getValue();
+						var exchange = Core.byId("idExchange").getValue();
+						var charges = Core.byId("idCharges").getValue();
+						var settleDate = Core.byId("idSettleDate").getValue();
+						var settleAmount = Core.byId("idSettleAmount").getValue();
+						var reference = Core.byId("idReference").getValue();
 						if (sAmount <= 50000) {
 							$.post('/updateSubcriptionAmount', {
 									"id": id,
-									"Amount": sAmount
+									"Amount": sAmount,
+									"USDAmount" : usdAmount,
+									"CurrencyCode" : currencyCode,
+									"Exchange" : exchange,
+									"Charges" : charges,
+									"SettleDate" : settleDate,
+									"SettleAmount" : settleAmount,
+									"Reference" : reference
 								})
 								.done(function(data, status) {
-									sap.m.MessageBox.success("Updated");
+									MessageToast.show("Updated");
+									that.destroyEditItems();
 									that.onStartDate();
 								})
 								.fail(function(xhr, status, error) {
-									sap.m.MessageBox.error("Error in access");
+									that.destroyEditItems();
+									MessageBox.error("Error in access");
 								});
+								oAmountDialog.close();
 						} else {
 							sap.m.MessageBox.error("No Subcription is greater than 50,000");
 						}
-						oAmountDialog.close();
-						Core.byId("confirmationNote").destroy();
 					}.bind(this)
 				}),
 				endButton: new sap.m.Button({
 					text: "Cancel",
 					press: function() {
+						that.destroyEditItems();
 						oAmountDialog.close();
-						Core.byId("confirmationNote").destroy();
 					}.bind(this)
 				})
 			});
 			oAmountDialog.open();
+		},
+		destroyEditItems : function(){
+			Core.byId("idAmount").destroy();
+			Core.byId("idUSDAmount").destroy();
+			Core.byId("idCurrencyCode").destroy();
+			Core.byId("idExchange").destroy();
+			Core.byId("idCharges").destroy();
+			Core.byId("idSettleDate").destroy();
+			Core.byId("idSettleAmount").destroy();
+			Core.byId("idReference").destroy();
+			Core.byId("idConfirm").destroy();
 		},
 		onDownloadInvoice: function(oEvent) {
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
 			var products = [{
 				"Course": oDetail.CourseName,
 				"Batch": oDetail.BatchNo,
-				"HSN": "xxxxxxx",
+				"HSN": "999293",
 				"Qty": 1,
 				"Rate": oDetail.Amount,
 				"CGST": "9%",
@@ -144,7 +213,7 @@ sap.ui.define([
 				items: products,
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
-				fullAmount : oDetail.FullAmount,
+				fullAmount: oDetail.FullAmount,
 				order_number: "xxxxxx",
 				header: {
 					company_name: "Soyuz Technologies LLP",

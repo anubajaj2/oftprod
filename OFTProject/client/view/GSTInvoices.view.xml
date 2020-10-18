@@ -1,106 +1,108 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-    controllerName="oft.fiori.controller.GSTInvoices" xmlns:viz="sap.viz.ui5.controls"
-     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
-    xmlns:viz.data="sap.viz.ui5.data"
-    xmlns:u="sap.ui.unified"
-	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.GSTInvoices"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="GST invoices" navButtonPress="onBack">
 		<headerContent>
-	    <Text id="idUser"></Text>
+			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
 		</headerContent>
 		<content>
-  				<f:SimpleForm>
-  					<f:content>
-  						<Label text="Date Range"/>
-  						<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy"
-  							value="" valueFormat="dd.MM.yyyy" change="onStartDate"
-  							></DatePicker>
-                <DatePicker id="idRegDateTo" displayFormat="dd.MM.yyyy"
-    							value="" valueFormat="dd.MM.yyyy" change="onEndDate"
-    							></DatePicker>
-  						<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
-  						id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+			<f:SimpleForm>
+				<f:content>
+					<Label text="Date Range"/>
+					<DatePicker id="idRegDate" displayFormat="dd-MMM-yyyy" value="" valueFormat="MMM dd yyyy" change="onStartDate"></DatePicker>
+					<DatePicker id="idRegDateTo" displayFormat="dd-MMM-yyyy" value="" valueFormat="MMM dd yyyy" change="onEndDate"></DatePicker>
+					<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+					id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
 
-  						<Label text="Account No"/>
-  						<Input id="accountDetails" required="true"
-  							value="{local>/GSTInvoices/AccountNo}"
-  							showValueHelp="true" valueHelpOnly="true"
-  							valueHelpRequest="onSelect"/>
-  					</f:content>
-  				</f:SimpleForm>
-  				<Panel title="Summary">
-  					<Table id="idSummary" items="{viewModel>/records}" growing="true"
-  						growingScrollToLoad="false"
-  			      class="sapUiSizeCompact"
-  						showRowCount="true"  updateFinished="onUpdateFinished" >
-  						<headerToolbar>
-  							<Toolbar>
-  							<Title
-  									id="newtitle" text="Account Summary"/>
-  							<ToolbarSpacer></ToolbarSpacer>
-  							<!-- <Button text="getNextAc" press="onGetNext" /> -->
-  						</Toolbar>
-  							</headerToolbar>
-  							<columns>
-  							<Column>
-  								<Label text="Email" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Name" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Course Name" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Type of Payment" class="columnLabelStyle"/>
-  							</Column>
-                <Column>
-  								<Label text="Payment Date" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Amount Paid" class="columnLabelStyle"/>
-  							</Column>
-                <Column>
-  								<Label text="CGST (9%)" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="SGST (9%)" class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Reference No." class="columnLabelStyle"/>
-  							</Column>
-  							<Column>
-  								<Label text="Invoice" class="columnLabelStyle"/>
-  							</Column>
-  						</columns>
-  						<items>
-  							<ColumnListItem id="idColumnlistSumm" press="onItemPress"  type="Active" >
-  								<cells>
-  									<Text text="{viewModel>Email}"  ></Text>
-  									<Text text="{viewModel>Name}"  ></Text>
+					<Label text="Account No"/>
+					<Input id="accountDetails" required="true" value="{local>/GSTInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+				</f:content>
+			</f:SimpleForm>
+			<Panel title="Summary">
+				<Table id="idSummary" items="{viewModel>/records}" growing="true" growingScrollToLoad="false" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
+					<headerToolbar>
+						<Toolbar>
+							<Title id="newtitle" text="Account Summary"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<!-- <Button text="getNextAc" press="onGetNext" /> -->
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column>
+							<Label text="Payment Date" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Email" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Name" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Course Name" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Type of Payment" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Amount Paid" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="CGST (9%)" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="SGST (9%)" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Total Amount" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Reference No." class="columnLabelStyle"/>
+						</Column>
+            <Column>
+							<Label text="Edit" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Invoice" class="columnLabelStyle"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active">
+							<cells>
+								<DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd-MMM-yyyy" editable="false"></DateTimeField>
+								<Text text="{viewModel>Email}"></Text>
+								<Text text="{viewModel>Name}"></Text>
 
-  									<Text text="{viewModel>CourseName}"  ></Text>
-                    <Text text="{viewModel>PaymentMode}"  ></Text>
-                    <Text text="{viewModel>PaymentDate}"  ></Text>
-  									<Text text="{path: 'viewModel>Amount',
-  										formatter: '.formatter.getIndianCurr'}"  ></Text>
-                    <Text text="{path: 'viewModel>CGST',
-    									formatter: '.formatter.getIndianCurr'}"  ></Text>
-                    <Text text="{path: 'viewModel>SGST',
-    									formatter: '.formatter.getIndianCurr'}"  ></Text>
-                    <Text text="{viewModel>Reference}"  ></Text>
-                    <Button icon="sap-icon://download" press = "onDownloadInvoice" ></Button>
-  								</cells>
-  							</ColumnListItem>
-  						</items>
-  					</Table>
-  				</Panel>
-  	</content>
+								<Text text="{viewModel>CourseName}"></Text>
+								<Text text="{viewModel>PaymentMode}"></Text>
+								<Text text="{path: 'viewModel>Amount',
+  										formatter: '.formatter.getIndianCurr'}"></Text>
+								<Text text="{path: 'viewModel>CGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text>
+								<Text text="{path: 'viewModel>SGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text>
+								<Text text="{path: 'viewModel>FullAmount',
+      									formatter: '.formatter.getIndianCurr'}"></Text>
+								<Text text="{viewModel>Reference}"></Text>
+								<Button icon="sap-icon://edit" press="onEditInfo"></Button>
+                <Button icon="sap-icon://download" press="onDownloadInvoice"></Button>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</Panel>
+		</content>
 		<footer>
-			<Toolbar>
-			</Toolbar>
+			<Toolbar></Toolbar>
 		</footer>
 	</Page>
 </mvc:View>

@@ -384,6 +384,12 @@ app.start = function() {
 								"CourseId": true,
 								"PaymentDate": true,
 								"Reference": true,
+								"USDAmount" : true,
+								"CurrencyCode" : true,
+								"Exchange" : true,
+								"Charges" : true,
+								"SettleDate" : true,
+								"SettleAmount" : true,
 								"PaymentMode": true,
 								"Amount": true,
 								"id": true
@@ -394,8 +400,14 @@ app.start = function() {
 									"AccountName": item.AccountName,
 									"StudentId": item.StudentId.toString(),
 									"CourseId": item.CourseId.toString(),
-									"PaymentDate": item.PaymentDate.toString().slice(4, 16),
+									"PaymentDate": item.PaymentDate,
 									"Reference": item.Reference,
+									"USDAmount" : item.USDAmount,
+									"CurrencyCode" : item.CurrencyCode,
+									"Exchange" : item.Exchange,
+									"Charges" : item.Charges,
+									"SettleDate" : (item.SettleDate?item.SettleDate.toDateString().slice(4):""),
+									"SettleAmount" : item.SettleAmount,
 									"PaymentMode": item.PaymentMode,
 									"Amount": item.Amount,
 									"id": item.id
@@ -473,7 +485,7 @@ app.start = function() {
 					var responseData = [];
 					try {
 						subsMap.get("subs").forEach((item) => {
-							if (item.PaymentMode === "PAYPAL" || item.PaymentMode === "XOOM") {
+							if (subsMap.get("student").get(item.StudentId).Country !="IN") {
 								var amount = item.Amount;
 								var gst = 0.00;
 							} else {
@@ -490,6 +502,12 @@ app.start = function() {
 								"PaymentMode": item.PaymentMode,
 								"PaymentDate": item.PaymentDate,
 								"FullAmount": item.Amount,
+								"USDAmount" : item.USDAmount,
+								"CurrencyCode" : item.CurrencyCode,
+								"Exchange" : item.Exchange,
+								"Charges" : item.Charges,
+								"SettleDate" : item.SettleDate,
+								"SettleAmount" : item.SettleAmount,
 								"Amount": amount.toFixed(2),
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
@@ -1292,15 +1310,21 @@ app.start = function() {
 			function(req, res) {
 				var app = require('../server/server');
 				var Sub = app.models.Sub;
-				var id = req.body.id;
-				var updateObj = {
-					Amount: req.body.Amount
-				};
-				Sub.findById(id).then(function(instance) {
-					instance.updateAttributes(updateObj);
+				var sId = req.body.id;
+				var settleDate = new Date(req.body.SettleDate);
+				delete req.body.id;
+				delete req.body.SettleDate;
+				req.body.SettleDate = settleDate;
+				var updateObj = req.body;
+				Sub.upsertWithWhere({id : sId}, updateObj).then(function() {
 					console.log("done");
 					res.send("done");
 				});
+				// Sub.findById(id).then(function(instance) {
+				// 	instance.upsert(updateObj);
+				// 	console.log("done");
+				// 	res.send("done");
+				// });
 			}
 		);
 		app.post('/ResetPassword',
