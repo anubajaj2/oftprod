@@ -60,6 +60,7 @@ sap.ui.define([
 			var that = this;
 			var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
 			var id = oSub.id;
+			var userId = that.getView().getModel("local").getProperty("/CurrentUser");
 			var amount = oSub.FullAmount;
 			var oAmountDialog = new sap.m.Dialog({
 				type: sap.m.DialogType.Message,
@@ -151,7 +152,8 @@ sap.ui.define([
 									"Charges" : charges,
 									"SettleDate" : settleDate,
 									"SettleAmount" : settleAmount,
-									"Reference" : reference
+									"Reference" : reference,
+									"ChangedBy" : userId
 								})
 								.done(function(data, status) {
 									MessageToast.show("Updated");

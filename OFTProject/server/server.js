@@ -1311,10 +1311,16 @@ app.start = function() {
 				var app = require('../server/server');
 				var Sub = app.models.Sub;
 				var sId = req.body.id;
-				var settleDate = new Date(req.body.SettleDate);
 				delete req.body.id;
-				delete req.body.SettleDate;
-				req.body.SettleDate = settleDate;
+				if(req.body.SettleDate){
+					var settleDate = new Date(req.body.SettleDate);
+					delete req.body.SettleDate;
+					req.body.SettleDate = settleDate;
+				}
+				else{
+					delete req.body.SettleDate;
+				}
+				req.body.ChangedOn = new Date();
 				var updateObj = req.body;
 				Sub.upsertWithWhere({id : sId}, updateObj).then(function() {
 					console.log("done");
