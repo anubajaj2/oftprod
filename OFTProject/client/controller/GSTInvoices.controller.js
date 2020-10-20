@@ -191,44 +191,70 @@ sap.ui.define([
 			Core.byId("idReference").destroy();
 			Core.byId("idConfirm").destroy();
 		},
-		onDownloadInvoice: function(oEvent) {
+		getCountryNameFromCode: function(code){
+			var countryWithCode = this.getView().getModel("local").getProperty("/countries");
+			var name = "";
+			countryWithCode.forEach((item)=>{
+				if(item.code===code){
+					name = item.name
+					return;
+				}
+			});
+			return (name?name:code);
+		},
+		onDownloadInvoice : function(oEvent){
+			var that = this;
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
+			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
+			$.post('/getInvoiceNo', {
+				"SubcriptionId" : oDetail.id,
+				"PaymentDate" : oDetail.PaymentDate,
+				"CreatedBy" : userId
+				})
+				.done(function(invoiceNo, status) {
+					 that.DownloadInvoice(oDetail,invoiceNo);
+				})
+				.fail(function(xhr, status, error) {
+					MessageBox.error("Error in Invoice no.");
+				});
+		},
+		DownloadInvoice: function(oDetail,invoiceNo) {
+			var country = this.getCountryNameFromCode(oDetail.Country);
 			var products = [{
 				"Course": oDetail.CourseName,
 				"Batch": oDetail.BatchNo,
 				"HSN": "999293",
 				"Qty": 1,
 				"Rate": oDetail.Amount,
-				"CGST": "9%",
-				"SGST": "9%",
+				"CGST": (oDetail.Country!="IN"? "0%":"9%"),
+				"SGST": (oDetail.Country!="IN"? "0%":"9%"),
 				"Amount": oDetail.Amount
 			}];
 			const invoiceDetail = {
 				shipping: {
 					name: oDetail.Name,
-					address: "",
-					city: "",
-					state: "",
-					country: oDetail.Country,
-					postal_code: ""
+					email : oDetail.Email,
+					mob : (oDetail.ContactNo ? oDetail.ContactNo:""),
+					GSTIN : (oDetail.GSTIN ? oDetail.GSTIN : ""),
+					address:  (oDetail.Address ? oDetail.Address + ", " : "")+(oDetail.City ? oDetail.City + ", ":"") + country
 				},
 				items: products,
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
 				fullAmount: oDetail.FullAmount,
-				order_number: "xxxxxx",
+				order_number: invoiceNo,
 				header: {
 					company_name: "Soyuz Technologies LLP",
 					company_logo: "logo.png",
-					company_address: "EPS-FF-073A Emerald Plaza, Golf Course Extension Road, Sector 65"
+					company_address: "EPS-FF-073A\nEmerald Plaza\nGolf Course Extension Road\nSector 65 Gurgaon Haryana",
+					GSTIN : "06AEFFS9740G1ZS"
 				},
 				footer: {
 					text: "Thank you for taking course with us"
 				},
 				currency_symbol: " INR",
 				date: {
-					billing_date: oDetail.PaymentDate.slice(4, 15),
-					due_date: oDetail.PaymentDate.slice(4, 15),
+					billing_date: new Date(oDetail.PaymentDate).toDateString().slice(4)
 				}
 			};
 
@@ -240,10 +266,14 @@ sap.ui.define([
 						})
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
+						.fontSize(10)
+            .text("GSTIN: "+invoice.header.GSTIN, 110, 87)
 						.moveDown();
 				} else {
 					doc.fontSize(20)
 						.text(invoice.header.company_name, 50, 45)
+            .fontSize(10)
+            .text("GSTIN: "+invoice.header.GSTIN, 50, 75)
 						.moveDown()
 				}
 
@@ -264,31 +294,30 @@ sap.ui.define([
 				const customerInformationTop = 200;
 
 				doc.fontSize(10)
-					.text("Invoice Number:", 50, customerInformationTop)
+					.text("Name:", 50, customerInformationTop)
 					.font("Helvetica-Bold")
-					.text(invoice.order_number, 150, customerInformationTop)
+					.text(invoice.shipping.name, 150, customerInformationTop)
 					.font("Helvetica")
-					.text("Billing Date:", 50, customerInformationTop + 15)
-					.text(invoice.date.billing_date, 150, customerInformationTop + 15)
-					.text("Due Date:", 50, customerInformationTop + 30)
-					.text(invoice.date.due_date, 150, customerInformationTop + 30)
+					.text("E-mail:", 50, customerInformationTop + 15)
+					.text(invoice.shipping.email, 150, customerInformationTop + 15)
+					.text("Mob.:", 50, customerInformationTop + 30)
+					.text(invoice.shipping.mob, 150, customerInformationTop + 30)
+					.fontSize(9)
+					.text("GSTIN:", 50, customerInformationTop + 45)
+					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
+					.fontSize(10)
+					.text("Address:", 50, customerInformationTop + 60)
+					.text(invoice.shipping.address, 150, customerInformationTop + 60)
 
+          .text("Invoice Number:", 350, customerInformationTop)
 					.font("Helvetica-Bold")
-					.text(invoice.shipping.name, 300, customerInformationTop)
+					.text(invoice.order_number, 450, customerInformationTop)
 					.font("Helvetica")
-					.text(invoice.shipping.address, 300, customerInformationTop + 15)
-					.text(
-						invoice.shipping.city +
-						", " +
-						invoice.shipping.state +
-						", " +
-						invoice.shipping.country,
-						300,
-						customerInformationTop + 30
-					)
+					.text("Billing Date:", 350, customerInformationTop + 15)
+					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
 					.moveDown();
 
-				generateHr(doc, 252);
+				generateHr(doc, 280);
 			}
 
 			let invoiceTable = (doc, invoice) => {
@@ -337,32 +366,32 @@ sap.ui.define([
 				totalTable(
 					doc,
 					subtotalPosition,
-					"Sub Total :",
-					totalAmount.toFixed(2)
+					"Sub Total:",
+					formatCurrency(totalAmount.toFixed(2))
 				);
 				const cgstPosition = subtotalPosition + 20;
 				doc.font("Helvetica-Bold");
 				totalTable(
 					doc,
 					cgstPosition,
-					"CGST(9%): ",
-					invoice.CGST
+					"CGST:",
+					formatCurrency(invoice.CGST)
 				);
 				const sgstPosition = cgstPosition + 20;
 				doc.font("Helvetica-Bold");
 				totalTable(
 					doc,
 					sgstPosition,
-					"SGST(9%): ",
-					invoice.SGST
+					"SGST:",
+					formatCurrency(invoice.SGST)
 				);
 				const paidToDatePosition = sgstPosition + 20;
 				doc.font("Helvetica-Bold");
 				totalTable(
 					doc,
 					paidToDatePosition,
-					"Total Amount :",
-					formatCurrency(invoice.fullAmount, currencySymbol)
+					"Total Amount:",
+					formatCurrency(invoice.fullAmount)
 				);
 			}
 
@@ -442,7 +471,7 @@ sap.ui.define([
 					.stroke();
 			}
 
-			let formatCurrency = (value, symbol) => {
+			let formatCurrency = (value, symbol="") => {
 				if (value) {
 					var x = value.toString().split('.');
 					var y = (x.length > 1 ? "." + x[1] : "");

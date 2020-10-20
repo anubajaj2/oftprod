@@ -461,7 +461,10 @@ app.start = function() {
 									"GmailId": true,
 									"Name": true,
 									"ContactNo" : true,
+									"GSTIN" : true,
+									"Address" : true,
 									"Country" : true,
+									"City" : true,
 									"id": true
 								}
 							})
@@ -472,7 +475,10 @@ app.start = function() {
 											"Name": item.Name,
 											"GmailId": item.GmailId,
 											"ContactNo" : item.ContactNo,
-											"Country" : item.Country
+											"GSTIN" : item.GSTIN,
+											"Address" : item.Address,
+											"Country" : item.Country,
+											"City" : item.City
 										});
 									}
 								});
@@ -495,8 +501,11 @@ app.start = function() {
 							responseData.push({
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
 								"Name": subsMap.get("student").get(item.StudentId).Name,
-								"Country" : subsMap.get("student").get(item.StudentId).Country,
 								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
+								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
+								"Address" : subsMap.get("student").get(item.StudentId).Address,
+								"Country" : subsMap.get("student").get(item.StudentId).Country,
+								"City" : subsMap.get("student").get(item.StudentId).City,
 								"CourseName": subsMap.get("course").get(item.CourseId).Name,
 								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"PaymentMode": item.PaymentMode,
@@ -1331,6 +1340,44 @@ app.start = function() {
 				// 	console.log("done");
 				// 	res.send("done");
 				// });
+			}
+		);
+		app.post('/getInvoiceNo',
+			function(req, res) {
+				var app = require('../server/server');
+				var subId = req.body.SubcriptionId;
+				var createdBy = req.body.CreatedBy;
+				var InvoiceNo = app.models.InvoiceNo;
+				var cDate = new Date(req.body.PaymentDate);
+				var month = cDate.getMonth()+1;
+				var year = cDate.getFullYear();
+				InvoiceNo.count({
+					Month : month,
+					Year : year
+				}).then(function(count) {
+					if(++count<9){
+						count = "0"+count;
+					}
+					var invoiceNo = year+"-"+month+"-"+count;
+					InvoiceNo.findOrCreate({
+						where : {
+							SubcriptionId : subId
+					},
+					fields : {
+						InvoiceNo : true
+					}
+					},{
+						Year : year,
+						Month : month,
+						InvoiceNo : invoiceNo,
+						CreatedOn : cDate,
+						SubcriptionId : subId,
+						CreatedBy : createdBy,
+						ChangedOn : cDate,
+					}).then(function(inq){
+						res.send(inq[0].InvoiceNo);
+					});
+				});
 			}
 		);
 		app.post('/ResetPassword',

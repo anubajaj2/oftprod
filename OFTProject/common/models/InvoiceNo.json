@@ -16,7 +16,12 @@
 			"required": true
 		},
 		"InvoiceNo": {
-			"type": "number",
+			"type": "string",
+			"required": true
+		},
+		"SubcriptionId": {
+			"type": "string",
+			"default": "null",
 			"required": true
 		},
     "CreatedOn": {
@@ -36,7 +41,11 @@
 	},
 	"validations": [],
 	"relations": {
-
+		"Sub": {
+			"type": "belongsTo",
+			"model": "Sub",
+			"foreignKey": "SubcriptionId"
+		}
 	},
 	"acls": [{
 		"accessType": "*",
