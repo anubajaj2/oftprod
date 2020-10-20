@@ -1349,7 +1349,7 @@ app.start = function() {
 			function(req, res) {
 				var app = require('../server/server');
 				var subId = req.body.SubcriptionId;
-				var createdBy = req.body.CreatedBy;
+				var userId = req.body.UserId;
 				var InvoiceNo = app.models.InvoiceNo;
 				var Sub = app.models.Sub;
 				var cDate = new Date(req.body.PaymentDate);
@@ -1368,15 +1368,16 @@ app.start = function() {
 					Year : year,
 					Month : month,
 					InvoiceNo : 0,
-					CreatedOn : cDate,
-					CreatedBy : createdBy,
-					ChangedOn : cDate,
+					CreatedOn : new Date(),
+					CreatedBy : userId
 				}).then(function(inq){
 					debugger;
 					var invoiceNo = inq[0].InvoiceNo+1;
 					InvoiceNo.findById(inq[0].id).then(function(instance) {
 						 instance.updateAttributes({
-	 						InvoiceNo : invoiceNo
+	 						InvoiceNo : invoiceNo,
+							ChangedOn : new Date(),
+							ChangedBy : userId
 	 					});
 						var orderNo = "INV-"+year+""+month+"-"+(invoiceNo<10 ? "0"+invoiceNo : invoiceNo);
 						Sub.findById(subId).then(function(instance) {

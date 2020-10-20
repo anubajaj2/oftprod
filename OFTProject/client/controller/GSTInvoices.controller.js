@@ -210,7 +210,7 @@ sap.ui.define([
 				$.post('/getInvoiceNo', {
 					"SubcriptionId" : oDetail.id,
 					"PaymentDate" : oDetail.PaymentDate,
-					"CreatedBy" : userId
+					"UserId" : userId
 					})
 					.done(function(invoiceNo, status) {
 						 that.DownloadInvoice(oDetail,invoiceNo);
