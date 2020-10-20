@@ -206,17 +206,21 @@ sap.ui.define([
 			var that = this;
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
-			$.post('/getInvoiceNo', {
-				"SubcriptionId" : oDetail.id,
-				"PaymentDate" : oDetail.PaymentDate,
-				"CreatedBy" : userId
-				})
-				.done(function(invoiceNo, status) {
-					 that.DownloadInvoice(oDetail,invoiceNo);
-				})
-				.fail(function(xhr, status, error) {
-					MessageBox.error("Error in Invoice no.");
-				});
+			if(oDetail.InvoiceNo==="null"){
+				$.post('/getInvoiceNo', {
+					"SubcriptionId" : oDetail.id,
+					"PaymentDate" : oDetail.PaymentDate,
+					"CreatedBy" : userId
+					})
+					.done(function(invoiceNo, status) {
+						 that.DownloadInvoice(oDetail,invoiceNo);
+					})
+					.fail(function(xhr, status, error) {
+						MessageBox.error("Error in Invoice no.");
+					});
+			}else{
+				that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+			}
 		},
 		DownloadInvoice: function(oDetail,invoiceNo) {
 			var country = this.getCountryNameFromCode(oDetail.Country);
@@ -235,8 +239,8 @@ sap.ui.define([
 					name: oDetail.Name,
 					email : oDetail.Email,
 					mob : (oDetail.ContactNo ? oDetail.ContactNo:""),
-					GSTIN : (oDetail.GSTIN ? oDetail.GSTIN : ""),
-					address:  (oDetail.Address ? oDetail.Address + ", " : "")+(oDetail.City ? oDetail.City + ", ":"") + country
+					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
+					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
 				},
 				items: products,
 				CGST: oDetail.CGST,

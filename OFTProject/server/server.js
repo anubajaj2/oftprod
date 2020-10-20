@@ -392,6 +392,7 @@ app.start = function() {
 								"SettleAmount" : true,
 								"PaymentMode": true,
 								"Amount": true,
+								"InvoiceNo" : true,
 								"id": true
 							}
 						}).then(function(subcriptions) {
@@ -410,6 +411,7 @@ app.start = function() {
 									"SettleAmount" : item.SettleAmount,
 									"PaymentMode": item.PaymentMode,
 									"Amount": item.Amount,
+									"InvoiceNo" : item.InvoiceNo,
 									"id": item.id
 								});
 								subsMap.get("course").set(item.CourseId.toString(), null);
@@ -509,6 +511,7 @@ app.start = function() {
 								"CourseName": subsMap.get("course").get(item.CourseId).Name,
 								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"PaymentMode": item.PaymentMode,
+								"InvoiceNo" : item.InvoiceNo,
 								"PaymentDate": item.PaymentDate,
 								"FullAmount": item.Amount,
 								"USDAmount" : item.USDAmount,
@@ -1348,34 +1351,40 @@ app.start = function() {
 				var subId = req.body.SubcriptionId;
 				var createdBy = req.body.CreatedBy;
 				var InvoiceNo = app.models.InvoiceNo;
+				var Sub = app.models.Sub;
 				var cDate = new Date(req.body.PaymentDate);
-				var month = cDate.getMonth()+1;
+				var month = (cDate.getMonth()<9? "0"+(cDate.getMonth()+1) : cDate.getMonth()+1);
 				var year = cDate.getFullYear();
-				InvoiceNo.count({
-					Month : month,
-					Year : year
-				}).then(function(count) {
-					if(++count<9){
-						count = "0"+count;
-					}
-					var invoiceNo = year+"-"+month+"-"+count;
-					InvoiceNo.findOrCreate({
-						where : {
-							SubcriptionId : subId
-					},
-					fields : {
-						InvoiceNo : true
-					}
-					},{
-						Year : year,
+				InvoiceNo.findOrCreate({
+					where : {
 						Month : month,
-						InvoiceNo : invoiceNo,
-						CreatedOn : cDate,
-						SubcriptionId : subId,
-						CreatedBy : createdBy,
-						ChangedOn : cDate,
-					}).then(function(inq){
-						res.send(inq[0].InvoiceNo);
+						Year : year
+				},
+				fields : {
+					InvoiceNo : true,
+					id : true
+				}
+				},{
+					Year : year,
+					Month : month,
+					InvoiceNo : 0,
+					CreatedOn : cDate,
+					CreatedBy : createdBy,
+					ChangedOn : cDate,
+				}).then(function(inq){
+					debugger;
+					var invoiceNo = inq[0].InvoiceNo+1;
+					InvoiceNo.findById(inq[0].id).then(function(instance) {
+						 instance.updateAttributes({
+	 						InvoiceNo : invoiceNo
+	 					});
+						var orderNo = "INV-"+year+""+month+"-"+(invoiceNo<10 ? "0"+invoiceNo : invoiceNo);
+						Sub.findById(subId).then(function(instance) {
+							 instance.updateAttributes({
+								InvoiceNo : orderNo
+							});
+							 res.send(orderNo);
+						});
 					});
 				});
 			}
