@@ -1336,12 +1336,18 @@ app.start = function() {
 				var updateObj = req.body;
 				Sub.upsertWithWhere({id : sId}, updateObj).then(function() {
 					console.log("done");
-					res.send("done");
+				res.send("done");
+				}).catch(function(err) {
+					console.log(err);
+				res.send("error");
 				});
 				// Sub.findById(id).then(function(instance) {
-				// 	instance.upsert(updateObj);
+				// 	instance.updateAttributes(updateObj);
 				// 	console.log("done");
 				// 	res.send("done");
+				// }).catch(function(err) {
+				// 	console.log(err);
+				//   res.send("error");
 				// });
 			}
 		);
