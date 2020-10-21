@@ -94,8 +94,8 @@
 								<Text text="{path: 'viewModel>FullAmount',
       									formatter: '.formatter.getIndianCurr'}"></Text>
 								<Text text="{viewModel>Reference}"></Text>
-								<Button icon="sap-icon://edit" press="onEditInfo"></Button>
-                <Button icon="sap-icon://download" press="onDownloadInvoice"></Button>
+								<Button icon="sap-icon://edit" press="onEditInfo" enabled = "{=${viewModel>PaymentMode}==='PAYPAL' ? true : false}"></Button>
+                <Button icon="sap-icon://download" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 							</cells>
 						</ColumnListItem>
 					</items>

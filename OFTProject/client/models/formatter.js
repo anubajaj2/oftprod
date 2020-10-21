@@ -88,7 +88,12 @@ sap.ui.define([], function() {
 					return val.match(/\d/g).join();
 			}
 		},
-
+		buttonTypeforInvoice : function(value){
+			if(value==="null"){
+				return sap.m.ButtonType.Reject;
+			}
+			return sap.m.ButtonType.Accept;
+		},
 		convertNumberToWords : function (amount) {
 	    var words = new Array();
 	    words[0] = '';

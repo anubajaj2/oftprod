@@ -1343,10 +1343,8 @@ app.start = function() {
 				// });
 				Sub.findById(sId).then(function(instance) {
 					instance.updateAttributes(updateObj);
-					console.log("done");
 					res.send("done");
 				}).catch(function(err) {
-					console.log(err);
 				  res.send("error");
 				});
 			}
@@ -1397,6 +1395,13 @@ app.start = function() {
 				});
 			}
 		);
+		// app.post('/getLogo',
+		// 	function(req, res) {
+		// 		var app = require('../server/server');
+		// 		var logo = fs.readFileSync('./server/logo.png', 'base64');
+		// 		res.send(logo);
+		// 	}
+		// );
 		app.post('/ResetPassword',
 			function(req, res) {
 				var app = require('../server/server');

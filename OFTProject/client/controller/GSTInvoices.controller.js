@@ -156,7 +156,7 @@ sap.ui.define([
 									"ChangedBy" : userId
 								})
 								.done(function(data, status) {
-									MessageToast.show("Updated");
+									MessageBox.success("Update "+data);
 									that.destroyEditItems();
 									that.onStartDate();
 								})
@@ -278,7 +278,7 @@ sap.ui.define([
 			let header = (doc, invoice) => {
 
 				if (false) {
-					doc.image(invoice.header.company_logo, 50, 45, {
+					doc.image(this.logo+'.png', 50, 45, {
 							width: 50
 						})
 						.fontSize(20)
@@ -1080,6 +1080,15 @@ sap.ui.define([
 		// },
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
+			// $.post('/getlogo', {
+			// 	})
+			// 	.done(function(logo, status) {
+			// 	this.logo = new Buffer(logo);
+			// 	})
+			// 	.fail(function(xhr, status, error) {
+			// 		sap.m.MessageBox.error("Error in access logo");
+			// 	});
+
 			$.post('/getAmountForAccount', {
 					"AccountNo": accountNo,
 					"StartDate": startDate,
