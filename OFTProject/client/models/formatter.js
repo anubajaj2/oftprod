@@ -72,8 +72,16 @@ sap.ui.define([], function() {
 
 		},
 
-		getDateObject : function(value){
-			return (value ? new Date(value) : "");
+		getIndianDateFormat : function(value){
+			if(value){
+				var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+				    pattern: "dd.MM.yyyy"
+				});
+				var ostartDate = new Date(value);
+				var indDate = oDateFormat.format(ostartDate);
+				return indDate;
+			}
+			return value;
 		},
 		extractNo: function(val) {
 			if(val){

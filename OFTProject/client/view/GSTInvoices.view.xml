@@ -19,8 +19,8 @@
 			<f:SimpleForm>
 				<f:content>
 					<Label text="Date Range"/>
-					<DatePicker id="idRegDate" displayFormat="dd-MMM-yyyy" value="" valueFormat="MMM dd yyyy" change="onStartDate"></DatePicker>
-					<DatePicker id="idRegDateTo" displayFormat="dd-MMM-yyyy" value="" valueFormat="MMM dd yyyy" change="onEndDate"></DatePicker>
+					<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy" value="" valueFormat="MMM dd yyyy" change="onStartDate"></DatePicker>
+					<DatePicker id="idRegDateTo" displayFormat="dd.MM.yyyy" value="" valueFormat="MMM dd yyyy" change="onEndDate"></DatePicker>
 					<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
 					id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
 
@@ -78,7 +78,8 @@
 					<items>
 						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active">
 							<cells>
-								<DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd-MMM-yyyy" editable="false"></DateTimeField>
+								<!-- <DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd.MM.yyyy" editable="false"></DateTimeField> -->
+								<Text text="{ path: 'viewModel>PaymentDate', formatter: '.formatter.getIndianDateFormat'}"></Text>
 								<Text text="{viewModel>Email}"></Text>
 								<Text text="{viewModel>Name}"></Text>
 
