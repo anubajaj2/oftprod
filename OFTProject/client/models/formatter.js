@@ -177,7 +177,7 @@ sap.ui.define([], function() {
 		},
 		getIndianCurr: function(value){
 			var x=value.toString().split('.');
-			var y = (x.length>1?'.'+x[1]:'.00');
+			var y = (x.length>1?'.'+x[1]:'');
 			var x = x[0];
 			var lastThree = x.substring(x.length-3);
 			var otherNumbers = x.substring(0,x.length-3);
