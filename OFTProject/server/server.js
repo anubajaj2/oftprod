@@ -1334,21 +1334,21 @@ app.start = function() {
 				}
 				req.body.ChangedOn = new Date();
 				var updateObj = req.body;
-				Sub.upsertWithWhere({id : sId}, updateObj).then(function() {
-					console.log("done");
-				res.send("done");
-				}).catch(function(err) {
-					console.log(err);
-				res.send("error");
-				});
-				// Sub.findById(id).then(function(instance) {
-				// 	instance.updateAttributes(updateObj);
+				// Sub.upsertWithWhere({id : sId}, updateObj).then(function() {
 				// 	console.log("done");
-				// 	res.send("done");
+				// res.send("done");
 				// }).catch(function(err) {
 				// 	console.log(err);
-				//   res.send("error");
+				// res.send("error");
 				// });
+				Sub.findById(sId).then(function(instance) {
+					instance.updateAttributes(updateObj);
+					console.log("done");
+					res.send("done");
+				}).catch(function(err) {
+					console.log(err);
+				  res.send("error");
+				});
 			}
 		);
 		app.post('/getInvoiceNo',
