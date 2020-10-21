@@ -218,6 +218,7 @@ sap.ui.define([
 						}else{
 							that.DownloadInvoice(oDetail,invoiceNo);
 						}
+						that.onStartDate();
 					})
 					.fail(function(xhr, status, error) {
 						MessageBox.error("Error in Invoice no.");
@@ -572,7 +573,7 @@ sap.ui.define([
 
 					const downloadLink = document.createElement('a');
 					downloadLink.href = url;
-					downloadLink.download = oDetail.Name;
+					downloadLink.download = invoiceNo+"_"+oDetail.Country+"_"+oDetail.Name;
 					downloadLink.click();
 				});
 			}

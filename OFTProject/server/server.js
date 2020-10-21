@@ -1380,10 +1380,11 @@ app.start = function() {
 							ChangedBy : userId
 	 					});
 						var orderNo = "INV-"+year+""+month+"-"+(invoiceNo<10 ? "0"+invoiceNo : invoiceNo);
-						Sub.findById(subId).then(function(instance) {
-							 instance.updateAttributes({
-								InvoiceNo : orderNo
-							});
+						var oUpdate = {
+						 InvoiceNo : orderNo
+					 };
+						Sub.findById(subId).then(function(sInstance) {
+							 sInstance.updateAttributes(oUpdate);
 							 res.send(orderNo);
 						});
 					});
