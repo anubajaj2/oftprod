@@ -224,6 +224,8 @@ sap.ui.define([
 		},
 		DownloadInvoice: function(oDetail,invoiceNo) {
 			var country = this.getCountryNameFromCode(oDetail.Country);
+			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
+			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
 			var products = [{
 				"Course": oDetail.CourseName,
 				"Batch": oDetail.BatchNo,
@@ -247,18 +249,20 @@ sap.ui.define([
 				SGST: oDetail.SGST,
 				fullAmount: oDetail.FullAmount,
 				order_number: invoiceNo,
+				paymentMode : oDetail.PaymentMode,
 				header: {
 					company_name: "Soyuz Technologies LLP",
 					company_logo: "logo.png",
-					company_address: "EPS-FF-073A\nEmerald Plaza\nGolf Course Extension Road\nSector 65 Gurgaon Haryana",
+					// hear \\ is used to change line
+					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
 					GSTIN : "06AEFFS9740G1ZS"
 				},
 				footer: {
-					text: "Thank you for taking course with us"
+					text: "This Invoice is digitally signed, can be considered as true copy"
 				},
 				currency_symbol: " INR",
 				date: {
-					billing_date: new Date(oDetail.PaymentDate).toDateString().slice(4)
+					billing_date: billingDate
 				}
 			};
 
@@ -317,8 +321,10 @@ sap.ui.define([
 					.font("Helvetica-Bold")
 					.text(invoice.order_number, 450, customerInformationTop)
 					.font("Helvetica")
-					.text("Billing Date:", 350, customerInformationTop + 15)
+					.text("Invoice Date:", 350, customerInformationTop + 15)
 					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
+					.text("Payment Mode:", 350, customerInformationTop + 30)
+					.text(invoice.paymentMode, 450, customerInformationTop + 30)
 					.moveDown();
 
 				generateHr(doc, 280);
@@ -336,7 +342,6 @@ sap.ui.define([
 					"Course",
 					"Batch",
 					"HSN/SAC",
-					"Qty",
 					"Rate",
 					"CGST",
 					"SGST",
@@ -355,7 +360,6 @@ sap.ui.define([
 						item.Course,
 						item.Batch,
 						item.HSN,
-						item.Qty,
 						item.Rate,
 						item.CGST,
 						item.SGST,
@@ -397,11 +401,18 @@ sap.ui.define([
 					"Total Amount:",
 					formatCurrency(invoice.fullAmount)
 				);
+				const amountInWordsPosition = sgstPosition + 20;
+				generateHr(doc, amountInWordsPosition + 20);
+				doc.font("Helvetica-Bold")
+				.text("Amount in Words:", 50, amountInWordsPosition + 30)
+				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
+				generateHr(doc, amountInWordsPosition + 50);
 			}
 
 			let footer = (doc, invoice) => {
 				if (invoice.footer.text.length !== 0) {
-					doc.fontSize(10).text(invoice.footer.text, 50, 780, {
+					generateHr(doc, 760);
+					doc.fontSize(10).text(invoice.footer.text, 50, 770, {
 						align: "center",
 						width: 500
 					});
@@ -431,7 +442,6 @@ sap.ui.define([
 				course,
 				batch,
 				hsn,
-				qty,
 				rate,
 				cgst,
 				sgst,
@@ -441,11 +451,7 @@ sap.ui.define([
 					.fontSize(10)
 					.text(course, 50, y)
 					.text(batch, 160, y)
-					.text(hsn, 200, y, {
-						width: 90,
-						align: "right"
-					})
-					.text(qty, 240, y, {
+					.text(hsn, 222, y, {
 						width: 90,
 						align: "right"
 					})
@@ -528,10 +534,11 @@ sap.ui.define([
 
 			let companyAddress = (doc, address) => {
 				let str = address;
-				let chunks = str.match(/.{0,25}(\s|$)/g);
+				// let chunks = str.match(/.{0,25}(\s|$)/g);
+				let chunks = str.split("\\");
 				let first = 50;
 				chunks.forEach(function(i, x) {
-					doc.fontSize(10).text(chunks[x], 200, first, {
+					doc.fontSize(10).text(chunks[x], 300, first, {
 						align: "right"
 					});
 					first = +first + 15;
