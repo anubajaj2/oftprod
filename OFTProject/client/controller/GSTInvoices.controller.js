@@ -4,9 +4,10 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"oft/fiori/models/formatter",
+	"sap/ui/core/Fragment",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast"
-], function(Controller, Core, Filter, FilterOperator, Formatter, MessageBox, MessageToast) {
+], function(Controller, Core, Filter, FilterOperator, Formatter, Fragment, MessageBox, MessageToast) {
 	"use strict";
 
 	return Controller.extend("oft.fiori.controller.GSTInvoices", {
@@ -56,6 +57,34 @@ sap.ui.define([
 		onEndDate: function(oEvent) {
 			this.onStartDate();
 		},
+		// onReference : function(oEvent){
+		// 	var oCtx = oEvent.getSource().getParent().getBindingContextPath(),
+		// 	oControl = oEvent.getSource();
+		// 	var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oCtx);
+		// // create popover
+		// 	if (!this._oPopover) {
+		// 		Fragment.load({
+		// 			id: "paypalReference",
+		// 			name: "oft.fiori.fragments.Popover",
+		// 			controller: this
+		// 		}).then(function (oPopover) {
+		// 			this._oPopover = oPopover;
+		// 			this.getView().addDependent(this._oPopover);
+		// 			this._oPopover.attachAfterOpen(function() {
+		// 				this.disablePointerEvents();
+		// 			}, this);
+		// 			this._oPopover.attachAfterClose(function() {
+		// 				this.enablePointerEvents();
+		// 			}, this);
+		//
+		// 			this._oPopover.bindElement(oCtx.getPath());
+		// 			this._oPopover.openBy(oControl);
+		// 		}.bind(this));
+		// 	} else {
+		// 		this._oPopover.bindElement(oCtx.getPath());
+		// 		this._oPopover.openBy(oControl);
+		// 	}
+		// },
 		onEditInfo: function(oEvent) {
 			var that = this;
 			var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
@@ -79,27 +108,31 @@ sap.ui.define([
 							}),
 					new sap.m.Input("idUSDAmount",{
 						type: "Number",
-						value : oSub.USDAmount
+						value : oSub.USDAmount,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "Currency Code: "
 							}),
 					new sap.m.Input("idCurrencyCode",{
-						value : oSub.CurrencyCode
+						value : oSub.CurrencyCode,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "Exchange: "
 							}),
 					new sap.m.Input("idExchange",{
 						type: "Number",
-						value : oSub.Exchange
+						value : oSub.Exchange,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "Charges: "
 							}),
 					new sap.m.Input("idCharges",{
 						type: "Number",
-						value : oSub.Charges
+						value : oSub.Charges,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "SettleDate: "
@@ -107,14 +140,16 @@ sap.ui.define([
 					new sap.m.DatePicker("idSettleDate",{
 						displayFormat : "dd.MM.yyyy",
 						valueFormat : "MMM dd yyyy",
-						value : oSub.SettleDate
+						value : oSub.SettleDate,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "SettleAmount: "
 							}),
 					new sap.m.Input("idSettleAmount",{
 						type: "Number",
-						value : oSub.SettleAmount
+						value : oSub.SettleAmount,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
 								text: "Reference: "
@@ -142,8 +177,9 @@ sap.ui.define([
 						var settleDate = Core.byId("idSettleDate").getValue();
 						var settleAmount = Core.byId("idSettleAmount").getValue();
 						var reference = Core.byId("idReference").getValue();
-						if (sAmount <= 50000) {
-							$.post('/updateSubcriptionAmount', {
+						var payload = {};
+						if(oSub.PaymentMode==="PAYPAL"){
+							payload = {
 									"id": id,
 									"Amount": sAmount,
 									"USDAmount" : usdAmount,
@@ -154,7 +190,17 @@ sap.ui.define([
 									"SettleAmount" : settleAmount,
 									"Reference" : reference,
 									"ChangedBy" : userId
-								})
+								}
+						}else{
+							payload = {
+									"id": id,
+									"Amount": sAmount,
+									"Reference" : reference,
+									"ChangedBy" : userId
+								}
+						}
+						if (sAmount <= 50000) {
+							$.post('/updateSubcriptionAmount', payload)
 								.done(function(data, status) {
 									MessageBox.success("Update "+data);
 									that.destroyEditItems();

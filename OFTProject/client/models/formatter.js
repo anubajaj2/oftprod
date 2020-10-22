@@ -90,7 +90,10 @@ sap.ui.define([], function() {
 		},
 		buttonTypeforInvoice : function(value){
 			if(value==="null"){
-				return sap.m.ButtonType.Reject;
+				return sap.m.ButtonType.Emphasized;
+			}
+			if(value==="PAYPAL"){
+				return sap.m.ButtonType.Emphasized;
 			}
 			return sap.m.ButtonType.Accept;
 		},

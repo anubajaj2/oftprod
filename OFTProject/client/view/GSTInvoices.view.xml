@@ -87,16 +87,18 @@
 								<!-- <Text text="{path: 'viewModel>Amount',
   										formatter: '.formatter.getIndianCurr'}"></Text> -->
 								<ObjectNumber number="{path: 'viewModel>Amount', formatter: '.formatter.getIndianCurr'}" />
-								<Text text="{path: 'viewModel>CGST',
-    									formatter: '.formatter.getIndianCurr'}"></Text>
-								<Text text="{path: 'viewModel>SGST',
-    									formatter: '.formatter.getIndianCurr'}"></Text>
+								<!-- <Text text="{path: 'viewModel>CGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{path: 'viewModel>CGST', formatter: '.formatter.getIndianCurr'}" />
+								<!-- <Text text="{path: 'viewModel>SGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}" />
 								<!-- <Text text="{path: 'viewModel>FullAmount',
       									formatter: '.formatter.getIndianCurr'}"></Text> -->
 								<ObjectNumber number="{path: 'viewModel>FullAmount', formatter: '.formatter.getIndianCurr'}" unit="INR"/>
 								<Text text="{viewModel>PaymentMode}"></Text>
-								<Text text="{viewModel>Reference}"></Text>
-								<Button icon="sap-icon://edit" press="onEditInfo" enabled = "{=${viewModel>PaymentMode}==='PAYPAL' ? true : false}"></Button>
+								<Link text="{viewModel>Reference}" subtle="{=${viewModel>PaymentMode}==='PAYPAL' ? false : true}" enabled = "{=${viewModel>PaymentMode}==='PAYPAL' ? true : false}" press = "onReference"></Link>
+								<Button icon="sap-icon://edit" press="onEditInfo" type = "{path : 'viewModel>PaymentMode', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
                 <Button icon="sap-icon://download" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 							</cells>
 						</ColumnListItem>
