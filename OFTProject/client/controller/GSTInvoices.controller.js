@@ -1142,17 +1142,43 @@ sap.ui.define([
 				})
 				.done(function(data, status) {
 					var oNewModel = new sap.ui.model.json.JSONModel();
-					// this.formatter.sortByProperty(data,"Amount");
-					// data.sort(function (a, b) {
-					//   return b.Amount - a.Amount;
-					// });
 					oNewModel.setData({
 						"records": data
 					});
-					var totalBalance = 0;
+					var totalBalance = 0,
+					 totalIndianEntries = 0,
+					 totalForeignersEntries =0,
+					 totalAmountNonPaypal = 0,
+					 totalAmountUSDPaypal = 0,
+					 totalSettleAmountPaypal = 0,
+					 totalGSTAmount = 0;
 					for (var i = 0; i < data.length; i++) {
 						totalBalance = totalBalance + data[i].FullAmount;
+						totalGSTAmount+=(parseFloat(data[i].CGST)+parseFloat(data[i].SGST));
+						if(data[i].Country==="IN"){
+							totalIndianEntries+=1;
+						}
+						else{
+							totalForeignersEntries+=1
+						}
+						if(data[i].PaymentMode==="PAYPAL"){
+							 totalSettleAmountPaypal+=data[i].SettleAmount;
+							  totalAmountUSDPaypal+=data[i].USDAmount;
+						}
+						else{
+							totalAmountNonPaypal+=data[i].FullAmount;
+						}
 					}
+					var totalProperties =  {
+							 "TotalBalance" : totalBalance,
+							 "TotalIndianEntries" : totalIndianEntries,
+							 "TotalForeignersEntries" : totalForeignersEntries,
+							 "TotalAmountNonPaypal" : totalAmountNonPaypal,
+							 "TotalAmountUSDPaypal" : totalAmountUSDPaypal,
+							 "TotalSettleAmountPaypal" : totalSettleAmountPaypal,
+							 "TotalGSTAmount" : totalGSTAmount.toFixed(2)
+						};
+					that.getView().getModel("local").setProperty("/totalProperties",totalProperties);
 					that.getView().byId("newtitle").setText("Total Balance : " + totalBalance);
 					that.getView().setModel(oNewModel, "viewModel");
 				})
