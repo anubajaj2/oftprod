@@ -17,7 +17,7 @@
 		</headerContent>
 		<content>
 			<FlexBox 	renderType="Bare">
-        <FlexBox class="columns" renderType="Bare" width="50%">
+        <FlexBox class="columns" renderType="Bare" width="50%" backgroundDesign="Solid">
 					<f:SimpleForm editable="true"
 					ariaLabelledBy="Filter" >
 						<f:toolbar>
@@ -78,7 +78,7 @@
 				<Table id="idSummary" items="{viewModel>/records}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished" fixedLayout="false">
 					<headerToolbar>
 						<Toolbar>
-							<Title id="newtitle" text="Account Summary"/>
+							<Title id="newtitle" text="Entries"/>
 							<ToolbarSpacer></ToolbarSpacer>
 							<!-- <Button text="getNextAc" press="onGetNext" /> -->
 						</Toolbar>

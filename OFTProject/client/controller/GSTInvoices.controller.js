@@ -1179,7 +1179,7 @@ sap.ui.define([
 							 "TotalGSTAmount" : totalGSTAmount.toFixed(2)
 						};
 					that.getView().getModel("local").setProperty("/totalProperties",totalProperties);
-					that.getView().byId("newtitle").setText("Total Balance : " + totalBalance);
+					that.getView().byId("newtitle").setText("Total Amount : " + totalBalance);
 					that.getView().setModel(oNewModel, "viewModel");
 				})
 				.fail(function(xhr, status, error) {
