@@ -511,7 +511,7 @@ app.start = function() {
 							}
 							Records.push({
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
-								"Name": subsMap.get("student").get(item.StudentId).Name,
+								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
 								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
 								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
 								"Address" : subsMap.get("student").get(item.StudentId).Address,
@@ -712,20 +712,26 @@ app.start = function() {
 				function(err, accountRecords, accountBalances, Records) {
 					// result now equals 'done'
 					var responseData = [];
+					var gstBeginDate = new Date("10.17.2020");
 					try {
 						subsMap.get("subs").forEach((item) => {
-							if (subsMap.get("student").get(item.StudentId).Country !="IN") {
-								var amount = item.Amount;
+							var paymentDate = new Date(item.PaymentDate);
+							var isGST = ( gstBeginDate <= paymentDate );
+
+							var amount = (item.PaymentMode==="PAYPAL" ? item.SettleAmount : item.Amount);
+
+							if (!isGST) {
 								var gst = 0.00;
 							} else {
-								var amount = item.Amount * 100 / 118;
-								var gst = item.Amount * 9 / 118;
+								var gst = amount * 9 / 118;
+								amount = amount * 100 / 118;
 							}
+
 							responseData.push({
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
-								"Name": subsMap.get("student").get(item.StudentId).Name,
+								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
 								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
-								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
+								"GSTIN" : (isGST ? subsMap.get("student").get(item.StudentId).GSTIN : ""),
 								"Address" : subsMap.get("student").get(item.StudentId).Address,
 								"Country" : subsMap.get("student").get(item.StudentId).Country,
 								"City" : subsMap.get("student").get(item.StudentId).City,
@@ -745,6 +751,7 @@ app.start = function() {
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
+								"IsGST" : isGST,
 								"id": item.id
 							});
 						});
@@ -1616,13 +1623,20 @@ app.start = function() {
 				});
 			}
 		);
-		// app.post('/getLogo',
-		// 	function(req, res) {
-		// 		var app = require('../server/server');
-		// 		var logo = fs.readFileSync('./server/logo.png', 'base64');
-		// 		res.send(logo);
-		// 	}
-		// );
+		app.get('/getLogo',
+			function(req, res) {
+				var app = require('../server/server');
+				var logo = fs.readFileSync('./server/invoice/logo.png', 'base64');
+				res.send(logo);
+			}
+		);
+		app.get('/getSignature',
+			function(req, res) {
+				var app = require('../server/server');
+				var signature = fs.readFileSync('./server/invoice/signature.png', 'base64');
+				res.send(signature);
+			}
+		);
 		app.post('/ResetPassword',
 			function(req, res) {
 				var app = require('../server/server');

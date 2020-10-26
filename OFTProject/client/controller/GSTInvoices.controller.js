@@ -33,6 +33,27 @@ sap.ui.define([
 			this.getView().byId("idRegDate").setValue(startDate.toDateString().slice(4));
 			this.getView().byId("idRegDateTo").setValue(rangeDate.toDateString().slice(4));
 			// this.super("123456789", month+'.'+'01.'+year, month+'.'+rangeDate.getDate()+'.'+year);
+			var that = this;
+			$.ajax({
+				type: 'GET', // added,
+				url: 'getLogo',
+				success: function(data) {
+					that.logo = data;
+				},
+				error: function(xhr, status, error) {
+					sap.m.MessageToast.show("error in fetching logo");
+				}
+			});
+			$.ajax({
+				type: 'GET', // added,
+				url: 'getSignature',
+				success: function(data) {
+					that.signature = data;
+				},
+				error: function(xhr, status, error) {
+					sap.m.MessageToast.show("error in fetching signature");
+				}
+			});
 		},
 		onConfirm: function(oEvent) {
 
@@ -275,25 +296,26 @@ sap.ui.define([
 						MessageBox.error("Error in Invoice no.");
 					});
 			}else{
-				if(oDetail.PaymentMode==="PAYPAL"){
+				if(oDetail.PaymentMode==="PAYPAL" && !oDetail.IsGST){
 					that.DownloadPaypalInvoice(oDetail,oDetail.InvoiceNo);
 				}else{
 					that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
 				}
 			}
 		},
-		DownloadInvoice: function(oDetail,invoiceNo) {
+	 DownloadInvoice: function(oDetail,invoiceNo) {
 			var country = this.getCountryNameFromCode(oDetail.Country);
 			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
 			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
+
 			var products = [{
 				"Course": oDetail.CourseName,
 				"Batch": oDetail.BatchNo,
 				"HSN": "999293",
 				"Qty": 1,
 				"Rate": oDetail.Amount,
-				"CGST": (oDetail.Country!="IN"? "0%":"9%"),
-				"SGST": (oDetail.Country!="IN"? "0%":"9%"),
+				"CGST": (oDetail.IsGST ? "9%":"0%"),
+				"SGST": (oDetail.IsGST ? "9%":"0%"),
 				"Amount": oDetail.Amount
 			}];
 			const invoiceDetail = {
@@ -307,12 +329,13 @@ sap.ui.define([
 				items: products,
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
-				fullAmount: oDetail.FullAmount,
+				fullAmount: (oDetail.PaymentMode==="PAYPAL" ? oDetail.SettleAmount : oDetail.FullAmount),
 				order_number: invoiceNo,
 				paymentMode : oDetail.PaymentMode,
 				header: {
 					company_name: "Soyuz Technologies LLP",
-					company_logo: "logo.png",
+					company_logo: "data:image/png;base64,"+this.logo,
+					signature : "data:image/png;base64,"+this.signature,
 					// hear \\ is used to change line
 					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
 					GSTIN : "06AEFFS9740G1ZS"
@@ -328,14 +351,14 @@ sap.ui.define([
 
 			let header = (doc, invoice) => {
 
-				if (false) {
-					doc.image(this.logo+'.png', 50, 45, {
+				if (this.logo) {
+					doc.image(invoice.header.company_logo, 50, 45, {
 							width: 50
 						})
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
 						.fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 110, 87)
+            .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
 						.moveDown();
 				} else {
 					doc.fontSize(20)
@@ -459,7 +482,7 @@ sap.ui.define([
 					doc,
 					paidToDatePosition,
 					"Total Amount:",
-					formatCurrency(invoice.fullAmount)
+					"₹"+formatCurrency(invoice.fullAmount)
 				);
 				const amountInWordsPosition = sgstPosition + 20;
 				generateHr(doc, amountInWordsPosition + 20);
@@ -467,6 +490,20 @@ sap.ui.define([
 				.text("Amount in Words:", 50, amountInWordsPosition + 30)
 				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
+				const signaturePosition = amountInWordsPosition+210;
+				if (this.signature) {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+					.image(invoice.header.signature, 440, signaturePosition+20, {
+						height : 50,
+						width : 110
+						})
+						.text("Designated Partner", 440, signaturePosition+80)
+						.moveDown();
+				} else {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+						.text("Designated Partner", 440, signaturePosition+80)
+						.moveDown()
+				}
 			}
 
 			let footer = (doc, invoice) => {
@@ -657,7 +694,9 @@ sap.ui.define([
 				paymentMode : oDetail.PaymentMode,
 				header: {
 					company_name: "Soyuz Technologies LLP",
-					company_logo: "logo.png",
+					company_logo: "data:image/png;base64,"+this.logo,
+					signature : "data:image/png;base64,"+this.signature,
+					signature : "data:image/png;base64,"+this.signature,
 					// hear \\ is used to change line
 					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
 					GSTIN : "06AEFFS9740G1ZS"
@@ -673,14 +712,14 @@ sap.ui.define([
 
 			let header = (doc, invoice) => {
 
-				if (false) {
+				if (this.logo) {
 					doc.image(invoice.header.company_logo, 50, 45, {
 							width: 50
 						})
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
 						.fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 110, 87)
+            .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
 						.moveDown();
 				} else {
 					doc.fontSize(20)
@@ -779,27 +818,41 @@ sap.ui.define([
 					formatCurrency(totalAmount.toFixed(2))
 				);
 				const chargesPosition = totalPosition + 20;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					chargesPosition,
-					"Fee:",
-					formatCurrency(invoice.fee)
-				);
+				// doc.font("Helvetica-Bold");
+				// totalTable(
+				// 	doc,
+				// 	chargesPosition,
+				// 	"Fee:",
+				// 	formatCurrency(invoice.fee)
+				// );
 				const settleAmountPosition = chargesPosition + 20;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					settleAmountPosition,
-					"Settle Amount:",
-					formatCurrency(invoice.fullAmount)
-				);
+				// doc.font("Helvetica-Bold");
+				// totalTable(
+				// 	doc,
+				// 	settleAmountPosition,
+				// 	"Settle Amount:",
+				// 	formatCurrency(invoice.fullAmount)
+				// );
 				const amountInWordsPosition = settleAmountPosition + 20;
 				generateHr(doc, amountInWordsPosition);
 				doc.font("Helvetica-Bold")
 				.text("Amount in Words:", 50, amountInWordsPosition + 10)
 				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +(invoice.fullAmount? " only" : ""), 150, amountInWordsPosition + 10)
 				generateHr(doc, amountInWordsPosition + 30);
+				const signaturePosition = amountInWordsPosition+210;
+				if (this.signature) {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+					.image(invoice.header.signature, 440, signaturePosition+20, {
+						height : 50,
+						width : 110
+						})
+						.text("Designated Partner", 440, signaturePosition+80)
+						.moveDown();
+				} else {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+						.text("Designated Partner", 440, signaturePosition+80)
+						.moveDown()
+				}
 			}
 
 			let footer = (doc, invoice) => {
