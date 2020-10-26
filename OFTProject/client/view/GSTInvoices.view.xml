@@ -90,7 +90,7 @@
 							<Label text="Payment Date" class="columnLabelStyle"/>
 						</Column>
 						<Column>
-							<Label text="Email" class="columnLabelStyle"/>
+							<Label text="Email Address" class="columnLabelStyle"/>
 						</Column>
 						<Column>
 							<Label text="Name" class="columnLabelStyle"/>
