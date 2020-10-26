@@ -88,9 +88,17 @@ sap.ui.define([], function() {
 					return val.match(/\d/g).join();
 			}
 		},
+		buttonTypeforDownload : function(value){
+			if(value==="null"){
+				return "sap-icon://download-from-cloud"
+			}
+			else{
+				return "sap-icon://download"
+			}
+		},
 		buttonTypeforInvoice : function(value){
 			if(value==="null"){
-				return sap.m.ButtonType.Emphasized;
+				return sap.m.ButtonType.Reject;
 			}
 			if(value==="PAYPAL"){
 				return sap.m.ButtonType.Emphasized;

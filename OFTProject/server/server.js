@@ -350,11 +350,14 @@ app.start = function() {
 
 				);
 		});
-		app.post('/getAmountForAccount', function(req, res) {
-			var responseData = [];
-			var accountNo = req.body.AccountNo;
-			var startDate = new Date(req.body.StartDate);
-			var endDate = new Date(req.body.EndDate);
+		app.get('/getExcelForGST', function(req, res) {
+			var Records = [];
+			// var accountNo = req.body.AccountNo;
+			   var accountNo = "123456998";
+			// var startDate = new Date(req.body.StartDate);
+			// var endDate = new Date(req.body.EndDate);
+			var startDate = new Date("01.01.2016");
+			var endDate = new Date("01.01.2021");
 			var Subs = app.models.Sub;
 			var Students = app.models.Student;
 			var Courses = app.models.Course;
@@ -362,22 +365,30 @@ app.start = function() {
 			subsMap.set("subs", new Map());
 			subsMap.set("course", new Map());
 			subsMap.set("student", new Map());
+			var oFilter = {
+				"AccountName": accountNo,
+				and: [{
+					"PaymentDate": {
+						gte: startDate
+					}
+				}, {
+					"PaymentDate": {
+						lte: endDate
+					}
+				}]
+			};
+			if(req.body.PaymentMode==="PAYPAL"){
+				oFilter.PaymentMode = {like: 'PAYPAL'};
+			}else if(req.body.PaymentMode==="NON-PAYPAL"){
+				oFilter.PaymentMode = {nlike: 'PAYPAL'};
+			}
+			var studentIds = [];
+			var courseIds = [];
 			var async = require('async');
 			async.waterfall([
 					function(callback) {
 						Subs.find({
-							where: {
-								"AccountName": accountNo,
-								and: [{
-									"PaymentDate": {
-										gte: startDate
-									}
-								}, {
-									"PaymentDate": {
-										lte: endDate
-									}
-								}],
-							},
+							where: oFilter,
 							fields: {
 								"AccountName": true,
 								"StudentId": true,
@@ -397,6 +408,8 @@ app.start = function() {
 							}
 						}).then(function(subcriptions) {
 							subcriptions.forEach((item) => {
+								studentIds.push(item.StudentId);
+								courseIds.push(item.CourseId);
 								subsMap.get("subs").set(item.id.toString(), {
 									"AccountName": item.AccountName,
 									"StudentId": item.StudentId.toString(),
@@ -421,13 +434,223 @@ app.start = function() {
 						});
 					},
 					function(subcriptions, callback) {
-						// arg1 now equals 'one' and arg2 now equals 'two'
-						// var date = new Date("2020-04-01");
-						// date.setHours(0,0,0,0);
+
 						Courses.find({
-								// where: {
-								//  or: []
-								// },
+								where: {
+								 id : {
+									 inq: courseIds
+								 }
+								},
+								fields: {
+									"Name": true,
+									"BatchNo": true,
+									"id": true
+								}
+							})
+							.then(function(courses, err) {
+								courses.forEach((item) => {
+									if (subsMap.get("course").has(item.id.toString())) {
+										subsMap.get("course").set(item.id.toString(), {
+											"Name": item.Name,
+											"BatchNo": item.BatchNo
+										});
+									}
+								});
+								callback(null, subcriptions, courses);
+							});
+
+					},
+					function(subcriptions, courses, callback) {
+						// arg1 now equals 'three'
+						Students.find({
+								where: {
+								 id : {
+									 inq : studentIds
+								 }
+								},
+								fields: {
+									"GmailId": true,
+									"Name": true,
+									"ContactNo" : true,
+									"GSTIN" : true,
+									"Address" : true,
+									"Country" : true,
+									"City" : true,
+									"id": true
+								}
+							})
+							.then(function(students, err) {
+								students.forEach((item) => {
+									if (subsMap.get("student").has(item.id.toString())) {
+										subsMap.get("student").set(item.id.toString(), {
+											"Name": item.Name,
+											"GmailId": item.GmailId,
+											"ContactNo" : item.ContactNo,
+											"GSTIN" : item.GSTIN,
+											"Address" : item.Address,
+											"Country" : item.Country,
+											"City" : item.City
+										});
+									}
+								});
+								callback(null, subcriptions, courses, students);
+							});
+					}
+				],
+				function(err, accountRecords, accountBalances, Records) {
+					// result now equals 'done'
+					var Records = [];
+					try {
+						subsMap.get("subs").forEach((item) => {
+							if (subsMap.get("student").get(item.StudentId).Country !="IN") {
+								var amount = item.Amount;
+								var gst = 0.00;
+							} else {
+								var amount = item.Amount * 100 / 118;
+								var gst = item.Amount * 9 / 118;
+							}
+							Records.push({
+								"Email": subsMap.get("student").get(item.StudentId).GmailId,
+								"Name": subsMap.get("student").get(item.StudentId).Name,
+								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
+								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
+								"Address" : subsMap.get("student").get(item.StudentId).Address,
+								"Country" : subsMap.get("student").get(item.StudentId).Country,
+								"City" : subsMap.get("student").get(item.StudentId).City,
+								"CourseName": subsMap.get("course").get(item.CourseId).Name,
+								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
+								"PaymentMode": item.PaymentMode,
+								"PaymentDate": item.PaymentDate,
+								"FullAmount": item.Amount,
+								"USDAmount" : item.USDAmount,
+								"CurrencyCode" : item.CurrencyCode,
+								"Exchange" : item.Exchange,
+								"Charges" : item.Charges,
+								"SettleDate" : item.SettleDate,
+								"SettleAmount" : item.SettleAmount,
+								"Amount": amount.toFixed(2),
+								"SGST": gst.toFixed(2),
+								"CGST": gst.toFixed(2),
+								"Reference": item.Reference,
+							});
+						});
+							var excel = require('exceljs');
+							var workbook = new excel.Workbook(); //creating workbook
+							var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
+							sheet.addRow().values = Object.keys(Records[0]);
+
+							for (var i = 0; i < Records["length"]; i++) {
+								sheet.addRow().values = Object.values(Records[i]);
+							}
+
+							var tempfile = require('tempfile');
+							var tempFilePath = tempfile('.xlsx');
+							console.log("tempFilePath : ", tempFilePath);
+							workbook.xlsx.writeFile(tempFilePath).then(function() {
+								res.sendFile(tempFilePath, function(err) {
+									if (err) {
+										console.log('---------- error downloading file: ', err);
+									}
+								});
+								console.log('file is written @ ' + tempFilePath);
+							});
+					} catch (e) {
+
+					} finally {
+
+					}
+				}
+			);
+		});
+		app.post('/getAmountForAccount', function(req, res) {
+			var responseData = [];
+			var accountNo = req.body.AccountNo;
+
+			var startDate = new Date(req.body.StartDate);
+			var endDate = new Date(req.body.EndDate);
+			var Subs = app.models.Sub;
+			var Students = app.models.Student;
+			var Courses = app.models.Course;
+			var subsMap = new Map();
+			subsMap.set("subs", new Map());
+			subsMap.set("course", new Map());
+			subsMap.set("student", new Map());
+			var oFilter = {
+				"AccountName": accountNo,
+				and: [{
+					"PaymentDate": {
+						gte: startDate
+					}
+				}, {
+					"PaymentDate": {
+						lte: endDate
+					}
+				}]
+			};
+			if(req.body.PaymentMode==="PAYPAL"){
+				oFilter.PaymentMode = {like: 'PAYPAL'};
+			}else if(req.body.PaymentMode==="NON-PAYPAL"){
+				oFilter.PaymentMode = {nlike: 'PAYPAL'};
+			}
+			var studentIds = [];
+			var courseIds = [];
+			var async = require('async');
+			async.waterfall([
+					function(callback) {
+						Subs.find({
+							where: oFilter,
+							fields: {
+								"AccountName": true,
+								"StudentId": true,
+								"CourseId": true,
+								"PaymentDate": true,
+								"Reference": true,
+								"USDAmount" : true,
+								"CurrencyCode" : true,
+								"Exchange" : true,
+								"Charges" : true,
+								"SettleDate" : true,
+								"SettleAmount" : true,
+								"PaymentMode": true,
+								"Amount": true,
+								"InvoiceNo" : true,
+								"id": true
+							}
+						}).then(function(subcriptions) {
+							subcriptions.forEach((item) => {
+								studentIds.push(item.StudentId);
+								courseIds.push(item.CourseId);
+								subsMap.get("subs").set(item.id.toString(), {
+									"AccountName": item.AccountName,
+									"StudentId": item.StudentId.toString(),
+									"CourseId": item.CourseId.toString(),
+									"PaymentDate": item.PaymentDate,
+									"Reference": item.Reference,
+									"USDAmount" : item.USDAmount,
+									"CurrencyCode" : item.CurrencyCode,
+									"Exchange" : item.Exchange,
+									"Charges" : item.Charges,
+									"SettleDate" : (item.SettleDate?item.SettleDate.toDateString().slice(4):""),
+									"SettleAmount" : item.SettleAmount,
+									"PaymentMode": item.PaymentMode,
+									"Amount": item.Amount,
+									"InvoiceNo" : item.InvoiceNo,
+									"id": item.id
+								});
+								subsMap.get("course").set(item.CourseId.toString(), null);
+								subsMap.get("student").set(item.StudentId.toString(), null);
+							});
+							callback(null, subcriptions);
+						});
+					},
+					function(subcriptions, callback) {
+
+						Courses.find({
+								where: {
+								 id : {
+									 inq: courseIds
+								 }
+								},
 								fields: {
 									"Name": true,
 									"BatchNo": true,
@@ -452,13 +675,11 @@ app.start = function() {
 						// var date = new Date("2020-04-01");
 						// date.setHours(0,0,0,0);
 						Students.find({
-								// where: {
-								//  and: [{
-								// 	 PaymentDate: {
-								// 		 gte: date
-								// 	 }
-								//  }]
-								// },
+								where: {
+								 id : {
+									 inq : studentIds
+								 }
+								},
 								fields: {
 									"GmailId": true,
 									"Name": true,

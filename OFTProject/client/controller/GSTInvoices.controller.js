@@ -48,13 +48,18 @@ sap.ui.define([
 				// this.getView().byId("idSummary").getBinding("items").filter(oFilter);
 			}
 		},
-		onStartDate: function(oEvent) {
+		onStartDate: function() {
 			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
 			var startDate = this.getView().byId("idRegDate").getValue();
 			var endDate = this.getView().byId("idRegDateTo").getValue();
 			this.super(accountNo, startDate, endDate);
 		},
 		onEndDate: function(oEvent) {
+			this.onStartDate();
+		},
+		payMode : "ALL",
+		onPayModeSelect : function(oEvent){
+			this.payMode = oEvent.getSource().getSelectedItem().getKey();
 			this.onStartDate();
 		},
 		// onReference : function(oEvent){
@@ -1124,21 +1129,42 @@ sap.ui.define([
 		// onStudentIdChange: function(oContext){
 		//
 		// },
-		super: function(accountNo, startDate, endDate) {
+		onDownloadExel: function(oEvent) {
 			var that = this;
-			// $.post('/getlogo', {
+			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
+			var startDate = this.getView().byId("idRegDate").getValue();
+			var endDate = this.getView().byId("idRegDateTo").getValue();
+			// $.post('/getExcelForGST', {
+			// 		"AccountNo" : accountNo,
+			// 		"StartDate" : startDate,
+			// 		"EndDate" : endDate,
+			// 		"PaymentMode" : this.payMode
 			// 	})
-			// 	.done(function(logo, status) {
-			// 	this.logo = new Buffer(logo);
+			// 	.done(function(data, status) {
+			// 		MessageToast.show("File Downloaded succesfully");
 			// 	})
 			// 	.fail(function(xhr, status, error) {
-			// 		sap.m.MessageBox.error("Error in access logo");
+			// 		sap.m.MessageBox.error("Error in downloading excel");
 			// 	});
+			$.ajax({
+				type: 'GET', // added,
+				url: 'getExcelForGST',
+				success: function(data) {
+					sap.m.MessageToast.show("File Downloaded succesfully");
+				},
+				error: function(xhr, status, error) {
+					sap.m.MessageToast.show("error in downloading the excel file");
+				}
+			});
+		},
+		super: function(accountNo, startDate, endDate) {
+			var that = this;
 
 			$.post('/getAmountForAccount', {
-					"AccountNo": accountNo,
-					"StartDate": startDate,
-					"EndDate": endDate
+					"AccountNo" : accountNo,
+					"StartDate" : startDate,
+					"EndDate" : endDate,
+					"PaymentMode" : this.payMode
 				})
 				.done(function(data, status) {
 					var oNewModel = new sap.ui.model.json.JSONModel();
