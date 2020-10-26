@@ -278,29 +278,21 @@ sap.ui.define([
 			var that = this;
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
-			if(oDetail.InvoiceNo==="null"){
+			if(!oDetail.InvoiceNo.startsWith("INV-")){
 				$.post('/getInvoiceNo', {
 					"SubcriptionId" : oDetail.id,
 					"PaymentDate" : oDetail.PaymentDate,
 					"UserId" : userId
 					})
 					.done(function(invoiceNo, status) {
-						if(oDetail.PaymentMode==="PAYPAL"){
-							that.DownloadPaypalInvoice(oDetail,invoiceNo);
-						}else{
 							that.DownloadInvoice(oDetail,invoiceNo);
-						}
 						that.onStartDate();
 					})
 					.fail(function(xhr, status, error) {
 						MessageBox.error("Error in Invoice no.");
 					});
 			}else{
-				if(oDetail.PaymentMode==="PAYPAL" && !oDetail.IsGST){
-					that.DownloadPaypalInvoice(oDetail,oDetail.InvoiceNo);
-				}else{
 					that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
-				}
 			}
 		},
 	 DownloadInvoice: function(oDetail,invoiceNo) {
@@ -322,7 +314,7 @@ sap.ui.define([
 				shipping: {
 					name: oDetail.Name,
 					email : oDetail.Email,
-					mob : (oDetail.ContactNo ? oDetail.ContactNo:""),
+					mob : (oDetail.ContactNo ? "+"+oDetail.ContactNo:""),
 					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
 					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
 				},
@@ -330,6 +322,7 @@ sap.ui.define([
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
 				fullAmount: (oDetail.PaymentMode==="PAYPAL" ? oDetail.SettleAmount : oDetail.FullAmount),
+				usdAmount : oDetail.USDAmount,
 				order_number: invoiceNo,
 				paymentMode : oDetail.PaymentMode,
 				header: {
@@ -338,10 +331,10 @@ sap.ui.define([
 					signature : "data:image/png;base64,"+this.signature,
 					// hear \\ is used to change line
 					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
-					GSTIN : "06AEFFS9740G1ZS"
+					GSTIN : (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
 				},
 				footer: {
-					text: "This Invoice is digitally signed, can be considered as true copy"
+					text: "This is a computer generated invoice"
 				},
 				currency_symbol: " INR",
 				date: {
@@ -481,16 +474,59 @@ sap.ui.define([
 				totalTable(
 					doc,
 					paidToDatePosition,
-					"Total Amount:",
-					"₹"+formatCurrency(invoice.fullAmount)
+					"Total (INR):",
+					  formatCurrency(invoice.fullAmount)
 				);
-				const amountInWordsPosition = sgstPosition + 20;
+				let amountInWordsPosition = sgstPosition + 20;
 				generateHr(doc, amountInWordsPosition + 20);
 				doc.font("Helvetica-Bold")
 				.text("Amount in Words:", 50, amountInWordsPosition + 30)
 				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
-				const signaturePosition = amountInWordsPosition+210;
+
+				if(invoice.paymentMode==="PAYPAL"){
+					doc.font("Helvetica-Bold")
+					.text("Paypal Exchange", 50, amountInWordsPosition + 80)
+					amountInWordsPosition+=10
+					doc.font("Helvetica")
+					.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
+					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
+					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82,{
+						width: 105,
+						align: "right"
+					})
+					.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
+					.text("Amount:", 60, amountInWordsPosition + 100)
+					.text(formatCurrency(invoice.usdAmount)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 100,{
+						width: 90,
+						align: "right"
+					})
+					.text("Fee:", 60, amountInWordsPosition + 120)
+					.text("-"+formatCurrency(oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 120,{
+						width: 90,
+						align: "right"
+					})
+					.text("------------------", 120, amountInWordsPosition + 132,{
+						width: 90,
+						align: "right"
+					})
+					.text("Sub Total:", 60, amountInWordsPosition + 145)
+					.text(formatCurrency(oDetail.USDAmount-oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 145,{
+						width: 90,
+						align: "right"
+					})
+					.text("Ex. Rate:", 60, amountInWordsPosition + 165)
+					.text(formatCurrency(oDetail.Exchange)+" INR", 115, amountInWordsPosition + 165,{
+						width: 90,
+						align: "right"
+					})
+					.text("Total Amount:", 60, amountInWordsPosition + 185)
+					.text(formatCurrency(oDetail.SettleAmount)+" INR", 115, amountInWordsPosition + 185,{
+						width: 90,
+						align: "right"
+					})
+				}
+				const signaturePosition = amountInWordsPosition+200;
 				if (this.signature) {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
 					.image(invoice.header.signature, 440, signaturePosition+20, {
@@ -509,8 +545,8 @@ sap.ui.define([
 			let footer = (doc, invoice) => {
 				if (invoice.footer.text.length !== 0) {
 					generateHr(doc, 760);
-					doc.fontSize(10).text(invoice.footer.text, 50, 770, {
-						align: "center",
+					doc.fontSize(8).text(invoice.footer.text, 50, 770, {
+						align: "right",
 						width: 500
 					});
 				}
@@ -668,352 +704,352 @@ sap.ui.define([
 			niceInvoice(invoiceDetail);
 		},
 
-		DownloadPaypalInvoice: function(oDetail,invoiceNo) {
-			var country = this.getCountryNameFromCode(oDetail.Country);
-			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
-			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
-			var products = [{
-				"Course": oDetail.CourseName,
-				"Batch": oDetail.BatchNo,
-				"PaypalAmount": oDetail.USDAmount +" "+ oDetail.CurrencyCode,
-				"Fee": oDetail.Charges,
-				"Amount": oDetail.Amount
-			}];
-			const invoiceDetail = {
-				shipping: {
-					name: oDetail.Name,
-					email : oDetail.Email,
-					mob : (oDetail.ContactNo ? oDetail.ContactNo:""),
-					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
-					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
-				},
-				items: products,
-				fee: oDetail.Charges,
-				fullAmount: oDetail.SettleAmount,
-				order_number: invoiceNo,
-				paymentMode : oDetail.PaymentMode,
-				header: {
-					company_name: "Soyuz Technologies LLP",
-					company_logo: "data:image/png;base64,"+this.logo,
-					signature : "data:image/png;base64,"+this.signature,
-					signature : "data:image/png;base64,"+this.signature,
-					// hear \\ is used to change line
-					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
-					GSTIN : "06AEFFS9740G1ZS"
-				},
-				footer: {
-					text: "This Invoice is digitally signed, can be considered as true copy"
-				},
-				currency_symbol: " INR",
-				date: {
-					billing_date: billingDate
-				}
-			};
-
-			let header = (doc, invoice) => {
-
-				if (this.logo) {
-					doc.image(invoice.header.company_logo, 50, 45, {
-							width: 50
-						})
-						.fontSize(20)
-						.text(invoice.header.company_name, 110, 57)
-						.fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
-						.moveDown();
-				} else {
-					doc.fontSize(20)
-						.text(invoice.header.company_name, 50, 45)
-            .fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 50, 75)
-						.moveDown()
-				}
-
-				if (invoice.header.company_address.length !== 0) {
-					companyAddress(doc, invoice.header.company_address);
-				}
-
-			}
-
-			let customerInformation = (doc, invoice) => {
-				doc
-					.fillColor("#444444")
-					.fontSize(20)
-					.text("Invoice", 50, 160);
-
-				generateHr(doc, 185);
-
-				const customerInformationTop = 200;
-
-				doc.fontSize(10)
-					.text("Name:", 50, customerInformationTop)
-					.font("Helvetica-Bold")
-					.text(invoice.shipping.name, 150, customerInformationTop)
-					.font("Helvetica")
-					.text("E-mail:", 50, customerInformationTop + 15)
-					.text(invoice.shipping.email, 150, customerInformationTop + 15)
-					.text("Mob.:", 50, customerInformationTop + 30)
-					.text(invoice.shipping.mob, 150, customerInformationTop + 30)
-					.fontSize(9)
-					.text("GSTIN:", 50, customerInformationTop + 45)
-					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
-					.fontSize(10)
-					.text("Address:", 50, customerInformationTop + 60)
-					.text(invoice.shipping.address, 150, customerInformationTop + 60)
-
-          .text("Invoice Number:", 350, customerInformationTop)
-					.font("Helvetica-Bold")
-					.text(invoice.order_number, 450, customerInformationTop)
-					.font("Helvetica")
-					.text("Invoice Date:", 350, customerInformationTop + 15)
-					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
-					.text("Payment Mode:", 350, customerInformationTop + 30)
-					.text(invoice.paymentMode, 450, customerInformationTop + 30)
-					.moveDown();
-
-				generateHr(doc, 280);
-			}
-
-			let invoiceTable = (doc, invoice) => {
-				let i;
-				const invoiceTableTop = 330;
-				const currencySymbol = invoice.currency_symbol;
-
-				doc.font("Helvetica-Bold");
-				tableRow(
-					doc,
-					invoiceTableTop,
-					"Course",
-					"Batch",
-					"Paypal Amount",
-					"Fee",
-					"Amount"
-				);
-				generateHr(doc, invoiceTableTop + 20);
-				doc.font("Helvetica");
-				var totalAmount = 0;
-				var totalGST = 0;
-				for (i = 0; i < invoice.items.length; i++) {
-					const item = invoice.items[i];
-					const position = invoiceTableTop + (i + 1) * 30;
-					tableRow(
-						doc,
-						position,
-						item.Course,
-						item.Batch,
-						item.PaypalAmount,
-						item.Fee,
-						item.Amount
-					);
-					totalAmount += parseFloat(item.Amount);
-					generateHr(doc, position + 20);
-				}
-
-				const totalPosition = invoiceTableTop + (i + 1) * 30;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					totalPosition,
-					"Total Amount:",
-					formatCurrency(totalAmount.toFixed(2))
-				);
-				const chargesPosition = totalPosition + 20;
-				// doc.font("Helvetica-Bold");
-				// totalTable(
-				// 	doc,
-				// 	chargesPosition,
-				// 	"Fee:",
-				// 	formatCurrency(invoice.fee)
-				// );
-				const settleAmountPosition = chargesPosition + 20;
-				// doc.font("Helvetica-Bold");
-				// totalTable(
-				// 	doc,
-				// 	settleAmountPosition,
-				// 	"Settle Amount:",
-				// 	formatCurrency(invoice.fullAmount)
-				// );
-				const amountInWordsPosition = settleAmountPosition + 20;
-				generateHr(doc, amountInWordsPosition);
-				doc.font("Helvetica-Bold")
-				.text("Amount in Words:", 50, amountInWordsPosition + 10)
-				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +(invoice.fullAmount? " only" : ""), 150, amountInWordsPosition + 10)
-				generateHr(doc, amountInWordsPosition + 30);
-				const signaturePosition = amountInWordsPosition+210;
-				if (this.signature) {
-					doc.text(invoice.header.company_name, 430, signaturePosition)
-					.image(invoice.header.signature, 440, signaturePosition+20, {
-						height : 50,
-						width : 110
-						})
-						.text("Designated Partner", 440, signaturePosition+80)
-						.moveDown();
-				} else {
-					doc.text(invoice.header.company_name, 430, signaturePosition)
-						.text("Designated Partner", 440, signaturePosition+80)
-						.moveDown()
-				}
-			}
-
-			let footer = (doc, invoice) => {
-				if (invoice.footer.text.length !== 0) {
-					generateHr(doc, 760);
-					doc.fontSize(10).text(invoice.footer.text, 50, 770, {
-						align: "center",
-						width: 500
-					});
-				}
-			}
-
-			let totalTable = (
-				doc,
-				y,
-				name,
-				description
-			) => {
-				doc
-					.fontSize(10)
-					.text(name, 380, y, {
-						width: 90,
-						align: "right"
-					})
-					.text(description, 0, y, {
-						align: "right"
-					})
-			}
-
-			let tableRow = (
-				doc,
-				y,
-				course,
-				batch,
-				paypalAmount,
-				fee,
-				amount
-			) => {
-				doc
-					.fontSize(10)
-					.text(course, 50, y)
-					.text(batch, 170, y)
-					// .text(hsn, 222, y, {
-					// 	width: 90,
-					// 	align: "right"
-					// })
-					.text(paypalAmount, 280, y, {
-						width: 90,
-						align: "right"
-					})
-					// .text(cgst, 350, y, {
-					// 	width: 90,
-					// 	align: "right"
-					// })
-					.text(fee, 360, y, {
-						width: 90,
-						align: "right"
-					})
-					.text(amount, 0, y, {
-						align: "right"
-					});
-			}
-
-			let generateHr = (doc, y) => {
-				doc
-					.strokeColor("#aaaaaa")
-					.lineWidth(1)
-					.moveTo(50, y)
-					.lineTo(550, y)
-					.stroke();
-			}
-
-			let formatCurrency = (value, symbol="") => {
-				if (value) {
-					var x = value.toString().split('.');
-					var y = (x.length > 1 ? "." + x[1] : "");
-					x = x[0];
-					var lastThree = x.substring(x.length - 3);
-					var otherNumbers = x.substring(0, x.length - 3);
-					if (otherNumbers != '')
-						lastThree = ',' + lastThree;
-					var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-					return res + y + symbol;
-				} else {
-					return value + symbol;
-				}
-			}
-
-			let getNumber = str => {
-				if (str.length !== 0) {
-					var num = str.replace(/[^0-9]/g, '');
-				} else {
-					var num = 0;
-				}
-
-				return num;
-			}
-
-			let checkIfTaxAvailable = tax => {
-				let validatedTax = getNumber(tax);
-				if (Number.isNaN(validatedTax) === false && validatedTax <= 100 && validatedTax > 0) {
-					var taxValue = tax;
-				} else {
-					var taxValue = '---';
-				}
-
-				return taxValue;
-			}
-
-			let applyTaxIfAvailable = (price, gst) => {
-
-
-				let validatedTax = getNumber(gst);
-				if (Number.isNaN(validatedTax) === false && validatedTax <= 100) {
-					let taxValue = '.' + validatedTax;
-					var itemPrice = price * (1 + taxValue);
-				} else {
-					var itemPrice = price * (1 + taxValue);
-				}
-
-				return itemPrice;
-			}
-
-			let companyAddress = (doc, address) => {
-				let str = address;
-				// let chunks = str.match(/.{0,25}(\s|$)/g);
-				let chunks = str.split("\\");
-				let first = 50;
-				chunks.forEach(function(i, x) {
-					doc.fontSize(10).text(chunks[x], 300, first, {
-						align: "right"
-					});
-					first = +first + 15;
-				});
-			}
-
-			let niceInvoice = (invoice) => {
-				var doc = new PDFDocument({
-					size: "A4",
-					margin: 40
-				});
-				var stream = doc.pipe(blobStream());
-				header(doc, invoice);
-				customerInformation(doc, invoice);
-				invoiceTable(doc, invoice);
-				footer(doc, invoice);
-				doc.end();
-				stream.on('finish', function() {
-					// get a blob you can do whatever you like with
-					const blob = stream.toBlob('application/pdf');
-					// or get a blob URL for display in the browser
-					const url = stream.toBlobURL('application/pdf');
-
-					const downloadLink = document.createElement('a');
-					downloadLink.href = url;
-					downloadLink.download = invoiceNo+"_"+oDetail.Country+"_"+oDetail.Name;
-					downloadLink.click();
-				});
-			}
-			niceInvoice(invoiceDetail);
-		},
+		// DownloadPaypalInvoice: function(oDetail,invoiceNo) {
+		// 	var country = this.getCountryNameFromCode(oDetail.Country);
+		// 	var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
+		// 	billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
+		// 	var products = [{
+		// 		"Course": oDetail.CourseName,
+		// 		"Batch": oDetail.BatchNo,
+		// 		"PaypalAmount": oDetail.USDAmount +" "+ oDetail.CurrencyCode,
+		// 		"Fee": oDetail.Charges,
+		// 		"Amount": oDetail.Amount
+		// 	}];
+		// 	const invoiceDetail = {
+		// 		shipping: {
+		// 			name: oDetail.Name,
+		// 			email : oDetail.Email,
+		// 			mob : (oDetail.ContactNo ? oDetail.ContactNo:""),
+		// 			GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
+		// 			address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
+		// 		},
+		// 		items: products,
+		// 		fee: oDetail.Charges,
+		// 		fullAmount: oDetail.SettleAmount,
+		// 		order_number: invoiceNo,
+		// 		paymentMode : oDetail.PaymentMode,
+		// 		header: {
+		// 			company_name: "Soyuz Technologies LLP",
+		// 			company_logo: "data:image/png;base64,"+this.logo,
+		// 			signature : "data:image/png;base64,"+this.signature,
+		// 			signature : "data:image/png;base64,"+this.signature,
+		// 			// hear \\ is used to change line
+		// 			company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
+		// 			GSTIN : "06AEFFS9740G1ZS"
+		// 		},
+		// 		footer: {
+		// 			text: "This Invoice is digitally signed, can be considered as true copy"
+		// 		},
+		// 		currency_symbol: " INR",
+		// 		date: {
+		// 			billing_date: billingDate
+		// 		}
+		// 	};
+		//
+		// 	let header = (doc, invoice) => {
+		//
+		// 		if (this.logo) {
+		// 			doc.image(invoice.header.company_logo, 50, 45, {
+		// 					width: 50
+		// 				})
+		// 				.fontSize(20)
+		// 				.text(invoice.header.company_name, 110, 57)
+		// 				.fontSize(10)
+    //         .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
+		// 				.moveDown();
+		// 		} else {
+		// 			doc.fontSize(20)
+		// 				.text(invoice.header.company_name, 50, 45)
+    //         .fontSize(10)
+    //         .text("GSTIN: "+invoice.header.GSTIN, 50, 75)
+		// 				.moveDown()
+		// 		}
+		//
+		// 		if (invoice.header.company_address.length !== 0) {
+		// 			companyAddress(doc, invoice.header.company_address);
+		// 		}
+		//
+		// 	}
+		//
+		// 	let customerInformation = (doc, invoice) => {
+		// 		doc
+		// 			.fillColor("#444444")
+		// 			.fontSize(20)
+		// 			.text("Invoice", 50, 160);
+		//
+		// 		generateHr(doc, 185);
+		//
+		// 		const customerInformationTop = 200;
+		//
+		// 		doc.fontSize(10)
+		// 			.text("Name:", 50, customerInformationTop)
+		// 			.font("Helvetica-Bold")
+		// 			.text(invoice.shipping.name, 150, customerInformationTop)
+		// 			.font("Helvetica")
+		// 			.text("E-mail:", 50, customerInformationTop + 15)
+		// 			.text(invoice.shipping.email, 150, customerInformationTop + 15)
+		// 			.text("Mob.:", 50, customerInformationTop + 30)
+		// 			.text(invoice.shipping.mob, 150, customerInformationTop + 30)
+		// 			.fontSize(9)
+		// 			.text("GSTIN:", 50, customerInformationTop + 45)
+		// 			.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
+		// 			.fontSize(10)
+		// 			.text("Address:", 50, customerInformationTop + 60)
+		// 			.text(invoice.shipping.address, 150, customerInformationTop + 60)
+		//
+    //       .text("Invoice Number:", 350, customerInformationTop)
+		// 			.font("Helvetica-Bold")
+		// 			.text(invoice.order_number, 450, customerInformationTop)
+		// 			.font("Helvetica")
+		// 			.text("Invoice Date:", 350, customerInformationTop + 15)
+		// 			.text(invoice.date.billing_date, 450, customerInformationTop + 15)
+		// 			.text("Payment Mode:", 350, customerInformationTop + 30)
+		// 			.text(invoice.paymentMode, 450, customerInformationTop + 30)
+		// 			.moveDown();
+		//
+		// 		generateHr(doc, 280);
+		// 	}
+		//
+		// 	let invoiceTable = (doc, invoice) => {
+		// 		let i;
+		// 		const invoiceTableTop = 330;
+		// 		const currencySymbol = invoice.currency_symbol;
+		//
+		// 		doc.font("Helvetica-Bold");
+		// 		tableRow(
+		// 			doc,
+		// 			invoiceTableTop,
+		// 			"Course",
+		// 			"Batch",
+		// 			"Paypal Amount",
+		// 			"Fee",
+		// 			"Amount"
+		// 		);
+		// 		generateHr(doc, invoiceTableTop + 20);
+		// 		doc.font("Helvetica");
+		// 		var totalAmount = 0;
+		// 		var totalGST = 0;
+		// 		for (i = 0; i < invoice.items.length; i++) {
+		// 			const item = invoice.items[i];
+		// 			const position = invoiceTableTop + (i + 1) * 30;
+		// 			tableRow(
+		// 				doc,
+		// 				position,
+		// 				item.Course,
+		// 				item.Batch,
+		// 				item.PaypalAmount,
+		// 				item.Fee,
+		// 				item.Amount
+		// 			);
+		// 			totalAmount += parseFloat(item.Amount);
+		// 			generateHr(doc, position + 20);
+		// 		}
+		//
+		// 		const totalPosition = invoiceTableTop + (i + 1) * 30;
+		// 		doc.font("Helvetica-Bold");
+		// 		totalTable(
+		// 			doc,
+		// 			totalPosition,
+		// 			"Total Amount:",
+		// 			formatCurrency(totalAmount.toFixed(2))
+		// 		);
+		// 		const chargesPosition = totalPosition + 20;
+		// 		// doc.font("Helvetica-Bold");
+		// 		// totalTable(
+		// 		// 	doc,
+		// 		// 	chargesPosition,
+		// 		// 	"Fee:",
+		// 		// 	formatCurrency(invoice.fee)
+		// 		// );
+		// 		const settleAmountPosition = chargesPosition + 20;
+		// 		// doc.font("Helvetica-Bold");
+		// 		// totalTable(
+		// 		// 	doc,
+		// 		// 	settleAmountPosition,
+		// 		// 	"Settle Amount:",
+		// 		// 	formatCurrency(invoice.fullAmount)
+		// 		// );
+		// 		const amountInWordsPosition = settleAmountPosition + 20;
+		// 		generateHr(doc, amountInWordsPosition);
+		// 		doc.font("Helvetica-Bold")
+		// 		.text("Amount in Words:", 50, amountInWordsPosition + 10)
+		// 		.text(this.formatter.convertNumberToWords(invoice.fullAmount) +(invoice.fullAmount? " only" : ""), 150, amountInWordsPosition + 10)
+		// 		generateHr(doc, amountInWordsPosition + 30);
+		// 		const signaturePosition = amountInWordsPosition+210;
+		// 		if (this.signature) {
+		// 			doc.text(invoice.header.company_name, 430, signaturePosition)
+		// 			.image(invoice.header.signature, 440, signaturePosition+20, {
+		// 				height : 50,
+		// 				width : 110
+		// 				})
+		// 				.text("Designated Partner", 440, signaturePosition+80)
+		// 				.moveDown();
+		// 		} else {
+		// 			doc.text(invoice.header.company_name, 430, signaturePosition)
+		// 				.text("Designated Partner", 440, signaturePosition+80)
+		// 				.moveDown()
+		// 		}
+		// 	}
+		//
+		// 	let footer = (doc, invoice) => {
+		// 		if (invoice.footer.text.length !== 0) {
+		// 			generateHr(doc, 760);
+		// 			doc.fontSize(10).text(invoice.footer.text, 50, 770, {
+		// 				align: "center",
+		// 				width: 500
+		// 			});
+		// 		}
+		// 	}
+		//
+		// 	let totalTable = (
+		// 		doc,
+		// 		y,
+		// 		name,
+		// 		description
+		// 	) => {
+		// 		doc
+		// 			.fontSize(10)
+		// 			.text(name, 380, y, {
+		// 				width: 90,
+		// 				align: "right"
+		// 			})
+		// 			.text(description, 0, y, {
+		// 				align: "right"
+		// 			})
+		// 	}
+		//
+		// 	let tableRow = (
+		// 		doc,
+		// 		y,
+		// 		course,
+		// 		batch,
+		// 		paypalAmount,
+		// 		fee,
+		// 		amount
+		// 	) => {
+		// 		doc
+		// 			.fontSize(10)
+		// 			.text(course, 50, y)
+		// 			.text(batch, 170, y)
+		// 			// .text(hsn, 222, y, {
+		// 			// 	width: 90,
+		// 			// 	align: "right"
+		// 			// })
+		// 			.text(paypalAmount, 280, y, {
+		// 				width: 90,
+		// 				align: "right"
+		// 			})
+		// 			// .text(cgst, 350, y, {
+		// 			// 	width: 90,
+		// 			// 	align: "right"
+		// 			// })
+		// 			.text(fee, 360, y, {
+		// 				width: 90,
+		// 				align: "right"
+		// 			})
+		// 			.text(amount, 0, y, {
+		// 				align: "right"
+		// 			});
+		// 	}
+		//
+		// 	let generateHr = (doc, y) => {
+		// 		doc
+		// 			.strokeColor("#aaaaaa")
+		// 			.lineWidth(1)
+		// 			.moveTo(50, y)
+		// 			.lineTo(550, y)
+		// 			.stroke();
+		// 	}
+		//
+		// 	let formatCurrency = (value, symbol="") => {
+		// 		if (value) {
+		// 			var x = value.toString().split('.');
+		// 			var y = (x.length > 1 ? "." + x[1] : "");
+		// 			x = x[0];
+		// 			var lastThree = x.substring(x.length - 3);
+		// 			var otherNumbers = x.substring(0, x.length - 3);
+		// 			if (otherNumbers != '')
+		// 				lastThree = ',' + lastThree;
+		// 			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+		// 			return res + y + symbol;
+		// 		} else {
+		// 			return value + symbol;
+		// 		}
+		// 	}
+		//
+		// 	let getNumber = str => {
+		// 		if (str.length !== 0) {
+		// 			var num = str.replace(/[^0-9]/g, '');
+		// 		} else {
+		// 			var num = 0;
+		// 		}
+		//
+		// 		return num;
+		// 	}
+		//
+		// 	let checkIfTaxAvailable = tax => {
+		// 		let validatedTax = getNumber(tax);
+		// 		if (Number.isNaN(validatedTax) === false && validatedTax <= 100 && validatedTax > 0) {
+		// 			var taxValue = tax;
+		// 		} else {
+		// 			var taxValue = '---';
+		// 		}
+		//
+		// 		return taxValue;
+		// 	}
+		//
+		// 	let applyTaxIfAvailable = (price, gst) => {
+		//
+		//
+		// 		let validatedTax = getNumber(gst);
+		// 		if (Number.isNaN(validatedTax) === false && validatedTax <= 100) {
+		// 			let taxValue = '.' + validatedTax;
+		// 			var itemPrice = price * (1 + taxValue);
+		// 		} else {
+		// 			var itemPrice = price * (1 + taxValue);
+		// 		}
+		//
+		// 		return itemPrice;
+		// 	}
+		//
+		// 	let companyAddress = (doc, address) => {
+		// 		let str = address;
+		// 		// let chunks = str.match(/.{0,25}(\s|$)/g);
+		// 		let chunks = str.split("\\");
+		// 		let first = 50;
+		// 		chunks.forEach(function(i, x) {
+		// 			doc.fontSize(10).text(chunks[x], 300, first, {
+		// 				align: "right"
+		// 			});
+		// 			first = +first + 15;
+		// 		});
+		// 	}
+		//
+		// 	let niceInvoice = (invoice) => {
+		// 		var doc = new PDFDocument({
+		// 			size: "A4",
+		// 			margin: 40
+		// 		});
+		// 		var stream = doc.pipe(blobStream());
+		// 		header(doc, invoice);
+		// 		customerInformation(doc, invoice);
+		// 		invoiceTable(doc, invoice);
+		// 		footer(doc, invoice);
+		// 		doc.end();
+		// 		stream.on('finish', function() {
+		// 			// get a blob you can do whatever you like with
+		// 			const blob = stream.toBlob('application/pdf');
+		// 			// or get a blob URL for display in the browser
+		// 			const url = stream.toBlobURL('application/pdf');
+		//
+		// 			const downloadLink = document.createElement('a');
+		// 			downloadLink.href = url;
+		// 			downloadLink.download = invoiceNo+"_"+oDetail.Country+"_"+oDetail.Name;
+		// 			downloadLink.click();
+		// 		});
+		// 	}
+		// 	niceInvoice(invoiceDetail);
+		// },
 		// onAcSelect: function(oEvent){
 		// 	this.oEvent_approve = oEvent;
 		// 		var that = this;
@@ -1179,26 +1215,12 @@ sap.ui.define([
 				});
 			}
 		},
-		// onStudentIdChange: function(oContext){
-		//
-		// },
+
 		onDownloadExel: function(oEvent) {
 			var that = this;
 			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
 			var startDate = this.getView().byId("idRegDate").getValue();
 			var endDate = this.getView().byId("idRegDateTo").getValue();
-			// $.post('/getExcelForGST', {
-			// 		"AccountNo" : accountNo,
-			// 		"StartDate" : startDate,
-			// 		"EndDate" : endDate,
-			// 		"PaymentMode" : this.payMode
-			// 	})
-			// 	.done(function(data, status) {
-			// 		MessageToast.show("File Downloaded succesfully");
-			// 	})
-			// 	.fail(function(xhr, status, error) {
-			// 		sap.m.MessageBox.error("Error in downloading excel");
-			// 	});
 			$.ajax({
 				type: 'GET', // added,
 				url: 'getExcelForGST',

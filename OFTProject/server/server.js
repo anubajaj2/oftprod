@@ -740,7 +740,7 @@ app.start = function() {
 								"PaymentMode": item.PaymentMode,
 								"InvoiceNo" : item.InvoiceNo,
 								"PaymentDate": item.PaymentDate,
-								"FullAmount": item.Amount,
+								"FullAmount": (item.PaymentMode!="PAYPAL" ? item.Amount : item.SettleAmount),
 								"USDAmount" : item.USDAmount,
 								"CurrencyCode" : item.CurrencyCode,
 								"Exchange" : item.Exchange,

@@ -44,7 +44,7 @@
 								</items>
 							</Select>
 							<Label text="Download"/>
-							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "25%" press="onDownloadExel"/>
+							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "28%" press="onDownloadExel"/>
 						</f:content>
 					</f:SimpleForm>
 				</FlexBox>
