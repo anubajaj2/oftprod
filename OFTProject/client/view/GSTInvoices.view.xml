@@ -44,7 +44,9 @@
 								</items>
 							</Select>
 							<Label text="Download"/>
-							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "28%" press="onDownloadExel"/>
+							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel"/>
+							<Label text="Invoice History"/>
+							<Button text = "Clear" icon="sap-icon://sys-cancel-2" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onClearInvoice" type = "Reject"/>
 						</f:content>
 					</f:SimpleForm>
 				</FlexBox>
@@ -76,8 +78,8 @@
 			</FlexBox>
     </FlexBox>
 
-			<Panel title="Summary">
-				<Table id="idSummary" items="{viewModel>/records}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
+			<Panel>
+				<Table id="idSummary" items="{ path : 'viewModel>/records', sorter: { path: 'PaymentDate'}}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
 					<headerToolbar>
 						<Toolbar>
 							<Title id="newtitle" text="Entries"/>

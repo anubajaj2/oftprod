@@ -252,7 +252,7 @@ sap.ui.define([
 								});
 								oAmountDialog.close();
 						} else {
-							sap.m.MessageBox.error("No Subcription is greater than 50,000");
+							MessageBox.error("No Subcription is greater than 50,000");
 						}
 					}.bind(this)
 				}),
@@ -1078,7 +1078,7 @@ sap.ui.define([
 		// 			sap.m.MessageToast.show("Account Checked Success");
 		// 		})
 		// 		.fail(function(xhr, status, error) {
-		// 			sap.m.MessageBox.error(xhr.responseText);
+		// 			MessageBox.error(xhr.responseText);
 		// 		});
 		//
 		// },
@@ -1093,7 +1093,7 @@ sap.ui.define([
 		// 			sap.m.MessageToast.show("done");
 		// 		})
 		// 		.fail(function(xhr, status, error) {
-		// 			sap.m.MessageBox.error(xhr.responseText);
+		// 			MessageBox.error(xhr.responseText);
 		// 		});
 		// },
 		// MSetKey: function(oEvent) {
@@ -1117,17 +1117,17 @@ sap.ui.define([
 		// 			sap.m.MessageToast.show("done");
 		// 		})
 		// 		.fail(function(xhr, status, error) {
-		// 			sap.m.MessageBox.error(xhr.responseText);
+		// 			MessageBox.error(xhr.responseText);
 		// 		});
 		// },
 		// onGetNext: function(){
 		// 	$.post('/MoveNextAc', {})
 		// 		.done(function(data, status) {
-		// 			sap.m.MessageBox.confirm(data.accountNo + "," + data.BankName + "," +
+		// 			MessageBox.confirm(data.accountNo + "," + data.BankName + "," +
 		// 															data.ifsc + "," + data.accountName);
 		// 		})
 		// 		.fail(function(xhr, status, error) {
-		// 			sap.m.MessageBox.error(xhr.responseText);
+		// 			MessageBox.error(xhr.responseText);
 		// 		});
 		// },
 		// onBank: function(oEvent){
@@ -1231,6 +1231,48 @@ sap.ui.define([
 			}
 		},
 
+		onClearInvoice : function(oEvent){
+			var that = this;
+			var startDate = this.getView().byId("idRegDate").getValue();
+			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
+			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
+			if (!this.oApproveDialog) {
+			this.oApproveDialog = new sap.m.Dialog({
+				type: sap.m.DialogType.Message,
+				title: "Confirm",
+				content: new sap.m.Text({ text: "Do you want to clear Invoice History of start range month ?"}),
+				beginButton: new sap.m.Button({
+					type: sap.m.ButtonType.Emphasized,
+					text: "Submit",
+					press: function () {
+						$.post('/clearInvoiceHistory', {
+								"AccountNo" : accountNo,
+								"StartDate" : startDate,
+								"UserId" : userId
+							})
+							.done(function(data, status) {
+								setTimeout(()=>{
+									that.onStartDate();
+									MessageBox.success("Invoice Entries Cleared");
+								},4000);
+							})
+							.fail(function(xhr, status, error) {
+								MessageBox.error("Error in access");
+							});
+						this.oApproveDialog.close();
+					}.bind(this)
+				}),
+				endButton: new sap.m.Button({
+					text: "Cancel",
+					press: function () {
+						this.oApproveDialog.close();
+					}.bind(this)
+				})
+			});
+		 }
+		this.oApproveDialog.open();
+		},
+
 		onDownloadExel: function(oEvent) {
 			var that = this;
 			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
@@ -1239,6 +1281,11 @@ sap.ui.define([
 			$.ajax({
 				type: 'GET', // added,
 				url: 'getExcelForGST',
+				data : {
+					"AccountNo"  : accountNo,
+					"StartDate" : startDate,
+					"EndDate" : endDate
+				},
 				success: function(data) {
 					sap.m.MessageToast.show("File Downloaded succesfully");
 				},
@@ -1247,6 +1294,7 @@ sap.ui.define([
 				}
 			});
 		},
+
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
 
@@ -1299,7 +1347,7 @@ sap.ui.define([
 					that.getView().setModel(oNewModel, "viewModel");
 				})
 				.fail(function(xhr, status, error) {
-					sap.m.MessageBox.error("Error in access");
+					MessageBox.error("Error in access");
 				});
 		}
 	});

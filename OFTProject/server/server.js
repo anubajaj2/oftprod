@@ -352,12 +352,13 @@ app.start = function() {
 		});
 		app.get('/getExcelForGST', function(req, res) {
 			var Records = [];
-			// var accountNo = req.body.AccountNo;
-			   var accountNo = "123456998";
-			// var startDate = new Date(req.body.StartDate);
-			// var endDate = new Date(req.body.EndDate);
-			var startDate = new Date("01.01.2016");
-			var endDate = new Date("01.01.2021");
+			var accountNo = req.query.AccountNo;
+			   // var accountNo = "123456998";
+			var startDate = new Date(req.query.StartDate);
+			var endDate = new Date(req.query.EndDate);
+			// var startDate = new Date("01.01.2016");
+			// var endDate = new Date("01.01.2021");
+			debugger;
 			var Subs = app.models.Sub;
 			var Students = app.models.Student;
 			var Courses = app.models.Course;
@@ -510,18 +511,18 @@ app.start = function() {
 								var gst = item.Amount * 9 / 118;
 							}
 							Records.push({
+								"PaymentDate": item.PaymentDate,
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
 								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
 								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
+								"CourseName": subsMap.get("course").get(item.CourseId).Name,
+								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
 								"Address" : subsMap.get("student").get(item.StudentId).Address,
 								"Country" : subsMap.get("student").get(item.StudentId).Country,
 								"City" : subsMap.get("student").get(item.StudentId).City,
-								"CourseName": subsMap.get("course").get(item.CourseId).Name,
-								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"PaymentMode": item.PaymentMode,
-								"PaymentDate": item.PaymentDate,
-								"FullAmount": item.Amount,
+								"FullAmount": (item.PaymentMode!="PAYPAL" ? item.Amount : item.SettleAmount),
 								"USDAmount" : item.USDAmount,
 								"CurrencyCode" : item.CurrencyCode,
 								"Exchange" : item.Exchange,
@@ -1603,7 +1604,6 @@ app.start = function() {
 					CreatedOn : new Date(),
 					CreatedBy : userId
 				}).then(function(inq){
-					debugger;
 					var invoiceNo = inq[0].InvoiceNo+1;
 					InvoiceNo.findById(inq[0].id).then(function(instance) {
 						 instance.updateAttributes({
@@ -1618,6 +1618,67 @@ app.start = function() {
 						Sub.findById(subId).then(function(sInstance) {
 							 sInstance.updateAttributes(oUpdate);
 							 res.send(orderNo);
+						});
+					});
+				});
+			}
+		);
+		app.post('/clearInvoiceHistory',
+			function(req, res) {
+				var app = require('../server/server');
+				var Subs = app.models.Sub;
+				var InvoiceNo = app.models.InvoiceNo;
+				var baseDate = new Date(req.body.StartDate);
+				var accountNo = req.body.AccountNo;
+				var userId = req.body.UserId;
+				var startDate = new Date(baseDate.getFullYear(), baseDate.getMonth());
+				var endDate = new Date(baseDate.getFullYear(),baseDate.getMonth()+1,0);
+				var month = (baseDate.getMonth()<9? "0"+(baseDate.getMonth()+1) : baseDate.getMonth()+1);
+				var year =baseDate.getFullYear();
+				var oFilter = {
+					"AccountName": accountNo,
+					and: [{
+						"PaymentDate": {
+							gte: startDate
+						}
+					}, {
+						"PaymentDate": {
+							lte: endDate
+						}
+					}]
+				};
+				InvoiceNo.find({
+					where : {
+						Month : month,
+						Year : year
+				},
+				fields : {
+					InvoiceNo : true,
+					id : true
+				}
+				}).then(function(inq){
+					InvoiceNo.findById(inq[0].id).then(function(instance) {
+						 instance.updateAttributes({
+							InvoiceNo : 0,
+							ChangedOn : new Date(),
+							ChangedBy : userId
+						});
+						Subs.find({
+							where: oFilter,
+							fields: {
+								"PaymentDate": true,
+								"id": true
+							}
+						}).then(function(subcriptions) {
+							subcriptions.forEach((item) => {
+								var oUpdate = {
+								 InvoiceNo : "null"
+							 };
+								Subs.findById(item.id).then(function(sInstance) {
+									 sInstance.updateAttributes(oUpdate);
+								});
+							});
+							res.send("success");
 						});
 					});
 				});
