@@ -77,7 +77,7 @@
     </FlexBox>
 
 			<Panel title="Summary">
-				<Table id="idSummary" items="{viewModel>/records}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished" fixedLayout="false">
+				<Table id="idSummary" items="{viewModel>/records}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
 					<headerToolbar>
 						<Toolbar>
 							<Title id="newtitle" text="Entries"/>

@@ -55,6 +55,15 @@ sap.ui.define([
 				}
 			});
 		},
+		onSearch : function(oEvent){
+			var sValue = oEvent.getParameter("value");
+			var oFilter = [
+				new Filter("accountNo", FilterOperator.Contains, sValue),
+				new Filter("accountName", FilterOperator.Contains, sValue)
+			];
+			var oBinding = oEvent.getParameter("itemsBinding");
+			oBinding.filter(new Filter(oFilter,false));
+		},
 		onConfirm: function(oEvent) {
 
 			if (this.sId.indexOf("accountDetails") !== -1) {
@@ -130,7 +139,7 @@ sap.ui.define([
 						value : amount
 					}),
 					new sap.m.Label({
-								text: "USD Amount: "
+								text: "Paypal Amount: "
 							}),
 					new sap.m.Input("idUSDAmount",{
 						type: "Number",
@@ -145,14 +154,6 @@ sap.ui.define([
 						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
-								text: "Exchange: "
-							}),
-					new sap.m.Input("idExchange",{
-						type: "Number",
-						value : oSub.Exchange,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
-					}),
-					new sap.m.Label({
 								text: "Charges: "
 							}),
 					new sap.m.Input("idCharges",{
@@ -161,20 +162,33 @@ sap.ui.define([
 						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
-								text: "SettleDate: "
+								text: "Exchange: ",
+								required : (oSub.PaymentMode!="PAYPAL" ? false : true),
+							}),
+					new sap.m.Input("idExchange",{
+						type: "Number",
+						value : oSub.Exchange,
+						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true),
+						liveChange : (oEvent)=>{
+							var newAmount = Core.byId("idUSDAmount").getValue()-Core.byId("idCharges").getValue();
+							Core.byId("idSettleAmount").setValue((newAmount*oEvent.getParameter("value")).toFixed(2));
+						}
+					}),
+					new sap.m.Label({
+								text: "Settle Amount: "
+							}),
+					new sap.m.Input("idSettleAmount",{
+						type: "Number",
+						value : oSub.SettleAmount,
+						enabled : false//(oSub.PaymentMode!="PAYPAL" ? false : true)
+					}),
+					new sap.m.Label({
+								text: "Settle Date: "
 							}),
 					new sap.m.DatePicker("idSettleDate",{
 						displayFormat : "dd.MM.yyyy",
 						valueFormat : "MMM dd yyyy",
 						value : oSub.SettleDate,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
-					}),
-					new sap.m.Label({
-								text: "SettleAmount: "
-							}),
-					new sap.m.Input("idSettleAmount",{
-						type: "Number",
-						value : oSub.SettleAmount,
 						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
 					}),
 					new sap.m.Label({
@@ -400,6 +414,7 @@ sap.ui.define([
 					.text("Invoice Date:", 350, customerInformationTop + 15)
 					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
 					.text("Payment Mode:", 350, customerInformationTop + 30)
+					.font("Helvetica-Bold")
 					.text(invoice.paymentMode, 450, customerInformationTop + 30)
 					.moveDown();
 
