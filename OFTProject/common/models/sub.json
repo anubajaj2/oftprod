@@ -162,6 +162,10 @@
 		"Status":{
 			"type": "string",
 			"default": "null"
+		},
+		"ChartedValid": {
+			"type": "number",
+			"default": 0
 		}
 	},
 	"validations": [],

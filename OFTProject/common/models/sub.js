@@ -56,7 +56,9 @@ module.exports = function(Sub) {
 		var Inquiry = app.models.Inquiry;
 		var Student = app.models.Student;
 		var Course = app.models.Course;
-
+		if(ctx.isNewInstance === false){
+			next();
+		}
 		var id_Stu = ctx.instance.__data.StudentId.toString();
 		var id_Cour = ctx.instance.__data.CourseId.toString();
 		if (ctx.instance.UpdatePayment === false) {
