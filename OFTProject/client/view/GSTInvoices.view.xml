@@ -46,7 +46,7 @@
 							<Label text="Download"/>
 							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel"/>
 							<Label text="Invoice History"/>
-							<Button text = "Clear" icon="sap-icon://sys-cancel-2" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onClearInvoice" type = "Reject"/>
+							<Button text = "Clear" icon="sap-icon://sys-cancel-2" width = "35%" press="onClearInvoice" type = "Reject"/>
 						</f:content>
 					</f:SimpleForm>
 				</FlexBox>

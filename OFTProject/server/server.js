@@ -1629,14 +1629,14 @@ app.start = function() {
 				var Subs = app.models.Sub;
 				var InvoiceNo = app.models.InvoiceNo;
 				var baseDate = new Date(req.body.StartDate);
-				var accountNo = req.body.AccountNo;
+				// var accountNo = req.body.AccountNo;
 				var userId = req.body.UserId;
 				var startDate = new Date(baseDate.getFullYear(), baseDate.getMonth());
 				var endDate = new Date(baseDate.getFullYear(),baseDate.getMonth()+1,0);
 				var month = (baseDate.getMonth()<9? "0"+(baseDate.getMonth()+1) : baseDate.getMonth()+1);
 				var year =baseDate.getFullYear();
 				var oFilter = {
-					"AccountName": accountNo,
+					// "AccountName": accountNo,
 					and: [{
 						"PaymentDate": {
 							gte: startDate

@@ -1234,7 +1234,7 @@ sap.ui.define([
 		onClearInvoice : function(oEvent){
 			var that = this;
 			var startDate = this.getView().byId("idRegDate").getValue();
-			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
+	//		var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
 			if (!this.oApproveDialog) {
 			this.oApproveDialog = new sap.m.Dialog({
@@ -1246,7 +1246,7 @@ sap.ui.define([
 					text: "Submit",
 					press: function () {
 						$.post('/clearInvoiceHistory', {
-								"AccountNo" : accountNo,
+							//	"AccountNo" : accountNo,
 								"StartDate" : startDate,
 								"UserId" : userId
 							})
