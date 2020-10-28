@@ -43,10 +43,10 @@
 									<core:Item text="Non-Paypal" key="NON-PAYPAL"/>
 								</items>
 							</Select>
-							<Label text="Download"/>
-							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel"/>
-							<Label text="Invoice History"/>
-							<Button text = "Clear" icon="sap-icon://sys-cancel-2" width = "35%" press="onClearInvoice" type = "Reject"/>
+							<Label text="Download" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Label text="Invoice History" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Button text = "Clear" icon="sap-icon://sys-cancel-2" width = "35%" press="onClearInvoice" type = "Reject" visible="{=${local>/Role}==='Admin' ? true : false}"/>
 						</f:content>
 					</f:SimpleForm>
 				</FlexBox>

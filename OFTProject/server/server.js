@@ -614,6 +614,7 @@ app.start = function() {
 								"SettleAmount" : true,
 								"PaymentMode": true,
 								"Amount": true,
+								"ChartedValid" : true,
 								"InvoiceNo" : true,
 								"id": true
 							}
@@ -635,6 +636,7 @@ app.start = function() {
 									"SettleAmount" : item.SettleAmount,
 									"PaymentMode": item.PaymentMode,
 									"Amount": item.Amount,
+									"ChartedValid" : item.ChartedValid,
 									"InvoiceNo" : item.InvoiceNo,
 									"id": item.id
 								});
@@ -749,6 +751,7 @@ app.start = function() {
 								"SettleDate" : item.SettleDate,
 								"SettleAmount" : item.SettleAmount,
 								"Amount": amount.toFixed(2),
+								"ChartedValid" : item.ChartedValid,
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
