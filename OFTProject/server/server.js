@@ -736,7 +736,7 @@ app.start = function() {
 								"Address" : subsMap.get("student").get(item.StudentId).Address,
 								"Country" : subsMap.get("student").get(item.StudentId).Country,
 								"City" : subsMap.get("student").get(item.StudentId).City,
-								"CourseName": subsMap.get("course").get(item.CourseId).Name,
+								"CourseName": (item.Amount < 7000 ? subsMap.get("course").get(item.CourseId).Name+"(Ex.)" : subsMap.get("course").get(item.CourseId).Name),
 								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"PaymentMode": item.PaymentMode,
 								"InvoiceNo" : item.InvoiceNo,
@@ -1681,6 +1681,21 @@ app.start = function() {
 							res.send("success");
 						});
 					});
+				});
+			}
+		);
+		app.post('/ChartedValidRating',
+			function(req, res) {
+				var app = require('../server/server');
+				var Subs = app.models.Sub;
+				var chartedValid = req.body.ChartedValid;
+				var id = req.body.id;
+				var oUpdate = {
+				 "ChartedValid" : chartedValid
+			 };
+				Subs.findById(id).then(function(sInstance) {
+					 sInstance.updateAttributes(oUpdate);
+					 res.send("success");
 				});
 			}
 		);

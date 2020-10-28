@@ -79,7 +79,7 @@
     </FlexBox>
 
 			<Panel>
-				<Table id="idSummary" items="{ path : 'viewModel>/records', sorter: { path: 'PaymentDate'}}" growing="true" growingScrollToLoad="false" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
+				<Table id="idSummary" items="{ path : 'viewModel>/records', sorter: { path: 'PaymentDate'}}" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
 					<headerToolbar>
 						<Toolbar>
 							<Title id="newtitle" text="Entries"/>
@@ -88,6 +88,9 @@
 						</Toolbar>
 					</headerToolbar>
 					<columns>
+						<Column>
+							<Label text="Sr." class="columnLabelStyle"/>
+						</Column>
 						<Column>
 							<Label text="Payment Date" class="columnLabelStyle"/>
 						</Column>
@@ -124,10 +127,14 @@
 						<Column>
 							<Label text="Invoice" class="columnLabelStyle"/>
 						</Column>
+						<Column>
+							<Label text="Verify" class="columnLabelStyle"/>
+						</Column>
 					</columns>
 					<items>
-						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active">
+						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active" highlight="{=${viewModel>Address}==='null' ? 'Error' : 'Success'}">
 							<cells>
+								<ObjectNumber number="{path: 'viewModel>Amount', formatter: '.formatter.formatRowNumber'}" />
 								<!-- <DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd.MM.yyyy" editable="false"></DateTimeField> -->
 								<Text text="{ path: 'viewModel>PaymentDate', formatter: '.formatter.getIndianDateFormat'}"></Text>
 								<Text text="{viewModel>Email}"></Text>
@@ -149,7 +156,8 @@
 								<Text text="{viewModel>PaymentMode}"></Text>
 								<Link text="{viewModel>Reference}" subtle="{=${viewModel>PaymentMode}==='PAYPAL' ? false : true}" enabled = "{=${viewModel>PaymentMode}==='PAYPAL' ? true : false}" press = "onReference"></Link>
 								<Button icon="sap-icon://edit" press="onEditInfo" text = "Edit" type = "{path : 'viewModel>PaymentMode', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
-                <Button icon="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforDownload' }" text="Download" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+                <Button icon="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+								<RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/>
 							</cells>
 						</ColumnListItem>
 					</items>

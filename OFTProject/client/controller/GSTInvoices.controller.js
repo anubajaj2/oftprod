@@ -65,7 +65,7 @@ sap.ui.define([
 			oBinding.filter(new Filter(oFilter,false));
 		},
 		onConfirm: function(oEvent) {
-
+			this.srNoForTable = 0;
 			if (this.sId.indexOf("accountDetails") !== -1) {
 
 				var accountNo = oEvent.getParameter("selectedItem").getValue();
@@ -1230,7 +1230,22 @@ sap.ui.define([
 				});
 			}
 		},
-
+		onVerifyRating : function(oEvent){
+			var that = this;
+			var val = oEvent.getParameter("value");
+			var sPath = oEvent.getSource().getParent().getBindingContextPath();
+			var subId = oEvent.getSource().getParent().getModel("viewModel").getProperty(sPath+"/id");
+			$.post('/ChartedValidRating', {
+				"id" : subId,
+				"ChartedValid" : val
+				})
+				.done(function(data, status) {
+						MessageToast.show("Rating "+data);
+				})
+				.fail(function(xhr, status, error) {
+					MessageBox.error("Error in Rating");
+				});
+		},
 		onClearInvoice : function(oEvent){
 			var that = this;
 			var startDate = this.getView().byId("idRegDate").getValue();
@@ -1242,7 +1257,7 @@ sap.ui.define([
 				title: "Confirm",
 				content: new sap.m.Text({ text: "Do you want to clear Invoice History of start range month ?"}),
 				beginButton: new sap.m.Button({
-					type: sap.m.ButtonType.Emphasized,
+					type: sap.m.ButtonType.Reject,
 					text: "Submit",
 					press: function () {
 						$.post('/clearInvoiceHistory', {
@@ -1254,7 +1269,7 @@ sap.ui.define([
 								setTimeout(()=>{
 									that.onStartDate();
 									MessageBox.success("Invoice Entries Cleared");
-								},4000);
+								},2000);
 							})
 							.fail(function(xhr, status, error) {
 								MessageBox.error("Error in access");
@@ -1297,7 +1312,7 @@ sap.ui.define([
 
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
-
+			this.srNoForTable = 0;
 			$.post('/getAmountForAccount', {
 					"AccountNo" : accountNo,
 					"StartDate" : startDate,

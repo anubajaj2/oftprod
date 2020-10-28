@@ -88,7 +88,7 @@ sap.ui.define([], function() {
 					return val.match(/\d/g).join();
 			}
 		},
-		buttonTypeforDownload : function(value){
+		buttonIconforDownload : function(value){
 			if(value==="null"){
 				return "sap-icon://download-from-cloud"
 			}
@@ -97,11 +97,8 @@ sap.ui.define([], function() {
 			}
 		},
 		buttonTypeforInvoice : function(value){
-			if(value==="null"){
+			if(value==="null" || value==="PAYPAL"){
 				return sap.m.ButtonType.Reject;
-			}
-			if(value==="PAYPAL"){
-				return sap.m.ButtonType.Emphasized;
 			}
 			return sap.m.ButtonType.Accept;
 		},
@@ -187,6 +184,9 @@ sap.ui.define([], function() {
 	    return words_string;
 		},
 		getIndianCurr: function(value){
+			if(!value){
+				return "";
+			}
 			var x=value.toString().split('.');
 			var y = (x.length>1?'.'+x[1]:'');
 			var x = x[0];
@@ -196,6 +196,10 @@ sap.ui.define([], function() {
 			    lastThree = ',' + lastThree;
 			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 			return res+y;
+		},
+		formatRowNumber : function(value){
+			this.srNoForTable+=1;
+			return this.srNoForTable;
 		},
 		sortByProperty: function(array, property) {
 			var lol = function dynamicSort(property) {
