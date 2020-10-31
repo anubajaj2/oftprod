@@ -84,7 +84,8 @@
 						<Toolbar>
 							<Title id="newtitle" text="Entries"/>
 							<ToolbarSpacer></ToolbarSpacer>
-							<Button icon="sap-icon://download" text="All Invoice" type="Accept" press="onDownloadAllInvoice" />
+							<Button icon="sap-icon://full-screen" press ="onFullScreen" type="Accept"/>
+							<Button icon="sap-icon://download" text="All Invoice" type="Reject" press="onDownloadAllInvoice" />
 						</Toolbar>
 					</headerToolbar>
 					<columns>
@@ -132,7 +133,7 @@
 						</Column>
 					</columns>
 					<items>
-						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active" highlight="{=${viewModel>Address}==='null' ? 'Error' : 'Success'}">
+						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active" highlight="{ path: 'viewModel>Address', formatter: '.formatter.gstTableAddressHighlight'}">
 							<cells>
 								<ObjectNumber number="{path: 'viewModel>Amount', formatter: '.formatter.formatRowNumber'}" />
 								<!-- <DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd.MM.yyyy" editable="false"></DateTimeField> -->

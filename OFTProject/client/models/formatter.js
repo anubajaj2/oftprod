@@ -291,7 +291,13 @@ sap.ui.define([], function() {
 				}
 			}
 		},
-
+		gstTableAddressHighlight : function(value){
+			if(value==="null" || value===""){
+				return "Error";
+			}else{
+				return "Success";
+			}
+		},
 		formatIconColor: function(bValue) {
 			if (bValue === true) {
 				return "red";

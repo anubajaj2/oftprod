@@ -288,6 +288,16 @@ sap.ui.define([
 			});
 			return (name?name:code);
 		},
+		onFullScreen : function(oEvent){
+			var oMode = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getMode();
+			if(oMode==="ShowHideMode"){
+				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("HideMode");
+				oEvent.getSource().setIcon("sap-icon://exit-full-screen");
+			}else{
+				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("ShowHideMode");
+				oEvent.getSource().setIcon("sap-icon://full-screen");
+			}
+		},
 		onDownloadAllInvoice : function(oEvent){
 			var that = this;
 			var items = oEvent.getSource().getParent().getParent().getItems();
