@@ -756,7 +756,73 @@ sap.ui.define([
 			}
 			niceInvoice(invoiceDetail);
 		},
+		onWalletCalculator : function(oEvent){
+			if (!this.oConfirmDialog) {
+				this.oConfirmDialog = new sap.m.Dialog({
+					type: sap.m.DialogType.Message,
+					title: "Confirm",
+					content: [
+						new sap.ui.layout.HorizontalLayout({
+							content: [
+								new sap.ui.layout.VerticalLayout({
+									content: [
+										new sap.m.Label({ text: "Wallet Amount", required : true }),
+										new sap.m.Input("idWalletAmount",{ }),
+										new sap.m.Label({ text: "Exch. Rate:", required : true }),
+										new sap.m.Label({ text: "Fee(INR): ", required : true }),
+										new sap.m.Label({ text: "Total Credit:+" }),
+										new sap.m.Label({ text: "Total Fees:+" })
+									]
+								}),
+								new sap.ui.layout.VerticalLayout({
+									content: [
+										new sap.m.Label({ text: "Wallet Fee", required : true }),
+										new sap.m.Input("idWalletFee",{ }),
+										new sap.m.Text("idExchangeRate",{ text : 0 }),
+										new sap.m.Text("idFeeINR",{ text : 0 }),
+										new sap.m.Label({ text: "--" }),
+										new sap.m.Text("idTotalCredit",{ text : 0 }),
+										new sap.m.Text("idTotalFees",{ text : 0 })
+									]
+								}),
+								new sap.ui.layout.VerticalLayout({
+									content: [
+										new sap.m.Label({ text: "Indian Amount", required : true }),
+										new sap.m.Input("idIndianAmount",{ liveChange : function(){
+											var walletFee = Core.byId("idWalletFee").getValue();
+											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
+											exchangeRate = exchangeRate.toFixed(4);
+											Core.byId("idExchangeRate").setText(exchangeRate);
+											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
+										} }),
+									]
+								})
+							]
+						})
+					],
+					beginButton: new sap.m.Button({
+						type: sap.m.ButtonType.Emphasized,
+						text: "Add",
+						press: function () {
+							var totalCredit = parseFloat(Core.byId("idTotalCredit").getText());
+							Core.byId("idTotalCredit").setText(totalCredit+parseFloat(Core.byId("idIndianAmount").getValue()));
+							var feeINR = parseFloat(Core.byId("idTotalFees").getText());
+							Core.byId("idTotalFees").setText((feeINR+parseFloat(Core.byId("idFeeINR").getText())).toFixed(2));
+						}.bind(this)
+					}),
+					endButton: new sap.m.Button({
+						text: "Close",
+						press: function () {
+							Core.byId("idTotalFees").setText(0);
+							Core.byId("idTotalCredit").setText(0);
+							this.oConfirmDialog.close();
+						}.bind(this)
+					})
+				});
+				}
 
+				this.oConfirmDialog.open();
+		},
 		// DownloadPaypalInvoice: function(oDetail,invoiceNo) {
 		// 	var country = this.getCountryNameFromCode(oDetail.Country);
 		// 	var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
