@@ -720,8 +720,12 @@ app.start = function() {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
 							var isGST = ( gstBeginDate <= paymentDate );
+							var isWallet = false;
+							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
+								isWallet = true;
+							}
 
-							var amount = (item.PaymentMode==="PAYPAL" ? item.SettleAmount : item.Amount);
+							var amount = (isWallet ? item.SettleAmount : item.Amount);
 
 							if (!isGST) {
 								var gst = 0.00;
@@ -743,7 +747,7 @@ app.start = function() {
 								"PaymentMode": item.PaymentMode,
 								"InvoiceNo" : item.InvoiceNo,
 								"PaymentDate": item.PaymentDate,
-								"FullAmount": (item.PaymentMode!="PAYPAL" ? item.Amount : item.SettleAmount),
+								"FullAmount": item.Amount,
 								"USDAmount" : item.USDAmount,
 								"CurrencyCode" : item.CurrencyCode,
 								"Exchange" : item.Exchange,
@@ -755,6 +759,7 @@ app.start = function() {
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
+								"IsWallet" : isWallet,
 								"IsGST" : isGST,
 								"id": item.id
 							});

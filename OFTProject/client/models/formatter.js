@@ -97,7 +97,7 @@ sap.ui.define([], function() {
 			}
 		},
 		buttonTypeforInvoice : function(value){
-			if(value==="null" || value==="PAYPAL"){
+			if(value==="null" || value===true){
 				return sap.m.ButtonType.Reject;
 			}
 			return sap.m.ButtonType.Accept;
@@ -183,6 +183,7 @@ sap.ui.define([], function() {
 	    }
 	    return words_string;
 		},
+
 		getIndianCurr: function(value){
 			if(!value){
 				return "";
@@ -197,6 +198,16 @@ sap.ui.define([], function() {
 			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 			return res+y;
 		},
+
+		getFullAmountForGST: function(isWallet, fullAmount, settleAmount){
+			if(isWallet){
+				return settleAmount;
+			}
+			else{
+				return fullAmount;
+			}
+		},
+
 		formatRowNumber : function(value){
 			this.srNoForTable+=1;
 			return this.srNoForTable;

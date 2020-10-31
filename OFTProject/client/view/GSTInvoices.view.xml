@@ -84,7 +84,7 @@
 						<Toolbar>
 							<Title id="newtitle" text="Entries"/>
 							<ToolbarSpacer></ToolbarSpacer>
-							<!-- <Button text="getNextAc" press="onGetNext" /> -->
+							<Button icon="sap-icon://download" text="All Invoice" type="Accept" press="onDownloadAllInvoice" />
 						</Toolbar>
 					</headerToolbar>
 					<columns>
@@ -152,10 +152,10 @@
 								<ObjectNumber number="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}" />
 								<!-- <Text text="{path: 'viewModel>FullAmount',
       									formatter: '.formatter.getIndianCurr'}"></Text> -->
-								<ObjectNumber number="{path: 'viewModel>FullAmount', formatter: '.formatter.getIndianCurr'}" unit="INR"/>
+								<ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>SettleAmount'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/>
 								<Text text="{viewModel>PaymentMode}"></Text>
-								<Link text="{viewModel>Reference}" subtle="{=${viewModel>PaymentMode}==='PAYPAL' ? false : true}" enabled = "{=${viewModel>PaymentMode}==='PAYPAL' ? true : false}" press = "onReference"></Link>
-								<Button icon="sap-icon://edit" press="onEditInfo" text = "Edit" type = "{path : 'viewModel>PaymentMode', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+								<Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled = "{viewModel>IsWallet}" press = "onReference"></Link>
+								<Button icon="sap-icon://edit" press="onEditInfo" text = "Edit" type = "{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
                 <Button icon="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 								<RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/>
 							</cells>

@@ -144,14 +144,14 @@ sap.ui.define([
 					new sap.m.Input("idUSDAmount",{
 						type: "Number",
 						value : oSub.USDAmount,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
+						enabled : oSub.IsWallet
 					}),
 					new sap.m.Label({
 								text: "Currency Code: "
 							}),
 					new sap.m.Input("idCurrencyCode",{
 						value : oSub.CurrencyCode,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
+						enabled : oSub.IsWallet
 					}),
 					new sap.m.Label({
 								text: "Charges: "
@@ -159,16 +159,16 @@ sap.ui.define([
 					new sap.m.Input("idCharges",{
 						type: "Number",
 						value : oSub.Charges,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
+						enabled : oSub.IsWallet
 					}),
 					new sap.m.Label({
 								text: "Exchange: ",
-								required : (oSub.PaymentMode!="PAYPAL" ? false : true),
+								required : oSub.IsWallet,
 							}),
 					new sap.m.Input("idExchange",{
 						type: "Number",
 						value : oSub.Exchange,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true),
+						enabled : oSub.IsWallet,
 						liveChange : (oEvent)=>{
 							var newAmount = Core.byId("idUSDAmount").getValue()-Core.byId("idCharges").getValue();
 							Core.byId("idSettleAmount").setValue((newAmount*oEvent.getParameter("value")).toFixed(2));
@@ -180,7 +180,7 @@ sap.ui.define([
 					new sap.m.Input("idSettleAmount",{
 						type: "Number",
 						value : oSub.SettleAmount,
-						enabled : false//(oSub.PaymentMode!="PAYPAL" ? false : true)
+						enabled : false//oSub.IsWallet
 					}),
 					new sap.m.Label({
 								text: "Settle Date: "
@@ -189,7 +189,7 @@ sap.ui.define([
 						displayFormat : "dd.MM.yyyy",
 						valueFormat : "MMM dd yyyy",
 						value : oSub.SettleDate,
-						enabled : (oSub.PaymentMode!="PAYPAL" ? false : true)
+						enabled : oSub.IsWallet
 					}),
 					new sap.m.Label({
 								text: "Reference: "
@@ -218,7 +218,7 @@ sap.ui.define([
 						var settleAmount = Core.byId("idSettleAmount").getValue();
 						var reference = Core.byId("idReference").getValue();
 						var payload = {};
-						if(oSub.PaymentMode==="PAYPAL"){
+						if(oSub.IsWallet){
 							payload = {
 									"id": id,
 									"Amount": sAmount,
@@ -288,6 +288,33 @@ sap.ui.define([
 			});
 			return (name?name:code);
 		},
+		onDownloadAllInvoice : function(oEvent){
+			var that = this;
+			var items = oEvent.getSource().getParent().getParent().getItems();
+			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
+			items.forEach((item)=>{
+				var oDetail = this.getView().getModel("viewModel").getProperty(item.getBindingContextPath());
+				if(!oDetail.InvoiceNo.startsWith("INV-")){
+					$.post('/getInvoiceNo', {
+						"SubcriptionId" : oDetail.id,
+						"PaymentDate" : oDetail.PaymentDate,
+						"UserId" : userId
+						})
+						.done(function(invoiceNo, status) {
+								that.DownloadInvoice(oDetail,invoiceNo);
+						})
+						.fail(function(xhr, status, error) {
+							MessageBox.error("Error in Invoice no.");
+						});
+				}else{
+						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+				}
+				setTimeout(()=>{
+					this.onStartDate();
+				},2000);
+			});
+		},
+
 		onDownloadInvoice : function(oEvent){
 			var that = this;
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
@@ -335,10 +362,11 @@ sap.ui.define([
 				items: products,
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
-				fullAmount: (oDetail.PaymentMode==="PAYPAL" ? oDetail.SettleAmount : oDetail.FullAmount),
+				fullAmount: (oDetail.IsWallet ? oDetail.SettleAmount : oDetail.FullAmount),
 				usdAmount : oDetail.USDAmount,
 				order_number: invoiceNo,
 				paymentMode : oDetail.PaymentMode,
+				IsWallet : oDetail.IsWallet,
 				header: {
 					company_name: "Soyuz Technologies LLP",
 					company_logo: "data:image/png;base64,"+this.logo,
@@ -499,7 +527,7 @@ sap.ui.define([
 				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
 
-				if(invoice.paymentMode==="PAYPAL"){
+				if(invoice.IsWallet){
 					doc.font("Helvetica-Bold")
 					.text("Paypal Exchange", 50, amountInWordsPosition + 80)
 					amountInWordsPosition+=10
@@ -1340,7 +1368,7 @@ sap.ui.define([
 						else{
 							totalForeignersEntries+=1
 						}
-						if(data[i].PaymentMode==="PAYPAL"){
+						if(data[i].IsWallet){
 							 totalSettleAmountPaypal+=data[i].SettleAmount;
 							  totalAmountUSDPaypal+=data[i].USDAmount;
 						}
