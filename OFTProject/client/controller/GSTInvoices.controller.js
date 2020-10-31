@@ -767,7 +767,13 @@ sap.ui.define([
 								new sap.ui.layout.VerticalLayout({
 									content: [
 										new sap.m.Label({ text: "Wallet Amount", required : true }),
-										new sap.m.Input("idWalletAmount",{ }),
+										new sap.m.Input("idWalletAmount",{value : 0, liveChange : function(){
+											var walletFee = Core.byId("idWalletFee").getValue();
+											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
+											exchangeRate = exchangeRate.toFixed(4);
+											Core.byId("idExchangeRate").setText(exchangeRate);
+											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
+										}}),
 										new sap.m.Label({ text: "Exch. Rate:", required : true }),
 										new sap.m.Label({ text: "Fee(INR): ", required : true }),
 										new sap.m.Label({ text: "Total Credit:+" }),
@@ -777,7 +783,13 @@ sap.ui.define([
 								new sap.ui.layout.VerticalLayout({
 									content: [
 										new sap.m.Label({ text: "Wallet Fee", required : true }),
-										new sap.m.Input("idWalletFee",{ }),
+										new sap.m.Input("idWalletFee",{value : 0, liveChange : function(){
+											var walletFee = Core.byId("idWalletFee").getValue();
+											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
+											exchangeRate = exchangeRate.toFixed(4);
+											Core.byId("idExchangeRate").setText(exchangeRate);
+											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
+										}}),
 										new sap.m.Text("idExchangeRate",{ text : 0 }),
 										new sap.m.Text("idFeeINR",{ text : 0 }),
 										new sap.m.Label({ text: "--" }),
@@ -788,7 +800,7 @@ sap.ui.define([
 								new sap.ui.layout.VerticalLayout({
 									content: [
 										new sap.m.Label({ text: "Indian Amount", required : true }),
-										new sap.m.Input("idIndianAmount",{ liveChange : function(){
+										new sap.m.Input("idIndianAmount",{value : 0, liveChange : function(){
 											var walletFee = Core.byId("idWalletFee").getValue();
 											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
 											exchangeRate = exchangeRate.toFixed(4);
