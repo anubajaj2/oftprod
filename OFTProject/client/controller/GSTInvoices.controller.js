@@ -799,7 +799,7 @@ sap.ui.define([
 								}),
 								new sap.ui.layout.VerticalLayout({
 									content: [
-										new sap.m.Label({ text: "Indian Amount", required : true }),
+										new sap.m.Label({ text: "Bank Amount", required : true }),
 										new sap.m.Input("idIndianAmount",{value : 0, liveChange : function(){
 											var walletFee = Core.byId("idWalletFee").getValue();
 											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
