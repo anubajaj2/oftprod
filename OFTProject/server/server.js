@@ -533,7 +533,12 @@ app.start = function() {
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
+								"InvoiceNo" : item.InvoiceNo
 							});
+						});
+
+						Records.sort((obj1,obj2)=>{
+								return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
 						});
 							var excel = require('exceljs');
 							var workbook = new excel.Workbook(); //creating workbook
@@ -763,6 +768,9 @@ app.start = function() {
 								"IsGST" : isGST,
 								"id": item.id
 							});
+						});
+						responseData.sort((obj1,obj2)=>{
+								return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
 						});
 						res.send(responseData);
 					} catch (e) {
@@ -1921,10 +1929,57 @@ app.start = function() {
 						});
 					});
 				});
-
-
-
 			});
+
+			// app.post('/sendEmailForAddress',
+			// 	function(req, res) {
+			// 		//https://developers.google.com/oauthplayground/
+			// 		//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+			//
+			// 		var nodemailer = require('nodemailer');
+			// 		var smtpTransport = require('nodemailer-smtp-transport');
+			// 		const xoauth2 = require('xoauth2');
+			// 		const key = require('./samples.json');
+			// 		console.log(req.body);
+			// 			var transporter = nodemailer.createTransport(smtpTransport({
+			// 				service: 'gmail',
+			// 				host: 'smtp.gmail.com',
+			// 				auth: {
+			// 					xoauth2: xoauth2.createXOAuth2Generator({
+			// 						user: key.user,
+			// 						clientId: key.clientId,
+			// 						clientSecret: key.clientSecret,
+			// 						refreshToken: key.refreshToken
+			// 					})
+			// 				}
+			// 			}));
+			// 			var contents = fs.readFileSync('./server/sampledata/payment.html', 'utf8');
+			// 			contents.replace("$$UserName$$",req.body.UserName);
+			// 			var mailOptions = {};
+			//
+			// 				mailOptions = {
+			// 					from: 'contact@anubhavtrainings.com',
+			// 					to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+			// 					cc: ccs,
+			// 					subject: 'Re: ' + Subject + " 🟢",
+			// 					html: contents
+			// 				};
+			//
+			// 			transporter.sendMail(mailOptions, function(error, info) {
+			// 				if (error) {
+			// 					console.log(error);
+			// 					if (error.code === "EAUTH") {
+			// 						res.status(500).send('Username and Password not accepted, Please try again.');
+			// 					} else {
+			// 						res.status(500).send('Internal Error while Sending the email, Please try again.');
+			// 					}
+			// 				} else {
+			// 					console.log('Email sent: ' + info.response);
+			// 					res.send("email sent");
+			// 				}
+			// 			});
+			// 		});
+			// 	});
 
 		app.post('/sendInquiryEmail',
 			function(req, res) {

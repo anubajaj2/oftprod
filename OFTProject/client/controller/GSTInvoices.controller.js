@@ -65,7 +65,6 @@ sap.ui.define([
 			oBinding.filter(new Filter(oFilter,false));
 		},
 		onConfirm: function(oEvent) {
-			this.srNoForTable = 0;
 			if (this.sId.indexOf("accountDetails") !== -1) {
 
 				var accountNo = oEvent.getParameter("selectedItem").getValue();
@@ -293,17 +292,19 @@ sap.ui.define([
 			if(oMode==="ShowHideMode"){
 				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("HideMode");
 				oEvent.getSource().setIcon("sap-icon://exit-full-screen");
+				oEvent.getSource().setText("Hide Fullscreen");
 			}else{
 				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("ShowHideMode");
 				oEvent.getSource().setIcon("sap-icon://full-screen");
+				oEvent.getSource().setText("Show Fullscreen");
 			}
 		},
 		onDownloadAllInvoice : function(oEvent){
 			var that = this;
-			var items = oEvent.getSource().getParent().getParent().getItems();
+			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
 			items.forEach((item)=>{
-				var oDetail = this.getView().getModel("viewModel").getProperty(item.getBindingContextPath());
+				var oDetail = this.getView().getModel("viewModel").getProperty(item);
 				if(!oDetail.InvoiceNo.startsWith("INV-")){
 					$.post('/getInvoiceNo', {
 						"SubcriptionId" : oDetail.id,
@@ -319,10 +320,10 @@ sap.ui.define([
 				}else{
 						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
 				}
-				setTimeout(()=>{
-					this.onStartDate();
-				},2000);
 			});
+			setTimeout(()=>{
+				this.onStartDate();
+			},2000);
 		},
 
 		onDownloadInvoice : function(oEvent){
@@ -760,7 +761,7 @@ sap.ui.define([
 			if (!this.oConfirmDialog) {
 				this.oConfirmDialog = new sap.m.Dialog({
 					type: sap.m.DialogType.Message,
-					title: "Confirm",
+					title: "Calculator",
 					content: [
 						new sap.ui.layout.HorizontalLayout({
 							content: [
@@ -834,6 +835,10 @@ sap.ui.define([
 				}
 
 				this.oConfirmDialog.open();
+		},
+
+		onAddressMail : function(oEvent){
+			debugger;
 		},
 		// DownloadPaypalInvoice: function(oDetail,invoiceNo) {
 		// 	var country = this.getCountryNameFromCode(oDetail.Country);
@@ -1428,7 +1433,6 @@ sap.ui.define([
 
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
-			this.srNoForTable = 0;
 			$.post('/getAmountForAccount', {
 					"AccountNo" : accountNo,
 					"StartDate" : startDate,
@@ -1436,10 +1440,6 @@ sap.ui.define([
 					"PaymentMode" : this.payMode
 				})
 				.done(function(data, status) {
-					var oNewModel = new sap.ui.model.json.JSONModel();
-					oNewModel.setData({
-						"records": data
-					});
 					var totalBalance = 0,
 					 totalIndianEntries = 0,
 					 totalForeignersEntries =0,
@@ -1448,6 +1448,7 @@ sap.ui.define([
 					 totalSettleAmountPaypal = 0,
 					 totalGSTAmount = 0;
 					for (var i = 0; i < data.length; i++) {
+						data[i].Index = i+1;
 						totalBalance = totalBalance + data[i].FullAmount;
 						totalGSTAmount+=(parseFloat(data[i].CGST)+parseFloat(data[i].SGST));
 						if(data[i].Country==="IN"){
@@ -1464,6 +1465,10 @@ sap.ui.define([
 							totalAmountNonPaypal+=data[i].FullAmount;
 						}
 					}
+					var oNewModel = new sap.ui.model.json.JSONModel();
+					oNewModel.setData({
+						"records": data
+					});
 					var totalProperties =  {
 							 "TotalBalance" : totalBalance,
 							 "TotalIndianEntries" : totalIndianEntries,

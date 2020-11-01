@@ -207,11 +207,7 @@ sap.ui.define([], function() {
 				return fullAmount;
 			}
 		},
-
-		formatRowNumber : function(value){
-			this.srNoForTable+=1;
-			return this.srNoForTable;
-		},
+		
 		sortByProperty: function(array, property) {
 			var lol = function dynamicSort(property) {
 				var sortOrder = 1;
