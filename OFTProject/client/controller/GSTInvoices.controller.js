@@ -341,11 +341,11 @@ sap.ui.define([
 
 		onDownloadAllInvoice : function(oEvent){
 			var that = this;
-			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			var oItems = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
-			items.forEach((item)=>{
-				var oDetail = this.getView().getModel("viewModel").getProperty(item);
-				if(!oDetail.InvoiceNo.startsWith("INV-")){
+			const temp = (items,index=0)=>{
+				var oDetail = this.getView().getModel("viewModel").getProperty(items[index]);
+				if(oDetail.InvoiceNo==="null" || oDetail.InvoiceNo===""){
 					$.post('/getInvoiceNo', {
 						"SubcriptionId" : oDetail.id,
 						"PaymentDate" : oDetail.PaymentDate,
@@ -353,17 +353,26 @@ sap.ui.define([
 						})
 						.done(function(invoiceNo, status) {
 								that.DownloadInvoice(oDetail,invoiceNo);
+								if(index<items.length){
+									temp(items,++index);
+								}
 						})
 						.fail(function(xhr, status, error) {
 							MessageBox.error("Error in Invoice no.");
 						});
 				}else{
 						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+						if(index<items.length){
+							temp(items,++index);
+						}
 				}
-			});
+			}
+			if(oItems.length>0){
+				temp(oItems);
+			}
 			setTimeout(()=>{
 				this.onStartDate();
-			},2000);
+			},3000);
 		},
 
 		onDownloadInvoice : function(oEvent){

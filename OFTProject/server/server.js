@@ -500,6 +500,7 @@ app.start = function() {
 				function(err, accountRecords, accountBalances, Records) {
 					// result now equals 'done'
 					var Records = [];
+					var gstBeginDate = new Date("10.17.2020");
 					try {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
