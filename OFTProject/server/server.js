@@ -358,7 +358,6 @@ app.start = function() {
 			var endDate = new Date(req.query.EndDate);
 			// var startDate = new Date("01.01.2016");
 			// var endDate = new Date("01.01.2021");
-			debugger;
 			var Subs = app.models.Sub;
 			var Students = app.models.Student;
 			var Courses = app.models.Course;
@@ -503,12 +502,20 @@ app.start = function() {
 					var Records = [];
 					try {
 						subsMap.get("subs").forEach((item) => {
-							if (subsMap.get("student").get(item.StudentId).Country !="IN") {
-								var amount = item.Amount;
+							var paymentDate = new Date(item.PaymentDate);
+							var isGST = ( gstBeginDate <= paymentDate );
+							var isWallet = false;
+							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
+								isWallet = true;
+							}
+
+							var amount = (isWallet ? item.SettleAmount : item.Amount);
+
+							if (!isGST) {
 								var gst = 0.00;
 							} else {
-								var amount = item.Amount * 100 / 118;
-								var gst = item.Amount * 9 / 118;
+								var gst = amount * 9 / 118;
+								amount = amount * 100 / 118;
 							}
 							Records.push({
 								"PaymentDate": item.PaymentDate,
@@ -1931,55 +1938,53 @@ app.start = function() {
 				});
 			});
 
-			// app.post('/sendEmailForAddress',
-			// 	function(req, res) {
-			// 		//https://developers.google.com/oauthplayground/
-			// 		//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
-			//
-			// 		var nodemailer = require('nodemailer');
-			// 		var smtpTransport = require('nodemailer-smtp-transport');
-			// 		const xoauth2 = require('xoauth2');
-			// 		const key = require('./samples.json');
-			// 		console.log(req.body);
-			// 			var transporter = nodemailer.createTransport(smtpTransport({
-			// 				service: 'gmail',
-			// 				host: 'smtp.gmail.com',
-			// 				auth: {
-			// 					xoauth2: xoauth2.createXOAuth2Generator({
-			// 						user: key.user,
-			// 						clientId: key.clientId,
-			// 						clientSecret: key.clientSecret,
-			// 						refreshToken: key.refreshToken
-			// 					})
-			// 				}
-			// 			}));
-			// 			var contents = fs.readFileSync('./server/sampledata/payment.html', 'utf8');
-			// 			contents.replace("$$UserName$$",req.body.UserName);
-			// 			var mailOptions = {};
-			//
-			// 				mailOptions = {
-			// 					from: 'contact@anubhavtrainings.com',
-			// 					to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-			// 					cc: ccs,
-			// 					subject: 'Re: ' + Subject + " 🟢",
-			// 					html: contents
-			// 				};
-			//
-			// 			transporter.sendMail(mailOptions, function(error, info) {
-			// 				if (error) {
-			// 					console.log(error);
-			// 					if (error.code === "EAUTH") {
-			// 						res.status(500).send('Username and Password not accepted, Please try again.');
-			// 					} else {
-			// 						res.status(500).send('Internal Error while Sending the email, Please try again.');
-			// 					}
-			// 				} else {
-			// 					console.log('Email sent: ' + info.response);
-			// 					res.send("email sent");
-			// 				}
-			// 			});
-			// 		});
-			// 	});
+			app.post('/sendEmailForAddress',
+				function(req, res) {
+					//https://developers.google.com/oauthplayground/
+					//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+
+					var nodemailer = require('nodemailer');
+					var smtpTransport = require('nodemailer-smtp-transport');
+					const xoauth2 = require('xoauth2');
+					const key = require('./samples.json');
+						var transporter = nodemailer.createTransport(smtpTransport({
+							service: 'gmail',
+							host: 'smtp.gmail.com',
+							auth: {
+								xoauth2: xoauth2.createXOAuth2Generator({
+									user: key.user,
+									clientId: key.clientId,
+									clientSecret: key.clientSecret,
+									refreshToken: key.refreshToken
+								})
+							}
+						}));
+						var contents = fs.readFileSync('./server/sampledata/AddressTemplate.html', 'utf8');
+						contents = contents.replace("$$UserName$$",req.body.UserName);
+
+						var mailOptions = {};
+						mailOptions = {
+							from: 'contact@anubhavtrainings.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							// cc: ccs,
+							subject: req.body.Subject + " 🟢",
+							html: contents
+						};
+
+						transporter.sendMail(mailOptions, function(error, info) {
+							if (error) {
+								console.log(error);
+								if (error.code === "EAUTH") {
+									res.status(500).send('Username and Password not accepted, Please try again.');
+								} else {
+									res.status(500).send('Internal Error while Sending the email, Please try again.');
+								}
+							} else {
+								console.log('Email sent: ' + info.response);
+								res.send("email sent");
+							}
+						});
+				});
 
 		app.post('/sendInquiryEmail',
 			function(req, res) {

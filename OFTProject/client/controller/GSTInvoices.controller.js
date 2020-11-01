@@ -299,6 +299,46 @@ sap.ui.define([
 				oEvent.getSource().setText("Show Fullscreen");
 			}
 		},
+
+		onAddressMail : function(oEvent){
+			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			if (!this.emailApproveDialog) {
+			this.emailApproveDialog = new sap.m.Dialog({
+				type: sap.m.DialogType.Message,
+				title: "Confirm",
+				content: new sap.m.Text({ text: "Please Confirm"}),
+				beginButton: new sap.m.Button({
+					type: sap.m.ButtonType.Emphasized,
+					text: "Submit",
+					press: function () {
+						items.forEach((item, i) => {
+							var oDetail = this.getView().getModel("viewModel").getProperty(item);
+							$.post('/sendEmailForAddress', {
+								"UserName" : oDetail.Name,
+								"EmailId" : oDetail.Email,
+								"Subject" : "[URGENT Action Required]"
+								})
+								.done(function(data, status) {
+										MessageToast.show("Email Sent");
+								})
+								.fail(function(xhr, status, error) {
+									MessageBox.error("Error in sending Mail");
+								});
+						});
+						this.emailApproveDialog.close();
+					}.bind(this)
+				}),
+				endButton: new sap.m.Button({
+					text: "Cancel",
+					press: function () {
+						this.emailApproveDialog.close();
+					}.bind(this)
+				})
+			});
+		 }
+		this.emailApproveDialog.open();
+		},
+
 		onDownloadAllInvoice : function(oEvent){
 			var that = this;
 			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
@@ -837,9 +877,6 @@ sap.ui.define([
 				this.oConfirmDialog.open();
 		},
 
-		onAddressMail : function(oEvent){
-			debugger;
-		},
 		// DownloadPaypalInvoice: function(oDetail,invoiceNo) {
 		// 	var country = this.getCountryNameFromCode(oDetail.Country);
 		// 	var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
@@ -1351,6 +1388,7 @@ sap.ui.define([
 				});
 			}
 		},
+
 		onVerifyRating : function(oEvent){
 			var that = this;
 			var val = oEvent.getParameter("value");
