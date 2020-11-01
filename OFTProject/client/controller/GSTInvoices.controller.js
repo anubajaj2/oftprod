@@ -352,18 +352,22 @@ sap.ui.define([
 						"UserId" : userId
 						})
 						.done(function(invoiceNo, status) {
-								that.DownloadInvoice(oDetail,invoiceNo);
+								that.DownloadInvoice(oDetail, invoiceNo);
 								if(index<items.length){
-									temp(items,++index);
+									setTimeout(()=>{
+										temp(items,++index);
+									},800);
 								}
 						})
 						.fail(function(xhr, status, error) {
 							MessageBox.error("Error in Invoice no.");
 						});
 				}else{
-						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+						that.DownloadInvoice(oDetail, oDetail.InvoiceNo);
 						if(index<items.length){
-							temp(items,++index);
+							setTimeout(()=>{
+								temp(items,++index);
+							},1000);
 						}
 				}
 			}
