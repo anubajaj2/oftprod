@@ -530,7 +530,7 @@ app.start = function() {
 								"Country" : subsMap.get("student").get(item.StudentId).Country,
 								"City" : subsMap.get("student").get(item.StudentId).City,
 								"PaymentMode": item.PaymentMode,
-								"FullAmount": (item.PaymentMode!="PAYPAL" ? item.Amount : item.SettleAmount),
+								"FullAmount": item.Amount,
 								"USDAmount" : item.USDAmount,
 								"CurrencyCode" : item.CurrencyCode,
 								"Exchange" : item.Exchange,

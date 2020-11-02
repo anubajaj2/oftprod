@@ -376,7 +376,7 @@ sap.ui.define([
 			}
 			setTimeout(()=>{
 				this.onStartDate();
-			},3000);
+			},1250*oItems.length);
 		},
 
 		onDownloadInvoice : function(oEvent){
