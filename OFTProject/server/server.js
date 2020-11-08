@@ -738,7 +738,7 @@ app.start = function() {
 								isWallet = true;
 							}
 
-							var amount = (isWallet ? item.SettleAmount : item.Amount);
+							var amount = (isWallet ? item.USDAmount*item.Exchange : item.Amount);
 
 							if (!isGST) {
 								var gst = 0.00;

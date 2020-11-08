@@ -156,7 +156,7 @@
 								<ObjectNumber number="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}" />
 								<!-- <Text text="{path: 'viewModel>FullAmount',
       									formatter: '.formatter.getIndianCurr'}"></Text> -->
-								<ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>SettleAmount'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/>
+								<ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>USDAmount', 'viewModel>Exchange'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/>
 								<Text text="{viewModel>PaymentMode}"></Text>
 								<Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled = "{viewModel>IsWallet}" press = "onReference"></Link>
 								<Button icon="sap-icon://edit" press="onEditInfo" text = "Edit" type = "{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button>

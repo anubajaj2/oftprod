@@ -199,15 +199,15 @@ sap.ui.define([], function() {
 			return res+y;
 		},
 
-		getFullAmountForGST: function(isWallet, fullAmount, settleAmount){
+		getFullAmountForGST: function(isWallet, fullAmount, usdAmount, exchange){
 			if(isWallet){
-				return settleAmount;
+				return (parseFloat(usdAmount)*parseFloat(exchange)).toFixed(2);
 			}
 			else{
 				return fullAmount;
 			}
 		},
-		
+
 		sortByProperty: function(array, property) {
 			var lol = function dynamicSort(property) {
 				var sortOrder = 1;
