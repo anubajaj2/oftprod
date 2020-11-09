@@ -348,6 +348,7 @@ sap.ui.define([
 				var address = (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"");
 				var patt = new RegExp("haryana","i");
 	 			var isHaryana = patt.test(address);
+				var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
 				if(oDetail.InvoiceNo==="null" || oDetail.InvoiceNo===""){
 					$.post('/getInvoiceNo', {
 						"SubcriptionId" : oDetail.id,
@@ -355,8 +356,8 @@ sap.ui.define([
 						"UserId" : userId
 						})
 						.done(function(invoiceNo, status) {
-							if(isHaryana){
-								that.DownloadInvoiceForHaryana(oDetail,invoiceNo);
+							if((!isHaryana)&&isGSTIN){
+								that.DownloadInvoiceForOther(oDetail,invoiceNo);
 							}else{
 								that.DownloadInvoice(oDetail,invoiceNo);
 							}
@@ -370,8 +371,8 @@ sap.ui.define([
 							MessageBox.error("Error in Invoice no.");
 						});
 				}else{
-					if(isHaryana){
-						that.DownloadInvoiceForHaryana(oDetail,oDetail.InvoiceNo);
+					if((!isHaryana)&&isGSTIN){
+						that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
 					}else{
 						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
 					}
@@ -398,6 +399,7 @@ sap.ui.define([
 			var patt = new RegExp("haryana","i");
 			var pattern = new RegExp("INV-","i");
  			var isHaryana = patt.test(address);
+			var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
 			if(!pattern.test(oDetail.InvoiceNo)){
 				$.post('/getInvoiceNo', {
 					"SubcriptionId" : oDetail.id,
@@ -405,8 +407,8 @@ sap.ui.define([
 					"UserId" : userId
 					})
 					.done(function(invoiceNo, status) {
-						if(isHaryana){
-							that.DownloadInvoiceForHaryana(oDetail,invoiceNo);
+						if((!isHaryana)&&isGSTIN){
+							that.DownloadInvoiceForOther(oDetail,invoiceNo);
 						}else{
 							that.DownloadInvoice(oDetail,invoiceNo);
 						}
@@ -416,15 +418,15 @@ sap.ui.define([
 						MessageBox.error("Error in Invoice no.");
 					});
 			}else{
-				if(isHaryana){
-					that.DownloadInvoiceForHaryana(oDetail,oDetail.invoiceNo);
+				if((!isHaryana)&&isGSTIN){
+					that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
 				}
 				else{
 					that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
 				}
 			}
 		},
-	 DownloadInvoiceForHaryana: function(oDetail,invoiceNo) {
+	  DownloadInvoice: function(oDetail,invoiceNo) {
 			var country = this.getCountryNameFromCode(oDetail.Country);
 			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
 			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
@@ -444,8 +446,7 @@ sap.ui.define([
 					email : oDetail.Email,
 					mob : (oDetail.ContactNo ? "+"+oDetail.ContactNo:""),
 					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
-					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country,
-					isHaryana : isHaryana
+					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
 				},
 				items: products,
 				CGST: oDetail.CGST,
@@ -834,7 +835,7 @@ sap.ui.define([
 			}
 			niceInvoice(invoiceDetail);
 		},
-		DownloadInvoice: function(oDetail,invoiceNo) {
+		DownloadInvoiceForOther: function(oDetail,invoiceNo) {
  			var country = this.getCountryNameFromCode(oDetail.Country);
  			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
  			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
