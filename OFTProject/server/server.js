@@ -509,7 +509,9 @@ app.start = function() {
 							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
 								isWallet = true;
 							}
-
+							if(isWallet && item.Exchange>1){
+								isGST = false;
+							}
 							var amount = (isWallet ? item.SettleAmount : item.Amount);
 
 							if (!isGST) {
@@ -732,12 +734,14 @@ app.start = function() {
 					try {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
-							var isGST = ( gstBeginDate <= paymentDate );
 							var isWallet = false;
 							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
 								isWallet = true;
 							}
-
+							var isGST = ( gstBeginDate <= paymentDate );
+							if(isWallet && item.Exchange>1){
+								isGST = false;
+							}
 							var amount = (isWallet ? item.USDAmount*item.Exchange : item.Amount);
 
 							if (!isGST) {
