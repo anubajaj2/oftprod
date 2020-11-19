@@ -2289,6 +2289,8 @@ app.start = function() {
 						var Course = app.models.Course;
 						var that2 = that;
 						that.studentEmailId = singleStu.GmailId;
+						that.studentEmail1 = singleStu.OtherEmail1
+						that.studentEmail2 = singleStu.OtherEmail2
 						that.studentName = singleStu.Name.split(" ")[0];
 						Course.findById(that.CourseId).then(function(courseStr) {
 							console.log(that2.studentEmailId + "," + that2.studentName);
@@ -2345,6 +2347,13 @@ app.start = function() {
 							if (courseStr.Name === "Hybris C4C" ||
 								courseStr.Name === "HANA Cloud Integration") {
 								ccs.push("sam4dsouza@gmail.com");
+							}
+							var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+							if(emailPattern.test(that2.studentEmail1)){
+								ccs.push(that2.studentEmail1);
+							}
+							if(emailPattern.test(that2.studentEmail2)){
+								ccs.push(that2.studentEmail2);
 							}
 							var mailOptions = {
 								from: 'no-reply@anubhavtrainings.com',

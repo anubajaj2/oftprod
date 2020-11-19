@@ -22,7 +22,7 @@
     },
     "LastName": {
       "type": "string",
-      "default": "null"
+      "default": null
     },
     "Date": {
       "type": "date"

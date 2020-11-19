@@ -111,7 +111,6 @@ sap.ui.define([
 
 					var Filter1 = new sap.ui.model.Filter("GmailId", "EQ", oContext.getObject().EmailId);
 
-					debugger;
 					this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {
 							filters: [Filter1]
 						}, payload, this)
@@ -989,25 +988,36 @@ sap.ui.define([
 		},
 		onDeleteCust: function(oEvent) {
 			var that = this;
-			MessageBox.confirm("Do you want to delete the selected records?", function(conf) {
-				if (conf == 'OK') {
-					//var items = that.getView().byId('manageSubsTable').getSelectedContexts();
-					// that.totalCount = that.totalCount - items.length;
-					// for (var i = 0; i < items["length"]; i++) {
-					debugger;
-					var sPath = "/Students('" + that.customerGUID + "')";
-					that.ODataHelper.callOData(that.getOwnerComponent().getModel(), sPath, "DELETE", {}, {}, that)
-						.then(function(oData) {
-							that.getView().byId("idDelete").setEnabled(false);
-							sap.m.MessageToast.show("Deleted succesfully");
-						}).catch(function(oError) {
-							that.getView().setBusy(false);
-							that.oPopover = that.getErrorMessage(oError);
-							that.getView().setBusy(false);
-						});
-					// }
-				}
-			}, "Confirmation");
+			that.getView().setBusy(true);
+			var Filter1 = new sap.ui.model.Filter("StudentId", "EQ", "'"+that.customerGUID+"'");
+			that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Subs", "GET", {
+				filters : [Filter1]
+			},
+					{}, that)
+				.then(function(subsData) {
+					if(subsData.results.length<1){
+						MessageBox.confirm("Do you want to delete the selected records?", function(conf) {
+							if (conf == 'OK') {
+								var sPath = "/Students('" + that.customerGUID + "')";
+								that.ODataHelper.callOData(that.getOwnerComponent().getModel(), sPath, "DELETE", {}, {}, that)
+									.then(function(oData) {
+										that.getView().byId("idDelete").setEnabled(false);
+										that.getView().setBusy(false);
+										sap.m.MessageToast.show("Deleted succesfully");
+									}).catch(function(oError) {
+										that.getView().setBusy(false);
+										that.oPopover = that.getErrorMessage(oError);
+									});
+							}
+						}, "Confirmation");
+					}else {
+						that.getView().setBusy(false);
+						sap.m.MessageToast.show(subsData.results.length+" Subscription found, can't delete");
+					}
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					that.oPopover = that.getErrorMessage(oError);
+				});
 		}
 	});
 

@@ -499,8 +499,6 @@ sap.ui.define([
 				vStatus = "Pending";
 			}
 
-			that.getView().setBusy(true);
-
 			var payload = {
 				"StudentId": this.customerId, //customerGUID, //leadData.StudentId,
 				"CourseId": this.courseId, //courseGUID, //leadData.CourseId,
@@ -535,21 +533,25 @@ sap.ui.define([
 				"Status": vStatus
 			};
 
+			if(!this.isDefaulter){
+				that.getView().setBusy(true);
+				this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Subs", "POST", {},
+						payload, this)
+					.then(function(oData) {
 
-			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Subs", "POST", {},
-					payload, this)
-				.then(function(oData) {
+						that.getView().setBusy(false);
+						that.subsciptionSaved = "true";
+						sap.m.MessageToast.show("Subscription Saved successfully");
+						that.destroyMessagePopover();
+					}).catch(function(oError) {
 
-					that.getView().setBusy(false);
-					that.subsciptionSaved = "true";
-					sap.m.MessageToast.show("Subscription Saved successfully");
-					that.destroyMessagePopover();
-				}).catch(function(oError) {
-
-					that.getView().setBusy(false);
-					that.subsciptionSaved = "false";
-					var oPopover = that.getErrorMessage(oError);
-				});
+						that.getView().setBusy(false);
+						that.subsciptionSaved = "false";
+						var oPopover = that.getErrorMessage(oError);
+					});
+			}else {
+				sap.m.MessageToast.show("Student is defaulter");
+			}
 		},
 
 		onStartChange: function(oEvent) {
@@ -973,7 +975,7 @@ sap.ui.define([
 				this.searchPopup.bindAggregation("items", {
 					path: "/Students",
 					template: new sap.m.DisplayListItem({
-						label: "{Name}",
+						label: "{Name} {=${Defaulter} ? '(Defaulter)' : ''}",
 						value: "{GmailId}"
 					})
 				});
@@ -1065,8 +1067,8 @@ sap.ui.define([
 
 				var data = this.getSelectedKey(oEvent);
 				this.getView().byId("customerId").setValue(data[0]);
+				this.isDefaulter = data[1].endsWith("(Defaulter)");
 				this.customerId = data[2];
-
 			} else if (this.sId.indexOf("courseId") !== -1) {
 
 				// var data = this.getSelectedKey(oEvent);
