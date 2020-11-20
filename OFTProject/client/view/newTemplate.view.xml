@@ -26,23 +26,22 @@
 			columnsL="1"
 			columnsM="1"
 			singleContainerFullSize="false" >
-			<f:toolbar>
+			<!-- <f:toolbar>
 				<Toolbar id="TB1">
 					<Title id="Title1" text="New Lead" level="H4" titleStyle="H4"/>
 					<ToolbarSpacer />
 				</Toolbar>
-			</f:toolbar>
+			</f:toolbar> -->
 			<f:content>
 				<Label text="Course Name"  />
-        <Select  id="course" items="{local>/courses}"
-						  selectedKey="{local>/template/CourseName}" change="onCourseSelect">
+        <Select  id="course" items="{local>/courses}" change="onCourseSelect">
 					<items>
 						<core:Item text="{local>courseName}" key="{local>courseName}"/>
 					</items>
 				</Select>
 
 				<Label text="Type" />
-        <Select  id="type" selectedKey="{local>/template/Type}">
+        <Select  id="type" change="onTypeSelect">
 					<items>
 						<core:Item text="Regular" key="R"/>
             <core:Item text="Before Batch" key="B"/>
@@ -65,7 +64,6 @@
 
         <Label text="Class Timing" />
 				<Input value="{local>/template/ClassTiming}" />
-
         <Label text="Next Class" />
 				<Input value="{local>/template/NextClass}" />
 
@@ -83,11 +81,7 @@
         <Title
             id="titletext2"/>
 				<ToolbarSpacer></ToolbarSpacer>
-        <CheckBox visible="{= ${local>/Role} === 'Admin'}" tooltip="Dollor Quote" id="doller" />
-        <Button icon="sap-icon://action" tooltip="send email" press="onEmail"/>
 				<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
-				<Button	visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport" />
-
 			</Toolbar>
 			</headerToolbar>
 		</List>
@@ -95,11 +89,12 @@
 		</content>
 		<footer>
 			<Toolbar>
-        <Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized"
-						press="handleMessagePopoverPress"/>
+        <!-- <Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized"
+						press="handleMessagePopoverPress"/> -->
 				<ToolbarSpacer/>
-				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
-        <Button text="Get Account" press="onGetNext" />
+        <Button text="Update" icon="sap-icon://save" type="Accept" enabled="false" press="onUpdate" id="idUpdate"></Button>
+				<Button text="Save" icon="sap-icon://save" type="Reject" enabled = "false" press="onSave" id="idSave"></Button>
+        <!-- <Button text="Get Account" press="onGetNext" /> -->
 			</Toolbar>
 		</footer>
 	</Page>
