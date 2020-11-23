@@ -509,7 +509,7 @@ app.start = function() {
 							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
 								isWallet = true;
 							}
-							if(isWallet && item.Exchange>1){
+							if(isWallet && parseInt(item.Exchange)>1){
 								isGST = false;
 							}
 							var amount = (isWallet ? item.SettleAmount : item.Amount);
@@ -521,7 +521,7 @@ app.start = function() {
 								amount = amount * 100 / 118;
 							}
 							Records.push({
-								"PaymentDate": item.PaymentDate,
+								"PaymentDate":( new Date(item.PaymentDate)).toDateString().slice(4),
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
 								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
 								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,

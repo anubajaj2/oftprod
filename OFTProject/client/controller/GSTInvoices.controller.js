@@ -131,6 +131,35 @@ sap.ui.define([
 				contentWidth : "450px",
 				content: [
 					new sap.m.Label({
+								text: "payment Mode: "
+							}),
+					new sap.m.Select("idPaymentMode",{
+						items : [
+							new sap.ui.core.Item({
+								key : "IMPS",
+								text : "Internet Banking"
+							}),
+							new sap.ui.core.Item({
+								key : "PAYTM",
+								text : "PayTM"
+							}),
+							new sap.ui.core.Item({
+								key : "PAYPAL",
+								text : "Paypal/Xoom"
+							}),
+							new sap.ui.core.Item({
+								key : "PAYU",
+								text : "PayUMoney"
+							}),
+							new sap.ui.core.Item({
+								key : "USA",
+								text : "Wire Transfer"
+							})
+						],
+						width : "100%",
+						selectedKey : oSub.PaymentMode
+					}),
+					new sap.m.Label({
 								text: "Amount: "
 							}),
 					new sap.m.Input("idAmount",{
@@ -212,6 +241,7 @@ sap.ui.define([
 						var usdAmount = Core.byId("idUSDAmount").getValue();
 						var currencyCode = Core.byId("idCurrencyCode").getValue();
 						var exchange = Core.byId("idExchange").getValue();
+						var paymentMode = Core.byId("idPaymentMode").getSelectedKey();
 						var charges = Core.byId("idCharges").getValue();
 						var settleDate = Core.byId("idSettleDate").getValue();
 						var settleAmount = Core.byId("idSettleAmount").getValue();
@@ -227,6 +257,7 @@ sap.ui.define([
 									"Charges" : charges,
 									"SettleDate" : settleDate,
 									"SettleAmount" : settleAmount,
+									"PaymentMode" : paymentMode,
 									"Reference" : reference,
 									"ChangedBy" : userId
 								}
@@ -234,6 +265,7 @@ sap.ui.define([
 							payload = {
 									"id": id,
 									"Amount": sAmount,
+									"PaymentMode" : paymentMode,
 									"Reference" : reference,
 									"ChangedBy" : userId
 								}
@@ -270,6 +302,7 @@ sap.ui.define([
 			Core.byId("idUSDAmount").destroy();
 			Core.byId("idCurrencyCode").destroy();
 			Core.byId("idExchange").destroy();
+			Core.byId("idPaymentMode").destroy();
 			Core.byId("idCharges").destroy();
 			Core.byId("idSettleDate").destroy();
 			Core.byId("idSettleAmount").destroy();
@@ -349,39 +382,45 @@ sap.ui.define([
 				var patt = new RegExp("haryana","i");
 	 			var isHaryana = patt.test(address);
 				var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
-				if(oDetail.InvoiceNo==="null" || oDetail.InvoiceNo===""){
-					$.post('/getInvoiceNo', {
-						"SubcriptionId" : oDetail.id,
-						"PaymentDate" : oDetail.PaymentDate,
-						"UserId" : userId
-						})
-						.done(function(invoiceNo, status) {
-							if((!isHaryana)&&isGSTIN){
-								that.DownloadInvoiceForOther(oDetail,invoiceNo);
-							}else{
-								that.DownloadInvoice(oDetail,invoiceNo);
-							}
-								if(++index<items.length){
-									setTimeout(()=>{
-										temp(items,index);
-									},800);
-								}
-						})
-						.fail(function(xhr, status, error) {
-							MessageBox.error("Error in Invoice no.");
-						});
-				}else{
-					if((!isHaryana)&&isGSTIN){
-						that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
-					}else{
-						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
-					}
-						if(++index<items.length){
-							setTimeout(()=>{
-								temp(items,index);
-							},1000);
-						}
+				if(oDetail.IsWallet && oDetail.SettleAmount===0){
+					MessageToast.show("Incomplete Information, can't download")
 				}
+				else{
+					if(oDetail.InvoiceNo==="null" || oDetail.InvoiceNo===""){
+						$.post('/getInvoiceNo', {
+							"SubcriptionId" : oDetail.id,
+							"PaymentDate" : oDetail.PaymentDate,
+							"UserId" : userId
+							})
+							.done(function(invoiceNo, status) {
+								if((!isHaryana)&&isGSTIN){
+									that.DownloadInvoiceForOther(oDetail,invoiceNo);
+								}else{
+									that.DownloadInvoice(oDetail,invoiceNo);
+								}
+									if(++index<items.length){
+										setTimeout(()=>{
+											temp(items,index);
+										},800);
+									}
+							})
+							.fail(function(xhr, status, error) {
+								MessageBox.error("Error in Invoice no.");
+							});
+					}else{
+						if((!isHaryana)&&isGSTIN){
+							that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
+						}else{
+							that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+						}
+							if(++index<items.length){
+								setTimeout(()=>{
+									temp(items,index);
+								},1000);
+							}
+					}
+				}
+
 			}
 			if(oItems.length>0){
 				temp(oItems);
@@ -400,29 +439,34 @@ sap.ui.define([
 			var pattern = new RegExp("INV-","i");
  			var isHaryana = patt.test(address);
 			var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
-			if(!pattern.test(oDetail.InvoiceNo)){
-				$.post('/getInvoiceNo', {
-					"SubcriptionId" : oDetail.id,
-					"PaymentDate" : oDetail.PaymentDate,
-					"UserId" : userId
-					})
-					.done(function(invoiceNo, status) {
-						if((!isHaryana)&&isGSTIN){
-							that.DownloadInvoiceForOther(oDetail,invoiceNo);
-						}else{
-							that.DownloadInvoice(oDetail,invoiceNo);
-						}
-							that.onStartDate();
-					})
-					.fail(function(xhr, status, error) {
-						MessageBox.error("Error in Invoice no.");
-					});
-			}else{
-				if((!isHaryana)&&isGSTIN){
-					that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
-				}
-				else{
-					that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+			if(oDetail.IsWallet && oDetail.SettleAmount===0){
+				MessageToast.show("Incomplete Information, can't download")
+			}
+			else{
+				if(!pattern.test(oDetail.InvoiceNo)){
+					$.post('/getInvoiceNo', {
+						"SubcriptionId" : oDetail.id,
+						"PaymentDate" : oDetail.PaymentDate,
+						"UserId" : userId
+						})
+						.done(function(invoiceNo, status) {
+							if((!isHaryana)&&isGSTIN){
+								that.DownloadInvoiceForOther(oDetail,invoiceNo);
+							}else{
+								that.DownloadInvoice(oDetail,invoiceNo);
+							}
+								that.onStartDate();
+						})
+						.fail(function(xhr, status, error) {
+							MessageBox.error("Error in Invoice no.");
+						});
+				}else{
+					if((!isHaryana)&&isGSTIN){
+						that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
+					}
+					else{
+						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+					}
 				}
 			}
 		},
