@@ -6,6 +6,7 @@
 			<headerToolbar>
 				<Toolbar>
 					<ToolbarSpacer></ToolbarSpacer>
+					<CheckBox id="server2" text="Gold Plan - Option 2" />
 					<Button icon="sap-icon://action" tooltip="send email" press="onEmail"/>
 					<Button icon="sap-icon://delete" press="onDelete"/>
 					<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport"/>

@@ -702,6 +702,7 @@ sap.ui.define([	"oft/fiori/controller/BaseController",
 					}
 				}
 				loginPayload.password = this.passwords;
+				loginPayload.isServer2 = this.getView().byId("server2").getSelected();
 				$.post('/sendServerEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");

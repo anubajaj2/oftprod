@@ -1849,13 +1849,21 @@ app.start = function() {
 			function(req, res) {
 				var payload = req.body;
 				var that = this;
+				var templateName = "";
 				this.password = req.body.password;
+				this.isServer2 = req.body.isServer2;
+				debugger;
+				if(req.body.isServer2 === "false"){
+					templateName = 'Server';
+				}else{
+					templateName = 'Server2';
+				}
 				var Template = app.models.Template;
 				debugger;
 				Template.findOne({
 					where: {
 						and: [{
-							CourseName: 'Server'
+							CourseName: templateName
 						}]
 					}
 				}).then(function(data) {
