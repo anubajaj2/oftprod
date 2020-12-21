@@ -270,7 +270,7 @@ sap.ui.define([
 									"ChangedBy" : userId
 								}
 						}
-						if (sAmount <= 50000) {
+						if (sAmount <= 90000) {
 							$.post('/updateSubcriptionAmount', payload)
 								.done(function(data, status) {
 									MessageBox.success("Update "+data);
@@ -283,7 +283,7 @@ sap.ui.define([
 								});
 								oAmountDialog.close();
 						} else {
-							MessageBox.error("No Subcription is greater than 50,000");
+							MessageBox.error("No Subcription is greater than 90,000");
 						}
 					}.bind(this)
 				}),
