@@ -27,6 +27,10 @@ sap.ui.define([], function() {
 			return starts + " - " + ends;
 
 		},
+		getPaypalCharges : function(amount){
+			return amount;
+
+		},
 		getDatesIcon: function(startDate, EndDate) {
 			var ostartDate = new Date(startDate);
 			var oEndDate = new Date(EndDate);

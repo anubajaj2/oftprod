@@ -299,6 +299,7 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newRegistration/PendingAmount", oModel.PendingAmount);
 			this.getView().getModel("local").setProperty("/newRegistration/Reference", oModel.Reference);
 			this.getView().getModel("local").setProperty("/newRegistration/Remarks", oModel.Remarks);
+			this.getView().getModel("local").setProperty("/newRegistration/USDAmount", oModel.USDAmount);
 			// this.getView().getModel("local").setProperty("/newRegistration/PendingAmount", 0);
 			// this.getView().getModel("local").setProperty("/newRegistration/AccountName", oModel.AccountName);
 			// this.getView().getModel("local").setProperty("/newRegistration/subGuid", oModel.id);
@@ -530,7 +531,11 @@ sap.ui.define([
 				"ExtraN3": 0,
 				"UpdatePayment": false,
 				"MostRecent": true,
-				"Status": vStatus
+				"Status": vStatus,
+				"USDAmount": leadData.USDAmount,
+				"Charges": leadData.Charges,
+				"Exchange" : leadData.Exchange,
+				"SettleAmount" : leadData.SettleAmount
 			};
 
 			if(!this.isDefaulter){
@@ -1822,7 +1827,6 @@ sap.ui.define([
 					this.searchPopup.getBinding("items").filter([]);
 				}
 			}
-
 		},
 		onClearScreen: function(oEvent) {
 			this.getView().getModel("local").setProperty("/newRegistration/StartDate", this.formatter.getFormattedDate(0));
@@ -1840,8 +1844,9 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newRegistration/Reference", null);
 			this.getView().getModel("local").setProperty("/newRegistration/Extra2", null);
 			this.getView().getModel("local").setProperty("/newRegistration/Waiver", false);
-			this.getView().getModel("local").setProperty("/newRegistration/Waiver", false);
-			this.getView().getModel("local").setProperty("/newRegistration/Waiver", false);
+			this.getView().getModel("local").setProperty("/newRegistration/USDAmount", 0);
+			this.getView().getModel("local").setProperty("/newRegistration/Charges", 0);
+			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", 0);
 			this.getView().getModel("local").setProperty("/newCustomer/GmailId", null);
 			this.getView().getModel("local").setProperty("/newCustomer/Name", null);
 			this.getView().getModel("local").setProperty("/newCustomer/Country", 'IN');

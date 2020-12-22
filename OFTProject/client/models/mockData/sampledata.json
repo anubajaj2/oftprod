@@ -281,7 +281,12 @@
 		"ChangedOn": "",
 		"ChangedBy": "",
 		"subGuid": "",
-		"Status":""
+		"Status":"",
+		"USDAmount": 0,
+		"CurrencyCode": "USD",
+		"Exchange": 73.25,
+		"Charges": 0,
+		"SettleAmount": 0
 	},
 	"BeneficiaryName": "",
 	"newRegExtension":{
