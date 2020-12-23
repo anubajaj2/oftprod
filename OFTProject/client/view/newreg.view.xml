@@ -127,7 +127,7 @@
 								<Label text="Exchange Rate"/>
 								<Input id="idExchangeRate" value="{local>/newRegistration/Exchange}"></Input>
 								<Label text="Settle Amount"/>
-								<Input id="idSettleAmount" text="{local>/newRegistration/SettleAmount}"></Input>
+								<Input id="idSettleAmount" value="{local>/newRegistration/SettleAmount}" enabled="false"></Input>
 							</f:content>
 						</f:SimpleForm>
 					</FlexBox>

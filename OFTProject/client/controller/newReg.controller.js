@@ -181,7 +181,7 @@ sap.ui.define([
 					});
 			}
 		},
-		onClearToken: function(){
+		onClearToken: function() {
 			$.post('/clearToken')
 				.done(function(data, status) {
 					sap.m.MessageToast.show("Token is now reset");
@@ -241,7 +241,7 @@ sap.ui.define([
 
 		},
 		oSuppPopup: null,
-		destoryDialog: function(){
+		destoryDialog: function() {
 			this.oSuppPopup.destroy();
 			this.oSuppPopup = null;
 		},
@@ -359,29 +359,36 @@ sap.ui.define([
 
 
 		},
-		onRate: function(oEvent){
+		onRate: function(oEvent) {
 
-						this.oEvent_approve = oEvent;
-						var sPath = oEvent.getSource().getBindingContext().sPath;
-						var that = this;
-						if(oEvent.getSource().getValue() === 0){
-							var payload3 = {
-								"ExtraN1": ""
-							};
-						}else{
-							var payload3 = {
-								"ExtraN1": oEvent.getSource().getValue()
-							};
-						}
+			this.oEvent_approve = oEvent;
+			var sPath = oEvent.getSource().getBindingContext().sPath;
+			var that = this;
+			if (oEvent.getSource().getValue() === 0) {
+				var payload3 = {
+					"ExtraN1": ""
+				};
+			} else {
+				var payload3 = {
+					"ExtraN1": oEvent.getSource().getValue()
+				};
+			}
 
-						this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload3, this)
-							.then(function(oData) {
-								sap.m.MessageToast.show("Star mark success");
-							}).catch(function(oError) {
-								that.getView().setBusy(false);
-								var oPopover = that.getErrorMessage(oError);
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload3, this)
+				.then(function(oData) {
+					sap.m.MessageToast.show("Star mark success");
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					var oPopover = that.getErrorMessage(oError);
 
-							});
+				});
+		},
+		onUSDAmountChange: function(oEvent) {
+			var amt = oEvent.getParameter("value");
+			var charges = ((amt * 0.044 + 0.30) * 1.18).toFixed(2);
+			var exchange = this.getView().getModel("local").getProperty("/newRegistration/Exchange");
+			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
+			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
 		},
 		onSaveSubs: function(oEvent) {
 			//TODO: Save to Coustomer Reg. table
@@ -534,11 +541,11 @@ sap.ui.define([
 				"Status": vStatus,
 				"USDAmount": leadData.USDAmount,
 				"Charges": leadData.Charges,
-				"Exchange" : leadData.Exchange,
-				"SettleAmount" : leadData.SettleAmount
+				"Exchange": leadData.Exchange,
+				"SettleAmount": leadData.SettleAmount
 			};
 
-			if(!this.isDefaulter){
+			if (!this.isDefaulter) {
 				that.getView().setBusy(true);
 				this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Subs", "POST", {},
 						payload, this)
@@ -554,7 +561,7 @@ sap.ui.define([
 						that.subsciptionSaved = "false";
 						var oPopover = that.getErrorMessage(oError);
 					});
-			}else {
+			} else {
 				sap.m.MessageToast.show("Student is defaulter");
 			}
 		},
@@ -596,7 +603,7 @@ sap.ui.define([
 		},
 
 		herculis: function(oEvent) {
-			if(oEvent.getParameter("name") !== "newreg"){
+			if (oEvent.getParameter("name") !== "newreg") {
 				return;
 			}
 			var newDate = new Date();
@@ -742,14 +749,14 @@ sap.ui.define([
 			var cell;
 
 			var isAdmin = this.getView().getModel("local").getProperty("/Role");
-			if(isAdmin === 'Admin'){
+			if (isAdmin === 'Admin') {
 				var totalAmount = 0;
 				for (var i = 0; i < itemList.length; i++) {
 					totalAmount = totalAmount + parseInt(itemList[i].getCells()[6].getText());
 				}
 				oTable.getHeaderToolbar().getContent()[0].setText("Today : " + noOfItems + "  Amount:" + totalAmount);
 
-			}else{
+			} else {
 				oTable.getHeaderToolbar().getContent()[0].setText("Today : " + noOfItems);
 
 			}
@@ -762,7 +769,7 @@ sap.ui.define([
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[1].setText(CourseName);
 				}
-				if(itemList[i].getCells()[0].getText().indexOf("@") === -1){
+				if (itemList[i].getCells()[0].getText().indexOf("@") === -1) {
 					allStudents.push(itemList[i].getCells()[0].getText());
 				}
 
@@ -804,9 +811,9 @@ sap.ui.define([
 					itemList[i].getCells()[4].setText(value1);
 				}
 			}
-			if(allStudents){
+			if (allStudents) {
 				var loginPayload = {
-						allStudents : allStudents
+					allStudents: allStudents
 				};
 
 				$.post('/getAllStudents', loginPayload)
@@ -814,7 +821,7 @@ sap.ui.define([
 						for (var i = 0; i < noOfItems; i++) {
 							var vStudent = itemList[i].getCells()[0].getText();
 							for (var j = 0; j < data.length; j++) {
-								if(data[j].id === vStudent){
+								if (data[j].id === vStudent) {
 									try {
 										itemList[i].getCells()[0].setText(data[j].GmailId);
 
@@ -837,49 +844,46 @@ sap.ui.define([
 
 		},
 		passwords: "",
-		copyToClipboard: function (text,extra1) {
-			  try {
-			  	var texts = eval(text);
-			  } catch (e) {
-					var texts = text;
-			  } finally {
+		copyToClipboard: function(text, extra1) {
+			try {
+				var texts = eval(text);
+			} catch (e) {
+				var texts = text;
+			} finally {
 
-			  }
-		    if (window.clipboardData && window.clipboardData.setData) {
-		        // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
-		        clipboardData.setData("Text", texts);
-						return window.open(extra1);
-		    }
-		    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-		        var textarea = document.createElement("textarea");
-		        textarea.textContent = texts;
-		        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
-		        document.body.appendChild(textarea);
-		        textarea.select();
-						textarea.setSelectionRange(0, 99999)
-		        try {
-		             document.execCommand("copy");  // Security exception may be thrown by some browsers.
-								return window.open(extra1);
-		        }
-		        catch (ex) {
-		            console.warn("Copy to clipboard failed.", ex);
-		            return window.open(extra1);
-		        }
-		        finally {
-		            document.body.removeChild(textarea);
-		        }
-		    }
+			}
+			if (window.clipboardData && window.clipboardData.setData) {
+				// Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+				clipboardData.setData("Text", texts);
+				return window.open(extra1);
+			} else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+				var textarea = document.createElement("textarea");
+				textarea.textContent = texts;
+				textarea.style.position = "fixed"; // Prevent scrolling to bottom of page in Microsoft Edge.
+				document.body.appendChild(textarea);
+				textarea.select();
+				textarea.setSelectionRange(0, 99999)
+				try {
+					document.execCommand("copy"); // Security exception may be thrown by some browsers.
+					return window.open(extra1);
+				} catch (ex) {
+					console.warn("Copy to clipboard failed.", ex);
+					return window.open(extra1);
+				} finally {
+					document.body.removeChild(textarea);
+				}
+			}
 		},
-		onBank: function(oEvent){
+		onBank: function(oEvent) {
 			this.oEvent_approve = oEvent;
 			var sPath = oEvent.getSource().getBindingContext().sPath;
 			var that = this;
 			var loginPayload = that.oEvent_approve.getSource().getBindingContext().getModel().getProperty(that.oEvent_approve.getSource().getBindingContext().getPath());
-			if(loginPayload.AccountName){
+			if (loginPayload.AccountName) {
 				this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Accounts",
-				 "GET", {
-					 filters: [new sap.ui.model.Filter("accountNo","EQ",loginPayload.AccountName)]
-				 }, {}, this)
+						"GET", {
+							filters: [new sap.ui.model.Filter("accountNo", "EQ", loginPayload.AccountName)]
+						}, {}, this)
 					.then(function(oData) {
 						console.log(oData.results[0].userId);
 						console.log(oData.results[0].key);
@@ -1022,12 +1026,13 @@ sap.ui.define([
 					// })
 
 					template: new sap.m.ObjectListItem({
-										title: "{Name}",
-										intro: "{BatchNo}",
-										number: {
-											path: "status",
-								formatter: this.formatter.formatStatusValue}
-									})
+						title: "{Name}",
+						intro: "{BatchNo}",
+						number: {
+							path: "status",
+							formatter: this.formatter.formatStatusValue
+						}
+					})
 
 
 				});
@@ -1082,9 +1087,9 @@ sap.ui.define([
 				// this.courseId = data[2];
 
 				var data = this.getObjListSelectedkey(oEvent);
-			this.getView().byId("idCourseName").setText(data[0]);
-			this.getView().byId("courseId").setValue(data[1]);
-			this.courseId = data[3];
+				this.getView().byId("idCourseName").setText(data[0]);
+				this.getView().byId("courseId").setValue(data[1]);
+				this.courseId = data[3];
 
 				var oItem = oEvent.getParameter("selectedItem");
 				var oContext = oItem.getBindingContext();
@@ -1097,8 +1102,8 @@ sap.ui.define([
 
 				var x = new Date(oContext.getObject().DemoStartDate);
 				x.setMonth(x.getMonth() + 1);
-				if(x > new Date()){
-						this.getView().byId("idPayDueDate").setDateValue(x);
+				if (x > new Date()) {
+					this.getView().byId("idPayDueDate").setDateValue(x);
 				}
 
 
