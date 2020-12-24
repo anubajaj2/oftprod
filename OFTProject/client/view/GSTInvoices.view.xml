@@ -87,6 +87,7 @@
 							<Title id="newtitle" text="Entries"/>
 							<ToolbarSpacer></ToolbarSpacer>
 							<Button icon="sap-icon://email" text= "For Address Maintenance" press ="onAddressMail" type="Accept"/>
+							<Button icon="sap-icon://generate-shortcut" text="Generate Invoice No" type="Accept" press="onGenerateInvoiceNo" />
 							<Button icon="sap-icon://download" text="Selected Invoice" type="Accept" press="onDownloadAllInvoice" />
 							<Button icon="sap-icon://full-screen" text = "Show Fullscreen" press ="onFullScreen" type="Accept"/>
 						</Toolbar>

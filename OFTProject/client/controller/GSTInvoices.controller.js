@@ -55,14 +55,14 @@ sap.ui.define([
 				}
 			});
 		},
-		onSearch : function(oEvent){
+		onSearch: function(oEvent) {
 			var sValue = oEvent.getParameter("value");
 			var oFilter = [
 				new Filter("accountNo", FilterOperator.Contains, sValue),
 				new Filter("accountName", FilterOperator.Contains, sValue)
 			];
 			var oBinding = oEvent.getParameter("itemsBinding");
-			oBinding.filter(new Filter(oFilter,false));
+			oBinding.filter(new Filter(oFilter, false));
 		},
 		onConfirm: function(oEvent) {
 			if (this.sId.indexOf("accountDetails") !== -1) {
@@ -86,8 +86,8 @@ sap.ui.define([
 		onEndDate: function(oEvent) {
 			this.onStartDate();
 		},
-		payMode : "ALL",
-		onPayModeSelect : function(oEvent){
+		payMode: "ALL",
+		onPayModeSelect: function(oEvent) {
 			this.payMode = oEvent.getSource().getSelectedItem().getKey();
 			this.onStartDate();
 		},
@@ -127,107 +127,107 @@ sap.ui.define([
 			var amount = oSub.FullAmount;
 			var oAmountDialog = new sap.m.Dialog({
 				type: sap.m.DialogType.Message,
-				title: "Modify : "+oSub.Email,
-				contentWidth : "450px",
+				title: "Modify : " + oSub.Email,
+				contentWidth: "450px",
 				content: [
 					new sap.m.Label({
-								text: "payment Mode: "
-							}),
-					new sap.m.Select("idPaymentMode",{
-						items : [
+						text: "payment Mode: "
+					}),
+					new sap.m.Select("idPaymentMode", {
+						items: [
 							new sap.ui.core.Item({
-								key : "IMPS",
-								text : "Internet Banking"
-							}),
-							new sap.ui.core.Item({
-								key : "PAYTM",
-								text : "PayTM"
+								key: "IMPS",
+								text: "Internet Banking"
 							}),
 							new sap.ui.core.Item({
-								key : "PAYPAL",
-								text : "Paypal/Xoom"
+								key: "PAYTM",
+								text: "PayTM"
 							}),
 							new sap.ui.core.Item({
-								key : "PAYU",
-								text : "PayUMoney"
+								key: "PAYPAL",
+								text: "Paypal/Xoom"
 							}),
 							new sap.ui.core.Item({
-								key : "USA",
-								text : "Wire Transfer"
+								key: "PAYU",
+								text: "PayUMoney"
+							}),
+							new sap.ui.core.Item({
+								key: "USA",
+								text: "Wire Transfer"
 							})
 						],
-						width : "100%",
-						selectedKey : oSub.PaymentMode
+						width: "100%",
+						selectedKey: oSub.PaymentMode
 					}),
 					new sap.m.Label({
-								text: "Amount: "
-							}),
-					new sap.m.Input("idAmount",{
+						text: "Amount: "
+					}),
+					new sap.m.Input("idAmount", {
 						type: "Number",
-						value : amount
+						value: amount
 					}),
 					new sap.m.Label({
-								text: "Paypal Amount: "
-							}),
-					new sap.m.Input("idUSDAmount",{
+						text: "Paypal Amount: "
+					}),
+					new sap.m.Input("idUSDAmount", {
 						type: "Number",
-						value : oSub.USDAmount,
-						enabled : oSub.IsWallet
+						value: oSub.USDAmount,
+						enabled: oSub.IsWallet
 					}),
 					new sap.m.Label({
-								text: "Currency Code: "
-							}),
-					new sap.m.Input("idCurrencyCode",{
-						value : oSub.CurrencyCode,
-						enabled : oSub.IsWallet
+						text: "Currency Code: "
+					}),
+					new sap.m.Input("idCurrencyCode", {
+						value: oSub.CurrencyCode,
+						enabled: oSub.IsWallet
 					}),
 					new sap.m.Label({
-								text: "Charges: "
-							}),
-					new sap.m.Input("idCharges",{
+						text: "Charges: "
+					}),
+					new sap.m.Input("idCharges", {
 						type: "Number",
-						value : oSub.Charges,
-						enabled : oSub.IsWallet
+						value: oSub.Charges,
+						enabled: oSub.IsWallet
 					}),
 					new sap.m.Label({
-								text: "Exchange: ",
-								required : oSub.IsWallet,
-							}),
-					new sap.m.Input("idExchange",{
+						text: "Exchange: ",
+						required: oSub.IsWallet,
+					}),
+					new sap.m.Input("idExchange", {
 						type: "Number",
-						value : oSub.Exchange,
-						enabled : oSub.IsWallet,
-						liveChange : (oEvent)=>{
-							var newAmount = Core.byId("idUSDAmount").getValue()-Core.byId("idCharges").getValue();
-							Core.byId("idSettleAmount").setValue((newAmount*oEvent.getParameter("value")).toFixed(2));
+						value: oSub.Exchange,
+						enabled: oSub.IsWallet,
+						liveChange: (oEvent) => {
+							var newAmount = Core.byId("idUSDAmount").getValue() - Core.byId("idCharges").getValue();
+							Core.byId("idSettleAmount").setValue((newAmount * oEvent.getParameter("value")).toFixed(2));
 						}
 					}),
 					new sap.m.Label({
-								text: "Settle Amount: "
-							}),
-					new sap.m.Input("idSettleAmount",{
+						text: "Settle Amount: "
+					}),
+					new sap.m.Input("idSettleAmount", {
 						type: "Number",
-						value : oSub.SettleAmount,
-						enabled : false//oSub.IsWallet
+						value: oSub.SettleAmount,
+						enabled: false //oSub.IsWallet
 					}),
 					new sap.m.Label({
-								text: "Settle Date: "
-							}),
-					new sap.m.DatePicker("idSettleDate",{
-						displayFormat : "dd.MM.yyyy",
-						valueFormat : "MMM dd yyyy",
-						value : oSub.SettleDate,
-						enabled : oSub.IsWallet
+						text: "Settle Date: "
+					}),
+					new sap.m.DatePicker("idSettleDate", {
+						displayFormat: "dd.MM.yyyy",
+						valueFormat: "MMM dd yyyy",
+						value: oSub.SettleDate,
+						enabled: oSub.IsWallet
 					}),
 					new sap.m.Label({
-								text: "Reference: "
-							}),
-					new sap.m.Input("idReference",{
-						value : oSub.Reference
+						text: "Reference: "
 					}),
-					new sap.m.CheckBox("idConfirm",{
-						text : "Confirm",
-						select : function(oEvent){
+					new sap.m.Input("idReference", {
+						value: oSub.Reference
+					}),
+					new sap.m.CheckBox("idConfirm", {
+						text: "Confirm",
+						select: function(oEvent) {
 							oAmountDialog.getBeginButton().setEnabled(oEvent.getParameter("selected"));
 						}.bind(this)
 					})
@@ -247,33 +247,33 @@ sap.ui.define([
 						var settleAmount = Core.byId("idSettleAmount").getValue();
 						var reference = Core.byId("idReference").getValue();
 						var payload = {};
-						if(oSub.IsWallet){
+						if (oSub.IsWallet) {
 							payload = {
-									"id": id,
-									"Amount": sAmount,
-									"USDAmount" : usdAmount,
-									"CurrencyCode" : currencyCode,
-									"Exchange" : exchange,
-									"Charges" : charges,
-									"SettleDate" : settleDate,
-									"SettleAmount" : settleAmount,
-									"PaymentMode" : paymentMode,
-									"Reference" : reference,
-									"ChangedBy" : userId
-								}
-						}else{
+								"id": id,
+								"Amount": sAmount,
+								"USDAmount": usdAmount,
+								"CurrencyCode": currencyCode,
+								"Exchange": exchange,
+								"Charges": charges,
+								"SettleDate": settleDate,
+								"SettleAmount": settleAmount,
+								"PaymentMode": paymentMode,
+								"Reference": reference,
+								"ChangedBy": userId
+							}
+						} else {
 							payload = {
-									"id": id,
-									"Amount": sAmount,
-									"PaymentMode" : paymentMode,
-									"Reference" : reference,
-									"ChangedBy" : userId
-								}
+								"id": id,
+								"Amount": sAmount,
+								"PaymentMode": paymentMode,
+								"Reference": reference,
+								"ChangedBy": userId
+							}
 						}
 						if (sAmount <= 90000) {
 							$.post('/updateSubcriptionAmount', payload)
 								.done(function(data, status) {
-									MessageBox.success("Update "+data);
+									MessageBox.success("Update " + data);
 									that.destroyEditItems();
 									that.onStartDate();
 								})
@@ -281,7 +281,7 @@ sap.ui.define([
 									that.destroyEditItems();
 									MessageBox.error("Error in access");
 								});
-								oAmountDialog.close();
+							oAmountDialog.close();
 						} else {
 							MessageBox.error("No Subcription is greater than 90,000");
 						}
@@ -297,7 +297,7 @@ sap.ui.define([
 			});
 			oAmountDialog.open();
 		},
-		destroyEditItems : function(){
+		destroyEditItems: function() {
 			Core.byId("idAmount").destroy();
 			Core.byId("idUSDAmount").destroy();
 			Core.byId("idCurrencyCode").destroy();
@@ -309,204 +309,256 @@ sap.ui.define([
 			Core.byId("idReference").destroy();
 			Core.byId("idConfirm").destroy();
 		},
-		getCountryNameFromCode: function(code){
+		getCountryNameFromCode: function(code) {
 			var countryWithCode = this.getView().getModel("local").getProperty("/countries");
 			var name = "";
-			countryWithCode.forEach((item)=>{
-				if(item.code===code){
+			countryWithCode.forEach((item) => {
+				if (item.code === code) {
 					name = item.name
 					return;
 				}
 			});
-			return (name?name:code);
+			return (name ? name : code);
 		},
-		onFullScreen : function(oEvent){
+		onFullScreen: function(oEvent) {
 			var oMode = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getMode();
-			if(oMode==="ShowHideMode"){
+			if (oMode === "ShowHideMode") {
 				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("HideMode");
 				oEvent.getSource().setIcon("sap-icon://exit-full-screen");
 				oEvent.getSource().setText("Hide Fullscreen");
-			}else{
+			} else {
 				oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().setMode("ShowHideMode");
 				oEvent.getSource().setIcon("sap-icon://full-screen");
 				oEvent.getSource().setText("Show Fullscreen");
 			}
 		},
 
-		onAddressMail : function(oEvent){
+		onAddressMail: function(oEvent) {
 			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
 			if (!this.emailApproveDialog) {
-			this.emailApproveDialog = new sap.m.Dialog({
-				type: sap.m.DialogType.Message,
-				title: "Confirm",
-				content: new sap.m.Text({ text: "Please Confirm"}),
-				beginButton: new sap.m.Button({
-					type: sap.m.ButtonType.Emphasized,
-					text: "Submit",
-					press: function () {
-						items.forEach((item, i) => {
-							var oDetail = this.getView().getModel("viewModel").getProperty(item);
-							$.post('/sendEmailForAddress', {
-								"UserName" : oDetail.Name,
-								"EmailId" : oDetail.Email,
-								"Subject" : "[URGENT Action Required]"
-								})
-								.done(function(data, status) {
+				this.emailApproveDialog = new sap.m.Dialog({
+					type: sap.m.DialogType.Message,
+					title: "Confirm",
+					content: new sap.m.Text({
+						text: "Please Confirm"
+					}),
+					beginButton: new sap.m.Button({
+						type: sap.m.ButtonType.Emphasized,
+						text: "Submit",
+						press: function() {
+							items.forEach((item, i) => {
+								var oDetail = this.getView().getModel("viewModel").getProperty(item);
+								$.post('/sendEmailForAddress', {
+										"UserName": oDetail.Name,
+										"EmailId": oDetail.Email,
+										"Subject": "[URGENT Action Required]"
+									})
+									.done(function(data, status) {
 										MessageToast.show("Email Sent");
-								})
-								.fail(function(xhr, status, error) {
-									MessageBox.error("Error in sending Mail");
-								});
-						});
-						this.emailApproveDialog.close();
-					}.bind(this)
-				}),
-				endButton: new sap.m.Button({
-					text: "Cancel",
-					press: function () {
-						this.emailApproveDialog.close();
-					}.bind(this)
-				})
-			});
-		 }
-		this.emailApproveDialog.open();
+									})
+									.fail(function(xhr, status, error) {
+										MessageBox.error("Error in sending Mail");
+									});
+							});
+							this.emailApproveDialog.close();
+						}.bind(this)
+					}),
+					endButton: new sap.m.Button({
+						text: "Cancel",
+						press: function() {
+							this.emailApproveDialog.close();
+						}.bind(this)
+					})
+				});
+			}
+			this.emailApproveDialog.open();
 		},
-
-		onDownloadAllInvoice : function(oEvent){
+		onGenerateInvoiceNo: function(oEvent) {
 			var that = this;
 			var oItems = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
-			const temp = (items,index=0)=>{
+			const temp = (items, index = 0) => {
 				var oDetail = this.getView().getModel("viewModel").getProperty(items[index]);
-				var address = (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"");
-				var patt = new RegExp("haryana","i");
-	 			var isHaryana = patt.test(address);
-				var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
-				if(oDetail.IsWallet && oDetail.SettleAmount===0){
-					MessageToast.show("Incomplete Information, can't download")
-				}
-				else{
-					if(oDetail.InvoiceNo==="null" || oDetail.InvoiceNo===""){
+				if (oDetail.IsWallet && oDetail.SettleAmount === 0) {
+					MessageToast.show("Incomplete Information, can't generate Invoice No")
+				} else {
+					if (oDetail.InvoiceNo === "null" || oDetail.InvoiceNo === "") {
 						$.post('/getInvoiceNo', {
-							"SubcriptionId" : oDetail.id,
-							"PaymentDate" : oDetail.PaymentDate,
-							"UserId" : userId
+								"SubcriptionId": oDetail.id,
+								"PaymentDate": oDetail.PaymentDate,
+								"UserId": userId
 							})
 							.done(function(invoiceNo, status) {
-								if((!isHaryana)&&isGSTIN){
-									that.DownloadInvoiceForOther(oDetail,invoiceNo);
-								}else{
-									that.DownloadInvoice(oDetail,invoiceNo);
+								if (++index < items.length) {
+									temp(items, index);
 								}
-									if(++index<items.length){
-										setTimeout(()=>{
-											temp(items,index);
-										},800);
-									}
+								if (items.length === index) {
+									that.onStartDate();
+									that.getView().setBusy(false);
+									MessageBox.success("Invoice no. generated for all");
+								}
+							})
+							.fail(function(xhr, status, error) {
+								MessageBox.error("Error in Invoice no.");
+								that.getView().setBusy(false);
+							});
+					} else {
+						if (++index < items.length) {
+							temp(items, index);
+						}
+						if (items.length === index) {
+							that.onStartDate();
+							that.getView().setBusy(false);
+							MessageBox.success("Invoice no. generated for all");
+						}
+					}
+
+				}
+
+			}
+			if (oItems.length < 1) {
+				MessageBox.alert("Please select atleast one/all");
+			} else {
+				MessageBox.confirm("Please confirm?", function(val) {
+					if (val === "OK") {
+						that.getView().setBusy(true);
+						temp(oItems);
+					}
+				});
+			}
+		},
+		onDownloadAllInvoice: function(oEvent) {
+			var that = this;
+			var oItems = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
+			const temp = (items, index = 0) => {
+				var oDetail = this.getView().getModel("viewModel").getProperty(items[index]);
+				var address = (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "");
+				var patt = new RegExp("haryana", "i");
+				var isHaryana = patt.test(address);
+				var isGSTIN = (oDetail.GSTIN != "null" && oDetail.GSTIN != "");
+				if (oDetail.IsWallet && oDetail.SettleAmount === 0) {
+					MessageToast.show("Incomplete Information, can't download")
+				} else {
+					if (oDetail.InvoiceNo === "null" || oDetail.InvoiceNo === "") {
+						$.post('/getInvoiceNo', {
+								"SubcriptionId": oDetail.id,
+								"PaymentDate": oDetail.PaymentDate,
+								"UserId": userId
+							})
+							.done(function(invoiceNo, status) {
+								if ((!isHaryana) && isGSTIN) {
+									that.DownloadInvoiceForOther(oDetail, invoiceNo);
+								} else {
+									that.DownloadInvoice(oDetail, invoiceNo);
+								}
+								if (++index < items.length) {
+									setTimeout(() => {
+										temp(items, index);
+									}, 800);
+								}
 							})
 							.fail(function(xhr, status, error) {
 								MessageBox.error("Error in Invoice no.");
 							});
-					}else{
-						if((!isHaryana)&&isGSTIN){
-							that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
-						}else{
-							that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+					} else {
+						if ((!isHaryana) && isGSTIN) {
+							that.DownloadInvoiceForOther(oDetail, oDetail.InvoiceNo);
+						} else {
+							that.DownloadInvoice(oDetail, oDetail.InvoiceNo);
 						}
-							if(++index<items.length){
-								setTimeout(()=>{
-									temp(items,index);
-								},1000);
-							}
+						if (++index < items.length) {
+							setTimeout(() => {
+								temp(items, index);
+							}, 1000);
+						}
 					}
 				}
 
 			}
-			if(oItems.length>0){
+			if (oItems.length > 0) {
 				temp(oItems);
 			}
-			setTimeout(()=>{
+			setTimeout(() => {
 				this.onStartDate();
-			},1250*oItems.length);
+			}, 1250 * oItems.length);
 		},
 
-		onDownloadInvoice : function(oEvent){
+		onDownloadInvoice: function(oEvent) {
 			var that = this;
 			var oDetail = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
-			var address = (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"");
+			var address = (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "");
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
-			var patt = new RegExp("haryana","i");
-			var pattern = new RegExp("INV-","i");
- 			var isHaryana = patt.test(address);
-			var isGSTIN = (oDetail.GSTIN!="null"&&oDetail.GSTIN!="");
-			if(oDetail.IsWallet && oDetail.SettleAmount===0){
+			var patt = new RegExp("haryana", "i");
+			var pattern = new RegExp("INV-", "i");
+			var isHaryana = patt.test(address);
+			var isGSTIN = (oDetail.GSTIN != "null" && oDetail.GSTIN != "");
+			if (oDetail.IsWallet && oDetail.SettleAmount === 0) {
 				MessageToast.show("Incomplete Information, can't download")
-			}
-			else{
-				if(!pattern.test(oDetail.InvoiceNo)){
+			} else {
+				if (!pattern.test(oDetail.InvoiceNo)) {
 					$.post('/getInvoiceNo', {
-						"SubcriptionId" : oDetail.id,
-						"PaymentDate" : oDetail.PaymentDate,
-						"UserId" : userId
+							"SubcriptionId": oDetail.id,
+							"PaymentDate": oDetail.PaymentDate,
+							"UserId": userId
 						})
 						.done(function(invoiceNo, status) {
-							if((!isHaryana)&&isGSTIN){
-								that.DownloadInvoiceForOther(oDetail,invoiceNo);
-							}else{
-								that.DownloadInvoice(oDetail,invoiceNo);
+							if ((!isHaryana) && isGSTIN) {
+								that.DownloadInvoiceForOther(oDetail, invoiceNo);
+							} else {
+								that.DownloadInvoice(oDetail, invoiceNo);
 							}
-								that.onStartDate();
+							that.onStartDate();
 						})
 						.fail(function(xhr, status, error) {
 							MessageBox.error("Error in Invoice no.");
 						});
-				}else{
-					if((!isHaryana)&&isGSTIN){
-						that.DownloadInvoiceForOther(oDetail,oDetail.InvoiceNo);
-					}
-					else{
-						that.DownloadInvoice(oDetail,oDetail.InvoiceNo);
+				} else {
+					if ((!isHaryana) && isGSTIN) {
+						that.DownloadInvoiceForOther(oDetail, oDetail.InvoiceNo);
+					} else {
+						that.DownloadInvoice(oDetail, oDetail.InvoiceNo);
 					}
 				}
 			}
 		},
-	  DownloadInvoice: function(oDetail,invoiceNo) {
+		DownloadInvoice: function(oDetail, invoiceNo) {
 			var country = this.getCountryNameFromCode(oDetail.Country);
 			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
-			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
+			billingDate = billingDate[0] + " " + billingDate[1] + ", " + billingDate[2];
 			var products = [{
 				"Course": oDetail.CourseName,
 				"Batch": oDetail.BatchNo,
 				"HSN": "999293",
 				"Qty": 1,
 				"Rate": oDetail.Amount,
-				"CGST": (oDetail.IsGST ? "9%":"0%"),
-				"SGST": (oDetail.IsGST ? "9%":"0%"),
+				"CGST": (oDetail.IsGST ? "9%" : "0%"),
+				"SGST": (oDetail.IsGST ? "9%" : "0%"),
 				"Amount": oDetail.Amount
 			}];
 			const invoiceDetail = {
 				shipping: {
 					name: oDetail.Name,
-					email : oDetail.Email,
-					mob : (oDetail.ContactNo ? "+"+oDetail.ContactNo:""),
-					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
-					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
+					email: oDetail.Email,
+					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
+					GSTIN: (oDetail.GSTIN != "null" ? oDetail.GSTIN : ""),
+					address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
 				},
 				items: products,
 				CGST: oDetail.CGST,
 				SGST: oDetail.SGST,
-				fullAmount: (oDetail.IsWallet ? (parseFloat(oDetail.USDAmount)*parseFloat(oDetail.Exchange)).toFixed(2) : oDetail.FullAmount),
-				usdAmount : oDetail.USDAmount,
+				fullAmount: (oDetail.IsWallet ? (parseFloat(oDetail.USDAmount) * parseFloat(oDetail.Exchange)).toFixed(2) : oDetail.FullAmount),
+				usdAmount: oDetail.USDAmount,
 				order_number: invoiceNo,
-				paymentMode : oDetail.PaymentMode,
-				IsWallet : oDetail.IsWallet,
+				paymentMode: oDetail.PaymentMode,
+				IsWallet: oDetail.IsWallet,
 				header: {
 					company_name: "Soyuz Technologies LLP",
-					company_logo: "data:image/png;base64,"+this.logo,
-					signature : "data:image/png;base64,"+this.signature,
+					company_logo: "data:image/png;base64," + this.logo,
+					signature: "data:image/png;base64," + this.signature,
 					// hear \\ is used to change line
 					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
-					GSTIN : (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
+					GSTIN: (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
 				},
 				footer: {
 					text: "This is a computer generated invoice"
@@ -526,13 +578,13 @@ sap.ui.define([
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
 						.fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
+						.text("GSTIN: " + invoice.header.GSTIN, 112, 87)
 						.moveDown();
 				} else {
 					doc.fontSize(20)
 						.text(invoice.header.company_name, 50, 45)
-            .fontSize(10)
-            .text("GSTIN: "+invoice.header.GSTIN, 50, 75)
+						.fontSize(10)
+						.text("GSTIN: " + invoice.header.GSTIN, 50, 75)
 						.moveDown()
 				}
 
@@ -568,7 +620,7 @@ sap.ui.define([
 					.text("Address:", 50, customerInformationTop + 60)
 					.text(invoice.shipping.address, 150, customerInformationTop + 60)
 
-          .text("Invoice Number:", 350, customerInformationTop)
+					.text("Invoice Number:", 350, customerInformationTop)
 					.font("Helvetica-Bold")
 					.text(invoice.order_number, 450, customerInformationTop)
 					.font("Helvetica")
@@ -651,69 +703,69 @@ sap.ui.define([
 					doc,
 					paidToDatePosition,
 					"Total (INR):",
-					  formatCurrency(invoice.fullAmount)
+					formatCurrency(invoice.fullAmount)
 				);
 				let amountInWordsPosition = sgstPosition + 20;
 				generateHr(doc, amountInWordsPosition + 20);
 				doc.font("Helvetica-Bold")
-				.text("Amount in Words:", 50, amountInWordsPosition + 30)
-				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
+					.text("Amount in Words:", 50, amountInWordsPosition + 30)
+					.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
 
-				if(invoice.IsWallet){
+				if (invoice.IsWallet) {
 					doc.font("Helvetica-Bold")
-					.text("Paypal Exchange", 50, amountInWordsPosition + 80)
-					amountInWordsPosition+=10
+						.text("Paypal Exchange", 50, amountInWordsPosition + 80)
+					amountInWordsPosition += 10
 					doc.font("Helvetica")
-					.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
-					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
-					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82,{
-						width: 105,
-						align: "right"
-					})
-					.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
-					.text("Amount:", 60, amountInWordsPosition + 100)
-					.text(formatCurrency(invoice.usdAmount)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 100,{
-						width: 90,
-						align: "right"
-					})
-					.text("Fee:", 60, amountInWordsPosition + 120)
-					.text("-"+formatCurrency(oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 120,{
-						width: 90,
-						align: "right"
-					})
-					.text("------------------", 120, amountInWordsPosition + 132,{
-						width: 90,
-						align: "right"
-					})
-					.text("Sub Total:", 60, amountInWordsPosition + 145)
-					.text(formatCurrency(oDetail.USDAmount-oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 145,{
-						width: 90,
-						align: "right"
-					})
-					.text("Ex. Rate:", 60, amountInWordsPosition + 165)
-					.text(formatCurrency(oDetail.Exchange)+" INR", 115, amountInWordsPosition + 165,{
-						width: 90,
-						align: "right"
-					})
-					.text("Amount(INR):", 60, amountInWordsPosition + 185)
-					.text(formatCurrency(oDetail.SettleAmount)+" INR", 115, amountInWordsPosition + 185,{
-						width: 90,
-						align: "right"
-					})
+						.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
+						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
+						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82, {
+							width: 105,
+							align: "right"
+						})
+						.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
+						.text("Amount:", 60, amountInWordsPosition + 100)
+						.text(formatCurrency(invoice.usdAmount) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 100, {
+							width: 90,
+							align: "right"
+						})
+						.text("Fee:", 60, amountInWordsPosition + 120)
+						.text("-" + formatCurrency(oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 120, {
+							width: 90,
+							align: "right"
+						})
+						.text("------------------", 120, amountInWordsPosition + 132, {
+							width: 90,
+							align: "right"
+						})
+						.text("Sub Total:", 60, amountInWordsPosition + 145)
+						.text(formatCurrency(oDetail.USDAmount - oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 145, {
+							width: 90,
+							align: "right"
+						})
+						.text("Ex. Rate:", 60, amountInWordsPosition + 165)
+						.text(formatCurrency(oDetail.Exchange) + " INR", 115, amountInWordsPosition + 165, {
+							width: 90,
+							align: "right"
+						})
+						.text("Amount(INR):", 60, amountInWordsPosition + 185)
+						.text(formatCurrency(oDetail.SettleAmount) + " INR", 115, amountInWordsPosition + 185, {
+							width: 90,
+							align: "right"
+						})
 				}
-				const signaturePosition = amountInWordsPosition+200;
+				const signaturePosition = amountInWordsPosition + 200;
 				if (this.signature) {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
-					.image(invoice.header.signature, 440, signaturePosition+20, {
-						height : 50,
-						width : 110
+						.image(invoice.header.signature, 440, signaturePosition + 20, {
+							height: 50,
+							width: 110
 						})
-						.text("Designated Partner", 440, signaturePosition+80)
+						.text("Designated Partner", 440, signaturePosition + 80)
 						.moveDown();
 				} else {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
-						.text("Designated Partner", 440, signaturePosition+80)
+						.text("Designated Partner", 440, signaturePosition + 80)
 						.moveDown()
 				}
 			}
@@ -790,7 +842,7 @@ sap.ui.define([
 					.stroke();
 			}
 
-			let formatCurrency = (value, symbol="") => {
+			let formatCurrency = (value, symbol = "") => {
 				if (value) {
 					var x = value.toString().split('.');
 					var y = (x.length > 1 ? "." + x[1] : "");
@@ -873,405 +925,405 @@ sap.ui.define([
 
 					const downloadLink = document.createElement('a');
 					downloadLink.href = url;
-					downloadLink.download = invoiceNo+"_"+oDetail.Country+"_"+oDetail.Name;
+					downloadLink.download = invoiceNo + "_" + oDetail.Country + "_" + oDetail.Name;
 					downloadLink.click();
 				});
 			}
 			niceInvoice(invoiceDetail);
 		},
-		DownloadInvoiceForOther: function(oDetail,invoiceNo) {
- 			var country = this.getCountryNameFromCode(oDetail.Country);
- 			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
- 			billingDate = billingDate[0]+" "+ billingDate[1]+", "+billingDate[2];
- 			var products = [{
- 				"Course": oDetail.CourseName,
- 				"Batch": oDetail.BatchNo,
- 				"HSN": "999293",
- 				"Qty": 1,
- 				"Rate": oDetail.Amount,
- 				"IGST": (oDetail.IsGST ? "18%":"0%"),
- 				"Amount": oDetail.Amount
- 			}];
- 			const invoiceDetail = {
- 				shipping: {
- 					name: oDetail.Name,
- 					email : oDetail.Email,
- 					mob : (oDetail.ContactNo ? "+"+oDetail.ContactNo:""),
- 					GSTIN : (oDetail.GSTIN !="null" ? oDetail.GSTIN : ""),
- 					address:  (oDetail.Address!="null" ? oDetail.Address + ", " : "")+(oDetail.City !="null" ? oDetail.City + ", ":"") + country
- 				},
- 				items: products,
- 				IGST: parseFloat(oDetail.CGST)+parseFloat(oDetail.SGST),
- 				fullAmount: (oDetail.IsWallet ? (parseFloat(oDetail.USDAmount)*parseFloat(oDetail.Exchange)).toFixed(2) : oDetail.FullAmount),
- 				usdAmount : oDetail.USDAmount,
- 				order_number: invoiceNo,
- 				paymentMode : oDetail.PaymentMode,
- 				IsWallet : oDetail.IsWallet,
- 				header: {
- 					company_name: "Soyuz Technologies LLP",
- 					company_logo: "data:image/png;base64,"+this.logo,
- 					signature : "data:image/png;base64,"+this.signature,
- 					// hear \\ is used to change line
- 					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
- 					GSTIN : (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
- 				},
- 				footer: {
- 					text: "This is a computer generated invoice"
- 				},
- 				currency_symbol: " INR",
- 				date: {
- 					billing_date: billingDate
- 				}
- 			};
+		DownloadInvoiceForOther: function(oDetail, invoiceNo) {
+			var country = this.getCountryNameFromCode(oDetail.Country);
+			var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
+			billingDate = billingDate[0] + " " + billingDate[1] + ", " + billingDate[2];
+			var products = [{
+				"Course": oDetail.CourseName,
+				"Batch": oDetail.BatchNo,
+				"HSN": "999293",
+				"Qty": 1,
+				"Rate": oDetail.Amount,
+				"IGST": (oDetail.IsGST ? "18%" : "0%"),
+				"Amount": oDetail.Amount
+			}];
+			const invoiceDetail = {
+				shipping: {
+					name: oDetail.Name,
+					email: oDetail.Email,
+					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
+					GSTIN: (oDetail.GSTIN != "null" ? oDetail.GSTIN : ""),
+					address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
+				},
+				items: products,
+				IGST: parseFloat(oDetail.CGST) + parseFloat(oDetail.SGST),
+				fullAmount: (oDetail.IsWallet ? (parseFloat(oDetail.USDAmount) * parseFloat(oDetail.Exchange)).toFixed(2) : oDetail.FullAmount),
+				usdAmount: oDetail.USDAmount,
+				order_number: invoiceNo,
+				paymentMode: oDetail.PaymentMode,
+				IsWallet: oDetail.IsWallet,
+				header: {
+					company_name: "Soyuz Technologies LLP",
+					company_logo: "data:image/png;base64," + this.logo,
+					signature: "data:image/png;base64," + this.signature,
+					// hear \\ is used to change line
+					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
+					GSTIN: (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
+				},
+				footer: {
+					text: "This is a computer generated invoice"
+				},
+				currency_symbol: " INR",
+				date: {
+					billing_date: billingDate
+				}
+			};
 
- 			let header = (doc, invoice) => {
+			let header = (doc, invoice) => {
 
- 				if (this.logo) {
- 					doc.image(invoice.header.company_logo, 50, 45, {
- 							width: 50
- 						})
- 						.fontSize(20)
- 						.text(invoice.header.company_name, 110, 57)
- 						.fontSize(10)
-             .text("GSTIN: "+invoice.header.GSTIN, 112, 87)
- 						.moveDown();
- 				} else {
- 					doc.fontSize(20)
- 						.text(invoice.header.company_name, 50, 45)
-             .fontSize(10)
-             .text("GSTIN: "+invoice.header.GSTIN, 50, 75)
- 						.moveDown()
- 				}
+				if (this.logo) {
+					doc.image(invoice.header.company_logo, 50, 45, {
+							width: 50
+						})
+						.fontSize(20)
+						.text(invoice.header.company_name, 110, 57)
+						.fontSize(10)
+						.text("GSTIN: " + invoice.header.GSTIN, 112, 87)
+						.moveDown();
+				} else {
+					doc.fontSize(20)
+						.text(invoice.header.company_name, 50, 45)
+						.fontSize(10)
+						.text("GSTIN: " + invoice.header.GSTIN, 50, 75)
+						.moveDown()
+				}
 
- 				if (invoice.header.company_address.length !== 0) {
- 					companyAddress(doc, invoice.header.company_address);
- 				}
+				if (invoice.header.company_address.length !== 0) {
+					companyAddress(doc, invoice.header.company_address);
+				}
 
- 			}
+			}
 
- 			let customerInformation = (doc, invoice) => {
- 				doc
- 					.fillColor("#444444")
- 					.fontSize(20)
- 					.text("Invoice", 50, 160);
+			let customerInformation = (doc, invoice) => {
+				doc
+					.fillColor("#444444")
+					.fontSize(20)
+					.text("Invoice", 50, 160);
 
- 				generateHr(doc, 185);
+				generateHr(doc, 185);
 
- 				const customerInformationTop = 200;
+				const customerInformationTop = 200;
 
- 				doc.fontSize(10)
- 					.text("Name:", 50, customerInformationTop)
- 					.font("Helvetica-Bold")
- 					.text(invoice.shipping.name, 150, customerInformationTop)
- 					.font("Helvetica")
- 					.text("E-mail:", 50, customerInformationTop + 15)
- 					.text(invoice.shipping.email, 150, customerInformationTop + 15)
- 					.text("Mob.:", 50, customerInformationTop + 30)
- 					.text(invoice.shipping.mob, 150, customerInformationTop + 30)
- 					.fontSize(9)
- 					.text("GSTIN:", 50, customerInformationTop + 45)
- 					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
- 					.fontSize(10)
- 					.text("Address:", 50, customerInformationTop + 60)
- 					.text(invoice.shipping.address, 150, customerInformationTop + 60)
+				doc.fontSize(10)
+					.text("Name:", 50, customerInformationTop)
+					.font("Helvetica-Bold")
+					.text(invoice.shipping.name, 150, customerInformationTop)
+					.font("Helvetica")
+					.text("E-mail:", 50, customerInformationTop + 15)
+					.text(invoice.shipping.email, 150, customerInformationTop + 15)
+					.text("Mob.:", 50, customerInformationTop + 30)
+					.text(invoice.shipping.mob, 150, customerInformationTop + 30)
+					.fontSize(9)
+					.text("GSTIN:", 50, customerInformationTop + 45)
+					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
+					.fontSize(10)
+					.text("Address:", 50, customerInformationTop + 60)
+					.text(invoice.shipping.address, 150, customerInformationTop + 60)
 
-           .text("Invoice Number:", 350, customerInformationTop)
- 					.font("Helvetica-Bold")
- 					.text(invoice.order_number, 450, customerInformationTop)
- 					.font("Helvetica")
- 					.text("Invoice Date:", 350, customerInformationTop + 15)
- 					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
- 					.text("Payment Mode:", 350, customerInformationTop + 30)
- 					.font("Helvetica-Bold")
- 					.text(invoice.paymentMode, 450, customerInformationTop + 30)
- 					.moveDown();
+					.text("Invoice Number:", 350, customerInformationTop)
+					.font("Helvetica-Bold")
+					.text(invoice.order_number, 450, customerInformationTop)
+					.font("Helvetica")
+					.text("Invoice Date:", 350, customerInformationTop + 15)
+					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
+					.text("Payment Mode:", 350, customerInformationTop + 30)
+					.font("Helvetica-Bold")
+					.text(invoice.paymentMode, 450, customerInformationTop + 30)
+					.moveDown();
 
- 				generateHr(doc, 280);
- 			}
+				generateHr(doc, 280);
+			}
 
- 			let invoiceTable = (doc, invoice) => {
- 				let i;
- 				const invoiceTableTop = 330;
- 				const currencySymbol = invoice.currency_symbol;
+			let invoiceTable = (doc, invoice) => {
+				let i;
+				const invoiceTableTop = 330;
+				const currencySymbol = invoice.currency_symbol;
 
- 				doc.font("Helvetica-Bold");
- 				tableRow(
- 					doc,
- 					invoiceTableTop,
- 					"Course",
- 					"Batch",
- 					"HSN/SAC",
- 					"Rate",
- 					"IGST",
- 					"Amount"
- 				);
- 				generateHr(doc, invoiceTableTop + 20);
- 				doc.font("Helvetica");
- 				var totalAmount = 0;
- 				var totalGST = 0;
- 				for (i = 0; i < invoice.items.length; i++) {
- 					const item = invoice.items[i];
- 					const position = invoiceTableTop + (i + 1) * 30;
- 					tableRow(
- 						doc,
- 						position,
- 						item.Course,
- 						item.Batch,
- 						item.HSN,
- 						item.Rate,
- 						item.IGST,
- 						item.Amount
- 					);
- 					totalAmount += parseFloat(item.Amount);
- 					generateHr(doc, position + 20);
- 				}
+				doc.font("Helvetica-Bold");
+				tableRow(
+					doc,
+					invoiceTableTop,
+					"Course",
+					"Batch",
+					"HSN/SAC",
+					"Rate",
+					"IGST",
+					"Amount"
+				);
+				generateHr(doc, invoiceTableTop + 20);
+				doc.font("Helvetica");
+				var totalAmount = 0;
+				var totalGST = 0;
+				for (i = 0; i < invoice.items.length; i++) {
+					const item = invoice.items[i];
+					const position = invoiceTableTop + (i + 1) * 30;
+					tableRow(
+						doc,
+						position,
+						item.Course,
+						item.Batch,
+						item.HSN,
+						item.Rate,
+						item.IGST,
+						item.Amount
+					);
+					totalAmount += parseFloat(item.Amount);
+					generateHr(doc, position + 20);
+				}
 
- 				const subtotalPosition = invoiceTableTop + (i + 1) * 30;
- 				doc.font("Helvetica-Bold");
- 				totalTable(
- 					doc,
- 					subtotalPosition,
- 					"Sub Total:",
- 					formatCurrency(totalAmount.toFixed(2))
- 				);
- 				const igstPosition = subtotalPosition + 20;
- 				doc.font("Helvetica-Bold");
- 				totalTable(
- 					doc,
- 					igstPosition,
- 					"IGST:",
- 					formatCurrency(invoice.IGST)
- 				);
- 				const paidToDatePosition = igstPosition + 20;
- 				doc.font("Helvetica-Bold");
- 				totalTable(
- 					doc,
- 					paidToDatePosition,
- 					"Total (INR):",
- 					  formatCurrency(invoice.fullAmount)
- 				);
- 				let amountInWordsPosition = igstPosition + 20;
- 				generateHr(doc, amountInWordsPosition + 20);
- 				doc.font("Helvetica-Bold")
- 				.text("Amount in Words:", 50, amountInWordsPosition + 30)
- 				.text(this.formatter.convertNumberToWords(invoice.fullAmount) +" only", 150, amountInWordsPosition + 30)
- 				generateHr(doc, amountInWordsPosition + 50);
+				const subtotalPosition = invoiceTableTop + (i + 1) * 30;
+				doc.font("Helvetica-Bold");
+				totalTable(
+					doc,
+					subtotalPosition,
+					"Sub Total:",
+					formatCurrency(totalAmount.toFixed(2))
+				);
+				const igstPosition = subtotalPosition + 20;
+				doc.font("Helvetica-Bold");
+				totalTable(
+					doc,
+					igstPosition,
+					"IGST:",
+					formatCurrency(invoice.IGST)
+				);
+				const paidToDatePosition = igstPosition + 20;
+				doc.font("Helvetica-Bold");
+				totalTable(
+					doc,
+					paidToDatePosition,
+					"Total (INR):",
+					formatCurrency(invoice.fullAmount)
+				);
+				let amountInWordsPosition = igstPosition + 20;
+				generateHr(doc, amountInWordsPosition + 20);
+				doc.font("Helvetica-Bold")
+					.text("Amount in Words:", 50, amountInWordsPosition + 30)
+					.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
+				generateHr(doc, amountInWordsPosition + 50);
 
- 				if(invoice.IsWallet){
- 					doc.font("Helvetica-Bold")
- 					.text("Paypal Exchange", 50, amountInWordsPosition + 80)
- 					amountInWordsPosition+=10
- 					doc.font("Helvetica")
- 					.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
- 					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
- 					.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82,{
- 						width: 105,
- 						align: "right"
- 					})
- 					.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
- 					.text("Amount:", 60, amountInWordsPosition + 100)
- 					.text(formatCurrency(invoice.usdAmount)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 100,{
- 						width: 90,
- 						align: "right"
- 					})
- 					.text("Fee:", 60, amountInWordsPosition + 120)
- 					.text("-"+formatCurrency(oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 120,{
- 						width: 90,
- 						align: "right"
- 					})
- 					.text("------------------", 120, amountInWordsPosition + 132,{
- 						width: 90,
- 						align: "right"
- 					})
- 					.text("Sub Total:", 60, amountInWordsPosition + 145)
- 					.text(formatCurrency(oDetail.USDAmount-oDetail.Charges)+" "+oDetail.CurrencyCode, 115, amountInWordsPosition + 145,{
- 						width: 90,
- 						align: "right"
- 					})
- 					.text("Ex. Rate:", 60, amountInWordsPosition + 165)
- 					.text(formatCurrency(oDetail.Exchange)+" INR", 115, amountInWordsPosition + 165,{
- 						width: 90,
- 						align: "right"
- 					})
- 					.text("Amount(INR):", 60, amountInWordsPosition + 185)
- 					.text(formatCurrency(oDetail.SettleAmount)+" INR", 115, amountInWordsPosition + 185,{
- 						width: 90,
- 						align: "right"
- 					})
- 				}
- 				const signaturePosition = amountInWordsPosition+200;
- 				if (this.signature) {
- 					doc.text(invoice.header.company_name, 430, signaturePosition)
- 					.image(invoice.header.signature, 440, signaturePosition+20, {
- 						height : 50,
- 						width : 110
- 						})
- 						.text("Designated Partner", 440, signaturePosition+80)
- 						.moveDown();
- 				} else {
- 					doc.text(invoice.header.company_name, 430, signaturePosition)
- 						.text("Designated Partner", 440, signaturePosition+80)
- 						.moveDown()
- 				}
- 			}
+				if (invoice.IsWallet) {
+					doc.font("Helvetica-Bold")
+						.text("Paypal Exchange", 50, amountInWordsPosition + 80)
+					amountInWordsPosition += 10
+					doc.font("Helvetica")
+						.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
+						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
+						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82, {
+							width: 105,
+							align: "right"
+						})
+						.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
+						.text("Amount:", 60, amountInWordsPosition + 100)
+						.text(formatCurrency(invoice.usdAmount) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 100, {
+							width: 90,
+							align: "right"
+						})
+						.text("Fee:", 60, amountInWordsPosition + 120)
+						.text("-" + formatCurrency(oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 120, {
+							width: 90,
+							align: "right"
+						})
+						.text("------------------", 120, amountInWordsPosition + 132, {
+							width: 90,
+							align: "right"
+						})
+						.text("Sub Total:", 60, amountInWordsPosition + 145)
+						.text(formatCurrency(oDetail.USDAmount - oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 145, {
+							width: 90,
+							align: "right"
+						})
+						.text("Ex. Rate:", 60, amountInWordsPosition + 165)
+						.text(formatCurrency(oDetail.Exchange) + " INR", 115, amountInWordsPosition + 165, {
+							width: 90,
+							align: "right"
+						})
+						.text("Amount(INR):", 60, amountInWordsPosition + 185)
+						.text(formatCurrency(oDetail.SettleAmount) + " INR", 115, amountInWordsPosition + 185, {
+							width: 90,
+							align: "right"
+						})
+				}
+				const signaturePosition = amountInWordsPosition + 200;
+				if (this.signature) {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+						.image(invoice.header.signature, 440, signaturePosition + 20, {
+							height: 50,
+							width: 110
+						})
+						.text("Designated Partner", 440, signaturePosition + 80)
+						.moveDown();
+				} else {
+					doc.text(invoice.header.company_name, 430, signaturePosition)
+						.text("Designated Partner", 440, signaturePosition + 80)
+						.moveDown()
+				}
+			}
 
- 			let footer = (doc, invoice) => {
- 				if (invoice.footer.text.length !== 0) {
- 					generateHr(doc, 760);
- 					doc.fontSize(8).text(invoice.footer.text, 50, 770, {
- 						align: "right",
- 						width: 500
- 					});
- 				}
- 			}
+			let footer = (doc, invoice) => {
+				if (invoice.footer.text.length !== 0) {
+					generateHr(doc, 760);
+					doc.fontSize(8).text(invoice.footer.text, 50, 770, {
+						align: "right",
+						width: 500
+					});
+				}
+			}
 
- 			let totalTable = (
- 				doc,
- 				y,
- 				name,
- 				description
- 			) => {
- 				doc
- 					.fontSize(10)
- 					.text(name, 380, y, {
- 						width: 90,
- 						align: "right"
- 					})
- 					.text(description, 0, y, {
- 						align: "right"
- 					})
- 			}
+			let totalTable = (
+				doc,
+				y,
+				name,
+				description
+			) => {
+				doc
+					.fontSize(10)
+					.text(name, 380, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(description, 0, y, {
+						align: "right"
+					})
+			}
 
- 			let tableRow = (
- 				doc,
- 				y,
- 				course,
- 				batch,
- 				hsn,
- 				rate,
- 				igst,
- 				amount
- 			) => {
- 				doc
- 					.fontSize(10)
- 					.text(course, 50, y)
- 					.text(batch, 160, y)
- 					.text(hsn, 222, y, {
- 						width: 90,
- 						align: "right"
- 					})
- 					.text(rate, 300, y, {
- 						width: 90,
- 						align: "right"
- 					})
- 					.text(igst, 380, y, {
- 						width: 90,
- 						align: "right"
- 					})
- 					.text(amount, 0, y, {
- 						align: "right"
- 					});
- 			}
+			let tableRow = (
+				doc,
+				y,
+				course,
+				batch,
+				hsn,
+				rate,
+				igst,
+				amount
+			) => {
+				doc
+					.fontSize(10)
+					.text(course, 50, y)
+					.text(batch, 160, y)
+					.text(hsn, 222, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(rate, 300, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(igst, 380, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(amount, 0, y, {
+						align: "right"
+					});
+			}
 
- 			let generateHr = (doc, y) => {
- 				doc
- 					.strokeColor("#aaaaaa")
- 					.lineWidth(1)
- 					.moveTo(50, y)
- 					.lineTo(550, y)
- 					.stroke();
- 			}
+			let generateHr = (doc, y) => {
+				doc
+					.strokeColor("#aaaaaa")
+					.lineWidth(1)
+					.moveTo(50, y)
+					.lineTo(550, y)
+					.stroke();
+			}
 
- 			let formatCurrency = (value, symbol="") => {
- 				if (value) {
- 					var x = value.toString().split('.');
- 					var y = (x.length > 1 ? "." + x[1] : "");
- 					x = x[0];
- 					var lastThree = x.substring(x.length - 3);
- 					var otherNumbers = x.substring(0, x.length - 3);
- 					if (otherNumbers != '')
- 						lastThree = ',' + lastThree;
- 					var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
- 					return res + y + symbol;
- 				} else {
- 					return value + symbol;
- 				}
- 			}
+			let formatCurrency = (value, symbol = "") => {
+				if (value) {
+					var x = value.toString().split('.');
+					var y = (x.length > 1 ? "." + x[1] : "");
+					x = x[0];
+					var lastThree = x.substring(x.length - 3);
+					var otherNumbers = x.substring(0, x.length - 3);
+					if (otherNumbers != '')
+						lastThree = ',' + lastThree;
+					var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+					return res + y + symbol;
+				} else {
+					return value + symbol;
+				}
+			}
 
- 			let getNumber = str => {
- 				if (str.length !== 0) {
- 					var num = str.replace(/[^0-9]/g, '');
- 				} else {
- 					var num = 0;
- 				}
+			let getNumber = str => {
+				if (str.length !== 0) {
+					var num = str.replace(/[^0-9]/g, '');
+				} else {
+					var num = 0;
+				}
 
- 				return num;
- 			}
+				return num;
+			}
 
- 			let checkIfTaxAvailable = tax => {
- 				let validatedTax = getNumber(tax);
- 				if (Number.isNaN(validatedTax) === false && validatedTax <= 100 && validatedTax > 0) {
- 					var taxValue = tax;
- 				} else {
- 					var taxValue = '---';
- 				}
+			let checkIfTaxAvailable = tax => {
+				let validatedTax = getNumber(tax);
+				if (Number.isNaN(validatedTax) === false && validatedTax <= 100 && validatedTax > 0) {
+					var taxValue = tax;
+				} else {
+					var taxValue = '---';
+				}
 
- 				return taxValue;
- 			}
+				return taxValue;
+			}
 
- 			let applyTaxIfAvailable = (price, gst) => {
+			let applyTaxIfAvailable = (price, gst) => {
 
 
- 				let validatedTax = getNumber(gst);
- 				if (Number.isNaN(validatedTax) === false && validatedTax <= 100) {
- 					let taxValue = '.' + validatedTax;
- 					var itemPrice = price * (1 + taxValue);
- 				} else {
- 					var itemPrice = price * (1 + taxValue);
- 				}
+				let validatedTax = getNumber(gst);
+				if (Number.isNaN(validatedTax) === false && validatedTax <= 100) {
+					let taxValue = '.' + validatedTax;
+					var itemPrice = price * (1 + taxValue);
+				} else {
+					var itemPrice = price * (1 + taxValue);
+				}
 
- 				return itemPrice;
- 			}
+				return itemPrice;
+			}
 
- 			let companyAddress = (doc, address) => {
- 				let str = address;
- 				// let chunks = str.match(/.{0,25}(\s|$)/g);
- 				let chunks = str.split("\\");
- 				let first = 50;
- 				chunks.forEach(function(i, x) {
- 					doc.fontSize(10).text(chunks[x], 300, first, {
- 						align: "right"
- 					});
- 					first = +first + 15;
- 				});
- 			}
+			let companyAddress = (doc, address) => {
+				let str = address;
+				// let chunks = str.match(/.{0,25}(\s|$)/g);
+				let chunks = str.split("\\");
+				let first = 50;
+				chunks.forEach(function(i, x) {
+					doc.fontSize(10).text(chunks[x], 300, first, {
+						align: "right"
+					});
+					first = +first + 15;
+				});
+			}
 
- 			let niceInvoice = (invoice) => {
- 				var doc = new PDFDocument({
- 					size: "A4",
- 					margin: 40
- 				});
- 				var stream = doc.pipe(blobStream());
- 				header(doc, invoice);
- 				customerInformation(doc, invoice);
- 				invoiceTable(doc, invoice);
- 				footer(doc, invoice);
- 				doc.end();
- 				stream.on('finish', function() {
- 					// get a blob you can do whatever you like with
- 					const blob = stream.toBlob('application/pdf');
- 					// or get a blob URL for display in the browser
- 					const url = stream.toBlobURL('application/pdf');
+			let niceInvoice = (invoice) => {
+				var doc = new PDFDocument({
+					size: "A4",
+					margin: 40
+				});
+				var stream = doc.pipe(blobStream());
+				header(doc, invoice);
+				customerInformation(doc, invoice);
+				invoiceTable(doc, invoice);
+				footer(doc, invoice);
+				doc.end();
+				stream.on('finish', function() {
+					// get a blob you can do whatever you like with
+					const blob = stream.toBlob('application/pdf');
+					// or get a blob URL for display in the browser
+					const url = stream.toBlobURL('application/pdf');
 
- 					const downloadLink = document.createElement('a');
- 					downloadLink.href = url;
- 					downloadLink.download = invoiceNo+"_"+oDetail.Country+"_"+oDetail.Name;
- 					downloadLink.click();
- 				});
- 			}
- 			niceInvoice(invoiceDetail);
- 		},
-		onWalletCalculator : function(oEvent){
+					const downloadLink = document.createElement('a');
+					downloadLink.href = url;
+					downloadLink.download = invoiceNo + "_" + oDetail.Country + "_" + oDetail.Name;
+					downloadLink.click();
+				});
+			}
+			niceInvoice(invoiceDetail);
+		},
+		onWalletCalculator: function(oEvent) {
 			if (!this.oConfirmDialog) {
 				this.oConfirmDialog = new sap.m.Dialog({
 					type: sap.m.DialogType.Message,
@@ -1281,47 +1333,85 @@ sap.ui.define([
 							content: [
 								new sap.ui.layout.VerticalLayout({
 									content: [
-										new sap.m.Label({ text: "Wallet Amount", required : true }),
-										new sap.m.Input("idWalletAmount",{value : 0, liveChange : function(){
-											var walletFee = Core.byId("idWalletFee").getValue();
-											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
-											exchangeRate = exchangeRate.toFixed(4);
-											Core.byId("idExchangeRate").setText(exchangeRate);
-											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
-										}}),
-										new sap.m.Label({ text: "Exch. Rate:", required : true }),
-										new sap.m.Label({ text: "Fee(INR): ", required : true }),
-										new sap.m.Label({ text: "Total Credit:+" }),
-										new sap.m.Label({ text: "Total Fees:+" })
+										new sap.m.Label({
+											text: "Wallet Amount",
+											required: true
+										}),
+										new sap.m.Input("idWalletAmount", {
+											value: 0,
+											liveChange: function() {
+												var walletFee = Core.byId("idWalletFee").getValue();
+												var exchangeRate = Core.byId("idIndianAmount").getValue() / (Core.byId("idWalletAmount").getValue() - walletFee);
+												exchangeRate = exchangeRate.toFixed(4);
+												Core.byId("idExchangeRate").setText(exchangeRate);
+												Core.byId("idFeeINR").setText((walletFee * exchangeRate).toFixed(2));
+											}
+										}),
+										new sap.m.Label({
+											text: "Exch. Rate:",
+											required: true
+										}),
+										new sap.m.Label({
+											text: "Fee(INR): ",
+											required: true
+										}),
+										new sap.m.Label({
+											text: "Total Credit:+"
+										}),
+										new sap.m.Label({
+											text: "Total Fees:+"
+										})
 									]
 								}),
 								new sap.ui.layout.VerticalLayout({
 									content: [
-										new sap.m.Label({ text: "Wallet Fee", required : true }),
-										new sap.m.Input("idWalletFee",{value : 0, liveChange : function(){
-											var walletFee = Core.byId("idWalletFee").getValue();
-											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
-											exchangeRate = exchangeRate.toFixed(4);
-											Core.byId("idExchangeRate").setText(exchangeRate);
-											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
-										}}),
-										new sap.m.Text("idExchangeRate",{ text : 0 }),
-										new sap.m.Text("idFeeINR",{ text : 0 }),
-										new sap.m.Label({ text: "--" }),
-										new sap.m.Text("idTotalCredit",{ text : 0 }),
-										new sap.m.Text("idTotalFees",{ text : 0 })
+										new sap.m.Label({
+											text: "Wallet Fee",
+											required: true
+										}),
+										new sap.m.Input("idWalletFee", {
+											value: 0,
+											liveChange: function() {
+												var walletFee = Core.byId("idWalletFee").getValue();
+												var exchangeRate = Core.byId("idIndianAmount").getValue() / (Core.byId("idWalletAmount").getValue() - walletFee);
+												exchangeRate = exchangeRate.toFixed(4);
+												Core.byId("idExchangeRate").setText(exchangeRate);
+												Core.byId("idFeeINR").setText((walletFee * exchangeRate).toFixed(2));
+											}
+										}),
+										new sap.m.Text("idExchangeRate", {
+											text: 0
+										}),
+										new sap.m.Text("idFeeINR", {
+											text: 0
+										}),
+										new sap.m.Label({
+											text: "--"
+										}),
+										new sap.m.Text("idTotalCredit", {
+											text: 0
+										}),
+										new sap.m.Text("idTotalFees", {
+											text: 0
+										})
 									]
 								}),
 								new sap.ui.layout.VerticalLayout({
 									content: [
-										new sap.m.Label({ text: "Bank Amount", required : true }),
-										new sap.m.Input("idIndianAmount",{value : 0, liveChange : function(){
-											var walletFee = Core.byId("idWalletFee").getValue();
-											var exchangeRate = Core.byId("idIndianAmount").getValue()/(Core.byId("idWalletAmount").getValue()-walletFee);
-											exchangeRate = exchangeRate.toFixed(4);
-											Core.byId("idExchangeRate").setText(exchangeRate);
-											Core.byId("idFeeINR").setText((walletFee*exchangeRate).toFixed(2));
-										} }),
+										new sap.m.Label({
+											text: "Bank Amount",
+											required: true
+										}),
+										new sap.m.Input("idIndianAmount", {
+											value: 0,
+											liveChange: function() {
+												var walletFee = Core.byId("idWalletFee").getValue();
+												var exchangeRate = Core.byId("idIndianAmount").getValue() / (Core.byId("idWalletAmount").getValue() - walletFee);
+												exchangeRate = exchangeRate.toFixed(4);
+												Core.byId("idExchangeRate").setText(exchangeRate);
+												Core.byId("idFeeINR").setText((walletFee * exchangeRate).toFixed(2));
+											}
+										}),
 									]
 								})
 							]
@@ -1330,25 +1420,25 @@ sap.ui.define([
 					beginButton: new sap.m.Button({
 						type: sap.m.ButtonType.Emphasized,
 						text: "Add",
-						press: function () {
+						press: function() {
 							var totalCredit = parseFloat(Core.byId("idTotalCredit").getText());
-							Core.byId("idTotalCredit").setText(totalCredit+parseFloat(Core.byId("idIndianAmount").getValue()));
+							Core.byId("idTotalCredit").setText(totalCredit + parseFloat(Core.byId("idIndianAmount").getValue()));
 							var feeINR = parseFloat(Core.byId("idTotalFees").getText());
-							Core.byId("idTotalFees").setText((feeINR+parseFloat(Core.byId("idFeeINR").getText())).toFixed(2));
+							Core.byId("idTotalFees").setText((feeINR + parseFloat(Core.byId("idFeeINR").getText())).toFixed(2));
 						}.bind(this)
 					}),
 					endButton: new sap.m.Button({
 						text: "Close",
-						press: function () {
+						press: function() {
 							Core.byId("idTotalFees").setText(0);
 							Core.byId("idTotalCredit").setText(0);
 							this.oConfirmDialog.close();
 						}.bind(this)
 					})
 				});
-				}
+			}
 
-				this.oConfirmDialog.open();
+			this.oConfirmDialog.open();
 		},
 
 		onSelect: function(oEvent) {
@@ -1378,62 +1468,64 @@ sap.ui.define([
 			}
 		},
 
-		onVerifyRating : function(oEvent){
+		onVerifyRating: function(oEvent) {
 			var that = this;
 			var val = oEvent.getParameter("value");
 			var sPath = oEvent.getSource().getParent().getBindingContextPath();
-			var subId = oEvent.getSource().getParent().getModel("viewModel").getProperty(sPath+"/id");
+			var subId = oEvent.getSource().getParent().getModel("viewModel").getProperty(sPath + "/id");
 			$.post('/ChartedValidRating', {
-				"id" : subId,
-				"ChartedValid" : val
+					"id": subId,
+					"ChartedValid": val
 				})
 				.done(function(data, status) {
-						MessageToast.show("Rating "+data);
+					MessageToast.show("Rating " + data);
 				})
 				.fail(function(xhr, status, error) {
 					MessageBox.error("Error in Rating");
 				});
 		},
-		onClearInvoice : function(oEvent){
+		onClearInvoice: function(oEvent) {
 			var that = this;
 			var startDate = this.getView().byId("idRegDate").getValue();
-	//		var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
+			//		var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
 			var userId = this.getView().getModel("local").getProperty("/CurrentUser");
 			if (!this.oApproveDialog) {
-			this.oApproveDialog = new sap.m.Dialog({
-				type: sap.m.DialogType.Message,
-				title: "Confirm",
-				content: new sap.m.Text({ text: "Do you want to clear Invoice History of start range month ?"}),
-				beginButton: new sap.m.Button({
-					type: sap.m.ButtonType.Reject,
-					text: "Submit",
-					press: function () {
-						$.post('/clearInvoiceHistory', {
-							//	"AccountNo" : accountNo,
-								"StartDate" : startDate,
-								"UserId" : userId
-							})
-							.done(function(data, status) {
-								setTimeout(()=>{
-									that.onStartDate();
-									MessageBox.success("Invoice Entries Cleared");
-								},2000);
-							})
-							.fail(function(xhr, status, error) {
-								MessageBox.error("Error in access");
-							});
-						this.oApproveDialog.close();
-					}.bind(this)
-				}),
-				endButton: new sap.m.Button({
-					text: "Cancel",
-					press: function () {
-						this.oApproveDialog.close();
-					}.bind(this)
-				})
-			});
-		 }
-		this.oApproveDialog.open();
+				this.oApproveDialog = new sap.m.Dialog({
+					type: sap.m.DialogType.Message,
+					title: "Confirm",
+					content: new sap.m.Text({
+						text: "Do you want to clear Invoice History of start range month ?"
+					}),
+					beginButton: new sap.m.Button({
+						type: sap.m.ButtonType.Reject,
+						text: "Submit",
+						press: function() {
+							$.post('/clearInvoiceHistory', {
+									//	"AccountNo" : accountNo,
+									"StartDate": startDate,
+									"UserId": userId
+								})
+								.done(function(data, status) {
+									setTimeout(() => {
+										that.onStartDate();
+										MessageBox.success("Invoice Entries Cleared");
+									}, 2000);
+								})
+								.fail(function(xhr, status, error) {
+									MessageBox.error("Error in access");
+								});
+							this.oApproveDialog.close();
+						}.bind(this)
+					}),
+					endButton: new sap.m.Button({
+						text: "Cancel",
+						press: function() {
+							this.oApproveDialog.close();
+						}.bind(this)
+					})
+				});
+			}
+			this.oApproveDialog.open();
 		},
 
 		onDownloadExel: function(oEvent) {
@@ -1444,10 +1536,10 @@ sap.ui.define([
 			$.ajax({
 				type: 'GET', // added,
 				url: 'getExcelForGST',
-				data : {
-					"AccountNo"  : accountNo,
-					"StartDate" : startDate,
-					"EndDate" : endDate
+				data: {
+					"AccountNo": accountNo,
+					"StartDate": startDate,
+					"EndDate": endDate
 				},
 				success: function(data) {
 					sap.m.MessageToast.show("File Downloaded succesfully");
@@ -1461,51 +1553,49 @@ sap.ui.define([
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
 			$.post('/getAmountForAccount', {
-					"AccountNo" : accountNo,
-					"StartDate" : startDate,
-					"EndDate" : endDate,
-					"PaymentMode" : this.payMode
+					"AccountNo": accountNo,
+					"StartDate": startDate,
+					"EndDate": endDate,
+					"PaymentMode": this.payMode
 				})
 				.done(function(data, status) {
 					var totalBalance = 0,
-					 totalIndianEntries = 0,
-					 totalForeignersEntries =0,
-					 totalAmountNonPaypal = 0,
-					 totalAmountUSDPaypal = 0,
-					 totalSettleAmountPaypal = 0,
-					 totalGSTAmount = 0;
+						totalIndianEntries = 0,
+						totalForeignersEntries = 0,
+						totalAmountNonPaypal = 0,
+						totalAmountUSDPaypal = 0,
+						totalSettleAmountPaypal = 0,
+						totalGSTAmount = 0;
 					for (var i = 0; i < data.length; i++) {
-						data[i].Index = i+1;
+						data[i].Index = i + 1;
 						totalBalance = totalBalance + data[i].FullAmount;
-						totalGSTAmount+=(parseFloat(data[i].CGST)+parseFloat(data[i].SGST));
-						if(data[i].Country==="IN"){
-							totalIndianEntries+=1;
+						totalGSTAmount += (parseFloat(data[i].CGST) + parseFloat(data[i].SGST));
+						if (data[i].Country === "IN") {
+							totalIndianEntries += 1;
+						} else {
+							totalForeignersEntries += 1
 						}
-						else{
-							totalForeignersEntries+=1
-						}
-						if(data[i].IsWallet){
-							 totalSettleAmountPaypal+=data[i].SettleAmount;
-							  totalAmountUSDPaypal+=data[i].USDAmount;
-						}
-						else{
-							totalAmountNonPaypal+=data[i].FullAmount;
+						if (data[i].IsWallet) {
+							totalSettleAmountPaypal += data[i].SettleAmount;
+							totalAmountUSDPaypal += data[i].USDAmount;
+						} else {
+							totalAmountNonPaypal += data[i].FullAmount;
 						}
 					}
 					var oNewModel = new sap.ui.model.json.JSONModel();
 					oNewModel.setData({
 						"records": data
 					});
-					var totalProperties =  {
-							 "TotalBalance" : totalBalance,
-							 "TotalIndianEntries" : totalIndianEntries,
-							 "TotalForeignersEntries" : totalForeignersEntries,
-							 "TotalAmountNonPaypal" : totalAmountNonPaypal,
-							 "TotalAmountUSDPaypal" : totalAmountUSDPaypal,
-							 "TotalSettleAmountPaypal" : totalSettleAmountPaypal,
-							 "TotalGSTAmount" : totalGSTAmount.toFixed(2)
-						};
-					that.getView().getModel("local").setProperty("/totalProperties",totalProperties);
+					var totalProperties = {
+						"TotalBalance": totalBalance,
+						"TotalIndianEntries": totalIndianEntries,
+						"TotalForeignersEntries": totalForeignersEntries,
+						"TotalAmountNonPaypal": totalAmountNonPaypal,
+						"TotalAmountUSDPaypal": totalAmountUSDPaypal,
+						"TotalSettleAmountPaypal": totalSettleAmountPaypal,
+						"TotalGSTAmount": totalGSTAmount.toFixed(2)
+					};
+					that.getView().getModel("local").setProperty("/totalProperties", totalProperties);
 					that.getView().byId("newtitle").setText("Total Amount : " + totalBalance);
 					that.getView().setModel(oNewModel, "viewModel");
 				})

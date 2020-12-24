@@ -385,8 +385,22 @@ sap.ui.define([
 		},
 		onUSDAmountChange: function(oEvent) {
 			var amt = oEvent.getParameter("value");
-			var charges = ((amt * 0.044 + 0.30) * 1.18).toFixed(2);
+			var charges = amt > 0 ? ((amt * 0.044 + 0.30) * 1.18).toFixed(2) : 0;
 			var exchange = this.getView().getModel("local").getProperty("/newRegistration/Exchange");
+			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
+			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
+		},
+		onChargesChange : function(oEvent){
+			var charges = oEvent.getParameter("value");
+			var amt = this.getView().getModel("local").getProperty("/newRegistration/USDAmount");
+			var exchange = this.getView().getModel("local").getProperty("/newRegistration/Exchange");
+			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
+			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
+		},
+		onExchangeChange : function(oEvent){
+			var exchange = oEvent.getParameter("value");
+			var charges = this.getView().getModel("local").getProperty("/newRegistration/Charges");
+			var amt = this.getView().getModel("local").getProperty("/newRegistration/USDAmount");
 			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
 		},
@@ -413,6 +427,10 @@ sap.ui.define([
 					sap.m.MessageToast.show("Registration Date can't be in future");
 					return "";
 				}
+			}
+			if (this.getView().byId("paymentMode").getSelectedKey()==="PAYPAL" && this.getView().byId("idUSDAmount").getValue() < 1) {
+				MessageBox.alert("USD Amount can't be 0 / less than 0");
+				return "";
 			}
 			if ((!this.getView().byId("idAmount").getValue()) || (this.getView().byId("idAmount").getValue() <= 0)) {
 
@@ -1851,6 +1869,7 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newRegistration/Waiver", false);
 			this.getView().getModel("local").setProperty("/newRegistration/USDAmount", 0);
 			this.getView().getModel("local").setProperty("/newRegistration/Charges", 0);
+			this.getView().getModel("local").setProperty("/newRegistration/Exchange", 73.25);
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", 0);
 			this.getView().getModel("local").setProperty("/newCustomer/GmailId", null);
 			this.getView().getModel("local").setProperty("/newCustomer/Name", null);

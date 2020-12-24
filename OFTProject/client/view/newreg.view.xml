@@ -72,6 +72,7 @@
 									<core:Item key="PAYPAL" text="Paypal/Xoom"></core:Item>
 									<core:Item key="PAYU" text="PayUMoney"></core:Item>
 									<core:Item key="USA" text="Wire Transfer"></core:Item>
+									<core:Item key="FOREIGN" text="Foreign Transfer"></core:Item>
 								</Select>
 								<Label text="Account Details"/>
 								<!--<Input id="accountDetails" type="Email" required="true" value="{local>/newRegistration/AccountName}" showValueHelp="true"-->
@@ -119,13 +120,13 @@
 							singleContainerFullSize="false"
 							backgroundDesign="Solid">
 							<f:content>
-								<Label text="USD Amount"/>
+								<Label required="true" text="USD Amount"/>
 								<Input id="idUSDAmount" type="Number" value="{local>/newRegistration/USDAmount}" liveChange="onUSDAmountChange"></Input>
 								<Label text="Charge"/>
 								<!-- <Input id="idCharges2" type="Number" value="{parts :[path : '{local>/newRegistration/Charges}', path : '{local>/newRegistration/USDAmount}'], formatter='.formatter.getPaypalCharges'}"></Input> -->
-								<Input id="idCharges2" type="Number" value="{local>/newRegistration/Charges}"></Input>
+								<Input id="idCharges2" type="Number" value="{local>/newRegistration/Charges}" liveChange="onChargesChange"></Input>
 								<Label text="Exchange Rate"/>
-								<Input id="idExchangeRate" value="{local>/newRegistration/Exchange}"></Input>
+								<Input id="idExchangeRate" value="{local>/newRegistration/Exchange}" liveChange="onExchangeChange"></Input>
 								<Label text="Settle Amount"/>
 								<Input id="idSettleAmount" value="{local>/newRegistration/SettleAmount}" enabled="false"></Input>
 							</f:content>
