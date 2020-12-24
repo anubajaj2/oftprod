@@ -381,6 +381,14 @@ sap.ui.define([
 				var oDetail = this.getView().getModel("viewModel").getProperty(items[index]);
 				if (oDetail.IsWallet && oDetail.SettleAmount === 0) {
 					MessageToast.show("Incomplete Information, can't generate Invoice No")
+					if (++index < items.length) {
+						temp(items, index);
+					}
+					if (items.length === index) {
+						that.onStartDate();
+						that.getView().setBusy(false);
+						MessageBox.success("Invoice no. generated for all");
+					}
 				} else {
 					if (oDetail.InvoiceNo === "null" || oDetail.InvoiceNo === "") {
 						$.post('/getInvoiceNo', {
