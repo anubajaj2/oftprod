@@ -126,9 +126,9 @@
 								<!-- <Input id="idCharges2" type="Number" value="{parts :[path : '{local>/newRegistration/Charges}', path : '{local>/newRegistration/USDAmount}'], formatter='.formatter.getPaypalCharges'}"></Input> -->
 								<Input id="idCharges2" type="Number" value="{local>/newRegistration/Charges}" liveChange="onChargesChange"></Input>
 								<Label text="Exchange Rate"/>
-								<Input id="idExchangeRate" value="{local>/newRegistration/Exchange}" liveChange="onExchangeChange"></Input>
+								<Input id="idExchangeRate" type="Number" value="{local>/newRegistration/Exchange}" liveChange="onExchangeChange"></Input>
 								<Label text="Settle Amount"/>
-								<Input id="idSettleAmount" value="{local>/newRegistration/SettleAmount}" enabled="false"></Input>
+								<Input id="idSettleAmount" type="Number" value="{local>/newRegistration/SettleAmount}" enabled="false"></Input>
 							</f:content>
 						</f:SimpleForm>
 					</FlexBox>

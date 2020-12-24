@@ -300,6 +300,9 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newRegistration/Reference", oModel.Reference);
 			this.getView().getModel("local").setProperty("/newRegistration/Remarks", oModel.Remarks);
 			this.getView().getModel("local").setProperty("/newRegistration/USDAmount", oModel.USDAmount);
+			this.getView().getModel("local").setProperty("/newRegistration/Charges", oModel.Charges);
+			this.getView().getModel("local").setProperty("/newRegistration/Exchange", oModel.Exchange);
+			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", oModel.SettleAmount);
 			// this.getView().getModel("local").setProperty("/newRegistration/PendingAmount", 0);
 			// this.getView().getModel("local").setProperty("/newRegistration/AccountName", oModel.AccountName);
 			// this.getView().getModel("local").setProperty("/newRegistration/subGuid", oModel.id);
@@ -389,6 +392,7 @@ sap.ui.define([
 			var exchange = this.getView().getModel("local").getProperty("/newRegistration/Exchange");
 			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
+			this.getView().getModel("local").setProperty("/newRegistration/Amount", (amt * exchange).toFixed(2));
 		},
 		onChargesChange : function(oEvent){
 			var charges = oEvent.getParameter("value");
@@ -403,6 +407,7 @@ sap.ui.define([
 			var amt = this.getView().getModel("local").getProperty("/newRegistration/USDAmount");
 			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
+			this.getView().getModel("local").setProperty("/newRegistration/Amount", (amt * exchange).toFixed(2));
 		},
 		onSaveSubs: function(oEvent) {
 			//TODO: Save to Coustomer Reg. table
