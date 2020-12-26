@@ -103,7 +103,7 @@
 						<f:SimpleForm
 							id="walletPaymentDetail"
 							editable="true"
-							visible="{=${local>/newRegistration/PaymentMode}==='PAYPAL'?true:false}"
+							visible="{=${local>/newRegistration/PaymentMode}==='PAYPAL' || ${local>/newRegistration/PaymentMode}==='FOREIGN' ?true:false}"
 							layout="ResponsiveGridLayout"
 							labelSpanXL="4"
 							labelSpanL="3"

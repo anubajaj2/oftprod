@@ -154,6 +154,10 @@ sap.ui.define([
 							new sap.ui.core.Item({
 								key: "USA",
 								text: "Wire Transfer"
+							}),
+							new sap.ui.core.Item({
+								key: "FOREIGN",
+								text: "Foregin Transfer"
 							})
 						],
 						width: "100%",

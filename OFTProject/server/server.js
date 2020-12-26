@@ -735,7 +735,7 @@ app.start = function() {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
 							var isWallet = false;
-							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
+							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU" || item.PaymentMode==="FOREIGN"){
 								isWallet = true;
 							}
 							var isGST = ( gstBeginDate <= paymentDate );

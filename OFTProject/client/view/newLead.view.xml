@@ -10,7 +10,7 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="New Lead (Version 1.0.22)" navButtonPress="onBack">
+	<Page title="New Lead (Version 1.0.23)" navButtonPress="onBack">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
