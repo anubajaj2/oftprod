@@ -91,11 +91,11 @@ sap.ui.define([
 			this.payMode = oEvent.getSource().getSelectedItem().getKey();
 			this.onStartDate();
 		},
-		onReference : function(oEvent){
+		onReference: function(oEvent) {
 			var oCtx = oEvent.getSource().getParent().getBindingContextPath(),
-			reference = oEvent.getSource().getParent().getModel("viewModel").getProperty(oCtx+"/Reference");
-			open('https://www.paypal.com/myaccount/transaction/details/'+reference,'paypal','width=1200,height=600');
-		// create popover
+				reference = oEvent.getSource().getParent().getModel("viewModel").getProperty(oCtx + "/Reference");
+			open('https://www.paypal.com/myaccount/transaction/details/' + reference, 'paypal', 'width=1200,height=600');
+			// create popover
 		},
 		onEditInfo: function(oEvent) {
 			var that = this;
@@ -431,7 +431,10 @@ sap.ui.define([
 				var isHaryana = patt.test(address);
 				var isGSTIN = (oDetail.GSTIN != "null" && oDetail.GSTIN != "");
 				if (oDetail.IsWallet && oDetail.SettleAmount === 0) {
-					MessageToast.show("Incomplete Information, can't download")
+					MessageToast.show("Incomplete Information, can't download");
+					if (++index < items.length) {
+						temp(items, index);
+					}
 				} else {
 					if (oDetail.InvoiceNo === "null" || oDetail.InvoiceNo === "") {
 						$.post('/getInvoiceNo', {
