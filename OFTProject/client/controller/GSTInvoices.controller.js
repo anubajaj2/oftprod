@@ -56,10 +56,10 @@ sap.ui.define([
 			});
 		},
 		onLiveSearch: function(oEvent) {
-			var sValue = this.formatter.toTitleCase(oEvent.getParameter("value"));
+			var sValue = oEvent.getParameter("value");
 			var oFilter = [
-				new Filter("accountNo", FilterOperator.Contains, sValue),
-				new Filter("accountName", FilterOperator.Contains, sValue)
+				new Filter("value", FilterOperator.Contains, sValue),
+				new Filter("key", FilterOperator.Contains, sValue)
 			];
 			var oBinding = oEvent.getParameter("itemsBinding");
 			oBinding.filter(new Filter(oFilter, false));
@@ -1445,16 +1445,17 @@ sap.ui.define([
 				this.getCustomerPopup();
 				var title = "Account Search";
 				var oSorter = new sap.ui.model.Sorter({
-					path: 'accountName'
+					path: 'value',
+					descending: false
 				});
 				this.searchPopup.setTitle(title);
 				this.searchPopup.bindAggregation("items", {
-					path: "/Accounts",
+					path: "local>/accountSet",
 					filters: [oAccFilter],
 					sorter: oSorter,
 					template: new sap.m.DisplayListItem({
-						label: "{accountName}",
-						value: "{accountNo}"
+						label: "{local>value}",
+						value: "{local>key}"
 					})
 				});
 			}
