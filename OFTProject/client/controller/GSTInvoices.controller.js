@@ -55,8 +55,8 @@ sap.ui.define([
 				}
 			});
 		},
-		onSearch: function(oEvent) {
-			var sValue = oEvent.getParameter("value");
+		onLiveSearch: function(oEvent) {
+			var sValue = this.formatter.toTitleCase(oEvent.getParameter("value"));
 			var oFilter = [
 				new Filter("accountNo", FilterOperator.Contains, sValue),
 				new Filter("accountName", FilterOperator.Contains, sValue)
@@ -91,34 +91,12 @@ sap.ui.define([
 			this.payMode = oEvent.getSource().getSelectedItem().getKey();
 			this.onStartDate();
 		},
-		// onReference : function(oEvent){
-		// 	var oCtx = oEvent.getSource().getParent().getBindingContextPath(),
-		// 	oControl = oEvent.getSource();
-		// 	var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oCtx);
-		// // create popover
-		// 	if (!this._oPopover) {
-		// 		Fragment.load({
-		// 			id: "paypalReference",
-		// 			name: "oft.fiori.fragments.Popover",
-		// 			controller: this
-		// 		}).then(function (oPopover) {
-		// 			this._oPopover = oPopover;
-		// 			this.getView().addDependent(this._oPopover);
-		// 			this._oPopover.attachAfterOpen(function() {
-		// 				this.disablePointerEvents();
-		// 			}, this);
-		// 			this._oPopover.attachAfterClose(function() {
-		// 				this.enablePointerEvents();
-		// 			}, this);
-		//
-		// 			this._oPopover.bindElement(oCtx.getPath());
-		// 			this._oPopover.openBy(oControl);
-		// 		}.bind(this));
-		// 	} else {
-		// 		this._oPopover.bindElement(oCtx.getPath());
-		// 		this._oPopover.openBy(oControl);
-		// 	}
-		// },
+		onReference : function(oEvent){
+			var oCtx = oEvent.getSource().getParent().getBindingContextPath(),
+			reference = oEvent.getSource().getParent().getModel("viewModel").getProperty(oCtx+"/Reference");
+			open('https://www.paypal.com/myaccount/transaction/details/'+reference,'paypal','width=1200,height=600');
+		// create popover
+		},
 		onEditInfo: function(oEvent) {
 			var that = this;
 			var oSub = oEvent.getSource().getParent().getModel("viewModel").getProperty(oEvent.getSource().getParent().getBindingContextPath());
@@ -279,10 +257,12 @@ sap.ui.define([
 								.done(function(data, status) {
 									MessageBox.success("Update " + data);
 									that.destroyEditItems();
+									oAmountDialog.destroy();
 									that.onStartDate();
 								})
 								.fail(function(xhr, status, error) {
 									that.destroyEditItems();
+									oAmountDialog.destroy();
 									MessageBox.error("Error in access");
 								});
 							oAmountDialog.close();
@@ -296,6 +276,7 @@ sap.ui.define([
 					press: function() {
 						that.destroyEditItems();
 						oAmountDialog.close();
+						oAmountDialog.destroy();
 					}.bind(this)
 				})
 			});
@@ -1464,8 +1445,7 @@ sap.ui.define([
 				this.getCustomerPopup();
 				var title = "Account Search";
 				var oSorter = new sap.ui.model.Sorter({
-					path: 'accountName',
-					descending: false
+					path: 'accountName'
 				});
 				this.searchPopup.setTitle(title);
 				this.searchPopup.bindAggregation("items", {
