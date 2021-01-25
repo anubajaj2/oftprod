@@ -11,7 +11,8 @@ module.exports = function(Sub) {
 		message: 'PaymentDate cannot be blank'
 	});
 	Sub.observe("before save", function(ctx, next) {
-		// console.log("Context kya hai" + ctx.instance.EmailId  + "   " +  ctx.instance.CourseName);
+		//console.log("Context kya hai" + ctx.instance.StudentId  + "   " +  ctx.instance.CourseId);
+
 		if (ctx.instance && ctx.instance.StudentId && ctx.instance.CourseId) {
 			Sub.findOne({
 					where: {
@@ -30,6 +31,10 @@ module.exports = function(Sub) {
 							ctx.instance.PartialPayment = false; //payment completed
 						} else {
 							ctx.instance.PartialPayment = true;
+						}
+						if(ctx.instance.CourseId.toString()	=== "5f971b523fb2a86ca4ad946e" ||
+						ctx.instance.CourseId.toString()	=== "5f9718653fb2a86ca4ad946b"){
+							return next();
 						}
 						if (ctx.instance.UpdatePayment === false) {
 							//console.log(JSON.stringify(subs));
