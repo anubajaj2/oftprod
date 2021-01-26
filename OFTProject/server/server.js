@@ -2056,6 +2056,9 @@ app.start = function() {
 						case "Hybris C4C":
 							Subject = "C4 Customer Experience training";
 							break;
+						case "SAP Cloud Platform":
+								Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+								break;
 						case "S4HANA Extension":
 							Subject = "S4 Cloud Extensions training";
 							break;
@@ -2103,8 +2106,8 @@ app.start = function() {
 					req.body.CourseName != "SimpleLogistics" &&
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
-					req.body.CourseName != "SAC Premium"
-
+					req.body.CourseName != "SAC Premium" &&
+					req.body.CourseName != "SAP Cloud Platform"
 					&&
 					req.body.CourseName != "ABAP" &&
 					req.body.CourseName != "OOPS ABAP" &&
