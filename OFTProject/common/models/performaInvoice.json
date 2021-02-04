@@ -1,0 +1,87 @@
+{
+	"name": "PerformaInvoice",
+	"plural": "PerformaInvoices",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"InvoiceNo ": {
+			"type": "string",
+			"required": true
+		},
+		"CompanyName": {
+			"type": "string",
+			"required": true
+		},
+		"ParticipentName": {
+			"type": "string"
+		},
+		"CourseName": {
+			"type": "string"
+		},
+		"Amount": {
+			"type": "number"
+		},
+		"GSTType": {
+			"type": "string"
+		},
+		"Date": {
+			"type": "date"
+		},
+		"DueDate": {
+			"type": "date"
+		},
+		"Address": {
+			"type": "string"
+		},
+		"City": {
+			"type": "string"
+		},
+		"Country": {
+			"type": "string"
+		},
+		"Currency": {
+			"type": "string"
+		},
+		"GSTIN": {
+			"type": "string"
+		},
+		"Notes": {
+			"type": "string"
+		},
+		"Terms": {
+			"type": "string"
+		},
+		"AccountNo": {
+			"type": "string"
+		},
+		"Email": {
+			"type": "string"
+		},
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+			"default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+			"default": "null"
+    }
+	},
+	"validations": [],
+	"relations": {},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
+}
