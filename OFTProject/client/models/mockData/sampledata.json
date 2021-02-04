@@ -1,22 +1,21 @@
 {
 	"Authorization": "",
 	"LoginUser": "",
-	"CurrentUser":"",
-	"Role":"",
+	"CurrentUser": "",
+	"Role": "",
 	"messagesLength": "0",
 	"messages": [],
-  "trueOrFalse":[
+	"trueOrFalse": [{
+			"value": " "
+		},
 		{
-				"value": " "
-			},
+			"value": true
+		},
 		{
-				"value": true
-			},
-			{
-				"value": false
-			}
+			"value": false
+		}
 	],
-	"template":{
+	"template": {
 		"CourseName": "",
 		"Type": "R",
 		"Template": "",
@@ -46,11 +45,11 @@
 			"courseName": "Launchpad",
 			"fee": "25 k",
 			"usdFee": 400
-		},{
+		}, {
 			"courseName": "ABAP on Cloud",
 			"fee": "20 k",
 			"usdFee": 350
-		},{
+		}, {
 			"courseName": "Analytics Cloud",
 			"fee": "25 k",
 			"usdFee": 400
@@ -112,7 +111,7 @@
 		},
 		{
 			"courseName": "FPM",
-			"fee":  "15 k",
+			"fee": "15 k",
 			"usdFee": 250
 		},
 		{
@@ -122,22 +121,22 @@
 		},
 		{
 			"courseName": "Adobe Forms",
-			"fee":  "7 k",
+			"fee": "7 k",
 			"usdFee": 150
 		},
 		{
 			"courseName": "Other",
 			"fee": "20 k",
 			"usdFee": 350
-		},{
+		}, {
 			"courseName": "SimpleLogistics",
 			"fee": "18 k",
 			"usdFee": 350
-		},{
+		}, {
 			"courseName": "SimpleFinance",
 			"fee": "18 k",
 			"usdFee": 350
-		},{
+		}, {
 			"courseName": "Google Blockly",
 			"fee": "8 k",
 			"usdFee": 150
@@ -157,15 +156,15 @@
 		"hidden": false,
 		"timing": "",
 		"id": "",
-		"DriveId":"",
-		"EventId":"",
-		"CalendarId":"",
-		"status":"",
-		"analysis":false
+		"DriveId": "",
+		"EventId": "",
+		"CalendarId": "",
+		"status": "",
+		"analysis": false
 	},
 	"status": [{
 			"key": "L",
-			"value":"Live"
+			"value": "Live"
 		},
 		{
 			"key": "V",
@@ -174,11 +173,12 @@
 		{
 			"key": "A",
 			"value": "Live and Video"
-		 },
- 		{
- 			"key": " ",
- 			"value": "Blank"
- 		 }],
+		},
+		{
+			"key": " ",
+			"value": "Blank"
+		}
+	],
 	"customersSet": [{
 			"key": "demo@gmail.com",
 			"value": "Ravi"
@@ -277,11 +277,11 @@
 		"PartialPayment": false,
 		"Extended": false,
 		"UpdatePayment": "",
-		"MostRecent":"",
+		"MostRecent": "",
 		"ChangedOn": "",
 		"ChangedBy": "",
 		"subGuid": "",
-		"Status":"",
+		"Status": "",
 		"USDAmount": 0,
 		"CurrencyCode": "USD",
 		"Exchange": 73.25,
@@ -289,33 +289,33 @@
 		"SettleAmount": 0
 	},
 	"BeneficiaryName": "",
-	"newRegExtension":{
-	"Mode": " ",
-	"PaymentDate": "",
-	"StudentId": "",
-	"CourseId": "",
-	"StartDate": "",
-	"EndDate": "",
-	"PaymentMode": " ",
-	"BankName": "",
-	"AccountName": "",
-	"Amount": "15000",
-	"Reference": "",
-	"Remarks": "",
-	"PendingAmount": "0",
-	"Moved": "",
-	"Waiver": false,
-	"PaymentScreenshot": "",
-	"PaymentDueDate": "",
-	"PartialPayment": false,
-	"Extended": false,
-	"UpdatePayment": "",
-	"MostRecent":"",
-	"ChangedOn": "",
-	"ChangedBy": "",
-	"subGuid": "",
-	"Status":""
-},
+	"newRegExtension": {
+		"Mode": " ",
+		"PaymentDate": "",
+		"StudentId": "",
+		"CourseId": "",
+		"StartDate": "",
+		"EndDate": "",
+		"PaymentMode": " ",
+		"BankName": "",
+		"AccountName": "",
+		"Amount": "15000",
+		"Reference": "",
+		"Remarks": "",
+		"PendingAmount": "0",
+		"Moved": "",
+		"Waiver": false,
+		"PaymentScreenshot": "",
+		"PaymentDueDate": "",
+		"PartialPayment": false,
+		"Extended": false,
+		"UpdatePayment": "",
+		"MostRecent": "",
+		"ChangedOn": "",
+		"ChangedBy": "",
+		"subGuid": "",
+		"Status": ""
+	},
 	"newLead": {
 		"emailId": "",
 		"course": " ",
@@ -326,8 +326,8 @@
 		"phone": "",
 		"subject": "",
 		"message": "",
-		"fees":"20 k",
-		"currency":"INR",
+		"fees": "20 k",
+		"currency": "INR",
 		"source": "L"
 	},
 	"block": {
@@ -340,8 +340,8 @@
 		"phone": "",
 		"subject": "",
 		"message": "",
-		"fees":"18 k",
-		"currency":"INR",
+		"fees": "18 k",
+		"currency": "INR",
 		"source": "L"
 	},
 	"newCustomer": {
@@ -384,23 +384,42 @@
 		"name": "",
 		"Extended": false
 	},
-	"newServerPay":{
+	"newServerPay": {
 		"PaymentDate": "",
 		"StudentId": "",
 		"Amount": "2000",
-		"Remarks":""
+		"Remarks": ""
 	},
-	"accountBalance":{
+	"accountBalance": {
 		"CreatedOn": "",
 		"AccountNo": "",
 		"Amount": "0",
-		"Remarks":""
+		"Remarks": ""
 	},
-	"GSTInvoices":{
+	"GSTInvoices": {
 		"CreatedOn": "",
 		"AccountNo": "",
 		"Amount": "0",
-		"Remarks":""
+		"Remarks": ""
+	},
+	"PerformaInvoices": {
+		"InvoiceNo": "INV-YYYYMM-DD",
+		"CompanyName": null,
+		"ParticipentName": null,
+		"CourseName": null,
+		"Amount": null,
+		"GSTType": "IGST",
+		"Date": null,
+		"DueDate": null,
+		"Address": null,
+		"City": null,
+		"Country": null,
+		"Currency": "INR",
+		"GSTIN": null,
+		"Notes": null,
+		"Terms": null,
+		"AccountNo": null,
+		"Email": null
 	},
 	"countries": [{
 		"name": "Afghanistan",

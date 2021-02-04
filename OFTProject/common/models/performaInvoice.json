@@ -39,6 +39,9 @@
 		"City": {
 			"type": "string"
 		},
+		"State": {
+			"type": "string"
+		},
 		"Country": {
 			"type": "string"
 		},
