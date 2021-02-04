@@ -103,5 +103,9 @@
   "InvoiceNo":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "PerformaInvoice":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }
