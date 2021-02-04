@@ -7,7 +7,7 @@
 		"validateUpsert": true
 	},
 	"properties": {
-		"InvoiceNo ": {
+		"InvoiceNo": {
 			"type": "string",
 			"required": true
 		},

@@ -407,7 +407,7 @@
 		"CompanyName": null,
 		"ParticipentName": null,
 		"CourseName": null,
-		"Amount": null,
+		"Amount": 0,
 		"GSTType": "IGST",
 		"Date": null,
 		"DueDate": null,

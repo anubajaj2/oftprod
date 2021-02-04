@@ -35,6 +35,8 @@ sap.ui.define([
 		onSave: function() {
 			var that = this;
 			var payload = this.getView().getModel("local").getProperty("/PerformaInvoices");
+			payload.Date = new Date();
+			payload.DueDate = new Date();
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/PerformaInvoices", "POST", {},
 					payload, this)
 				.then(function(oData) {
