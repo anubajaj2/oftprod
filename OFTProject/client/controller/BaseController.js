@@ -8,7 +8,7 @@ sap.ui.define([
 	'sap/m/MessagePopover',
 	'sap/m/MessageItem',
 	"oft/fiori/models/formatter"
-], function(jQuery, Controller, History, JSONModel, ODataHelper, MessageBox, MessagePopover, MessageItem,Formatter) {
+], function(jQuery, Controller, History, JSONModel, ODataHelper, MessageBox, MessagePopover, MessageItem, Formatter) {
 	"use strict";
 	var oTargetField;
 	var oSDCField;
@@ -50,7 +50,7 @@ sap.ui.define([
 			// 	});
 		},
 		allStudnets: [],
-		loadAllStudents: function(){
+		loadAllStudents: function() {
 			var that = this;
 			var oStuModel = this.getOwnerComponent().getModel();
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {}, {}, this)
@@ -73,17 +73,20 @@ sap.ui.define([
 						allAccounts.push({
 							"key": data.results[i].accountNo,
 							"value": data.results[i].accountName + " " + data.results[i].ifsc,
-							"deleted": data.results[i].deleted
+							"accountName": data.results[i].accountName,
+							"ifsc": data.results[i].ifsc,
+							"deleted": data.results[i].deleted,
+							"current": data.results[i].current
 						})
 					}
 
 					that.getView().getModel("local").setProperty("/accountSet", allAccounts);
 				});
 		},
-		getAccountBeneficiary: function(AccountName){
+		getAccountBeneficiary: function(AccountName) {
 			var allAccounts = this.getView().getModel("local").getProperty("/accountSet");
 			for (var i = 0; i < allAccounts.length; i++) {
-				if(allAccounts[i].key === AccountName){
+				if (allAccounts[i].key === AccountName) {
 					return allAccounts[i].value;
 				}
 			}
@@ -91,7 +94,7 @@ sap.ui.define([
 		getRouter: function() {
 			return this.getOwnerComponent().getRouter();
 		},
-		getCurrentUser: function(){
+		getCurrentUser: function() {
 			return this.currentUser;
 		},
 		logOutApp: function(Reload) {
@@ -127,7 +130,7 @@ sap.ui.define([
 
 		getDialogPopup: function() {
 			if (!this.oDialogPopup) {
-				this.oDialogPopup = new sap.ui.xmlfragment("idDialog","oft.fiori.fragments.Dialog", this);
+				this.oDialogPopup = new sap.ui.xmlfragment("idDialog", "oft.fiori.fragments.Dialog", this);
 				// sap.ui.getCore().getMessageManager().registerObject(this.oSuppPopup, true);
 				this.getView().addDependent(this.oDialogPopup);
 			}
@@ -135,7 +138,7 @@ sap.ui.define([
 		},
 		getReasgnPopup: function() {
 			if (!this.ReasgnPopup) {
-				this.ReasgnPopup = new sap.ui.xmlfragment("idReDialog","oft.fiori.fragments.Dialog", this);
+				this.ReasgnPopup = new sap.ui.xmlfragment("idReDialog", "oft.fiori.fragments.Dialog", this);
 				// sap.ui.getCore().getMessageManager().registerObject(this.oSuppPopup, true);
 				this.getView().addDependent(this.ReasgnPopup);
 			}
@@ -232,17 +235,16 @@ sap.ui.define([
 
 			try {
 				var sErrorMessages = oError.responseText.split(".")[1];
-				if(oError.responseText.split(".")["length"] > 2){
-				 sErrorMessages = oError.responseText ;
+				if (oError.responseText.split(".")["length"] > 2) {
+					sErrorMessages = oError.responseText;
 				}
-				if(!sErrorMessages){
-				sErrorMessages = oError.responseText.split(":")[1];
+				if (!sErrorMessages) {
+					sErrorMessages = oError.responseText.split(":")[1];
 				}
 			} catch (e) {
-				if(oError.message){
+				if (oError.message) {
 					sErrorMessages = ';' + oError.message;
-				}
-				else{
+				} else {
 					return oError.responseText.split(".")[1];
 				}
 			}
@@ -343,21 +345,19 @@ sap.ui.define([
 		},
 
 		//conversion of server date to format "DD-MM-YYYY"
-		onDateFormatted: function(oDate){
+		onDateFormatted: function(oDate) {
 			var dd = oDate.getDate();
-			var mm = oDate.getMonth()+1;
+			var mm = oDate.getMonth() + 1;
 			var yyyy = oDate.getFullYear();
-			if(dd<10)
-			{
-			    dd='0'+dd;
+			if (dd < 10) {
+				dd = '0' + dd;
 			}
-			if(mm<10)
-			{
-			    mm='0'+mm;
+			if (mm < 10) {
+				mm = '0' + mm;
 			}
-			return dd+'.'+mm+'.'+yyyy;
+			return dd + '.' + mm + '.' + yyyy;
 		},
-		copyTextToClipboard: function (text) {
+		copyTextToClipboard: function(text) {
 			if (!navigator.clipboard) {
 				fallbackCopyTextToClipboard(text);
 				return;
@@ -368,7 +368,7 @@ sap.ui.define([
 				console.error('Async: Could not copy text: ', err);
 			});
 		},
-		fallbackCopyTextToClipboard: function (text) {
+		fallbackCopyTextToClipboard: function(text) {
 			var textArea = document.createElement("textarea");
 			textArea.value = text;
 			document.body.appendChild(textArea);
