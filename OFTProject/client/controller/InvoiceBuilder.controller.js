@@ -158,7 +158,7 @@ sap.ui.define([
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath,
 					"GET", {}, {}, this)
 				.then(function(oData) {
-					oData.IsGST = true;
+					oData.IsGST = false;
 					that.DownloadInvoiceForOther(oData, oData.InvoiceNo);
 				}).catch(function(oError) {
 					that.getView().setBusy(false);
@@ -598,7 +598,7 @@ sap.ui.define([
 					address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
 				},
 				items: products,
-				IGST: 18,
+				IGST: 0,
 				fullAmount: oDetail.Amount,
 				usdAmount: oDetail.Amount,
 				order_number: invoiceNo,
@@ -744,7 +744,9 @@ sap.ui.define([
 					.text("Amount in Words:", 50, amountInWordsPosition + 30)
 					.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
-
+				doc.font("Helvetica-Bold")
+					// .text("Note: ", 50, amountInWordsPosition + 80)
+					.text("Note: "+oDetail.Notes, 60, amountInWordsPosition + 100)
 				if (invoice.IsWallet) {
 					doc.font("Helvetica-Bold")
 						.text("Paypal Exchange", 50, amountInWordsPosition + 80)
