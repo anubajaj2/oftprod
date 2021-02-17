@@ -34,14 +34,38 @@ sap.ui.define([
 			});
 			$.ajax({
 				type: 'GET', // added,
-				url: 'getSignature',
+				url: 'getAnubhavTrainingsLogo',
 				success: function(data) {
-					that.signature = data;
+					that.AnubhavTrainingslogo = data;
 				},
 				error: function(xhr, status, error) {
-					sap.m.MessageToast.show("error in fetching signature");
+					sap.m.MessageToast.show("error in fetching logo");
 				}
 			});
+			if (!that.soyuz_signature) {
+				$.ajax({
+					type: 'GET', // added,
+					url: 'getSoyuzSignature',
+					success: function(data) {
+						that.soyuz_signature = data;
+					},
+					error: function(xhr, status, error) {
+						sap.m.MessageToast.show("error in fetching signature");
+					}
+				});
+			}
+			if (!that.anubhav_signature) {
+				$.ajax({
+					type: 'GET', // added,
+					url: 'getanubhavTrainingsSignature',
+					success: function(data) {
+						that.anubhav_signature = data;
+					},
+					error: function(xhr, status, error) {
+						sap.m.MessageToast.show("error in fetching signature");
+					}
+				});
+			}
 		},
 		formatter: Formatter,
 		setRandomInvoiceNo: function() {
@@ -166,458 +190,52 @@ sap.ui.define([
 
 				});
 		},
-		// DownloadInvoice: function(oDetail, invoiceNo) {
-		// 	var country = this.getCountryNameFromCode(oDetail.Country);
-		// 	var billingDate = new Date(oDetail.PaymentDate).toDateString().slice(4).split(" ");
-		// 	billingDate = billingDate[0] + " " + billingDate[1] + ", " + billingDate[2];
-		// 	var products = [{
-		// 		"Course": oDetail.CourseName,
-		// 		"Batch": oDetail.BatchNo,
-		// 		"HSN": "999293",
-		// 		"Qty": 1,
-		// 		"Rate": oDetail.Amount,
-		// 		"CGST": (oDetail.IsGST ? "9%" : "0%"),
-		// 		"SGST": (oDetail.IsGST ? "9%" : "0%"),
-		// 		"Amount": oDetail.Amount
-		// 	}];
-		// 	const invoiceDetail = {
-		// 		shipping: {-
-		// 			name: oDetail.Name,
-		// 			email: oDetail.Email,
-		// 			mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
-		// 			GSTIN: (oDetail.GSTIN != "null" ? oDetail.GSTIN : ""),
-		// 			address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
-		// 		},
-		// 		items: products,
-		// 		CGST: oDetail.CGST,
-		// 		SGST: oDetail.SGST,
-		// 		fullAmount: (oDetail.IsWallet ? (parseFloat(oDetail.USDAmount) * parseFloat(oDetail.Exchange)).toFixed(2) : oDetail.FullAmount),
-		// 		usdAmount: oDetail.USDAmount,
-		// 		order_number: invoiceNo,
-		// 		paymentMode: oDetail.PaymentMode,
-		// 		IsWallet: oDetail.IsWallet,
-		// 		header: {
-		// 			company_name: "Soyuz Technologies LLP",
-		// 			company_logo: "data:image/png;base64," + this.logo,
-		// 			signature: "data:image/png;base64," + this.signature,
-		// 			// hear \\ is used to change line
-		// 			company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
-		// 			GSTIN: (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
-		// 		},
-		// 		footer: {
-		// 			text: "This is a computer generated invoice"
-		// 		},
-		// 		currency_symbol: " INR",
-		// 		date: {
-		// 			billing_date: billingDate
-		// 		}
-		// 	};
-		//
-		// 	let header = (doc, invoice) => {
-		//
-		// 		if (this.logo) {
-		// 			doc.image(invoice.header.company_logo, 50, 45, {
-		// 					width: 50
-		// 				})
-		// 				.fontSize(20)
-		// 				.text(invoice.header.company_name, 110, 57)
-		// 				.fontSize(10)
-		// 				.text("GSTIN: " + invoice.header.GSTIN, 112, 87)
-		// 				.moveDown();
-		// 		} else {
-		// 			doc.fontSize(20)
-		// 				.text(invoice.header.company_name, 50, 45)
-		// 				.fontSize(10)
-		// 				.text("GSTIN: " + invoice.header.GSTIN, 50, 75)
-		// 				.moveDown()
-		// 		}
-		//
-		// 		if (invoice.header.company_address.length !== 0) {
-		// 			companyAddress(doc, invoice.header.company_address);
-		// 		}
-		//
-		// 	}
-		//
-		// 	let customerInformation = (doc, invoice) => {
-		// 		doc
-		// 			.fillColor("#444444")
-		// 			.fontSize(20)
-		// 			.text("Invoice", 50, 160);
-		//
-		// 		generateHr(doc, 185);
-		//
-		// 		const customerInformationTop = 200;
-		//
-		// 		doc.fontSize(10)
-		// 			.text("Name:", 50, customerInformationTop)
-		// 			.font("Helvetica-Bold")
-		// 			.text(invoice.shipping.name, 150, customerInformationTop)
-		// 			.font("Helvetica")
-		// 			.text("E-mail:", 50, customerInformationTop + 15)
-		// 			.text(invoice.shipping.email, 150, customerInformationTop + 15)
-		// 			.text("Mob.:", 50, customerInformationTop + 30)
-		// 			.text(invoice.shipping.mob, 150, customerInformationTop + 30)
-		// 			.fontSize(9)
-		// 			.text("GSTIN:", 50, customerInformationTop + 45)
-		// 			.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45)
-		// 			.fontSize(10)
-		// 			.text("Address:", 50, customerInformationTop + 60)
-		// 			.text(invoice.shipping.address, 150, customerInformationTop + 60)
-		//
-		// 			.text("Invoice Number:", 350, customerInformationTop)
-		// 			.font("Helvetica-Bold")
-		// 			.text(invoice.order_number, 450, customerInformationTop)
-		// 			.font("Helvetica")
-		// 			.text("Invoice Date:", 350, customerInformationTop + 15)
-		// 			.text(invoice.date.billing_date, 450, customerInformationTop + 15)
-		// 			.text("Payment Mode:", 350, customerInformationTop + 30)
-		// 			.font("Helvetica-Bold")
-		// 			.text(invoice.paymentMode, 450, customerInformationTop + 30)
-		// 			.moveDown();
-		//
-		// 		generateHr(doc, 280);
-		// 	}
-		//
-		// 	let invoiceTable = (doc, invoice) => {
-		// 		let i;
-		// 		const invoiceTableTop = 330;
-		// 		const currencySymbol = invoice.currency_symbol;
-		//
-		// 		doc.font("Helvetica-Bold");
-		// 		tableRow(
-		// 			doc,
-		// 			invoiceTableTop,
-		// 			// "Course",
-		// 			// "Batch",
-		// 			// "HSN/SAC",
-		// 			"Description",
-		// 			"Rate",
-		// 			"CGST",
-		// 			"SGST",
-		// 			"Amount"
-		// 		);
-		// 		generateHr(doc, invoiceTableTop + 20);
-		// 		doc.font("Helvetica");
-		// 		var totalAmount = 0;
-		// 		var totalGST = 0;
-		// 		for (i = 0; i < invoice.items.length; i++) {
-		// 			const item = invoice.items[i];
-		// 			const position = invoiceTableTop + (i + 1) * 30;
-		// 			tableRow(
-		// 				doc,
-		// 				position,
-		// 				item.Course,
-		// 				item.Batch,
-		// 				item.HSN,
-		// 				item.Rate,
-		// 				item.CGST,
-		// 				item.SGST,
-		// 				item.Amount
-		// 			);
-		// 			totalAmount += parseFloat(item.Amount);
-		// 			generateHr(doc, position + 20);
-		// 		}
-		//
-		// 		const subtotalPosition = invoiceTableTop + (i + 1) * 30;
-		// 		doc.font("Helvetica-Bold");
-		// 		totalTable(
-		// 			doc,
-		// 			subtotalPosition,
-		// 			"Sub Total:",
-		// 			formatCurrency(totalAmount.toFixed(2))
-		// 		);
-		// 		const cgstPosition = subtotalPosition + 20;
-		// 		doc.font("Helvetica-Bold");
-		// 		totalTable(
-		// 			doc,
-		// 			cgstPosition,
-		// 			"CGST:",
-		// 			formatCurrency(invoice.CGST)
-		// 		);
-		// 		const sgstPosition = cgstPosition + 20;
-		// 		doc.font("Helvetica-Bold");
-		// 		totalTable(
-		// 			doc,
-		// 			sgstPosition,
-		// 			"SGST:",
-		// 			formatCurrency(invoice.SGST)
-		// 		);
-		// 		const paidToDatePosition = sgstPosition + 20;
-		// 		doc.font("Helvetica-Bold");
-		// 		totalTable(
-		// 			doc,
-		// 			paidToDatePosition,
-		// 			"Total (INR):",
-		// 			formatCurrency(invoice.fullAmount)
-		// 		);
-		// 		let amountInWordsPosition = sgstPosition + 20;
-		// 		generateHr(doc, amountInWordsPosition + 20);
-		// 		doc.font("Helvetica-Bold")
-		// 			.text("Amount in Words:", 50, amountInWordsPosition + 30)
-		// 			.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
-		// 		generateHr(doc, amountInWordsPosition + 50);
-		//
-		// 		if (invoice.IsWallet) {
-		// 			doc.font("Helvetica-Bold")
-		// 				.text("Paypal Exchange", 50, amountInWordsPosition + 80)
-		// 			amountInWordsPosition += 10
-		// 			doc.font("Helvetica")
-		// 				.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
-		// 				.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
-		// 				.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82, {
-		// 					width: 105,
-		// 					align: "right"
-		// 				})
-		// 				.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
-		// 				.text("Amount:", 60, amountInWordsPosition + 100)
-		// 				.text(formatCurrency(invoice.usdAmount) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 100, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 				.text("Fee:", 60, amountInWordsPosition + 120)
-		// 				.text("-" + formatCurrency(oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 120, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 				.text("------------------", 120, amountInWordsPosition + 132, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 				.text("Sub Total:", 60, amountInWordsPosition + 145)
-		// 				.text(formatCurrency(oDetail.USDAmount - oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 145, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 				.text("Ex. Rate:", 60, amountInWordsPosition + 165)
-		// 				.text(formatCurrency(oDetail.Exchange) + " INR", 115, amountInWordsPosition + 165, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 				.text("Amount(INR):", 60, amountInWordsPosition + 185)
-		// 				.text(formatCurrency(oDetail.SettleAmount) + " INR", 115, amountInWordsPosition + 185, {
-		// 					width: 90,
-		// 					align: "right"
-		// 				})
-		// 		}
-		// 		const signaturePosition = amountInWordsPosition + 200;
-		// 		if (this.signature) {
-		// 			doc.text(invoice.header.company_name, 430, signaturePosition)
-		// 				.image(invoice.header.signature, 440, signaturePosition + 20, {
-		// 					height: 50,
-		// 					width: 110
-		// 				})
-		// 				.text("Designated Partner", 440, signaturePosition + 80)
-		// 				.moveDown();
-		// 		} else {
-		// 			doc.text(invoice.header.company_name, 430, signaturePosition)
-		// 				.text("Designated Partner", 440, signaturePosition + 80)
-		// 				.moveDown()
-		// 		}
-		// 	}
-		//
-		// 	let footer = (doc, invoice) => {
-		// 		if (invoice.footer.text.length !== 0) {
-		// 			generateHr(doc, 760);
-		// 			doc.fontSize(8).text(invoice.footer.text, 50, 770, {
-		// 				align: "right",
-		// 				width: 500
-		// 			});
-		// 		}
-		// 	}
-		//
-		// 	let totalTable = (
-		// 		doc,
-		// 		y,
-		// 		name,
-		// 		description
-		// 	) => {
-		// 		doc
-		// 			.fontSize(10)
-		// 			.text(name, 380, y, {
-		// 				width: 90,
-		// 				align: "right"
-		// 			})
-		// 			.text(description, 0, y, {
-		// 				align: "right"
-		// 			})
-		// 	}
-		//
-		// 	let tableRow = (
-		// 		doc,
-		// 		y,
-		// 		// course,
-		// 		// batch,
-		// 		// hsn,
-		// 		rate,
-		// 		cgst,
-		// 		sgst,
-		// 		amount
-		// 	) => {
-		// 		doc
-		// 			.fontSize(10)
-		// 			.text(course, 50, y)
-		// 			.text(batch, 160, y)
-		// 			.text(hsn, 222, y, {
-		// 				width: 90,
-		// 				align: "right"
-		// 			})
-		// 			.text(rate, 300, y, {
-		// 				width: 90,
-		// 				align: "right"
-		// 			})
-		// 			.text(cgst, 350, y, {
-		// 				width: 90,
-		// 				align: "right"
-		// 			})
-		// 			.text(sgst, 400, y, {
-		// 				width: 90,
-		// 				align: "right"
-		// 			})
-		// 			.text(amount, 0, y, {
-		// 				align: "right"
-		// 			});
-		// 	}
-		//
-		// 	let generateHr = (doc, y) => {
-		// 		doc
-		// 			.strokeColor("#aaaaaa")
-		// 			.lineWidth(1)
-		// 			.moveTo(50, y)
-		// 			.lineTo(550, y)
-		// 			.stroke();
-		// 	}
-		//
-		// 	let formatCurrency = (value, symbol = "") => {
-		// 		if (value) {
-		// 			var x = value.toString().split('.');
-		// 			var y = (x.length > 1 ? "." + x[1] : "");
-		// 			x = x[0];
-		// 			var lastThree = x.substring(x.length - 3);
-		// 			var otherNumbers = x.substring(0, x.length - 3);
-		// 			if (otherNumbers != '')
-		// 				lastThree = ',' + lastThree;
-		// 			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-		// 			return res + y + symbol;
-		// 		} else {
-		// 			return value + symbol;
-		// 		}
-		// 	}
-		//
-		// 	let getNumber = str => {
-		// 		if (str.length !== 0) {
-		// 			var num = str.replace(/[^0-9]/g, '');
-		// 		} else {
-		// 			var num = 0;
-		// 		}
-		//
-		// 		return num;
-		// 	}
-		//
-		// 	let checkIfTaxAvailable = tax => {
-		// 		let validatedTax = getNumber(tax);
-		// 		if (Number.isNaN(validatedTax) === false && validatedTax <= 100 && validatedTax > 0) {
-		// 			var taxValue = tax;
-		// 		} else {
-		// 			var taxValue = '---';
-		// 		}
-		//
-		// 		return taxValue;
-		// 	}
-		//
-		// 	let applyTaxIfAvailable = (price, gst) => {
-		//
-		//
-		// 		let validatedTax = getNumber(gst);
-		// 		if (Number.isNaN(validatedTax) === false && validatedTax <= 100) {
-		// 			let taxValue = '.' + validatedTax;
-		// 			var itemPrice = price * (1 + taxValue);
-		// 		} else {
-		// 			var itemPrice = price * (1 + taxValue);
-		// 		}
-		//
-		// 		return itemPrice;
-		// 	}
-		//
-		// 	let companyAddress = (doc, address) => {
-		// 		let str = address;
-		// 		// let chunks = str.match(/.{0,25}(\s|$)/g);
-		// 		let chunks = str.split("\\");
-		// 		let first = 50;
-		// 		chunks.forEach(function(i, x) {
-		// 			doc.fontSize(10).text(chunks[x], 300, first, {
-		// 				align: "right"
-		// 			});
-		// 			first = +first + 15;
-		// 		});
-		// 	}
-		//
-		// 	let niceInvoice = (invoice) => {
-		// 		var doc = new PDFDocument({
-		// 			size: "A4",
-		// 			margin: 40
-		// 		});
-		// 		var stream = doc.pipe(blobStream());
-		// 		header(doc, invoice);
-		// 		customerInformation(doc, invoice);
-		// 		invoiceTable(doc, invoice);
-		// 		footer(doc, invoice);
-		// 		doc.end();
-		// 		stream.on('finish', function() {
-		// 			// get a blob you can do whatever you like with
-		// 			const blob = stream.toBlob('application/pdf');
-		// 			// or get a blob URL for display in the browser
-		// 			const url = stream.toBlobURL('application/pdf');
-		//
-		// 			const downloadLink = document.createElement('a');
-		// 			downloadLink.href = url;
-		// 			downloadLink.download = invoiceNo + "_" + oDetail.Country + "_" + oDetail.Name;
-		// 			downloadLink.click();
-		// 		});
-		// 	}
-		// 	niceInvoice(invoiceDetail);
-		// },
+
 		DownloadInvoiceForOther: function(oDetail, invoiceNo) {
 			// var country = this.getCountryNameFromCode(oDetail.Country);
 			var country = oDetail.Country;
 			var billingDate = new Date(oDetail.Date).toDateString().slice(4).split(" ");
 			billingDate = billingDate[0] + " " + billingDate[1] + ", " + billingDate[2];
+			var dueDate = new Date(oDetail.DueDate).toDateString().slice(4).split(" ");
+			dueDate = dueDate[0] + " " + dueDate[1] + ", " + dueDate[2];
 			var products = [{
 				"Course": oDetail.CourseName,
 				"HSN": "999293",
 				"Qty": 1,
 				"Rate": oDetail.Amount,
-				"IGST": (oDetail.IsGST ? "18%" : "0%"),
+				"IGST": (oDetail.GSTType !== "NONE" ? 18 : 0),
 				"Amount": oDetail.Amount
 			}];
 			const invoiceDetail = {
 				shipping: {
-					name: oDetail.CompanyName,
+					name: oDetail.CompanyName ? oDetail.CompanyName : oDetail.ParticipentName,
 					email: oDetail.Email,
 					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
 					GSTIN: (oDetail.GSTIN != "null" ? oDetail.GSTIN : ""),
 					address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
 				},
 				items: products,
-				IGST: 0,
-				fullAmount: oDetail.Amount,
-				usdAmount: oDetail.Amount,
+				IGST: oDetail.GSTType !== "None" ? 18 : 0,
+				fullAmount: oDetail.GSTType !== "None" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
+				usdAmount: oDetail.GSTType !== "None" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
 				order_number: invoiceNo,
 				paymentMode: oDetail.PaymentMode,
 				IsWallet: oDetail.IsWallet,
 				header: {
-					company_name: "Soyuz Technologies LLP",
-					company_logo: "data:image/png;base64," + this.logo,
-					signature: "data:image/png;base64," + this.signature,
+					company_name: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "Soyuz Technologies LLP" : "Anubhav Trainings",
+					company_logo: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "data:image/png;base64," + this.logo : "data:image/png;base64," + this.AnubhavTrainingslogo,
+					signature: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "data:image/png;base64," + this.soyuz_signature : "data:image/png;base64," + this.anubhav_signature,
 					// hear \\ is used to change line
-					company_address: "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102",
-					GSTIN: (oDetail.IsGST ? "06AEFFS9740G1ZS" : "")
+					company_address: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102" : "B-25 Shayona shopping center,\\Near Shayona Party Plot,\\Chanikyapuri, Ahemdabad\\Pin - 380061",
+					GSTIN: (oDetail.GSTType !== "NONE" ? "06AEFFS9740G1ZS" : "")
 				},
 				footer: {
 					text: "This is a computer generated invoice"
 				},
 				currency_symbol: " INR",
 				date: {
-					billing_date: billingDate
+					billing_date: billingDate,
+					due_date: dueDate
 				}
 			};
 
@@ -629,9 +247,11 @@ sap.ui.define([
 						})
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
-						.fontSize(10)
-						.text("GSTIN: " + invoice.header.GSTIN, 112, 87)
-						.moveDown();
+						.fontSize(10);
+					if (oDetail.GSTType !== "NONE") {
+						doc.text("GSTIN: " + invoice.header.GSTIN, 112, 87);
+					}
+					doc.moveDown();
 				} else {
 					doc.fontSize(20)
 						.text(invoice.header.company_name, 50, 45)
@@ -662,12 +282,14 @@ sap.ui.define([
 					.text(invoice.shipping.name, 150, customerInformationTop)
 					.font("Helvetica")
 					.text("E-mail:", 50, customerInformationTop + 15)
-					.text(invoice.shipping.email, 150, customerInformationTop + 15)
-					.text("GSTIN:", 50, customerInformationTop + 45-15)
-					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45-15)
-					.fontSize(10)
-					.text("Address:", 50, customerInformationTop + 60-15)
-					.text(invoice.shipping.address, 150, customerInformationTop + 60-15)
+					.text(invoice.shipping.email, 150, customerInformationTop + 15);
+				if (oDetail.GSTType !== "NONE") {
+					doc.text("GSTIN:", 50, customerInformationTop + 45 - 15)
+						.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45 - 15);
+				}
+				doc.fontSize(10)
+					.text("Address:", 50, customerInformationTop + 60 - 15)
+					.text(invoice.shipping.address, 150, customerInformationTop + 60 - 15)
 
 					.text("Invoice Number:", 350, customerInformationTop)
 					.font("Helvetica-Bold")
@@ -675,6 +297,8 @@ sap.ui.define([
 					.font("Helvetica")
 					.text("Invoice Date:", 350, customerInformationTop + 15)
 					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
+					.text("Invoice Date:", 350, customerInformationTop + 30)
+					.text(invoice.date.due_date, 450, customerInformationTop + 30)
 					.moveDown();
 
 				generateHr(doc, 280);
@@ -682,18 +306,29 @@ sap.ui.define([
 
 			let invoiceTable = (doc, invoice) => {
 				let i;
-				const invoiceTableTop = 330;
+				const invoiceTableTop = 300;
 				const currencySymbol = invoice.currency_symbol;
-
 				doc.font("Helvetica-Bold");
-				tableRow(
-					doc,
-					invoiceTableTop,
-					"Description",
-					"Rate",
-					"IGST",
-					"Amount"
-				);
+				if (oDetail.GSTType === "SGST") {
+					tableRowSGST(
+						doc,
+						invoiceTableTop,
+						"Description",
+						"Rate",
+						"SGST",
+						"CGST",
+						"Amount"
+					);
+				} else {
+					tableRowIGST(
+						doc,
+						invoiceTableTop,
+						"Description",
+						"Rate",
+						"IGST",
+						"Amount"
+					);
+				}
 				generateHr(doc, invoiceTableTop + 20);
 				doc.font("Helvetica");
 				var totalAmount = 0;
@@ -701,96 +336,107 @@ sap.ui.define([
 				for (i = 0; i < invoice.items.length; i++) {
 					const item = invoice.items[i];
 					const position = invoiceTableTop + (i + 1) * 30;
-					tableRow(
-						doc,
-						position,
-						item.Course+" "+
-						item.HSN,
-						item.Rate,
-						item.IGST,
-						item.Amount
-					);
+					if (oDetail.GSTType === "SGST") {
+						item.SGST = item.IGST / 2;
+						item.CGST = item.IGST / 2;
+						tableRowSGST(
+							doc,
+							position,
+							item.Course + "\nHSN/SAC: " + item.HSN,
+							item.Rate,
+							item.SGST,
+							item.CGST,
+							item.Amount
+						);
+					} else {
+						tableRowIGST(
+							doc,
+							position,
+							item.Course + "\nHSN/SAC: " + item.HSN,
+							item.Rate,
+							item.IGST,
+							item.Amount
+						);
+					}
 					totalAmount += parseFloat(item.Amount);
-					generateHr(doc, position + 20);
+					generateHr(doc, position + 28);
 				}
-
-				const subtotalPosition = invoiceTableTop + (i + 1) * 30;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					subtotalPosition,
-					"Sub Total:",
-					formatCurrency(totalAmount.toFixed(2))
-				);
-				const igstPosition = subtotalPosition + 20;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					igstPosition,
-					"IGST:",
-					formatCurrency(invoice.IGST)
-				);
-				const paidToDatePosition = igstPosition + 20;
-				doc.font("Helvetica-Bold");
-				totalTable(
-					doc,
-					paidToDatePosition,
-					"Total (INR):",
-					formatCurrency(invoice.fullAmount)
-				);
-				let amountInWordsPosition = igstPosition + 20;
+				if (oDetail.GSTType === "SGST") {
+					const subtotalPosition = invoiceTableTop + (i + 1) * 35;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						subtotalPosition,
+						"Sub Total:",
+						formatCurrency(totalAmount.toFixed(2))
+					);
+					const sgstPosition = subtotalPosition + 20;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						sgstPosition,
+						"SGST:",
+						formatCurrency((totalAmount * 0.09).toFixed(2))
+					);
+					const cgstPosition = sgstPosition + 20;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						cgstPosition,
+						"CGST:",
+						formatCurrency((totalAmount * 0.09).toFixed(2))
+					);
+					var paidToDatePosition = cgstPosition + 20;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						paidToDatePosition,
+						"Total (INR):",
+						formatCurrency(invoice.fullAmount)
+					);
+				} else {
+					const subtotalPosition = invoiceTableTop + (i + 1) * 35;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						subtotalPosition,
+						"Sub Total:",
+						formatCurrency(totalAmount.toFixed(2))
+					);
+					const igstPosition = subtotalPosition + 20;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						igstPosition,
+						"IGST:",
+						formatCurrency((totalAmount * 0.18).toFixed(2))
+					);
+					var paidToDatePosition = igstPosition + 20;
+					doc.font("Helvetica-Bold");
+					totalTable(
+						doc,
+						paidToDatePosition,
+						"Total (INR):",
+						formatCurrency(invoice.fullAmount)
+					);
+				}
+				let amountInWordsPosition = paidToDatePosition;
 				generateHr(doc, amountInWordsPosition + 20);
 				doc.font("Helvetica-Bold")
 					.text("Amount in Words:", 50, amountInWordsPosition + 30)
 					.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
 				doc.font("Helvetica-Bold")
-					// .text("Note: ", 50, amountInWordsPosition + 80)
-					.text("Note: "+oDetail.Notes, 60, amountInWordsPosition + 100)
-				if (invoice.IsWallet) {
-					doc.font("Helvetica-Bold")
-						.text("Paypal Exchange", 50, amountInWordsPosition + 80)
-					amountInWordsPosition += 10
-					doc.font("Helvetica")
-						.text("---------------------------------------------------", 50, amountInWordsPosition + 78)
-						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 50, amountInWordsPosition + 82)
-						.text("|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 115, amountInWordsPosition + 82, {
-							width: 105,
-							align: "right"
-						})
-						.text("---------------------------------------------------", 50, amountInWordsPosition + 201)
-						.text("Amount:", 60, amountInWordsPosition + 100)
-						.text(formatCurrency(invoice.usdAmount) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 100, {
-							width: 90,
-							align: "right"
-						})
-						.text("Fee:", 60, amountInWordsPosition + 120)
-						.text("-" + formatCurrency(oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 120, {
-							width: 90,
-							align: "right"
-						})
-						.text("------------------", 120, amountInWordsPosition + 132, {
-							width: 90,
-							align: "right"
-						})
-						.text("Sub Total:", 60, amountInWordsPosition + 145)
-						.text(formatCurrency(oDetail.USDAmount - oDetail.Charges) + " " + oDetail.CurrencyCode, 115, amountInWordsPosition + 145, {
-							width: 90,
-							align: "right"
-						})
-						.text("Ex. Rate:", 60, amountInWordsPosition + 165)
-						.text(formatCurrency(oDetail.Exchange) + " INR", 115, amountInWordsPosition + 165, {
-							width: 90,
-							align: "right"
-						})
-						.text("Amount(INR):", 60, amountInWordsPosition + 185)
-						.text(formatCurrency(oDetail.SettleAmount) + " INR", 115, amountInWordsPosition + 185, {
-							width: 90,
-							align: "right"
-						})
-				}
+					.text("Notes: ", 50, amountInWordsPosition + 75)
+					.font("Helvetica")
+					.text(oDetail.Notes, 50, amountInWordsPosition + 90)
+					.font("Helvetica-Bold")
+					.text("Remarks: ", 50, amountInWordsPosition + 155)
+					.font("Helvetica")
+					.text(oDetail.CourseName + "Training fee for " + oDetail.Email + ". Please note that the actual invoice will be generated after payment.", 50, amountInWordsPosition + 170);
+
 				const signaturePosition = amountInWordsPosition + 200;
-				if (this.signature) {
+				if ((oDetail.Notes).indexOf("Soyuz Technologies") !== -1) {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
 						.image(invoice.header.signature, 440, signaturePosition + 20, {
 							height: 50,
@@ -800,8 +446,12 @@ sap.ui.define([
 						.moveDown();
 				} else {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
-						.text("Designated Partner", 440, signaturePosition + 80)
-						.moveDown()
+						.image(invoice.header.signature, 430, signaturePosition + 20, {
+							height: 80,
+							width: 90
+						})
+						.text("Designated Partner", 440, signaturePosition + 105)
+						.moveDown();
 				}
 			}
 
@@ -832,7 +482,7 @@ sap.ui.define([
 					})
 			}
 
-			let tableRow = (
+			let tableRowIGST = (
 				doc,
 				y,
 				desc,
@@ -847,7 +497,36 @@ sap.ui.define([
 						width: 90,
 						align: "right"
 					})
-					.text(igst, 380, y, {
+					.text(igst + "%", 380, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(amount, 0, y, {
+						align: "right"
+					});
+			}
+
+			let tableRowSGST = (
+				doc,
+				y,
+				desc,
+				rate,
+				sgst,
+				cgst,
+				amount
+			) => {
+				doc
+					.fontSize(10)
+					.text(desc, 50, y)
+					.text(rate, 260, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(sgst + "%", 320, y, {
+						width: 90,
+						align: "right"
+					})
+					.text(cgst + "%", 380, y, {
 						width: 90,
 						align: "right"
 					})

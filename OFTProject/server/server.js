@@ -353,7 +353,7 @@ app.start = function() {
 		app.get('/getExcelForGST', function(req, res) {
 			var Records = [];
 			var accountNo = req.query.AccountNo;
-			   // var accountNo = "123456998";
+			// var accountNo = "123456998";
 			var startDate = new Date(req.query.StartDate);
 			var endDate = new Date(req.query.EndDate);
 			// var startDate = new Date("01.01.2016");
@@ -377,10 +377,14 @@ app.start = function() {
 					}
 				}]
 			};
-			if(req.body.PaymentMode==="PAYPAL"){
-				oFilter.PaymentMode = {like: 'PAYPAL'};
-			}else if(req.body.PaymentMode==="NON-PAYPAL"){
-				oFilter.PaymentMode = {nlike: 'PAYPAL'};
+			if (req.body.PaymentMode === "PAYPAL") {
+				oFilter.PaymentMode = {
+					like: 'PAYPAL'
+				};
+			} else if (req.body.PaymentMode === "NON-PAYPAL") {
+				oFilter.PaymentMode = {
+					nlike: 'PAYPAL'
+				};
 			}
 			var studentIds = [];
 			var courseIds = [];
@@ -395,15 +399,15 @@ app.start = function() {
 								"CourseId": true,
 								"PaymentDate": true,
 								"Reference": true,
-								"USDAmount" : true,
-								"CurrencyCode" : true,
-								"Exchange" : true,
-								"Charges" : true,
-								"SettleDate" : true,
-								"SettleAmount" : true,
+								"USDAmount": true,
+								"CurrencyCode": true,
+								"Exchange": true,
+								"Charges": true,
+								"SettleDate": true,
+								"SettleAmount": true,
 								"PaymentMode": true,
 								"Amount": true,
-								"InvoiceNo" : true,
+								"InvoiceNo": true,
 								"id": true
 							}
 						}).then(function(subcriptions) {
@@ -416,15 +420,15 @@ app.start = function() {
 									"CourseId": item.CourseId.toString(),
 									"PaymentDate": item.PaymentDate,
 									"Reference": item.Reference,
-									"USDAmount" : item.USDAmount,
-									"CurrencyCode" : item.CurrencyCode,
-									"Exchange" : item.Exchange,
-									"Charges" : item.Charges,
-									"SettleDate" : (item.SettleDate?item.SettleDate.toDateString().slice(4):""),
-									"SettleAmount" : item.SettleAmount,
+									"USDAmount": item.USDAmount,
+									"CurrencyCode": item.CurrencyCode,
+									"Exchange": item.Exchange,
+									"Charges": item.Charges,
+									"SettleDate": (item.SettleDate ? item.SettleDate.toDateString().slice(4) : ""),
+									"SettleAmount": item.SettleAmount,
 									"PaymentMode": item.PaymentMode,
 									"Amount": item.Amount,
-									"InvoiceNo" : item.InvoiceNo,
+									"InvoiceNo": item.InvoiceNo,
 									"id": item.id
 								});
 								subsMap.get("course").set(item.CourseId.toString(), null);
@@ -437,9 +441,9 @@ app.start = function() {
 
 						Courses.find({
 								where: {
-								 id : {
-									 inq: courseIds
-								 }
+									id: {
+										inq: courseIds
+									}
 								},
 								fields: {
 									"Name": true,
@@ -464,18 +468,18 @@ app.start = function() {
 						// arg1 now equals 'three'
 						Students.find({
 								where: {
-								 id : {
-									 inq : studentIds
-								 }
+									id: {
+										inq: studentIds
+									}
 								},
 								fields: {
 									"GmailId": true,
 									"Name": true,
-									"ContactNo" : true,
-									"GSTIN" : true,
-									"Address" : true,
-									"Country" : true,
-									"City" : true,
+									"ContactNo": true,
+									"GSTIN": true,
+									"Address": true,
+									"Country": true,
+									"City": true,
 									"id": true
 								}
 							})
@@ -485,11 +489,11 @@ app.start = function() {
 										subsMap.get("student").set(item.id.toString(), {
 											"Name": item.Name,
 											"GmailId": item.GmailId,
-											"ContactNo" : item.ContactNo,
-											"GSTIN" : item.GSTIN,
-											"Address" : item.Address,
-											"Country" : item.Country,
-											"City" : item.City
+											"ContactNo": item.ContactNo,
+											"GSTIN": item.GSTIN,
+											"Address": item.Address,
+											"Country": item.Country,
+											"City": item.City
 										});
 									}
 								});
@@ -504,12 +508,12 @@ app.start = function() {
 					try {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
-							var isGST = ( gstBeginDate <= paymentDate );
+							var isGST = (gstBeginDate <= paymentDate);
 							var isWallet = false;
-							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU"){
+							if (item.PaymentMode === "PAYPAL" || item.PaymentMode === "PAYU") {
 								isWallet = true;
 							}
-							if(isWallet && parseInt(item.Exchange)>1){
+							if (isWallet && parseInt(item.Exchange) > 1) {
 								isGST = false;
 							}
 							var amount = (isWallet ? item.SettleAmount : item.Amount);
@@ -521,55 +525,55 @@ app.start = function() {
 								amount = amount * 100 / 118;
 							}
 							Records.push({
-								"PaymentDate":( new Date(item.PaymentDate)).toDateString().slice(4),
+								"PaymentDate": (new Date(item.PaymentDate)).toDateString().slice(4),
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
-								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
-								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
+								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null", ""),
+								"ContactNo": subsMap.get("student").get(item.StudentId).ContactNo,
 								"CourseName": subsMap.get("course").get(item.CourseId).Name,
 								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
-								"GSTIN" : subsMap.get("student").get(item.StudentId).GSTIN,
-								"Address" : subsMap.get("student").get(item.StudentId).Address,
-								"Country" : subsMap.get("student").get(item.StudentId).Country,
-								"City" : subsMap.get("student").get(item.StudentId).City,
+								"GSTIN": subsMap.get("student").get(item.StudentId).GSTIN,
+								"Address": subsMap.get("student").get(item.StudentId).Address,
+								"Country": subsMap.get("student").get(item.StudentId).Country,
+								"City": subsMap.get("student").get(item.StudentId).City,
 								"PaymentMode": item.PaymentMode,
 								"FullAmount": item.Amount,
-								"USDAmount" : item.USDAmount,
-								"CurrencyCode" : item.CurrencyCode,
-								"Exchange" : item.Exchange,
-								"Charges" : item.Charges,
-								"SettleDate" : item.SettleDate,
-								"SettleAmount" : item.SettleAmount,
+								"USDAmount": item.USDAmount,
+								"CurrencyCode": item.CurrencyCode,
+								"Exchange": item.Exchange,
+								"Charges": item.Charges,
+								"SettleDate": item.SettleDate,
+								"SettleAmount": item.SettleAmount,
 								"Amount": amount.toFixed(2),
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
-								"InvoiceNo" : item.InvoiceNo
+								"InvoiceNo": item.InvoiceNo
 							});
 						});
 
-						Records.sort((obj1,obj2)=>{
-								return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
+						Records.sort((obj1, obj2) => {
+							return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
 						});
-							var excel = require('exceljs');
-							var workbook = new excel.Workbook(); //creating workbook
-							var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
-							sheet.addRow().values = Object.keys(Records[0]);
+						var excel = require('exceljs');
+						var workbook = new excel.Workbook(); //creating workbook
+						var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
+						sheet.addRow().values = Object.keys(Records[0]);
 
-							for (var i = 0; i < Records["length"]; i++) {
-								sheet.addRow().values = Object.values(Records[i]);
-							}
+						for (var i = 0; i < Records["length"]; i++) {
+							sheet.addRow().values = Object.values(Records[i]);
+						}
 
-							var tempfile = require('tempfile');
-							var tempFilePath = tempfile('.xlsx');
-							console.log("tempFilePath : ", tempFilePath);
-							workbook.xlsx.writeFile(tempFilePath).then(function() {
-								res.sendFile(tempFilePath, function(err) {
-									if (err) {
-										console.log('---------- error downloading file: ', err);
-									}
-								});
-								console.log('file is written @ ' + tempFilePath);
+						var tempfile = require('tempfile');
+						var tempFilePath = tempfile('.xlsx');
+						console.log("tempFilePath : ", tempFilePath);
+						workbook.xlsx.writeFile(tempFilePath).then(function() {
+							res.sendFile(tempFilePath, function(err) {
+								if (err) {
+									console.log('---------- error downloading file: ', err);
+								}
 							});
+							console.log('file is written @ ' + tempFilePath);
+						});
 					} catch (e) {
 
 					} finally {
@@ -603,10 +607,14 @@ app.start = function() {
 					}
 				}]
 			};
-			if(req.body.PaymentMode==="PAYPAL"){
-				oFilter.PaymentMode = {like: 'PAYPAL'};
-			}else if(req.body.PaymentMode==="NON-PAYPAL"){
-				oFilter.PaymentMode = {nlike: 'PAYPAL'};
+			if (req.body.PaymentMode === "PAYPAL") {
+				oFilter.PaymentMode = {
+					like: 'PAYPAL'
+				};
+			} else if (req.body.PaymentMode === "NON-PAYPAL") {
+				oFilter.PaymentMode = {
+					nlike: 'PAYPAL'
+				};
 			}
 			var studentIds = [];
 			var courseIds = [];
@@ -621,16 +629,16 @@ app.start = function() {
 								"CourseId": true,
 								"PaymentDate": true,
 								"Reference": true,
-								"USDAmount" : true,
-								"CurrencyCode" : true,
-								"Exchange" : true,
-								"Charges" : true,
-								"SettleDate" : true,
-								"SettleAmount" : true,
+								"USDAmount": true,
+								"CurrencyCode": true,
+								"Exchange": true,
+								"Charges": true,
+								"SettleDate": true,
+								"SettleAmount": true,
 								"PaymentMode": true,
 								"Amount": true,
-								"ChartedValid" : true,
-								"InvoiceNo" : true,
+								"ChartedValid": true,
+								"InvoiceNo": true,
 								"id": true
 							}
 						}).then(function(subcriptions) {
@@ -643,16 +651,16 @@ app.start = function() {
 									"CourseId": item.CourseId.toString(),
 									"PaymentDate": item.PaymentDate,
 									"Reference": item.Reference,
-									"USDAmount" : item.USDAmount,
-									"CurrencyCode" : item.CurrencyCode,
-									"Exchange" : item.Exchange,
-									"Charges" : item.Charges,
-									"SettleDate" : (item.SettleDate?item.SettleDate.toDateString().slice(4):""),
-									"SettleAmount" : item.SettleAmount,
+									"USDAmount": item.USDAmount,
+									"CurrencyCode": item.CurrencyCode,
+									"Exchange": item.Exchange,
+									"Charges": item.Charges,
+									"SettleDate": (item.SettleDate ? item.SettleDate.toDateString().slice(4) : ""),
+									"SettleAmount": item.SettleAmount,
 									"PaymentMode": item.PaymentMode,
 									"Amount": item.Amount,
-									"ChartedValid" : item.ChartedValid,
-									"InvoiceNo" : item.InvoiceNo,
+									"ChartedValid": item.ChartedValid,
+									"InvoiceNo": item.InvoiceNo,
 									"id": item.id
 								});
 								subsMap.get("course").set(item.CourseId.toString(), null);
@@ -665,9 +673,9 @@ app.start = function() {
 
 						Courses.find({
 								where: {
-								 id : {
-									 inq: courseIds
-								 }
+									id: {
+										inq: courseIds
+									}
 								},
 								fields: {
 									"Name": true,
@@ -694,18 +702,18 @@ app.start = function() {
 						// date.setHours(0,0,0,0);
 						Students.find({
 								where: {
-								 id : {
-									 inq : studentIds
-								 }
+									id: {
+										inq: studentIds
+									}
 								},
 								fields: {
 									"GmailId": true,
 									"Name": true,
-									"ContactNo" : true,
-									"GSTIN" : true,
-									"Address" : true,
-									"Country" : true,
-									"City" : true,
+									"ContactNo": true,
+									"GSTIN": true,
+									"Address": true,
+									"Country": true,
+									"City": true,
 									"id": true
 								}
 							})
@@ -715,11 +723,11 @@ app.start = function() {
 										subsMap.get("student").set(item.id.toString(), {
 											"Name": item.Name,
 											"GmailId": item.GmailId,
-											"ContactNo" : item.ContactNo,
-											"GSTIN" : item.GSTIN,
-											"Address" : item.Address,
-											"Country" : item.Country,
-											"City" : item.City
+											"ContactNo": item.ContactNo,
+											"GSTIN": item.GSTIN,
+											"Address": item.Address,
+											"Country": item.Country,
+											"City": item.City
 										});
 									}
 								});
@@ -735,14 +743,14 @@ app.start = function() {
 						subsMap.get("subs").forEach((item) => {
 							var paymentDate = new Date(item.PaymentDate);
 							var isWallet = false;
-							if(item.PaymentMode==="PAYPAL"||item.PaymentMode==="PAYU" || item.PaymentMode==="FOREIGN"){
+							if (item.PaymentMode === "PAYPAL" || item.PaymentMode === "PAYU" || item.PaymentMode === "FOREIGN") {
 								isWallet = true;
 							}
-							var isGST = ( gstBeginDate <= paymentDate );
-							if(isWallet && item.Exchange>1){
+							var isGST = (gstBeginDate <= paymentDate);
+							if (isWallet && item.Exchange > 1) {
 								isGST = false;
 							}
-							var amount = (isWallet ? item.USDAmount*item.Exchange : item.Amount);
+							var amount = (isWallet ? item.USDAmount * item.Exchange : item.Amount);
 
 							if (!isGST) {
 								var gst = 0.00;
@@ -753,36 +761,36 @@ app.start = function() {
 
 							responseData.push({
 								"Email": subsMap.get("student").get(item.StudentId).GmailId,
-								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null",""),
-								"ContactNo" : subsMap.get("student").get(item.StudentId).ContactNo,
-								"GSTIN" : (isGST ? subsMap.get("student").get(item.StudentId).GSTIN : ""),
-								"Address" : subsMap.get("student").get(item.StudentId).Address,
-								"Country" : subsMap.get("student").get(item.StudentId).Country,
-								"City" : subsMap.get("student").get(item.StudentId).City,
-								"CourseName": (item.Amount < 7000 ? subsMap.get("course").get(item.CourseId).Name+"(Ex.)" : subsMap.get("course").get(item.CourseId).Name),
+								"Name": subsMap.get("student").get(item.StudentId).Name.replace(" null", ""),
+								"ContactNo": subsMap.get("student").get(item.StudentId).ContactNo,
+								"GSTIN": (isGST ? subsMap.get("student").get(item.StudentId).GSTIN : ""),
+								"Address": subsMap.get("student").get(item.StudentId).Address,
+								"Country": subsMap.get("student").get(item.StudentId).Country,
+								"City": subsMap.get("student").get(item.StudentId).City,
+								"CourseName": (item.Amount < 7000 ? subsMap.get("course").get(item.CourseId).Name + "(Ex.)" : subsMap.get("course").get(item.CourseId).Name),
 								"BatchNo": subsMap.get("course").get(item.CourseId).BatchNo,
 								"PaymentMode": item.PaymentMode,
-								"InvoiceNo" : item.InvoiceNo,
+								"InvoiceNo": item.InvoiceNo,
 								"PaymentDate": item.PaymentDate,
 								"FullAmount": item.Amount,
-								"USDAmount" : item.USDAmount,
-								"CurrencyCode" : item.CurrencyCode,
-								"Exchange" : item.Exchange,
-								"Charges" : item.Charges,
-								"SettleDate" : item.SettleDate,
-								"SettleAmount" : item.SettleAmount,
+								"USDAmount": item.USDAmount,
+								"CurrencyCode": item.CurrencyCode,
+								"Exchange": item.Exchange,
+								"Charges": item.Charges,
+								"SettleDate": item.SettleDate,
+								"SettleAmount": item.SettleAmount,
 								"Amount": amount.toFixed(2),
-								"ChartedValid" : item.ChartedValid,
+								"ChartedValid": item.ChartedValid,
 								"SGST": gst.toFixed(2),
 								"CGST": gst.toFixed(2),
 								"Reference": item.Reference,
-								"IsWallet" : isWallet,
-								"IsGST" : isGST,
+								"IsWallet": isWallet,
+								"IsGST": isGST,
 								"id": item.id
 							});
 						});
-						responseData.sort((obj1,obj2)=>{
-								return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
+						responseData.sort((obj1, obj2) => {
+							return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
 						});
 						res.send(responseData);
 					} catch (e) {
@@ -1581,12 +1589,11 @@ app.start = function() {
 				var Sub = app.models.Sub;
 				var sId = req.body.id;
 				delete req.body.id;
-				if(req.body.SettleDate){
+				if (req.body.SettleDate) {
 					var settleDate = new Date(req.body.SettleDate);
 					delete req.body.SettleDate;
 					req.body.SettleDate = settleDate;
-				}
-				else{
+				} else {
 					delete req.body.SettleDate;
 				}
 				req.body.ChangedOn = new Date();
@@ -1602,7 +1609,7 @@ app.start = function() {
 					instance.updateAttributes(updateObj);
 					res.send("done");
 				}).catch(function(err) {
-				  res.send("error");
+					res.send("error");
 				});
 			}
 		);
@@ -1614,38 +1621,38 @@ app.start = function() {
 				var InvoiceNo = app.models.InvoiceNo;
 				var Sub = app.models.Sub;
 				var cDate = new Date(req.body.PaymentDate);
-				var month = (cDate.getMonth()<9? "0"+(cDate.getMonth()+1) : cDate.getMonth()+1);
+				var month = (cDate.getMonth() < 9 ? "0" + (cDate.getMonth() + 1) : cDate.getMonth() + 1);
 				var year = cDate.getFullYear();
 				InvoiceNo.findOrCreate({
-					where : {
-						Month : month,
-						Year : year
-				},
-				fields : {
-					InvoiceNo : true,
-					id : true
-				}
-				},{
-					Year : year,
-					Month : month,
-					InvoiceNo : 0,
-					CreatedOn : new Date(),
-					CreatedBy : userId
-				}).then(function(inq){
-					var invoiceNo = inq[0].InvoiceNo+1;
+					where: {
+						Month: month,
+						Year: year
+					},
+					fields: {
+						InvoiceNo: true,
+						id: true
+					}
+				}, {
+					Year: year,
+					Month: month,
+					InvoiceNo: 0,
+					CreatedOn: new Date(),
+					CreatedBy: userId
+				}).then(function(inq) {
+					var invoiceNo = inq[0].InvoiceNo + 1;
 					InvoiceNo.findById(inq[0].id).then(function(instance) {
-						 instance.updateAttributes({
-	 						InvoiceNo : invoiceNo,
-							ChangedOn : new Date(),
-							ChangedBy : userId
-	 					});
-						var orderNo = "INV-"+year+""+month+"-"+(invoiceNo<10 ? "0"+invoiceNo : invoiceNo);
+						instance.updateAttributes({
+							InvoiceNo: invoiceNo,
+							ChangedOn: new Date(),
+							ChangedBy: userId
+						});
+						var orderNo = "INV-" + year + "" + month + "-" + (invoiceNo < 10 ? "0" + invoiceNo : invoiceNo);
 						var oUpdate = {
-						 InvoiceNo : orderNo
-					 };
+							InvoiceNo: orderNo
+						};
 						Sub.findById(subId).then(function(sInstance) {
-							 sInstance.updateAttributes(oUpdate);
-							 res.send(orderNo);
+							sInstance.updateAttributes(oUpdate);
+							res.send(orderNo);
 						});
 					});
 				});
@@ -1660,9 +1667,9 @@ app.start = function() {
 				// var accountNo = req.body.AccountNo;
 				var userId = req.body.UserId;
 				var startDate = new Date(baseDate.getFullYear(), baseDate.getMonth());
-				var endDate = new Date(baseDate.getFullYear(),baseDate.getMonth()+1,0);
-				var month = (baseDate.getMonth()<9? "0"+(baseDate.getMonth()+1) : baseDate.getMonth()+1);
-				var year =baseDate.getFullYear();
+				var endDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0);
+				var month = (baseDate.getMonth() < 9 ? "0" + (baseDate.getMonth() + 1) : baseDate.getMonth() + 1);
+				var year = baseDate.getFullYear();
 				var oFilter = {
 					// "AccountName": accountNo,
 					and: [{
@@ -1676,20 +1683,20 @@ app.start = function() {
 					}]
 				};
 				InvoiceNo.find({
-					where : {
-						Month : month,
-						Year : year
-				},
-				fields : {
-					InvoiceNo : true,
-					id : true
-				}
-				}).then(function(inq){
+					where: {
+						Month: month,
+						Year: year
+					},
+					fields: {
+						InvoiceNo: true,
+						id: true
+					}
+				}).then(function(inq) {
 					InvoiceNo.findById(inq[0].id).then(function(instance) {
-						 instance.updateAttributes({
-							InvoiceNo : 0,
-							ChangedOn : new Date(),
-							ChangedBy : userId
+						instance.updateAttributes({
+							InvoiceNo: 0,
+							ChangedOn: new Date(),
+							ChangedBy: userId
 						});
 						Subs.find({
 							where: oFilter,
@@ -1700,10 +1707,10 @@ app.start = function() {
 						}).then(function(subcriptions) {
 							subcriptions.forEach((item) => {
 								var oUpdate = {
-								 InvoiceNo : "null"
-							 };
+									InvoiceNo: "null"
+								};
 								Subs.findById(item.id).then(function(sInstance) {
-									 sInstance.updateAttributes(oUpdate);
+									sInstance.updateAttributes(oUpdate);
 								});
 							});
 							res.send("success");
@@ -1719,11 +1726,11 @@ app.start = function() {
 				var chartedValid = req.body.ChartedValid;
 				var id = req.body.id;
 				var oUpdate = {
-				 "ChartedValid" : chartedValid
-			 };
+					"ChartedValid": chartedValid
+				};
 				Subs.findById(id).then(function(sInstance) {
-					 sInstance.updateAttributes(oUpdate);
-					 res.send("success");
+					sInstance.updateAttributes(oUpdate);
+					res.send("success");
 				});
 			}
 		);
@@ -1734,10 +1741,31 @@ app.start = function() {
 				res.send(logo);
 			}
 		);
+		app.get('/getAnubhavTrainingsLogo',
+			function(req, res) {
+				var app = require('../server/server');
+				var logo = fs.readFileSync('./server/invoice/AnubhavTrainings.png', 'base64');
+				res.send(logo);
+			}
+		);
 		app.get('/getSignature',
 			function(req, res) {
 				var app = require('../server/server');
 				var signature = fs.readFileSync('./server/invoice/signature.png', 'base64');
+				res.send(signature);
+			}
+		);
+		app.get('/getSoyuzSignature',
+			function(req, res) {
+				var app = require('../server/server');
+				var signature = fs.readFileSync('./server/invoice/soyuz Stamp.png', 'base64');
+				res.send(signature);
+			}
+		);
+		app.get('/getAnubhavTrainingsSignature',
+			function(req, res) {
+				var app = require('../server/server');
+				var signature = fs.readFileSync('./server/invoice/AnubhavTrainingsSignature.png', 'base64');
 				res.send(signature);
 			}
 		);
@@ -1853,9 +1881,9 @@ app.start = function() {
 				this.password = req.body.password;
 				this.isServer2 = req.body.isServer2;
 				debugger;
-				if(req.body.isServer2 === "false"){
+				if (req.body.isServer2 === "false") {
 					templateName = 'Server';
-				}else{
+				} else {
 					templateName = 'Server2';
 				}
 				var Template = app.models.Template;
@@ -1951,53 +1979,53 @@ app.start = function() {
 				});
 			});
 
-			app.post('/sendEmailForAddress',
-				function(req, res) {
-					//https://developers.google.com/oauthplayground/
-					//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+		app.post('/sendEmailForAddress',
+			function(req, res) {
+				//https://developers.google.com/oauthplayground/
+				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
 
-					var nodemailer = require('nodemailer');
-					var smtpTransport = require('nodemailer-smtp-transport');
-					const xoauth2 = require('xoauth2');
-					const key = require('./samples.json');
-						var transporter = nodemailer.createTransport(smtpTransport({
-							service: 'gmail',
-							host: 'smtp.gmail.com',
-							auth: {
-								xoauth2: xoauth2.createXOAuth2Generator({
-									user: key.user,
-									clientId: key.clientId,
-									clientSecret: key.clientSecret,
-									refreshToken: key.refreshToken
-								})
-							}
-						}));
-						var contents = fs.readFileSync('./server/sampledata/AddressTemplate.html', 'utf8');
-						contents = contents.replace("$$UserName$$",req.body.UserName);
+				var nodemailer = require('nodemailer');
+				var smtpTransport = require('nodemailer-smtp-transport');
+				const xoauth2 = require('xoauth2');
+				const key = require('./samples.json');
+				var transporter = nodemailer.createTransport(smtpTransport({
+					service: 'gmail',
+					host: 'smtp.gmail.com',
+					auth: {
+						xoauth2: xoauth2.createXOAuth2Generator({
+							user: key.user,
+							clientId: key.clientId,
+							clientSecret: key.clientSecret,
+							refreshToken: key.refreshToken
+						})
+					}
+				}));
+				var contents = fs.readFileSync('./server/sampledata/AddressTemplate.html', 'utf8');
+				contents = contents.replace("$$UserName$$", req.body.UserName);
 
-						var mailOptions = {};
-						mailOptions = {
-							from: 'contact@anubhavtrainings.com',
-							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-							// cc: ccs,
-							subject: req.body.Subject + " 🟢",
-							html: contents
-						};
+				var mailOptions = {};
+				mailOptions = {
+					from: 'contact@anubhavtrainings.com',
+					to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+					// cc: ccs,
+					subject: req.body.Subject + " 🟢",
+					html: contents
+				};
 
-						transporter.sendMail(mailOptions, function(error, info) {
-							if (error) {
-								console.log(error);
-								if (error.code === "EAUTH") {
-									res.status(500).send('Username and Password not accepted, Please try again.');
-								} else {
-									res.status(500).send('Internal Error while Sending the email, Please try again.');
-								}
-							} else {
-								console.log('Email sent: ' + info.response);
-								res.send("email sent");
-							}
-						});
+				transporter.sendMail(mailOptions, function(error, info) {
+					if (error) {
+						console.log(error);
+						if (error.code === "EAUTH") {
+							res.status(500).send('Username and Password not accepted, Please try again.');
+						} else {
+							res.status(500).send('Internal Error while Sending the email, Please try again.');
+						}
+					} else {
+						console.log('Email sent: ' + info.response);
+						res.send("email sent");
+					}
 				});
+			});
 
 		app.post('/sendInquiryEmail',
 			function(req, res) {
@@ -2057,8 +2085,8 @@ app.start = function() {
 							Subject = "C4 Customer Experience training";
 							break;
 						case "SAP Cloud Platform":
-								Subject = "Cloud Platform - Cloud Fondary CAPM Training";
-								break;
+							Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+							break;
 						case "S4HANA Extension":
 							Subject = "S4 Cloud Extensions training";
 							break;
@@ -2107,8 +2135,7 @@ app.start = function() {
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "SAC Premium" &&
-					req.body.CourseName != "SAP Cloud Platform"
-					&&
+					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
 					req.body.CourseName != "OOPS ABAP" &&
 					req.body.CourseName != "Webdynpro" &&
@@ -2360,10 +2387,10 @@ app.start = function() {
 								ccs.push("sam4dsouza@gmail.com");
 							}
 							var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-							if(emailPattern.test(that2.studentEmail1)){
+							if (emailPattern.test(that2.studentEmail1)) {
 								ccs.push(that2.studentEmail1);
 							}
-							if(emailPattern.test(that2.studentEmail2)){
+							if (emailPattern.test(that2.studentEmail2)) {
 								ccs.push(that2.studentEmail2);
 							}
 							var mailOptions = {

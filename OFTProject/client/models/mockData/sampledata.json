@@ -421,6 +421,43 @@
 		"AccountNo": null,
 		"Email": null
 	},
+	"CourseCollection": [{
+		"key": "Professional Service Post IGST",
+		"text": "Professional Service Post IGST"
+	}, {
+		"key": "Professional Service Post GST",
+		"text": "Professional Service Post GST"
+	}, {
+		"key": "Professional Services (Export)",
+		"text": "Professional Services (Export)"
+	}, {
+		"key": "Professional Service (Export) - GST Exempt",
+		"text": "Professional Service (Export) - GST Exempt"
+	}, {
+		"key": "UI5 and OData Training",
+		"text": "UI5 and OData Training"
+	}, {
+		"key": "CDS View Training",
+		"text": "CDS View Training"
+	}, {
+		"key": "Analytics Cloud Training",
+		"text": "Analytics Cloud Training"
+	}, {
+		"key": "Cloud Application Programming Training",
+		"text": "Cloud Application Programming Training"
+	}, {
+		"key": "Cloud Platform Integration Training",
+		"text": "Cloud Platform Integration Training"
+	}, {
+		"key": "XSA Development with Node JS Training",
+		"text": "XSA Development with Node JS Training"
+	}, {
+		"key": "Workflow Training",
+		"text": "Workflow Training"
+	}, {
+		"key": "Server Access",
+		"text": "Server Access"
+	}],
 	"countries": [{
 		"name": "Afghanistan",
 		"dial_code": "+93",
