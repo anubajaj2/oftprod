@@ -431,11 +431,11 @@ sap.ui.define([
 					.font("Helvetica")
 					.text(oDetail.Notes, 50, amountInWordsPosition + 90)
 					.font("Helvetica-Bold")
-					.text("Remarks: ", 50, amountInWordsPosition + 155)
+					.text("Remarks: ", 50, amountInWordsPosition + 165)
 					.font("Helvetica")
-					.text(oDetail.CourseName + "Training fee for " + oDetail.Email + ". Please note that the actual invoice will be generated after payment.", 50, amountInWordsPosition + 170);
+					.text(oDetail.CourseName + "Training fee for " + oDetail.Email + ". Please note that the actual invoice will be generated after payment.", 50, amountInWordsPosition + 180);
 
-				const signaturePosition = amountInWordsPosition + 200;
+				const signaturePosition = amountInWordsPosition + 205;
 				if ((oDetail.Notes).indexOf("Soyuz Technologies") !== -1) {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
 						.image(invoice.header.signature, 440, signaturePosition + 20, {
