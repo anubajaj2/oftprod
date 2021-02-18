@@ -83,65 +83,6 @@ sap.ui.define([
 			this.getView().byId("idDueDate").setValue(rangeDate.toDateString().slice(4));
 			this.setRandomInvoiceNo();
 		},
-		onSelect: function(oEvent) {
-			this.sId = oEvent.getSource().getId();
-
-			var sTitle = "",
-				sPath = "";
-			if (this.sId.indexOf("accountDetails") !== -1) {
-				var oAccFilter = new sap.ui.model.Filter("deleted", FilterOperator.EQ, false);
-				sTitle = "Account Search";
-				this.getCustomerPopup();
-				var title = "Account Search";
-				var oSorter = new sap.ui.model.Sorter({
-					path: 'value',
-					descending: false
-				});
-				this.searchPopup.setTitle(title);
-				this.searchPopup.bindAggregation("items", {
-					path: "local>/accountSet",
-					filters: [oAccFilter],
-					sorter: oSorter,
-					template: new sap.m.DisplayListItem({
-						label: "{local>value}",
-						value: "{local>key}"
-					})
-				});
-			}
-		},
-		onConfirm: function(oEvent) {
-			if (this.sId.indexOf("accountDetails") !== -1) {
-				var accountNo = oEvent.getParameter("selectedItem").getValue();
-				var accountDetails = this.oLocalModel.getProperty(oEvent.getParameter("selectedItem").getBindingContextPath());
-				this.oLocalModel.setProperty("/PerformaInvoices/AccountNo", accountNo);
-				var currency = this.oLocalModel.getProperty("/PerformaInvoices/Currency");
-				if (accountNo === "114705500444" && currency === "INR") {
-					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
-						"Account Number:                  " + accountNo + "\n" +
-						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
-						"Account name:                      " + accountDetails.accountName + "\n" +
-						"IFSC Code:                            " + accountDetails.ifsc +
-						"\nYou can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway";
-					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
-					var address = "EPS-FF-073A, Emerald Plaza,\nGolf Course Extension Road, Sector 65";
-					// +",\nCity            Gurgaon\nPinCode           122018.\nState             Haryana\nContact No             +91-8448454549" +
-					// "Country             India\nGSTIN:            06AEFFS9740G1ZS";
-				} else if (currency === "INR") {
-					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
-						"Account Number:                  " + accountNo + "\n" +
-						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
-						"Account name:                      " + accountDetails.accountName + "\n" +
-						"IFSC Code:                            " + accountDetails.ifsc;
-					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
-					var address = "B-25 Shayona shopping center,\n" + "Near Shayona Party Plot, Chanikyapuri";
-					// + ",\nCity -	 Ahemdabad\n" +
-					// 	+"PinCode			 380061\n" + "State 		Gujarat\n" + "Contact No       +91-8448454549\n" + "Country        India";
-				}
-			}
-		},
-		// onCurrencyChange: function(oEvent) {
-		//
-		// },
 		onCurrencyLiveChange: function(oEvent) {
 			oEvent.getSource().setValue(oEvent.getParameter("value").toUpperCase());
 			if (oEvent.getParameter("value") !== "INR") {
@@ -175,6 +116,40 @@ sap.ui.define([
 					that.getView().setBusy(false);
 					MessageBox.error(oError);
 				});
+		},
+		onUpdateFinished: function(oEvent) {
+			debugger;
+			var sTitle = "Payment Records";
+			var oTable = this.getView().byId("invoiceTabTable");
+			var itemList = oTable.getItems();
+			var noOfItems = itemList.length;
+			for (var i = 0; i < noOfItems; i++) {
+				var vCourse = itemList[i].getCells()[2].getText();
+				var oCourseId = 'Courses(\'' + vCourse + '\')';
+				var oModel = this.getView().getModel().oData[oCourseId];
+				if (oModel) {
+					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
+					itemList[i].getCells()[2].setText(CourseName);
+				}
+				var vStudent = itemList[i].getCells()[0].getText();
+				var oStudentId = 'Students(\'' + vStudent + '\')';
+				debugger;
+				var vModel = this.allStudnets[vStudent];
+				if (vModel) {
+					var StudMail = vModel.GmailId;
+					itemList[i].getCells()[0].setText(StudMail);
+				}
+			}
+
+			if (oTable.getBinding("items").isLengthFinal()) {
+				var iCount = oEvent.getParameter("total");
+				if ((this.totalCount === 0) || (this.totalCount < iCount)) {
+					this.totalCount = iCount;
+				}
+				var iItems = oTable.getItems().length;
+				sTitle += "(" + iItems + "/" + this.totalCount + ")";
+			}
+			this.getView().byId("titletext").setText(sTitle);
 		},
 		onDownloadInvoice: function(oEvent) {
 			var that = this;
@@ -632,6 +607,157 @@ sap.ui.define([
 				});
 			}
 			niceInvoice(invoiceDetail);
+		},
+		onSelect: function(oEvent) {
+			this.sId = oEvent.getSource().getId();
+			debugger;
+			var sTitle = "",
+				sPath = "";
+
+			if (this.sId.indexOf("accountDetails") !== -1) {
+				var oAccFilter = new sap.ui.model.Filter("deleted", FilterOperator.EQ, false);
+				var oSorter = new sap.ui.model.Sorter({
+					path: 'value',
+					descending: false
+				});
+				sTitle = "Account Search";
+				sPath = "local>/accountSet";
+				this.getCustomerPopup();
+				var title = "Account Search";
+				this.searchPopup.setTitle(title);
+				this.searchPopup.bindAggregation("items", {
+					path: "local>/accountSet",
+					filters: [oAccFilter],
+					sorter: oSorter,
+					template: new sap.m.DisplayListItem({
+						label: "{local>value}",
+						value: "{local>key}"
+					})
+				});
+			} else if ((this.sId.indexOf("idbatchId") !== -1) || (this.sId.indexOf("idCourse_upd") !== -1) ||
+				(this.sId.indexOf("idCourseSearch") !== -1)) {
+				var oBatchFilter = new Filter("hidden", FilterOperator.EQ, false);
+				this.getCustomerPopup();
+				var title = this.getView().getModel("i18n").getProperty("batch");
+				this.searchPopup.setTitle(title);
+				this.searchPopup.bindAggregation("items", {
+					path: "/Courses",
+					filters: [oBatchFilter],
+					template: new sap.m.DisplayListItem({
+						label: "{Name}",
+						value: "{BatchNo}"
+					})
+				});
+				//this.searchPopup.attachConfirm(this.BatchPopupClose).bind(this);
+				// var aFilters = [];
+				// aFilters.push(new Filter("Hidden", FilterOperator.EQ, false));
+				// var oBinding = this.searchPopup.getBinding("items").filter(aFilters);
+			} else if (this.sId.indexOf("idStuSearch") !== -1) {
+				this.getCustomerPopup();
+				var title = this.getView().getModel("i18n").getProperty("customer");
+				this.searchPopup.setTitle(title);
+				this.searchPopup.bindAggregation("items", {
+					path: "/Students",
+					template: new sap.m.DisplayListItem({
+						label: "{Name}",
+						value: "{GmailId}"
+					})
+				});
+			}
+
+		},
+		onConfirm: function(oEvent) {
+			if (this.sId.indexOf("accountDetails") !== -1) {
+				var accountNo = oEvent.getParameter("selectedItem").getValue();
+				var accountDetails = this.oLocalModel.getProperty(oEvent.getParameter("selectedItem").getBindingContextPath());
+				this.oLocalModel.setProperty("/PerformaInvoices/AccountNo", accountNo);
+				var currency = this.oLocalModel.getProperty("/PerformaInvoices/Currency");
+				if (accountNo === "114705500444" && currency === "INR") {
+					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
+						"Account Number:                  " + accountNo + "\n" +
+						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
+						"Account name:                      " + accountDetails.accountName + "\n" +
+						"IFSC Code:                            " + accountDetails.ifsc +
+						"\nYou can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway";
+					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
+					var address = "EPS-FF-073A, Emerald Plaza,\nGolf Course Extension Road, Sector 65";
+					// +",\nCity            Gurgaon\nPinCode           122018.\nState             Haryana\nContact No             +91-8448454549" +
+					// "Country             India\nGSTIN:            06AEFFS9740G1ZS";
+				} else if (currency === "INR") {
+					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
+						"Account Number:                  " + accountNo + "\n" +
+						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
+						"Account name:                      " + accountDetails.accountName + "\n" +
+						"IFSC Code:                            " + accountDetails.ifsc;
+					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
+					var address = "B-25 Shayona shopping center,\n" + "Near Shayona Party Plot, Chanikyapuri";
+					// + ",\nCity -	 Ahemdabad\n" +
+					// 	+"PinCode			 380061\n" + "State 		Gujarat\n" + "Contact No       +91-8448454549\n" + "Country        India";
+				}
+			} else if (this.sId.indexOf("idCourseSearch") !== -1) {
+				var data = this.getSelectedKey(oEvent);
+				this.SearchCourseGuid = data[2];
+				this.getView().byId("idCourseSearch").setValue(data[0] + ': ' + data[1]);
+				// debugger;
+			} else if (this.sId.indexOf("idStuSearch") !== -1) {
+				// debugger;
+				var data = this.getSelectedKey(oEvent);
+				this.SearchStuGuid = data[2];
+				this.getView().byId("idStuSearch").setValue(data[0]);
+			}
+		},
+		onSearchManageSubs: function(oEvent) {
+			// this.SearchStuGuid;
+			// this.SearchCourseGuid;
+			debugger;
+			var aFilter = [];
+
+			if (this.SearchStuGuid) {
+				aFilter.push(new sap.ui.model.Filter("StudentId", "EQ", "'" + this.SearchStuGuid + "'"));
+			}
+			if (this.SearchCourseGuid) {
+				aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + this.SearchCourseGuid + "'"));
+			}
+			var dateString = this.getView().byId("idBatchEndate");
+			if (dateString._lastValue != false) {
+				var from = dateString._lastValue.split(".");
+				var newDate = new Date(from[2], from[1] - 1, from[0]);
+				newDate.setHours(0, 0, 0, 0);
+				var oFilter_date = new sap.ui.model.Filter("EndDate", "GE", newDate);
+			} else {
+				var oFilter_date = new sap.ui.model.Filter();
+			}
+
+			if (dateString._lastValue != false) {
+				aFilter.push(oFilter_date);
+			}
+
+
+			// var vKey = this.getView().byId("idPendingPayment").getSelectedKey();
+			// if (vKey === "true") {
+			// 	var oFilter1 = new sap.ui.model.Filter("PendingAmount", "GT", 0);
+			// 	aFilter.push(oFilter1);
+			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter1]);
+			// } else if (vKey === "false") {
+			// 	var oFilter1 = new sap.ui.model.Filter("PendingAmount", "EQ", 0);
+			// 	aFilter.push(oFilter1);
+			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter2]);
+			// }
+			//
+			//
+			// var vKey1 = this.getView().byId("idPartPaySearch").getSelectedKey();
+			// if (vKey1 === "true") {
+			// 	var oFilter2 = new sap.ui.model.Filter("PartialPayment", "EQ", "true");
+			// 	aFilter.push(oFilter2);
+			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter1]);
+			// } else if (vKey1 === "false") {
+			// 	var oFilter2 = new sap.ui.model.Filter("PartialPayment", "EQ", "false");
+			// 	aFilter.push(oFilter2);
+			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter2]);
+			// }
+
+			this.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
+
 		},
 		onFullScreen: function(oEvent) {
 			var oMode = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getMode();

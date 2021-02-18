@@ -169,8 +169,113 @@
 							</Table>
 						</Panel>
 					</IconTabFilter>
-					<IconTabFilter text="Attachments" key="attachments">
-						<Text text="Attachments is hear..."/>
+					<IconTabFilter text="Invoice Tab" key="attachments">
+						<FlexBox renderType="Bare">
+						<FlexBox class="columns" renderType="Bare" width="50%">
+							<f:SimpleForm editable="true">
+								<f:content>
+									<Label text="Batch End Date"/>
+									<DatePicker id="idBatchEndate" displayFormat="dd.MM.yyyy" placeholder="Batch End Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
+									<Label text="Student Email"/>
+									<Input id="idStuSearch" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select student email"/>
+								</f:content>
+							</f:SimpleForm>
+						</FlexBox>
+						<FlexBox class="columns" renderType="Bare" width="50%">
+							<f:SimpleForm editable="true">
+								<f:content>
+									<Label text="Batch"/>
+									<Input id="idCourseSearch" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
+									<Label text="Search"/>
+									<Button press="onSearchManageSubs" text="Search" icon="sap-icon://search"/>
+									<!-- <Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/> -->
+								</f:content>
+							</f:SimpleForm>
+						</FlexBox>
+					</FlexBox>
+						<!-- <VBox>
+
+						</VBox> -->
+						<Panel>
+							<Table id="invoiceTabTable" growing="true" growingThreshold="50" growingScrollToLoad="false" items="{/Subs}" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
+								<!--class="tableStyle" -->
+								<headerToolbar>
+									<Toolbar>
+										<Title id="titletext"/>
+										<!-- <ToolbarSpacer/>
+										<Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/>
+										<Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+										<ToolbarSpacer/>
+										<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
+										<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
+										<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExport"/>
+										<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
+										<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
+										<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+										<Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
+										<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
+										<Text text="Display Most Recent records?"/>
+										<HBox visible="{= ${local>/Role} === 'Admin'}">
+											<Switch idstate="true" customTextOn="Yes" customTextOff="No" change="onSwitchToggle">
+												<layoutData>
+													<FlexItemData growFactor="1"/>
+												</layoutData>
+											</Switch>
+										</HBox> -->
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<!-- <Column> <Text text="SubGuid"/> </Column> -->
+									<Column>
+										<Label text="{i18n>customerId}" class="columnLabelStyle"/>
+									</Column>
+									<Column hAlign="Center">
+										<Label text="Status" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>courseName}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>payDate}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>payDueDate}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>PartPay}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Batch End Date" class="columnLabelStyle"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
+										<cells>
+											<!-- <Text text="{id}"></Text> -->
+											<Text text="{StudentId}"></Text>
+											<core:Icon
+												src="sap-icon://status-positive"
+												size="1.5rem"
+												color="{path:'PartialPayment', formatter:'.formatter.formatIconColor'}"
+												activeColor=""
+												width=""
+												height=""
+												backgroundColor=""
+												hoverBackgroundColor=""
+												activeBackgroundColor=""
+												decorative="true"
+												press="fnOnValidate"/>
+											<!-- <Text text="{CourseId}" modelContextChange="onCourseIdChange" ></Text> <Text text="{StudentId}" ></Text> -->
+											<Text text="{CourseId}"></Text>
+											<Text text="{ path: 'PaymentDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+											<Text text="{ path: 'PaymentDueDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+											<CheckBox selected="{PartialPayment}" editable="false"></CheckBox>
+											<Text text="{ path: 'EndDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
 					</IconTabFilter>
 				</items>
 			</IconTabBar>

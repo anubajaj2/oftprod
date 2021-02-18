@@ -277,14 +277,15 @@ sap.ui.define([
 				for (var i = 0; i < noOfItems; i++) {
 					var vCourse = itemList[i].getCells()[2].getText();
 					var oCourseId = 'Courses(\'' + vCourse + '\')';
-					var oModel = this.getView().getModel().oData[oCourseId];
+					// var oModel = this.getView().getModel().oData[oCourseId];
+					var oModel = this.allCourses[vCourse];
 					if (oModel) {
 						var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 						itemList[i].getCells()[2].setText(CourseName);
 					}
 					var vStudent = itemList[i].getCells()[0].getText();
 					var oStudentId = 'Students(\'' + vStudent + '\')';
-					debugger;
+					// debugger;
 					var vModel = this.allStudnets[vStudent];
 					if (vModel) {
 						var StudMail = vModel.GmailId;
