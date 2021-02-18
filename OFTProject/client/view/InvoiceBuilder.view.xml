@@ -125,6 +125,12 @@
 										<Label text="GST No" class="columnLabelStyle"/>
 									</Column>
 									<Column>
+										<Label text="Create Date" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Created By" class="columnLabelStyle"/>
+									</Column>
+									<Column>
 										<Label text="Invoice" class="columnLabelStyle"/>
 									</Column>
 									<!-- <Column> <Label text="Total " class="columnLabelStyle"/> </Column> <Column> <Label text="Pay Mode" class="columnLabelStyle"/> </Column> <Column> <Label text="Reference No." class="columnLabelStyle"/> </Column> <Column> <Label text="Edit"
@@ -151,6 +157,8 @@
 											<!-- <ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>USDAmount', 'viewModel>Exchange'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/> -->
 											<Text text="{City}"></Text>
 											<Text text="{GSTIN}"/>
+											<Text text="{ path: 'CreatedOn', formatter: '.formatter.getIndianDateFormat'}"/>
+											<Text text="{CreatedBy}"/>
 											<!-- <Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled="{viewModel>IsWallet}" press="onReference"></Link> -->
 											<!-- <Button icon="sap-icon://edit" press="onEditInfo" text="Edit" type="{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button> -->
 											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
