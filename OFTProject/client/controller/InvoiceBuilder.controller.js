@@ -84,6 +84,24 @@ sap.ui.define([
 			this.getView().byId("idDueDate").setValue(rangeDate.toDateString().slice(4));
 			this.setRandomInvoiceNo();
 		},
+		onDeletePerformaInvoice: function(oEvent) {
+			var that = this;
+			var items = this.getView().byId("idPerformaInvoiceTable").getSelectedContexts();
+			if (items.length > 0) {
+				items.forEach(function(item) {
+					that.ODataHelper.callOData(that.getOwnerComponent().getModel(), item.sPath, "DELETE", {}, {}, that)
+						.then(function(oData) {
+							MessageToast.show("Deleted succesfully");
+						}).catch(function(oError) {
+							that.getView().setBusy(false);
+							that.oPopover = that.getErrorMessage(oError);
+							that.getView().setBusy(false);
+						});
+				});
+			} else {
+				MessageToast.show("Please select an item");
+			}
+		},
 		onCurrencyLiveChange: function(oEvent) {
 			var currency = oEvent.getParameter("value").toUpperCase();
 			oEvent.getSource().setValue(currency);
