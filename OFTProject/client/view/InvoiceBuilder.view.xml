@@ -201,12 +201,14 @@
 								<headerToolbar>
 									<Toolbar>
 										<Title id="titletext"/>
-										<!-- <ToolbarSpacer/> <Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/> <Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
-										<ToolbarSpacer/> <CheckBox id="includeX" tooltip="Include in CC" text="cc"/> <Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}"
-										tooltip="All" press="onDataExport"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/> <Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email"
-										press="onSendEmail"/> <Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/> <Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/> <Button visible="{=
-										${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/> <Text text="Display Most Recent records?"/> <HBox visible="{= ${local>/Role} === 'Admin'}"> <Switch idstate="true"
-										customTextOn="Yes" customTextOff="No" change="onSwitchToggle"> <layoutData> <FlexItemData growFactor="1"/> </layoutData> </Switch> </HBox> -->
+										<ToolbarSpacer/>
+										<!-- <Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/> <Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/> <ToolbarSpacer/>
+										<CheckBox id="includeX" tooltip="Include in CC" text="cc"/> <Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All"
+										press="onDataExport"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/> <Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/> <Button
+										icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/> <Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/> <Button visible="{= ${local>/Role} === 'Admin'}"
+										icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/> <Text text="Display Most Recent records?"/> <HBox visible="{= ${local>/Role} === 'Admin'}"> <Switch idstate="true" customTextOn="Yes" customTextOff="No"
+										change="onSwitchToggle"> <layoutData> <FlexItemData growFactor="1"/> </layoutData> </Switch> </HBox> -->
+										<CheckBox id="idNoGST" text="No GST" tooltip="Download Non-GST Invoice"/>
 									</Toolbar>
 								</headerToolbar>
 								<columns>

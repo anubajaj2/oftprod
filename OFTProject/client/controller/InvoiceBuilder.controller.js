@@ -247,6 +247,9 @@ sap.ui.define([
 										gstType = "NONE";
 										currency = "USD";
 									}
+									if (that.getView().byId("idNoGST").getSelected()) {
+										gstType = "NONE";
+									}
 									var oDetail = {
 										"Email": sData.GmailId,
 										"ParticipentName": sData.Name.replace(" null", ""),
@@ -319,9 +322,9 @@ sap.ui.define([
 				"Course": oDetail.CourseName,
 				"HSN": "999293",
 				"Qty": 1,
-				"Rate": (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2),
+				"Rate": oDetail.GSTType !== "NONE" ? (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2) : oDetail.Amount,
 				"IGST": (oDetail.GSTType !== "NONE" ? 18 : 0),
-				"Amount": (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2)
+				"Amount": oDetail.GSTType !== "NONE" ? (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2) : oDetail.Amount
 			}];
 			const invoiceDetail = {
 				shipping: {
@@ -329,7 +332,7 @@ sap.ui.define([
 					email: oDetail.Email,
 					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
 					GSTIN: (oDetail.GSTIN !== null ? oDetail.GSTIN : ""),
-					address: (oDetail.Address != null ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + (oDetail.State != "null" ? oDetail.State + ", " : "") + country
+					address: (oDetail.Address != null ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + (oDetail.State ? oDetail.State + ", " : "") + country
 				},
 				items: products,
 				IGST: oDetail.GSTType !== "NONE" ? 18 : 0,
