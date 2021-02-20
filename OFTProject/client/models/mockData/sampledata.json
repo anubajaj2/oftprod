@@ -402,6 +402,10 @@
 		"Amount": "0",
 		"Remarks": ""
 	},
+	"InvoiceBuilder": {
+		"StudentId": "",
+		"CourseId": ""
+	},
 	"PerformaInvoices": {
 		"InvoiceNo": "INV-YYYYMM-DD",
 		"CompanyName": null,
@@ -457,6 +461,9 @@
 	}, {
 		"key": "Server Access",
 		"text": "Server Access"
+	}, {
+		"key": "Launchpad and App Security Training",
+		"text": "Launchpad and App Security Training"
 	}],
 	"countries": [{
 		"name": "Afghanistan",

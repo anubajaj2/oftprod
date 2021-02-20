@@ -98,7 +98,7 @@
 										<ToolbarSpacer></ToolbarSpacer>
 										<!-- <Button icon="sap-icon://email" text="For Address Maintenance" press="onAddressMail" type="Accept"/> -->
 										<!-- <Button icon="sap-icon://generate-shortcut" text="Generate Invoice No" type="Accept" press="onGenerateInvoiceNo"/> -->
-										<!-- <Button icon="sap-icon://download" text="Selected Invoice" type="Accept" press="onDownloadAllInvoice"/> -->
+										<Button icon="sap-icon://delete" text="" type="Reject" press="onDeletePerformaInvoice"/>
 										<Button icon="sap-icon://full-screen" text="Show Fullscreen" press="onFullScreen" type="Accept"/>
 									</Toolbar>
 								</headerToolbar>
@@ -175,9 +175,9 @@
 								<f:SimpleForm editable="true">
 									<f:content>
 										<Label text="Payment Date"/>
-										<DatePicker id="idPaymentdate" displayFormat="dd.MM.yyyy" placeholder="Payment Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
+										<DatePicker id="idPaymentdate" displayFormat="dd.MM.yyyy" placeholder="Payment Date" required="true" valueFormat="dd.MM.yyyy" change="onSearchManageSubs"></DatePicker>
 										<Label text="Student Email"/>
-										<Input id="idStuSearch" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="false" placeholder="Select student email"/>
+										<Input id="idStuSearch" value="{local>/InvoiceBuilder/StudentId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="false" placeholder="Select student email"/>
 									</f:content>
 								</f:SimpleForm>
 							</FlexBox>
@@ -185,7 +185,7 @@
 								<f:SimpleForm editable="true">
 									<f:content>
 										<Label text="Batch"/>
-										<Input id="idCourseSearch" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
+										<Input id="idCourseSearch" value="{local>/InvoiceBuilder/CourseId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
 										<Label text="Search"/>
 										<Button press="onSearchManageSubs" icon="sap-icon://search"/>
 										<Button press="onClearSearchFilter" icon="sap-icon://clear-filter"/>

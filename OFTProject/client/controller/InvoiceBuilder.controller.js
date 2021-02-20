@@ -21,6 +21,7 @@ sap.ui.define([
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.oRouter.attachRoutePatternMatched(this.onBankAccount, this);
 			this.oLocalModel = this.getOwnerComponent().getModel("local");
+			this.totalCount = 0;
 			var that = this;
 			$.ajax({
 				type: 'GET', // added,
@@ -163,6 +164,7 @@ sap.ui.define([
 				var vCourse = itemList[i].getCells()[2].getText();
 				var oCourseId = 'Courses(\'' + vCourse + '\')';
 				var oModel = this.getView().getModel().oData[oCourseId];
+				// var oModel = this.getView().getModel().getObject(oCourseId);
 				if (oModel) {
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[2].setText(CourseName);
@@ -217,6 +219,7 @@ sap.ui.define([
 									var patt = new RegExp("haryana", "i");
 									var isHaryana = patt.test(address);
 									var gstType = "NONE";
+									var currency = "INR";
 									if (isHaryana || sData.GSTIN === "null") {
 										gstType = "SGST"
 									} else {
@@ -224,6 +227,7 @@ sap.ui.define([
 									}
 									if (oData.PaymentMode === "PAYPAL" || oData.PaymentMode === "PAYU" || oData.PaymentMode === "FOREIGN") {
 										gstType = "NONE";
+										currency = "USD";
 									}
 									var oDetail = {
 										"Email": sData.GmailId,
@@ -241,7 +245,7 @@ sap.ui.define([
 										"AccountNo": oData.AccountName,
 										"FullAmount": oData.USDAmount ? oData.USDAmount : oData.Amount,
 										"USDAmount": oData.USDAmount,
-										"Currency": oData.CurrencyCode,
+										"Currency": currency,
 										// "Exchange": oData.Exchange,
 										// "Charges": oData.Charges,
 										// "SettleDate": oData.SettleDate,
@@ -297,9 +301,9 @@ sap.ui.define([
 				"Course": oDetail.CourseName,
 				"HSN": "999293",
 				"Qty": 1,
-				"Rate": oDetail.Amount,
+				"Rate": (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2),
 				"IGST": (oDetail.GSTType !== "NONE" ? 18 : 0),
-				"Amount": oDetail.Amount
+				"Amount": (parseFloat(oDetail.Amount) * 100 / 118).toFixed(2)
 			}];
 			const invoiceDetail = {
 				shipping: {
@@ -307,11 +311,11 @@ sap.ui.define([
 					email: oDetail.Email,
 					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
 					GSTIN: (oDetail.GSTIN !== null ? oDetail.GSTIN : ""),
-					address: (oDetail.Address != null ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
+					address: (oDetail.Address != null ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + (oDetail.State != "null" ? oDetail.State + ", " : "") + country
 				},
 				items: products,
 				IGST: oDetail.GSTType !== "NONE" ? 18 : 0,
-				fullAmount: oDetail.GSTType !== "NONE" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
+				fullAmount: oDetail.GSTType !== "NONE" ? parseFloat(oDetail.Amount) : oDetail.Amount,
 				order_number: invoiceNo,
 				paymentMode: oDetail.PaymentMode,
 				IsWallet: oDetail.IsWallet,
@@ -363,8 +367,12 @@ sap.ui.define([
 			let customerInformation = (doc, invoice) => {
 				doc
 					.fillColor("#444444")
-					.fontSize(20)
-					.text("Performa Invoice", 50, 160);
+					.fontSize(20);
+				if (oDetail.Notes) {
+					doc.text("Performa Invoice", 50, 160);
+				} else {
+					doc.text("Invoice", 50, 160);
+				}
 
 				generateHr(doc, 185);
 
@@ -470,7 +478,7 @@ sap.ui.define([
 						doc,
 						sgstPosition,
 						"SGST:",
-						formatCurrency((totalAmount * 0.09).toFixed(2))
+						formatCurrency(oDetail.GSTType !== "NONE" ? (totalAmount * 0.09).toFixed(2) : 0)
 					);
 					const cgstPosition = sgstPosition + 20;
 					doc.font("Helvetica-Bold");
@@ -478,7 +486,7 @@ sap.ui.define([
 						doc,
 						cgstPosition,
 						"CGST:",
-						formatCurrency((totalAmount * 0.09).toFixed(2))
+						formatCurrency(oDetail.GSTType !== "NONE" ? (totalAmount * 0.09).toFixed(2) : 0)
 					);
 					var paidToDatePosition = cgstPosition + 20;
 					doc.font("Helvetica-Bold");
@@ -503,7 +511,7 @@ sap.ui.define([
 						doc,
 						igstPosition,
 						"IGST:",
-						formatCurrency((totalAmount * 0.18).toFixed(2))
+						formatCurrency(oDetail.GSTType !== "NONE" ? (totalAmount * 0.18).toFixed(2) : 0)
 					);
 					var paidToDatePosition = igstPosition + 20;
 					doc.font("Helvetica-Bold");
@@ -830,35 +838,237 @@ sap.ui.define([
 				this.getView().byId("idStuSearch").setValue(data[0]);
 			}
 		},
+		// onSearch: function(oEvent) {
+		// 	if (this.sId.indexOf("idStuSearch") !== -1) {
+		// 		var queryString = this.getQuery(oEvent);
+		//
+		// 		if (queryString) {
+		// 			var oFilter1 = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, queryString);
+		// 			var oFilter2 = new sap.ui.model.Filter("GmailId", sap.ui.model.FilterOperator.Contains, queryString);
+		//
+		// 			var oFilter = new sap.ui.model.Filter({
+		// 				filters: [oFilter1, oFilter2],
+		// 				and: false
+		// 			});
+		// 			var aFilter = [oFilter];
+		// 			this.searchPopup.getBinding("items").filter(aFilter);
+		// 		} else {
+		// 			this.searchPopup.bindAggregation("items", {
+		// 				path: "/Students",
+		// 				template: new sap.m.DisplayListItem({
+		// 					label: "{Name}",
+		// 					value: "{GmailId}"
+		// 				})
+		// 			});
+		// 			this.searchPopup.getBinding("items").filter([]);
+		// 		}
+		//
+		// 	} else if (this.sId.indexOf("idCourseSearch") !== -1) {
+		// 		var queryString = this.getQuery(oEvent);
+		//
+		// 		if (queryString) {
+		// 			var oFilter1 = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, queryString);
+		// 			var oFilter2 = new sap.ui.model.Filter("BatchNo", sap.ui.model.FilterOperator.Contains, queryString);
+		//
+		// 			var oFilter = new sap.ui.model.Filter({
+		// 				filters: [oFilter1, oFilter2],
+		// 				and: false
+		// 			});
+		// 			var aFilter = [oFilter];
+		// 			this.searchPopup.getBinding("items").filter(aFilter);
+		// 		} else {
+		// 			this.searchPopup.bindAggregation("items", {
+		// 				path: "/Courses",
+		// 				template: new sap.m.DisplayListItem({
+		// 					label: "{Name}",
+		// 					value: "{BatchNo}"
+		// 				})
+		// 			});
+		// 			this.searchPopup.getBinding("items").filter([]);
+		// 		}
+		// 	}
+		// },
+		onLiveSearch: function(oEvent) {
+
+			var queryString = oEvent.getParameter("query");
+			if (!queryString) {
+				queryString = oEvent.getParameter("value");
+			}
+
+			if (this.sId.indexOf("idStuSearch") !== -1) {
+				if (queryString) {
+
+					var oFilter1 = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter2 = new sap.ui.model.Filter("GmailId", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1, oFilter2],
+						and: false
+					});
+
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+
+				} else {
+					this.searchPopup.bindAggregation("items", {
+						path: "/Students",
+						template: new sap.m.DisplayListItem({
+							label: "{Name}",
+							value: "{GmailId}"
+						})
+					});
+					this.searchPopup.getBinding("items").filter([]);
+				}
+			} else if (this.sId.indexOf("idCourseSearch") !== -1) {
+
+				if (queryString) {
+					var oFilter1 = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter2 = new sap.ui.model.Filter("BatchNo", sap.ui.model.FilterOperator.Contains, queryString);
+
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1, oFilter2],
+						and: false
+					});
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+				} else {
+					this.searchPopup.bindAggregation("items", {
+						path: "/Courses",
+						template: new sap.m.DisplayListItem({
+							label: "{Name}",
+							value: "{BatchNo}"
+						})
+						// template: new sap.m.StandardListItem({
+						// 	title: "{Name}",
+						// 	description: "{BatchNo}",
+						// 	info: "{id}"
+						// })
+					});
+					this.searchPopup.getBinding("items").filter([]);
+				}
+
+			} else if (this.sId.indexOf("accountDetails") !== -1) {
+				if (queryString) {
+					var oFilter1 = new sap.ui.model.Filter("value", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter2 = new sap.ui.model.Filter("key", sap.ui.model.FilterOperator.Contains, queryString);
+
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1, oFilter2],
+						and: false
+					});
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+				} else {
+					this.searchPopup.bindAggregation("items", {
+						path: "local>/accountSet",
+						template: new sap.m.DisplayListItem({
+							label: "{local>value}",
+							value: "{local>key}"
+						})
+					});
+					this.searchPopup.getBinding("items").filter([]);
+				}
+
+			} else if (this.sId.indexOf("idEmailCust") !== -1) {
+
+				// "{EmailId}",
+				// "{FirstName}"
+				if (queryString) {
+
+					var oFilter1 = new sap.ui.model.Filter("EmailId", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter2 = new sap.ui.model.Filter("FirstName", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1, oFilter2],
+						and: false
+					});
+
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+
+				} else {
+					this.searchPopup.bindAggregation("items", {
+						path: "/Inquries",
+						template: new sap.m.DisplayListItem({
+							label: "{EmailId}",
+							value: "{FirstName}"
+						})
+					});
+					this.searchPopup.getBinding("items").filter([]);
+				}
+			}
+		},
 		onSearchManageSubs: function(oEvent) {
-			// this.SearchStuGuid;
-			// this.SearchCourseGuid;
-			// debugger;
+			var that = this;
 			var aFilter = [];
+			var queryString = this.oLocalModel.getProperty("/InvoiceBuilder/StudentId");
+			var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if (regEx.test(queryString) && (!that.SearchStuGuid)) {
+				var payload = {};
+				var Filter1 = new sap.ui.model.Filter("GmailId", "EQ", queryString);
 
-			if (this.SearchStuGuid) {
-				aFilter.push(new sap.ui.model.Filter("StudentId", "EQ", "'" + this.SearchStuGuid + "'"));
-			}
-			if (this.SearchCourseGuid) {
-				aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + this.SearchCourseGuid + "'"));
-			}
-			var dateString = this.getView().byId("idPaymentdate");
-			if (dateString._lastValue != false) {
-				var from = dateString._lastValue.split(".");
-				var newDate = new Date(from[2], from[1] - 1, from[0]);
-				newDate.setHours(0, 0, 0, 0);
-				var oFilter_date = new sap.ui.model.Filter("PaymentDate", "EQ", newDate);
+				this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {
+						filters: [Filter1]
+					}, payload, this)
+					.then(function(oData) {
+						// var that2 = that;
+						// debugger;
+						// var aFilter = [new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'")];
+						// that.SearchStuGuid = oData.results[0].id;
+						aFilter.push(new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'"));
+						if (that.SearchCourseGuid) {
+							aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + that.SearchCourseGuid + "'"));
+						}
+						var dateString = that.getView().byId("idPaymentdate");
+						if (dateString._lastValue != false) {
+							var from = dateString._lastValue.split(".");
+							var startDate = new Date(from[2], from[1] - 1, from[0]);
+							startDate.setHours(0, 0, 0, 0);
+							var from = dateString._lastValue.split(".");
+							var endDate = new Date(from[2], from[1] - 1, from[0]);
+							endDate.setHours(23, 59, 59, 999);
+							var oFilter_startDate = new sap.ui.model.Filter("PaymentDate", "GE", startDate);
+							var oFilter_endDate = new sap.ui.model.Filter("PaymentDate", "LE", endDate);
+						} else {
+							var oFilter_date = new sap.ui.model.Filter();
+						}
+
+						if (dateString._lastValue != false) {
+							aFilter.push(new sap.ui.model.Filter([oFilter_startDate, oFilter_endDate], true));
+						}
+						that.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
+					}).catch(function(oError) {
+						debugger;
+					});
 			} else {
-				var oFilter_date = new sap.ui.model.Filter();
-			}
+				if (that.SearchStuGuid) {
+					aFilter.push(new sap.ui.model.Filter("StudentId", "EQ", "'" + that.SearchStuGuid + "'"));
+				}
+				if (that.SearchCourseGuid) {
+					aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + that.SearchCourseGuid + "'"));
+				}
+				var dateString = that.getView().byId("idPaymentdate");
+				if (dateString._lastValue != false) {
+					var from = dateString._lastValue.split(".");
+					var startDate = new Date(from[2], from[1] - 1, from[0]);
+					startDate.setHours(0, 0, 0, 0);
+					var from = dateString._lastValue.split(".");
+					var endDate = new Date(from[2], from[1] - 1, from[0]);
+					endDate.setHours(23, 59, 59, 999);
+					var oFilter_startDate = new sap.ui.model.Filter("PaymentDate", "GE", startDate);
+					var oFilter_endDate = new sap.ui.model.Filter("PaymentDate", "LE", endDate);
+				} else {
+					var oFilter_date = new sap.ui.model.Filter();
+				}
 
-			if (dateString._lastValue != false) {
-				aFilter.push(oFilter_date);
+				if (dateString._lastValue != false) {
+					aFilter.push(new sap.ui.model.Filter([oFilter_startDate, oFilter_endDate], true));
+				}
+				that.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
 			}
-			this.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
 		},
 		onClearSearchFilter: function(oEvent) {
 			var aFilter = [];
+			this.SearchCourseGuid = null;
+			this.SearchStuGuid = null;
 			this.getView().byId("idPaymentdate").setValue(null);
 			this.getView().byId("idStuSearch").setValue(null);
 			this.getView().byId("idCourseSearch").setValue(null);
