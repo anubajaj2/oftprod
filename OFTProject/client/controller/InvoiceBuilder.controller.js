@@ -315,7 +315,7 @@ sap.ui.define([
 				},
 				items: products,
 				IGST: oDetail.GSTType !== "NONE" ? 18 : 0,
-				fullAmount: oDetail.GSTType !== "NONE" ? parseFloat(oDetail.Amount) : oDetail.Amount,
+				fullAmount: parseFloat(oDetail.Amount).toFixed(2),
 				order_number: invoiceNo,
 				paymentMode: oDetail.PaymentMode,
 				IsWallet: oDetail.IsWallet,
@@ -735,7 +735,7 @@ sap.ui.define([
 
 					const downloadLink = document.createElement('a');
 					downloadLink.href = url;
-					downloadLink.download = invoiceNo + "_" + oDetail.Country + "_" + oDetail.Name;
+					downloadLink.download = invoiceNo + "_" + oDetail.Country + "_" + invoice.shipping.name;
 					downloadLink.click();
 				});
 			}
