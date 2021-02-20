@@ -60,14 +60,14 @@ sap.ui.define([
 					}
 				});
 		},
-		allCourses: [],
-		loadAllCourses: function() {
+		allAppUsers: [],
+		loadAllAppUsers: function() {
 			var that = this;
 			var oStuModel = this.getOwnerComponent().getModel();
-			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Courses", "GET", {}, {}, this)
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/AppUsers", "GET", {}, {}, this)
 				.then(function(data, controller) {
 					for (var i = 0; i < data.results.length; i++) {
-						that.allCourses[data.results[i].id] = data.results[i];
+						that.allAppUsers[data.results[i].TechnicalId] = data.results[i];
 					}
 				});
 		},

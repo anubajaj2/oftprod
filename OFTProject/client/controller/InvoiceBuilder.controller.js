@@ -84,11 +84,34 @@ sap.ui.define([
 			this.setRandomInvoiceNo();
 		},
 		onCurrencyLiveChange: function(oEvent) {
-			oEvent.getSource().setValue(oEvent.getParameter("value").toUpperCase());
-			if (oEvent.getParameter("value") !== "INR") {
+			var currency = oEvent.getParameter("value").toUpperCase();
+			oEvent.getSource().setValue(currency);
+			var accountNo = this.oLocalModel.getProperty("/PerformaInvoices/AccountNo");
+			if (currency !== "INR") {
 				var amount = this.oLocalModel.getProperty("/PerformaInvoices/Amount");
 				var note = "Please make payment using Paypal with the below link-\nhttps://www.paypal.com/paypalme/anubhavstraining/" + amount;
 				this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
+			} else if (accountNo === "114705500444" && currency === "INR") {
+				var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
+					"Account Number:                  " + accountNo + "\n" +
+					"Account Type:                       " + (this.accountDetails.current ? "Current" : "Saving") + "\n" +
+					"Account name:                      " + this.accountDetails.accountName + "\n" +
+					"IFSC Code:                            " + this.accountDetails.ifsc +
+					"\nYou can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway";
+				this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
+				// var address = "EPS-FF-073A, Emerald Plaza,\nGolf Course Extension Road, Sector 65";
+				// +",\nCity            Gurgaon\nPinCode           122018.\nState             Haryana\nContact No             +91-8448454549" +
+				// "Country             India\nGSTIN:            06AEFFS9740G1ZS";
+			} else if (currency === "INR") {
+				var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
+					"Account Number:                  " + accountNo + "\n" +
+					"Account Type:                       " + (this.accountDetails.current ? "Current" : "Saving") + "\n" +
+					"Account name:                      " + this.accountDetails.accountName + "\n" +
+					"IFSC Code:                            " + this.accountDetails.ifsc;
+				this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
+				// var address = "B-25 Shayona shopping center,\n" + "Near Shayona Party Plot, Chanikyapuri";
+				// + ",\nCity -	 Ahemdabad\n" +
+				// 	+"PinCode			 380061\n" + "State 		Gujarat\n" + "Contact No       +91-8448454549\n" + "Country        India";
 			}
 		},
 		onAmount: function(oEvent) {
@@ -117,8 +140,21 @@ sap.ui.define([
 					MessageBox.error(oError);
 				});
 		},
-		onUpdateFinished: function(oEvent) {
+		onUpdateFinishedPerforma: function() {
 			debugger;
+			var oTable = this.getView().byId("idPerformaInvoiceTable");
+			var itemList = oTable.getItems();
+			var noOfItems = itemList.length;
+			for (var i = 0; i < noOfItems; i++) {
+				var vUser = itemList[i].getCells()[8].getText();
+				var vModel = this.allAppUsers[vUser];
+				if (vModel) {
+					var userName = vModel.UserName;
+					itemList[i].getCells()[8].setText(userName);
+				}
+			}
+		},
+		onUpdateFinished: function(oEvent) {
 			var sTitle = "Payment Records";
 			var oTable = this.getView().byId("invoiceTabTable");
 			var itemList = oTable.getItems();
@@ -151,7 +187,7 @@ sap.ui.define([
 			}
 			this.getView().byId("titletext").setText(sTitle);
 		},
-		onDownloadInvoice: function(oEvent) {
+		onPerformaInvoice: function(oEvent) {
 			var that = this;
 			var sPath = oEvent.getSource().getParent().getBindingContextPath();
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath,
@@ -165,14 +201,98 @@ sap.ui.define([
 
 				});
 		},
+		onDownloadInvoice: function(oEvent) {
+			var that = this;
+			var sPath = oEvent.getSource().getParent().getBindingContextPath();
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath,
+					"GET", {}, {}, this)
+				.then(function(oData) {
+					that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Students('" + oData.StudentId + "')",
+							"GET", {}, {}, that)
+						.then(function(sData) {
+							that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Courses('" + oData.CourseId + "')",
+									"GET", {}, {}, that)
+								.then(function(cData) {
+									var address = (sData.Address != "null" ? sData.Address + ", " : "") + (sData.City != "null" ? sData.City + ", " : "");
+									var patt = new RegExp("haryana", "i");
+									var isHaryana = patt.test(address);
+									var gstType = "NONE";
+									if (isHaryana || sData.GSTIN === "null") {
+										gstType = "SGST"
+									} else {
+										gstType = "IGST"
+									}
+									if (oData.PaymentMode === "PAYPAL" || oData.PaymentMode === "PAYU" || oData.PaymentMode === "FOREIGN") {
+										gstType = "NONE";
+									}
+									var oDetail = {
+										"Email": sData.GmailId,
+										"ParticipentName": sData.Name.replace(" null", ""),
+										"ContactNo": sData.ContactNo,
+										"GSTIN": sData.GSTIN === "null" ? null : sData.GSTIN,
+										"Address": sData.Address === "null" ? null : sData.Address,
+										"Country": sData.Country,
+										"City": sData.City,
+										"CourseName": (oData.Amount < 7000 ? cData.Name + "(Ex.)" : cData.Name),
+										"BatchNo": cData.BatchNo,
+										"PaymentMode": oData.PaymentMode,
+										"InvoiceNo": oData.InvoiceNo,
+										"Date": oData.PaymentDate,
+										"AccountNo": oData.AccountName,
+										"FullAmount": oData.USDAmount ? oData.USDAmount : oData.Amount,
+										"USDAmount": oData.USDAmount,
+										"Currency": oData.CurrencyCode,
+										// "Exchange": oData.Exchange,
+										// "Charges": oData.Charges,
+										// "SettleDate": oData.SettleDate,
+										// "SettleAmount": oData.SettleAmount,
+										"Amount": oData.USDAmount ? oData.USDAmount : oData.Amount,
+										// "ChartedValid": item.ChartedValid,
+										"GSTType": gstType,
+									};
+									if (oData.InvoiceNo === "null") {
+										$.post('/getInvoiceNoInvoiceBuilder', {
+												"AccountNo": oData.AccountName,
+												"SubcriptionId": oData.id,
+												"PaymentDate": oData.PaymentDate
+											})
+											.done(function(invoiceNo, status) {
+												that.DownloadInvoiceForOther(oDetail, invoiceNo);
+											})
+											.fail(function(xhr, status, error) {
+												MessageBox.error("Error in Invoice no.");
+											});
+									} else {
+										that.DownloadInvoiceForOther(oDetail, oData.InvoiceNo);
+									}
+								}).catch(function(oError) {
+									that.getView().setBusy(false);
+									var oPopover = that.getErrorMessage(oError);
 
+								});
+
+						}).catch(function(oError) {
+							that.getView().setBusy(false);
+							var oPopover = that.getErrorMessage(oError);
+
+						});
+
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					var oPopover = that.getErrorMessage(oError);
+
+				});
+		},
 		DownloadInvoiceForOther: function(oDetail, invoiceNo) {
 			// var country = this.getCountryNameFromCode(oDetail.Country);
 			var country = oDetail.Country;
 			var billingDate = new Date(oDetail.Date).toDateString().slice(4).split(" ");
 			billingDate = billingDate[0] + " " + billingDate[1] + ", " + billingDate[2];
-			var dueDate = new Date(oDetail.DueDate).toDateString().slice(4).split(" ");
-			dueDate = dueDate[0] + " " + dueDate[1] + ", " + dueDate[2];
+			var dueDate = null;
+			if (oDetail.DueDate) {
+				dueDate = new Date(oDetail.DueDate).toDateString().slice(4).split(" ");
+				dueDate = dueDate[0] + " " + dueDate[1] + ", " + dueDate[2];
+			}
 			var products = [{
 				"Course": oDetail.CourseName,
 				"HSN": "999293",
@@ -186,31 +306,30 @@ sap.ui.define([
 					name: oDetail.CompanyName ? oDetail.CompanyName : oDetail.ParticipentName,
 					email: oDetail.Email,
 					mob: (oDetail.ContactNo ? "+" + oDetail.ContactNo : ""),
-					GSTIN: (oDetail.GSTIN != "null" ? oDetail.GSTIN : ""),
-					address: (oDetail.Address != "null" ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
+					GSTIN: (oDetail.GSTIN !== null ? oDetail.GSTIN : ""),
+					address: (oDetail.Address != null ? oDetail.Address + ", " : "") + (oDetail.City != "null" ? oDetail.City + ", " : "") + country
 				},
 				items: products,
-				IGST: oDetail.GSTType !== "None" ? 18 : 0,
-				fullAmount: oDetail.GSTType !== "None" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
-				usdAmount: oDetail.GSTType !== "None" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
+				IGST: oDetail.GSTType !== "NONE" ? 18 : 0,
+				fullAmount: oDetail.GSTType !== "NONE" ? parseFloat(oDetail.Amount) * 1.18 : oDetail.Amount,
 				order_number: invoiceNo,
 				paymentMode: oDetail.PaymentMode,
 				IsWallet: oDetail.IsWallet,
 				header: {
-					company_name: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "Soyuz Technologies LLP" : "Anubhav Trainings",
-					company_logo: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "data:image/png;base64," + this.logo : "data:image/png;base64," + this.AnubhavTrainingslogo,
-					signature: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "data:image/png;base64," + this.soyuz_signature : "data:image/png;base64," + this.anubhav_signature,
+					company_name: (oDetail.AccountNo).indexOf("114705500444") !== -1 ? "Soyuz Technologies LLP" : "Anubhav Trainings",
+					company_logo: (oDetail.AccountNo).indexOf("114705500444") !== -1 ? "data:image/png;base64," + this.logo : "data:image/png;base64," + this.AnubhavTrainingslogo,
+					signature: (oDetail.AccountNo).indexOf("114705500444") !== -1 ? "data:image/png;base64," + this.soyuz_signature : "data:image/png;base64," + this.anubhav_signature,
 					// hear \\ is used to change line
-					company_address: (oDetail.Notes).indexOf("Soyuz Technologies") !== -1 ? "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102" : "B-25 Shayona shopping center,\\Near Shayona Party Plot,\\Chanikyapuri, Ahemdabad\\Pin - 380061",
+					company_address: (oDetail.AccountNo).indexOf("114705500444") !== -1 ? "EPS-FF-073A, Emerald Plaza,\\Golf Course Extension Road,\\Sector 65, Gurgaon,\\Haryana-122102" : "B-25 Shayona shopping center,\\Near Shayona Party Plot,\\Chanikyapuri, Ahemdabad\\Pin - 380061",
 					GSTIN: (oDetail.GSTType !== "NONE" ? "06AEFFS9740G1ZS" : "")
 				},
 				footer: {
 					text: "This is a computer generated invoice"
 				},
-				currency_symbol: " INR",
+				currency_symbol: oDetail.Currency,
 				date: {
 					billing_date: billingDate,
-					due_date: dueDate
+					due_date: dueDate ? dueDate : ""
 				}
 			};
 
@@ -223,7 +342,7 @@ sap.ui.define([
 						.fontSize(20)
 						.text(invoice.header.company_name, 110, 57)
 						.fontSize(10);
-					if (oDetail.GSTType !== "NONE") {
+					if (oDetail.GSTType !== "NONE" && (oDetail.AccountNo === "114705500444")) {
 						doc.text("GSTIN: " + invoice.header.GSTIN, 112, 87);
 					}
 					doc.moveDown();
@@ -258,10 +377,10 @@ sap.ui.define([
 					.font("Helvetica")
 					.text("E-mail:", 50, customerInformationTop + 15)
 					.text(invoice.shipping.email, 150, customerInformationTop + 15);
-				if (oDetail.GSTType !== "NONE") {
-					doc.text("GSTIN:", 50, customerInformationTop + 45 - 15)
-						.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45 - 15);
-				}
+				// if (oDetail.GSTType !== "NONE") {
+				doc.text("GSTIN:", 50, customerInformationTop + 45 - 15)
+					.text(invoice.shipping.GSTIN, 150, customerInformationTop + 45 - 15);
+				// }
 				doc.fontSize(10)
 					.text("Address:", 50, customerInformationTop + 60 - 15)
 					.text(invoice.shipping.address, 150, customerInformationTop + 60 - 15)
@@ -272,7 +391,7 @@ sap.ui.define([
 					.font("Helvetica")
 					.text("Invoice Date:", 350, customerInformationTop + 15)
 					.text(invoice.date.billing_date, 450, customerInformationTop + 15)
-					.text("Invoice Date:", 350, customerInformationTop + 30)
+					.text("Due Date:", 350, customerInformationTop + 30)
 					.text(invoice.date.due_date, 450, customerInformationTop + 30)
 					.moveDown();
 
@@ -317,7 +436,7 @@ sap.ui.define([
 						tableRowSGST(
 							doc,
 							position,
-							item.Course + "\nHSN/SAC: " + item.HSN,
+							item.Course + (oDetail.GSTType !== "NONE" ? "\nHSN/SAC: " + item.HSN : ""),
 							item.Rate,
 							item.SGST,
 							item.CGST,
@@ -366,7 +485,7 @@ sap.ui.define([
 					totalTable(
 						doc,
 						paidToDatePosition,
-						"Total (INR):",
+						"Total (" + oDetail.Currency + "):",
 						formatCurrency(invoice.fullAmount)
 					);
 				} else {
@@ -391,7 +510,7 @@ sap.ui.define([
 					totalTable(
 						doc,
 						paidToDatePosition,
-						"Total (INR):",
+						"Total (" + oDetail.Currency + "):",
 						formatCurrency(invoice.fullAmount)
 					);
 				}
@@ -401,17 +520,23 @@ sap.ui.define([
 					.text("Amount in Words:", 50, amountInWordsPosition + 30)
 					.text(this.formatter.convertNumberToWords(invoice.fullAmount) + " only", 150, amountInWordsPosition + 30)
 				generateHr(doc, amountInWordsPosition + 50);
-				doc.font("Helvetica-Bold")
-					.text("Notes: ", 50, amountInWordsPosition + 75)
-					.font("Helvetica")
-					.text(oDetail.Notes, 50, amountInWordsPosition + 90)
-					.font("Helvetica-Bold")
-					.text("Remarks: ", 50, amountInWordsPosition + 165)
-					.font("Helvetica")
-					.text(oDetail.CourseName + "Training fee for " + oDetail.Email + ". Please note that the actual invoice will be generated after payment.", 50, amountInWordsPosition + 180);
+				if (oDetail.Notes) {
+					doc.font("Helvetica-Bold")
+						.text("Notes: ", 50, amountInWordsPosition + 75)
+						.font("Helvetica")
+						.text(oDetail.Notes, 50, amountInWordsPosition + 90)
+						.font("Helvetica-Bold")
+						.text("Remarks: ", 50, amountInWordsPosition + 165)
+						.font("Helvetica")
+						.text(oDetail.CourseName + "Training fee for " + oDetail.Email + ". Please note that the actual invoice will be generated after payment.", 50, amountInWordsPosition + 180)
+						.font("Helvetica-Bold")
+						.text("Terms: ", 50, amountInWordsPosition + 215)
+						.font("Helvetica")
+						.text(oDetail.Terms ? oDetail.Terms : "", 50, amountInWordsPosition + 230);
+				}
 
 				const signaturePosition = amountInWordsPosition + 205;
-				if ((oDetail.Notes).indexOf("Soyuz Technologies") !== -1) {
+				if (oDetail.AccountNo === "114705500444") {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
 						.image(invoice.header.signature, 440, signaturePosition + 20, {
 							height: 50,
@@ -421,9 +546,9 @@ sap.ui.define([
 						.moveDown();
 				} else {
 					doc.text(invoice.header.company_name, 430, signaturePosition)
-						.image(invoice.header.signature, 430, signaturePosition + 20, {
+						.image(invoice.header.signature, 420, signaturePosition + 20, {
 							height: 80,
-							width: 90
+							width: 155
 						})
 						.text("Designated Partner", 440, signaturePosition + 105)
 						.moveDown();
@@ -616,14 +741,13 @@ sap.ui.define([
 
 			if (this.sId.indexOf("accountDetails") !== -1) {
 				var oAccFilter = new sap.ui.model.Filter("deleted", FilterOperator.EQ, false);
+				sTitle = "Account Search";
+				this.getCustomerPopup();
+				var title = "Account Search";
 				var oSorter = new sap.ui.model.Sorter({
 					path: 'value',
 					descending: false
 				});
-				sTitle = "Account Search";
-				sPath = "local>/accountSet";
-				this.getCustomerPopup();
-				var title = "Account Search";
 				this.searchPopup.setTitle(title);
 				this.searchPopup.bindAggregation("items", {
 					path: "local>/accountSet",
@@ -669,28 +793,28 @@ sap.ui.define([
 		onConfirm: function(oEvent) {
 			if (this.sId.indexOf("accountDetails") !== -1) {
 				var accountNo = oEvent.getParameter("selectedItem").getValue();
-				var accountDetails = this.oLocalModel.getProperty(oEvent.getParameter("selectedItem").getBindingContextPath());
+				this.accountDetails = this.oLocalModel.getProperty(oEvent.getParameter("selectedItem").getBindingContextPath());
 				this.oLocalModel.setProperty("/PerformaInvoices/AccountNo", accountNo);
 				var currency = this.oLocalModel.getProperty("/PerformaInvoices/Currency");
 				if (accountNo === "114705500444" && currency === "INR") {
 					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
 						"Account Number:                  " + accountNo + "\n" +
-						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
-						"Account name:                      " + accountDetails.accountName + "\n" +
-						"IFSC Code:                            " + accountDetails.ifsc +
+						"Account Type:                       " + (this.accountDetails.current ? "Current" : "Saving") + "\n" +
+						"Account name:                      " + this.accountDetails.accountName + "\n" +
+						"IFSC Code:                            " + this.accountDetails.ifsc +
 						"\nYou can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway";
 					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
-					var address = "EPS-FF-073A, Emerald Plaza,\nGolf Course Extension Road, Sector 65";
+					// var address = "EPS-FF-073A, Emerald Plaza,\nGolf Course Extension Road, Sector 65";
 					// +",\nCity            Gurgaon\nPinCode           122018.\nState             Haryana\nContact No             +91-8448454549" +
 					// "Country             India\nGSTIN:            06AEFFS9740G1ZS";
 				} else if (currency === "INR") {
 					var note = "Please make payment before the due date in below a/c and share the screenshot with us\n" +
 						"Account Number:                  " + accountNo + "\n" +
-						"Account Type:                       " + (accountDetails.current ? "Current" : "Saving") + "\n" +
-						"Account name:                      " + accountDetails.accountName + "\n" +
-						"IFSC Code:                            " + accountDetails.ifsc;
+						"Account Type:                       " + (this.accountDetails.current ? "Current" : "Saving") + "\n" +
+						"Account name:                      " + this.accountDetails.accountName + "\n" +
+						"IFSC Code:                            " + this.accountDetails.ifsc;
 					this.oLocalModel.setProperty("/PerformaInvoices/Notes", note);
-					var address = "B-25 Shayona shopping center,\n" + "Near Shayona Party Plot, Chanikyapuri";
+					// var address = "B-25 Shayona shopping center,\n" + "Near Shayona Party Plot, Chanikyapuri";
 					// + ",\nCity -	 Ahemdabad\n" +
 					// 	+"PinCode			 380061\n" + "State 		Gujarat\n" + "Contact No       +91-8448454549\n" + "Country        India";
 				}
@@ -709,7 +833,7 @@ sap.ui.define([
 		onSearchManageSubs: function(oEvent) {
 			// this.SearchStuGuid;
 			// this.SearchCourseGuid;
-			debugger;
+			// debugger;
 			var aFilter = [];
 
 			if (this.SearchStuGuid) {
@@ -718,12 +842,12 @@ sap.ui.define([
 			if (this.SearchCourseGuid) {
 				aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + this.SearchCourseGuid + "'"));
 			}
-			var dateString = this.getView().byId("idBatchEndate");
+			var dateString = this.getView().byId("idPaymentdate");
 			if (dateString._lastValue != false) {
 				var from = dateString._lastValue.split(".");
 				var newDate = new Date(from[2], from[1] - 1, from[0]);
 				newDate.setHours(0, 0, 0, 0);
-				var oFilter_date = new sap.ui.model.Filter("EndDate", "GE", newDate);
+				var oFilter_date = new sap.ui.model.Filter("PaymentDate", "EQ", newDate);
 			} else {
 				var oFilter_date = new sap.ui.model.Filter();
 			}
@@ -731,33 +855,14 @@ sap.ui.define([
 			if (dateString._lastValue != false) {
 				aFilter.push(oFilter_date);
 			}
-
-
-			// var vKey = this.getView().byId("idPendingPayment").getSelectedKey();
-			// if (vKey === "true") {
-			// 	var oFilter1 = new sap.ui.model.Filter("PendingAmount", "GT", 0);
-			// 	aFilter.push(oFilter1);
-			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter1]);
-			// } else if (vKey === "false") {
-			// 	var oFilter1 = new sap.ui.model.Filter("PendingAmount", "EQ", 0);
-			// 	aFilter.push(oFilter1);
-			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter2]);
-			// }
-			//
-			//
-			// var vKey1 = this.getView().byId("idPartPaySearch").getSelectedKey();
-			// if (vKey1 === "true") {
-			// 	var oFilter2 = new sap.ui.model.Filter("PartialPayment", "EQ", "true");
-			// 	aFilter.push(oFilter2);
-			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter1]);
-			// } else if (vKey1 === "false") {
-			// 	var oFilter2 = new sap.ui.model.Filter("PartialPayment", "EQ", "false");
-			// 	aFilter.push(oFilter2);
-			// 	// this.getView().byId("manageSubsTable").getBinding("items").filter([oFilter2]);
-			// }
-
 			this.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
-
+		},
+		onClearSearchFilter: function(oEvent) {
+			var aFilter = [];
+			this.getView().byId("idPaymentdate").setValue(null);
+			this.getView().byId("idStuSearch").setValue(null);
+			this.getView().byId("idCourseSearch").setValue(null);
+			this.getView().byId("invoiceTabTable").getBinding("items").filter(aFilter);
 		},
 		onFullScreen: function(oEvent) {
 			var oMode = oEvent.getSource().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getMode();

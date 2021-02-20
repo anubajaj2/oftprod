@@ -56,10 +56,10 @@
 										<!-- <Input value="{local>/PerformaInvoices/CourseName}"/> -->
 										<Label text="Amount"/>
 										<Input value="{local>/PerformaInvoices/Amount}" change="onAmount"/>
-										<Label text="Currency"/>
-										<Input value="{local>/PerformaInvoices/Currency}" change="onCurrencyChange" liveChange="onCurrencyLiveChange"/>
 										<Label wrapping="true" text="Account" class="sapUiSmallMarginEnd"></Label>
 										<Input id="accountDetails" required="true" value="{local>/PerformaInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+										<Label text="Currency"/>
+										<Input value="{local>/PerformaInvoices/Currency}" change="onCurrencyChange" liveChange="onCurrencyLiveChange"/>
 										<Label text="Terms" wrapping="true" class="sapUiSmallMarginEnd"/>
 										<Input value="{local>/PerformaInvoices/Terms}" class="sapUiTinyMarginBottom"/>
 									</f:content>
@@ -91,7 +91,7 @@
 						</FlexBox>
 
 						<Panel>
-							<Table id="idSummary" items="{/PerformaInvoices}" mode="MultiSelect" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
+							<Table id="idPerformaInvoiceTable" items="{/PerformaInvoices}" mode="MultiSelect" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinishedPerforma" fixedLayout="false">
 								<headerToolbar>
 									<Toolbar>
 										<Title id="newtitle" text="Entries"/>
@@ -161,7 +161,7 @@
 											<Text text="{CreatedBy}"/>
 											<!-- <Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled="{viewModel>IsWallet}" press="onReference"></Link> -->
 											<!-- <Button icon="sap-icon://edit" press="onEditInfo" text="Edit" type="{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button> -->
-											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onPerformaInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 											<!-- <RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/> -->
 										</cells>
 									</ColumnListItem>
@@ -169,59 +169,44 @@
 							</Table>
 						</Panel>
 					</IconTabFilter>
-					<IconTabFilter text="Invoice Tab" key="attachments">
+					<IconTabFilter text="Invoice" key="attachments">
 						<FlexBox renderType="Bare">
-						<FlexBox class="columns" renderType="Bare" width="50%">
-							<f:SimpleForm editable="true">
-								<f:content>
-									<Label text="Batch End Date"/>
-									<DatePicker id="idBatchEndate" displayFormat="dd.MM.yyyy" placeholder="Batch End Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
-									<Label text="Student Email"/>
-									<Input id="idStuSearch" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select student email"/>
-								</f:content>
-							</f:SimpleForm>
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm editable="true">
+									<f:content>
+										<Label text="Payment Date"/>
+										<DatePicker id="idPaymentdate" displayFormat="dd.MM.yyyy" placeholder="Payment Date" required="true" valueFormat="dd.MM.yyyy"></DatePicker>
+										<Label text="Student Email"/>
+										<Input id="idStuSearch" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="false" placeholder="Select student email"/>
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm editable="true">
+									<f:content>
+										<Label text="Batch"/>
+										<Input id="idCourseSearch" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
+										<Label text="Search"/>
+										<Button press="onSearchManageSubs" icon="sap-icon://search"/>
+										<Button press="onClearSearchFilter" icon="sap-icon://clear-filter"/>
+										<!-- <Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/> -->
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
 						</FlexBox>
-						<FlexBox class="columns" renderType="Bare" width="50%">
-							<f:SimpleForm editable="true">
-								<f:content>
-									<Label text="Batch"/>
-									<Input id="idCourseSearch" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
-									<Label text="Search"/>
-									<Button press="onSearchManageSubs" text="Search" icon="sap-icon://search"/>
-									<!-- <Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/> -->
-								</f:content>
-							</f:SimpleForm>
-						</FlexBox>
-					</FlexBox>
-						<!-- <VBox>
-
-						</VBox> -->
+						<!-- <VBox> </VBox> -->
 						<Panel>
 							<Table id="invoiceTabTable" growing="true" growingThreshold="50" growingScrollToLoad="false" items="{/Subs}" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
 								<!--class="tableStyle" -->
 								<headerToolbar>
 									<Toolbar>
 										<Title id="titletext"/>
-										<!-- <ToolbarSpacer/>
-										<Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/>
-										<Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
-										<ToolbarSpacer/>
-										<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
-										<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
-										<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExport"/>
-										<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
-										<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
-										<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
-										<Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
-										<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
-										<Text text="Display Most Recent records?"/>
-										<HBox visible="{= ${local>/Role} === 'Admin'}">
-											<Switch idstate="true" customTextOn="Yes" customTextOff="No" change="onSwitchToggle">
-												<layoutData>
-													<FlexItemData growFactor="1"/>
-												</layoutData>
-											</Switch>
-										</HBox> -->
+										<!-- <ToolbarSpacer/> <Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/> <Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+										<ToolbarSpacer/> <CheckBox id="includeX" tooltip="Include in CC" text="cc"/> <Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}"
+										tooltip="All" press="onDataExport"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/> <Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email"
+										press="onSendEmail"/> <Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/> <Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/> <Button visible="{=
+										${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/> <Text text="Display Most Recent records?"/> <HBox visible="{= ${local>/Role} === 'Admin'}"> <Switch idstate="true"
+										customTextOn="Yes" customTextOff="No" change="onSwitchToggle"> <layoutData> <FlexItemData growFactor="1"/> </layoutData> </Switch> </HBox> -->
 									</Toolbar>
 								</headerToolbar>
 								<columns>
@@ -247,6 +232,9 @@
 									<Column>
 										<Label text="Batch End Date" class="columnLabelStyle"/>
 									</Column>
+									<Column>
+										<Label text="Invoice" class="columnLabelStyle"/>
+									</Column>
 								</columns>
 								<items>
 									<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
@@ -271,6 +259,7 @@
 											<Text text="{ path: 'PaymentDueDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
 											<CheckBox selected="{PartialPayment}" editable="false"></CheckBox>
 											<Text text="{ path: 'EndDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 										</cells>
 									</ColumnListItem>
 								</items>

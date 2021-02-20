@@ -17,7 +17,7 @@ sap.ui.define([
 			//sap.ui.getCore().setModel(oModel);
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.loadAllStudents();
-			this.loadAllCourses();
+			this.loadAllAppUsers();
 			this.initAccounts();
 		},
 		onSuggest: function(oEvent){

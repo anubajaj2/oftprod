@@ -277,8 +277,7 @@ sap.ui.define([
 				for (var i = 0; i < noOfItems; i++) {
 					var vCourse = itemList[i].getCells()[2].getText();
 					var oCourseId = 'Courses(\'' + vCourse + '\')';
-					// var oModel = this.getView().getModel().oData[oCourseId];
-					var oModel = this.allCourses[vCourse];
+					var oModel = this.getView().getModel().oData[oCourseId];
 					if (oModel) {
 						var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 						itemList[i].getCells()[2].setText(CourseName);

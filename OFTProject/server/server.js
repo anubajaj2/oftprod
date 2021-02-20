@@ -802,6 +802,53 @@ app.start = function() {
 			);
 		});
 
+		app.post('/getInvoiceNoInvoiceBuilder', function(req, res) {
+			var responseData = [];
+			var date = new Date(req.body.PaymentDate);
+			var subId = req.body.SubcriptionId;
+			var accountNo = req.body.AccountNo;
+			var startDate = new Date(new Date(date.getFullYear(), date.getMonth(), 1));
+			var endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+			var cDate = new Date(req.body.PaymentDate);
+			var month = (cDate.getMonth() < 9 ? "0" + (cDate.getMonth() + 1) : cDate.getMonth() + 1);
+			var year = cDate.getFullYear();
+			var Subs = app.models.Sub;
+			var oFilter = {
+				"AccountName": accountNo,
+				and: [{
+					"PaymentDate": {
+						gte: startDate
+					}
+				}, {
+					"PaymentDate": {
+						lte: endDate
+					}
+				}]
+			};
+			Subs.find({
+				where: oFilter,
+				fields: {
+					"PaymentDate": true,
+					"InvoiceNo": true,
+					"id": true
+				}
+			}).then(function(subcriptions) {
+				subcriptions.sort((obj1, obj2) => {
+					return new Date(obj1.PaymentDate) - new Date(obj2.PaymentDate);
+				});
+				var invoiceNo;
+				for (var i = 0; i < subcriptions.length; i++) {
+					if (subcriptions[i].id.toString() === subId) {
+						invoiceNo = i;
+						invoiceNo += 1;
+						break;
+					}
+				}
+				var orderNo = "INV-" + year + "" + month + "-" + (invoiceNo < 10 ? "0" + invoiceNo : invoiceNo);
+				res.send(orderNo);
+			});
+		});
+
 		app.get('/getStudentPerBatch', function(req, res) {
 			var responseData = [];
 			var app = require('../server/server');
