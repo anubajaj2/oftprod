@@ -174,7 +174,7 @@ sap.ui.define([
 			}
 		},
 		onUpdateFinished: function(oEvent) {
-			var sTitle = "Payment Records";
+			var sTitle = "Entry found";
 			var oTable = this.getView().byId("invoiceTabTable");
 			var itemList = oTable.getItems();
 			var noOfItems = itemList.length;
@@ -266,6 +266,7 @@ sap.ui.define([
 										"AccountNo": oData.AccountName,
 										"FullAmount": oData.USDAmount ? oData.USDAmount : oData.Amount,
 										"USDAmount": oData.USDAmount,
+										"Reference": oData.Reference,
 										"Currency": currency,
 										// "Exchange": oData.Exchange,
 										// "Charges": oData.Charges,
@@ -562,6 +563,12 @@ sap.ui.define([
 						.text("Terms: ", 50, amountInWordsPosition + 215)
 						.font("Helvetica")
 						.text(oDetail.Terms ? oDetail.Terms : "", 50, amountInWordsPosition + 230);
+				}
+				if ((!oDetail.Notes) && oDetail.Reference !== "null") {
+					doc.font("Helvetica-Bold")
+						.text("Remarks: ", 50, amountInWordsPosition + 215)
+						.font("Helvetica")
+						.text("Thanks for making payment on" + invoice.date.billing_date + "with reference no " + (oDetail.Reference !== "null" ? oDetail.Reference : ""), 50, amountInWordsPosition + 230);
 				}
 
 				const signaturePosition = amountInWordsPosition + 205;
@@ -1021,6 +1028,7 @@ sap.ui.define([
 			var that = this;
 			var aFilter = [];
 			var queryString = this.oLocalModel.getProperty("/InvoiceBuilder/StudentId");
+			var accountNo = this.oLocalModel.getProperty("/PerformaInvoices/AccountNo");
 			var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			if (regEx.test(queryString) && (!that.SearchStuGuid)) {
 				var payload = {};
@@ -1037,6 +1045,9 @@ sap.ui.define([
 						aFilter.push(new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'"));
 						if (that.SearchCourseGuid) {
 							aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + that.SearchCourseGuid + "'"));
+						}
+						if (accountNo) {
+							aFilter.push(new sap.ui.model.Filter("AccountName", "EQ", accountNo));
 						}
 						var dateString = that.getView().byId("idPaymentdate");
 						if (dateString._lastValue != false) {
@@ -1065,6 +1076,9 @@ sap.ui.define([
 				}
 				if (that.SearchCourseGuid) {
 					aFilter.push(new sap.ui.model.Filter("CourseId", "EQ", "'" + that.SearchCourseGuid + "'"));
+				}
+				if (accountNo) {
+					aFilter.push(new sap.ui.model.Filter("AccountName", "EQ", accountNo));
 				}
 				var dateString = that.getView().byId("idPaymentdate");
 				if (dateString._lastValue != false) {

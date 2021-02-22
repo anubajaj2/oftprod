@@ -91,7 +91,20 @@
 						</FlexBox>
 
 						<Panel>
-							<Table id="idPerformaInvoiceTable" items="{/PerformaInvoices}" mode="MultiSelect" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinishedPerforma" fixedLayout="false">
+							<Table
+								id="idPerformaInvoiceTable"
+								items="{
+					           path: '/PerformaInvoices',
+					             sorter: {
+					             path: 'ChangedOn',
+					             descending: 'true'
+					             }
+					           }"
+								mode="MultiSelect"
+								alternateRowColors="true"
+								class="sapUiSizeCompact"
+								updateFinished="onUpdateFinishedPerforma"
+								fixedLayout="false">
 								<headerToolbar>
 									<Toolbar>
 										<Title id="newtitle" text="Entries"/>
@@ -178,6 +191,9 @@
 										<DatePicker id="idPaymentdate" displayFormat="dd.MM.yyyy" placeholder="Payment Date" required="true" valueFormat="dd.MM.yyyy" change="onSearchManageSubs"></DatePicker>
 										<Label text="Student Email"/>
 										<Input id="idStuSearch" value="{local>/InvoiceBuilder/StudentId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="false" placeholder="Select student email"/>
+										<Label text="Search"/>
+										<Button press="onSearchManageSubs" icon="sap-icon://search"/>
+										<Button press="onClearSearchFilter" icon="sap-icon://clear-filter"/>
 									</f:content>
 								</f:SimpleForm>
 							</FlexBox>
@@ -186,9 +202,8 @@
 									<f:content>
 										<Label text="Batch"/>
 										<Input id="idCourseSearch" value="{local>/InvoiceBuilder/CourseId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
-										<Label text="Search"/>
-										<Button press="onSearchManageSubs" icon="sap-icon://search"/>
-										<Button press="onClearSearchFilter" icon="sap-icon://clear-filter"/>
+										<Label wrapping="true" text="Account" class="sapUiSmallMarginEnd"></Label>
+										<Input id="accountDetails2" required="true" value="{local>/PerformaInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
 										<!-- <Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/> -->
 									</f:content>
 								</f:SimpleForm>
@@ -226,13 +241,13 @@
 										<Label text="{i18n>payDate}" class="columnLabelStyle"/>
 									</Column>
 									<Column>
-										<Label text="{i18n>payDueDate}" class="columnLabelStyle"/>
+										<Label text="{i18n>Amount}" class="columnLabelStyle"/>
 									</Column>
 									<Column>
-										<Label text="{i18n>PartPay}" class="columnLabelStyle"/>
+										<Label text="Payment Mode" class="columnLabelStyle"/>
 									</Column>
 									<Column>
-										<Label text="Batch End Date" class="columnLabelStyle"/>
+										<Label text="Account No" class="columnLabelStyle"/>
 									</Column>
 									<Column>
 										<Label text="Invoice" class="columnLabelStyle"/>
@@ -258,10 +273,14 @@
 											<!-- <Text text="{CourseId}" modelContextChange="onCourseIdChange" ></Text> <Text text="{StudentId}" ></Text> -->
 											<Text text="{CourseId}"></Text>
 											<Text text="{ path: 'PaymentDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
-											<Text text="{ path: 'PaymentDueDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
-											<CheckBox selected="{PartialPayment}" editable="false"></CheckBox>
-											<Text text="{ path: 'EndDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
-											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+											<Text text="{ path: 'Amount'}"></Text>
+											<Text text="{PaymentMode}"/>
+											<Text text="{ path: 'AccountName'}"></Text>
+											<Button
+												icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }"
+												text="{path : 'InvoiceNo', formatter: '.formatter.buttonTextforDownload' }"
+												press="onDownloadInvoice"
+												type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 										</cells>
 									</ColumnListItem>
 								</items>

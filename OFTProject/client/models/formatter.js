@@ -107,6 +107,13 @@ sap.ui.define([], function() {
 				return "sap-icon://download"
 			}
 		},
+		buttonTextforDownload: function(value) {
+			if (value === "null") {
+				return "DNLD";
+			} else {
+				return value;
+			}
+		},
 		buttonTypeforInvoice: function(value) {
 			if (value === "null" || value === true) {
 				return sap.m.ButtonType.Reject;
