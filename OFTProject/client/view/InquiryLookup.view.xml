@@ -1,0 +1,70 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.InquiryLookup"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Inquiry Lookup" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<f:SimpleForm id="selectionId" editable="true">
+				<f:content>
+					<VBox>
+						<l:Grid defaultSpan="L6 M8 S12">
+							<VBox id="vBoxCol1" class="column">
+								<Label text="Date From-To"/>
+								<DateRangeSelection id="DRS3" showFooter="true" change="handleChange"/>
+								<Label text="Course Name"/>
+								<Select width="100%"/>
+							</VBox>
+							<VBox id="vBoxCol2" class="column">
+								<Label text="Staff Name"/>
+								<Input id="idStaffName" value="" maxLength="90" submit="onNameEnt"/>
+								<Label text="Type"/>
+								<Select width="100%"/>
+								<Label text="{i18n>Search}"/>
+								<Button class="sapUiSmallMarginLeft" icon="sap-icon://search" text = "Go" width="50%"/>
+								<layoutData>
+									<l:GridData span="L6 M6 S10"/>
+								</layoutData>
+							</VBox>
+						</l:Grid>
+					</VBox>
+				</f:content>
+			</f:SimpleForm>
+			<viz:VizFrame id="idVizFrame" height="400px" uiConfig="{applicationSet:'fiori'}" vizType="column">
+				<viz:dataset>
+					<viz.data:FlattenedDataset data="{local>/AllInq}">
+						<viz.data:dimensions>
+							<viz.data:DimensionDefinition name="Name" value="{local>name}"/>
+						</viz.data:dimensions>
+						<viz.data:measures>
+							<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
+						</viz.data:measures>
+					</viz.data:FlattenedDataset>
+				</viz:dataset>
+				<viz:feeds>
+					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Name"/>
+				</viz:feeds>
+			</viz:VizFrame>
+		</content>
+		<footer>
+			<Toolbar>
+				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
+				<ToolbarSpacer/>
+				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+				<Button text="Get Account" press="onGetNext"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

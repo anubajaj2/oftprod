@@ -122,6 +122,11 @@
 									"target": ["donald", "InvoiceBuilder"]
 							},
 							{
+									"pattern": "InquiryLookup",
+									"name": "InquiryLookup",
+									"target": ["donald", "InquiryLookup"]
+							},
+							{
 								"pattern": "newreg",
 								"name": "newreg",
 
@@ -260,6 +265,15 @@
 					"clearAggregation": true,
 					"viewName": "InvoiceBuilder",
 					"viewId": "idInvoiceBuilder",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"InquiryLookup": {
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "InquiryLookup",
+					"viewId": "idInquiryLookup",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
