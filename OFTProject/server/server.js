@@ -2026,54 +2026,314 @@ app.start = function() {
 				});
 			});
 
-		app.post('/sendEmailForAddress',
+		app.get('/grantTrainingAccess',
 			function(req, res) {
+
 				//https://developers.google.com/oauthplayground/
 				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+				//https://developers.google.com/drive/api/v3/quickstart/nodejs
+				const fs = require('fs');
+				const readline = require('readline');
+				const {google} = require('googleapis');
 
-				var nodemailer = require('nodemailer');
-				var smtpTransport = require('nodemailer-smtp-transport');
+				// If modifying these scopes, delete token.json.
+				const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
+											  'https://www.googleapis.com/auth/drive.activity'];
+				// The file token.json stores the user's access and refresh tokens, and is
+				// created automatically when the authorization flow completes for the first
+				// time.
+				const TOKEN_PATH = 'token.json';
 				const xoauth2 = require('xoauth2');
-				const key = require('./samples.json');
-				var transporter = nodemailer.createTransport(smtpTransport({
-					service: 'gmail',
-					host: 'smtp.gmail.com',
-					auth: {
-						xoauth2: xoauth2.createXOAuth2Generator({
-							user: key.user,
-							clientId: key.clientId,
-							clientSecret: key.clientSecret,
-							refreshToken: key.refreshToken
-						})
-					}
-				}));
-				var contents = fs.readFileSync('./server/sampledata/AddressTemplate.html', 'utf8');
-				contents = contents.replace("$$UserName$$", req.body.UserName);
-
-				var mailOptions = {};
-				mailOptions = {
-					from: 'contact@anubhavtrainings.com',
-					to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-					// cc: ccs,
-					subject: req.body.Subject + " 🟢",
-					html: contents
-				};
-
-				transporter.sendMail(mailOptions, function(error, info) {
-					if (error) {
-						console.log(error);
-						if (error.code === "EAUTH") {
-							res.status(500).send('Username and Password not accepted, Please try again.');
-						} else {
-							res.status(500).send('Internal Error while Sending the email, Please try again.');
-						}
-					} else {
-						console.log('Email sent: ' + info.response);
-						res.send("email sent");
-					}
+				const key = require('./drive.json');
+				// Load client secrets from a local file.
+				console.log(key);
+				xoauth2gen = xoauth2.createXOAuth2Generator({
+			    user: key.user,
+			    clientId: key.clientId,
+			    clientSecret: key.clientSecret,
+			    refreshToken: key.refreshToken
 				});
+
+				// HTTP
+				xoauth2gen.getToken(function(err, token, accessToken){
+				    if(err){
+				        return console.log(err);
+				    }
+				    console.log("Authorization: Bearer " + accessToken);
+						const drive = google.drive({version: 'v3', auth: accessToken});
+
+						drive.files.list({
+							pageSize: 10,
+							fields: 'nextPageToken, files(id, name)',
+						}, (err, res) => {
+							if (err) return console.log('The API returned an error: ' + err);
+							const files = res.data.files;
+							if (files.length) {
+								console.log('Files:');
+								files.map((file) => {
+									console.log(`${file.name} (${file.id})`);
+								});
+							} else {
+								console.log('No files found.');
+							}
+						});
+				});
+
+
+
 			});
 
+			app.post('/sendInquiryEmail',
+				function(req, res) {
+					//https://developers.google.com/oauthplayground/
+					//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+					//
+					debugger;
+					var nodemailer = require('nodemailer');
+					var smtpTransport = require('nodemailer-smtp-transport');
+					const xoauth2 = require('xoauth2');
+					const key = require('./samples.json');
+					console.log(req.body);
+
+					if (req.body.IsMinakshi === "X") {
+						var transporter = nodemailer.createTransport(smtpTransport({
+							service: 'gmail',
+							host: 'smtp.gmail.com',
+							auth: {
+								user: 'install.abap@gmail.com',
+								pass: req.body.password
+							}
+						}));
+					} else {
+						var transporter = nodemailer.createTransport(smtpTransport({
+							service: 'gmail',
+							host: 'smtp.gmail.com',
+							auth: {
+								xoauth2: xoauth2.createXOAuth2Generator({
+									user: key.user,
+									clientId: key.clientId,
+									clientSecret: key.clientSecret,
+									refreshToken: key.refreshToken
+								})
+							}
+						}));
+					}
+
+
+					var Subject = req.body.Subject;
+
+					if (Subject === "" || Subject === "null") {
+						//Subject = req.body.CourseName + " training";
+						switch (req.body.CourseName) {
+							case "ABAP on HANA":
+								Subject = "AoH CDS and S4 technical training";
+								break;
+							case "UI5 and Fiori":
+								Subject = "UI5 WebIDE and OData training";
+								break;
+							case "HANA XS":
+								Subject = "XS and Native xsodata training";
+								break;
+							case "Launchpad":
+								Subject = "Launchpad, Security & Extensions training";
+								break;
+							case "Hybris C4C":
+								Subject = "C4 Customer Experience training";
+								break;
+							case "SAP Cloud Platform":
+								Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+								break;
+							case "S4HANA Extension":
+								Subject = "S4 Cloud Extensions training";
+								break;
+							case "HANA Cloud Integration":
+								Subject = "Cloud Platform Integration training";
+								break;
+							case "ABAP on Cloud":
+								Subject = "RESTful Programming in Cloud training";
+								break;
+							case "Analytics Cloud":
+								Subject = "Analytics Cloud training";
+								break;
+							case "SAC Premium":
+								Subject = "SAC Premium training";
+								break;
+							case "ABAP":
+								Subject = "Core ABAP Training";
+								break;
+							case "OOPS ABAP":
+								Subject = "OOPS ABAP and Design pattern Training";
+								break;
+							case "Webdynpro":
+								Subject = "Webdynrpo training";
+								break;
+							case "Workflow":
+								Subject = "Workflow training";
+								break;
+							case "FPM":
+								Subject = "FPM training";
+								break;
+							case "BRF":
+								Subject = "BRF+ training";
+								break;
+							default:
+								Subject = req.body.CourseName + " training";
+								break;
+						}
+					}
+					//https://myaccount.google.com/lesssecureapps?pli=1
+					if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
+						req.body.CourseName != "HANA XS" &&
+						req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
+						req.body.CourseName != "S4HANA Extension" &&
+						req.body.CourseName != "HANA Cloud Integration" &&
+						req.body.CourseName != "SimpleLogistics" &&
+						req.body.CourseName != "ABAP on Cloud" &&
+						req.body.CourseName != "Analytics Cloud" &&
+						req.body.CourseName != "SAC Premium" &&
+						req.body.CourseName != "SAP Cloud Platform" &&
+						req.body.CourseName != "ABAP" &&
+						req.body.CourseName != "OOPS ABAP" &&
+						req.body.CourseName != "Webdynpro" &&
+						req.body.CourseName != "Workflow" &&
+						req.body.CourseName != "FPM" &&
+						req.body.CourseName != "BRF" &&
+						req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
+						req.body.CourseName = "Generic";
+						if (Subject === "" || Subject === "null") {
+							Subject = "[REPLY] Regarding training Course 🟢";
+						}
+					}
+					if (req.body.FirstName === "" || req.body.FirstName == "null") {
+						req.body.FirstName = "Sir";
+					}
+
+
+					if (req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined) {
+						req.body.mailType = "R";
+					}
+					if (req.body.CourseName === "Generic") {
+						req.body.CourseName = "Other";
+					}
+
+					var app = require('../server/server');
+					var Template = app.models.Template;
+					debugger;
+					var CourseName = req.body.CourseName;
+					if (req.body.source === "L" || req.body.source === "F") {
+						CourseName = "Linkedin";
+					}
+					Template.findOne({
+						where: {
+							and: [{
+								Type: req.body.mailType
+							}, {
+								CourseName: CourseName
+							}]
+						}
+					}).then(function(data) {
+						//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
+						debugger;
+						if (!data) {
+							res.status(500).send('Template Not found for the course');
+						}
+						var contents = data.Template;
+						var demoDate = new Date(data.DemoDate);
+						Date.prototype.toShortFormat = function() {
+							var month_names = ["Jan", "Feb", "Mar",
+								"Apr", "May", "Jun",
+								"Jul", "Aug", "Sep",
+								"Oct", "Nov", "Dec"
+							];
+
+							var day = this.getDate();
+							var month_index = this.getMonth();
+							var year = this.getFullYear();
+
+							return "" + day + "-" + month_names[month_index] + "-" + year;
+						}
+						if (req.body.mailType === "A") {
+							contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+							contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+							contents = contents.replace('$$DemoLink$$', data.VideoLink);
+							contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
+							contents = contents.replace('$$NextClass$$', data.NextClass);
+
+						} else if (req.body.mailType === "B") {
+							//yet to code
+							contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+							contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+							contents = contents.replace('$$DemoLink$$', data.VideoLink);
+							contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
+							contents = contents.replace('$$NextClass$$', data.FirstName);
+							contents = contents.replace('$$CALLink$$', data.Extra1);
+							contents = contents.replace('%24%24CALLink%24%24', data.Extra1);
+						}
+						contents = contents.replace('$$Extra1$$', data.Extra2);
+						var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
+						req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
+						contents = contents.replace('$$Name$$', req.body.FirstName)
+						debugger;
+						if (req.body.fees !== "null" && req.body.fees !== "") {
+							if (req.body.source === "L" || req.body.source === "F") {
+								// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+								// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
+								// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+								// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
+								//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+								Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
+							} else {
+								contents = contents.replace("$$fees$$", req.body.fees);
+								contents = contents.replace("$$currency$$", req.body.currency);
+							}
+
+						}
+						var ccs = [];
+						if (req.body.CourseName === "SimpleLogistics") {
+							ccs.push("paramsaddy@gmail.com");
+						} else if (req.body.CourseName === "SimpleFinance") {
+							ccs.push("info@gaurav-consulting.com");
+						}
+						var mailOptions = {};
+
+						if (req.body.IsMinakshi === "X") {
+							ccs.push("contact@anubhavtrainings.com");
+							mailOptions = {
+								from: 'install.abap@gmail.com',
+								to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+								cc: ccs,
+								subject: 'Re: ' + Subject + " 🟢",
+								html: contents
+							};
+						} else {
+							mailOptions = {
+								from: 'contact@anubhavtrainings.com',
+								to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+								cc: ccs,
+								subject: 'Re: ' + Subject + " 🟢",
+								html: contents
+							};
+						}
+
+
+						transporter.sendMail(mailOptions, function(error, info) {
+							if (error) {
+								console.log(error);
+								if (error.code === "EAUTH") {
+									res.status(500).send('Username and Password not accepted, Please try again.');
+								} else {
+									res.status(500).send('Internal Error while Sending the email, Please try again.');
+								}
+							} else {
+								console.log('Email sent: ' + info.response);
+								res.send("email sent");
+							}
+						});
+					});
+
+
+
+		});
 		app.post('/sendInquiryEmail',
 			function(req, res) {
 				//https://developers.google.com/oauthplayground/
