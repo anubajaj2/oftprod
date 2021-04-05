@@ -5,6 +5,7 @@
 	"Role": "",
 	"messagesLength": "0",
 	"messages": [],
+	"inquiryLookupVizType": "line",
 	"trueOrFalse": [{
 			"value": " "
 		},

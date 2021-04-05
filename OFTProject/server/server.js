@@ -248,7 +248,60 @@ app.start = function() {
 				);
 		});
 
-
+		app.post("/inquiryLookup", function(req, res) {
+			var staffId = req.body.staffId;
+			var courseId = req.body.courseId;
+			var startDate = new Date(req.body.startDate);
+			// startDate.setDate(date.getDate() - 1);
+			// startDate.setHours(24, 0, 0, 0);
+			var endDate = new Date(req.body.endDate);
+			// endDate.setDate(date.getDate() + 1);
+			// endDate.setHours(0, 0, 0, 0);
+			debugger;
+			var Inquiry = app.models.Inquiry;
+			Inquiry.find({
+					where: {
+						and: [{
+							CreatedOn: {
+								gt: startDate
+							}
+						},{
+							CreatedOn: {
+								lt: endDate
+							}
+						}
+						// ,{
+						// 	"CreatedBy" : staffId
+						// },{
+						// 	"CourseName" : courseId
+						// }
+					]
+					}
+					// ,
+					// fields: {
+					// 	"CreatedOn": true
+					// }
+				})
+				.then(function(all) {
+					debugger;
+					var countMap = new Map();
+					all.forEach(function(item){
+						if(countMap.has(item.CreatedOn.toDateString())){
+							countMap.set(item.CreatedOn.toDateString(),countMap.get(item.CreatedOn.toDateString()));
+						}else{
+							countMap.set(item.CreatedOn.toDateString(),1);
+						}
+					});
+					var result = [];
+					countMap.forEach(function(c,d){
+						result.push({
+							count : c,
+							date : d
+						});
+					});
+					res.send(result);
+				});
+		});
 
 		app.post('/requestMessage', function(req, res) {
 			debugger;

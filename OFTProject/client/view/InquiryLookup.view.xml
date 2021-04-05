@@ -22,17 +22,30 @@
 						<l:Grid defaultSpan="L6 M8 S12">
 							<VBox id="vBoxCol1" class="column">
 								<Label text="Date From-To"/>
-								<DateRangeSelection id="DRS3" showFooter="true" change="handleChange"/>
+								<DateRangeSelection id="DRS3" showFooter="false" change="handleChange"/>
 								<Label text="Course Name"/>
-								<Select width="100%"/>
+								<Select id = "idCourseName" width="100%" items="{
+						path: '/Courses',
+						sorter: { path: 'Name' }
+					}">
+									<core:Item key="{id}" text="{Name}"/>
+								</Select>
 							</VBox>
 							<VBox id="vBoxCol2" class="column">
 								<Label text="Staff Name"/>
-								<Input id="idStaffName" value="" maxLength="90" submit="onNameEnt"/>
+								<Select id = "idStaffName" width="100%" items="{
+						path: '/AppUsers',
+						sorter: { path: 'UserName' }
+					}">
+									<core:Item key="{id} {TechnicalId}" text="{UserName}"/>
+								</Select>
 								<Label text="Type"/>
-								<Select width="100%"/>
-								<Label text="{i18n>Search}"/>
-								<Button class="sapUiSmallMarginLeft" icon="sap-icon://search" text = "Go" width="50%"/>
+								<Select width="100%" change="onChartTypeChange">
+									<core:Item key="line" text="Line"/>
+									<core:Item key="column" text="Column"/>
+								</Select>
+								<!-- <Label text="{i18n>Search}"/> -->
+								<!-- <Button class="sapUiSmallMarginLeft" icon="sap-icon://search" text="Go" width="50%"/> -->
 								<layoutData>
 									<l:GridData span="L6 M6 S10"/>
 								</layoutData>
@@ -41,11 +54,11 @@
 					</VBox>
 				</f:content>
 			</f:SimpleForm>
-			<viz:VizFrame id="idVizFrame" height="400px" uiConfig="{applicationSet:'fiori'}" vizType="column">
+			<viz:VizFrame id="idVizFrame" height="400px" width="100%" uiConfig="{applicationSet:'fiori'}" vizType="{local>/inquiryLookupVizType}">
 				<viz:dataset>
-					<viz.data:FlattenedDataset data="{local>/AllInq}">
+					<viz.data:FlattenedDataset data="{local>/IquiryLookup}">
 						<viz.data:dimensions>
-							<viz.data:DimensionDefinition name="Name" value="{local>name}"/>
+							<viz.data:DimensionDefinition name="Date" value="{local>date}" dataType="date"/>
 						</viz.data:dimensions>
 						<viz.data:measures>
 							<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
@@ -54,7 +67,7 @@
 				</viz:dataset>
 				<viz:feeds>
 					<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
-					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Name"/>
+					<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Date"/>
 				</viz:feeds>
 			</viz:VizFrame>
 		</content>
@@ -62,8 +75,9 @@
 			<Toolbar>
 				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
 				<ToolbarSpacer/>
-				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
-				<Button text="Get Account" press="onGetNext"/>
+				<Button class="sapUiSmallMargin" icon="sap-icon://filter" text="Filter" press="onFilter"/>
+				<!-- <Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+				<Button text="Get Account" press="onGetNext"/> -->
 			</Toolbar>
 		</footer>
 	</Page>
