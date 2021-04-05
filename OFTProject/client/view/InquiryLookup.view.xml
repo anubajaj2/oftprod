@@ -37,7 +37,7 @@
 						path: '/AppUsers',
 						sorter: { path: 'UserName' }
 					}">
-									<core:Item key="{id} {TechnicalId}" text="{UserName}"/>
+									<core:Item key="{TechnicalId}" text="{UserName}"/>
 								</Select>
 								<Label text="Type"/>
 								<Select width="100%" change="onChartTypeChange">

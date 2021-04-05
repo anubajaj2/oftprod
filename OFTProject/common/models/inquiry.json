@@ -78,12 +78,12 @@
   "relations": {
     "CreatedByTo": {
 			"type": "belongsTo",
-			"model": "AppUser",
+			"model": "User",
 			"foreignKey": "CreatedBy"
 		},
     "ChangedByTo": {
 			"type": "belongsTo",
-			"model": "AppUser",
+			"model": "User",
 			"foreignKey": "ChangedBy"
 		}
   },

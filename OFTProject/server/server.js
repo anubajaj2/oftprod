@@ -261,7 +261,8 @@ app.start = function() {
 			var Inquiry = app.models.Inquiry;
 			Inquiry.find({
 					where: {
-						and: [{
+						and: [
+							{
 							CreatedOn: {
 								gt: startDate
 							}
@@ -269,10 +270,10 @@ app.start = function() {
 							CreatedOn: {
 								lt: endDate
 							}
+						},{
+							CreatedBy :   staffId
 						}
 						// ,{
-						// 	"CreatedBy" : staffId
-						// },{
 						// 	"CourseName" : courseId
 						// }
 					]
