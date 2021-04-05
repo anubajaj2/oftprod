@@ -2156,12 +2156,16 @@ app.start = function() {
 				        return console.log(err);
 				    }
 				    console.log("Authorization: Bearer " + accessToken);
-						const drive = google.drive({version: 'v3',  accessToken});
+						var tokenAuth = {"access_token": accessToken,
+						"scope":"https://www.googleapis.com/auth/drive.metadata.readonly",
+						"token_type":"Bearer"};
+						const drive = google.drive({version: 'v3', tokenAuth});
 
 						drive.files.list({
 							pageSize: 10,
-							fields: 'nextPageToken, files(id, name)',
+					    fields: 'nextPageToken, files(id, name)',
 						}, (err, res) => {
+							console.log(res);
 							if (err) return console.log('The API returned an error: ' + err);
 							const files = res.data.files;
 							if (files.length) {
