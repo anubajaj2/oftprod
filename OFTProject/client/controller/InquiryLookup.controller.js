@@ -78,8 +78,9 @@ sap.ui.define([
 				dateCount += ("\n" + item.date + "\t|\t" + item.count);
 			})
 			var mailContent = {
-				subject: "Your Inquiries between" + dateRange.getFrom() + " - " + dateRange.getTo(),
-				body: "Hello " + staffName + ",\n\nPlease find details of your inquiries between " + dateRange.getFrom() + " - " + dateRange.getTo() +
+				subject: "Your Inquiries between " + dateRange.getFrom().toDateString() + " - " + dateRange.getTo().toDateString(),
+				body: "Hello " + staffName + ",\n\nPlease find details of your inquiries between " + dateRange.getFrom().toDateString() +
+					" - " + dateRange.getTo().toDateString() +
 					".\n\n" + dateCount + "\n\n" +
 					"Kindly check the dates where count was zero and maintain the work accordingly.\n\nRegards,\nAnubhav"
 			};

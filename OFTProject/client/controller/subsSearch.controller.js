@@ -105,6 +105,9 @@ sap.ui.define([
 						var oPopover = that.getErrorMessage(oError);
 					});
 			},
+			onCopyEmail: function(){
+				debugger;
+			},
 			onClearDue: function(oEvent){
 				debugger;
 				var that = this;

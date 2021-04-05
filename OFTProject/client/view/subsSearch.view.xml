@@ -84,6 +84,7 @@
 						<Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/>
 						<Button icon="sap-icon://synchronize"
 							id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+						<Button icon = "sap-icon://copy" tooltip="Copy Email" press = "onCopyEmail"/>
 						<ToolbarSpacer/>
 						<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
 						<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
