@@ -4,9 +4,10 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"oft/fiori/models/formatter",
 	"sap/ui/model/Filter",
+	'sap/ui/model/FilterOperator',
 	'sap/viz/ui5/format/ChartFormatter',
-  'sap/viz/ui5/api/env/Format'
-], function(Controller, MessageBox, MessageToast, Formatter, Filter, ChartFormatter, Format) {
+	'sap/viz/ui5/api/env/Format'
+], function(Controller, MessageBox, MessageToast, Formatter, Filter, FilterOperator, ChartFormatter, Format) {
 	"use strict";
 
 	return Controller.extend("oft.fiori.controller.newLead", {
@@ -26,91 +27,94 @@ sap.ui.define([
 				this.getView().byId("idUser").setText(loginUser);
 			}
 		},
-		setCountryData: function(text, oCountry){
+		setCountryData: function(text, oCountry) {
 			var arr = text.split(", ");
 			var lv_text = "";
-			var arr = arr.filter(function (el) {
-								  return el != null;
-								}).filter(function () { return true });
+			var arr = arr.filter(function(el) {
+				return el != null;
+			}).filter(function() {
+				return true
+			});
 			var uniqueNames = [];
-			var arr = $.each(arr, function(i, el){
-					    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-					});
-		 for (var i = 0; i < uniqueNames.length; i++) {
-			 if(i>0){
-				 	lv_text =   uniqueNames[i] + ", " + lv_text;
-			 }else{
-				 lv_text =   uniqueNames[i];
-			 }
+			var arr = $.each(arr, function(i, el) {
+				if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+			});
+			for (var i = 0; i < uniqueNames.length; i++) {
+				if (i > 0) {
+					lv_text = uniqueNames[i] + ", " + lv_text;
+				} else {
+					lv_text = uniqueNames[i];
+				}
 
-		 }
-		 if (lv_text === "") {
-		 	lv_text = "no past history found";
-		 }
-		 oCountry.setText(lv_text);
+			}
+			if (lv_text === "") {
+				lv_text = "no past history found";
+			}
+			oCountry.setText(lv_text);
 		},
-		onSplitName: function(oEvent){
+		onSplitName: function(oEvent) {
 			var text = oEvent.getParameter("value");
-			if(text.indexOf(" ") !== -1){
+			if (text.indexOf(" ") !== -1) {
 				var first = text.split(" ")[0];
 				var second = text.split(" ")[1];
 				this.getView().getModel("local").setProperty("/newLead/FirstName", first);
 				this.getView().getModel("local").setProperty("/newLead/LastName", second);
 			}
 		},
-		setOtherData: function(data){
+		setOtherData: function(data) {
 			if (data.FirstName !== "" && data.FirstName !== "null" && data.FirstName !== undefined) {
-					this.getView().getModel("local").setProperty("/newLead/FirstName", data.FirstName);
-			}else{
+				this.getView().getModel("local").setProperty("/newLead/FirstName", data.FirstName);
+			} else {
 				this.getView().getModel("local").setProperty("/newLead/FirstName", "");
 			}
 			if (data.LastName !== "" && data.LastName !== "null" && data.LastName !== undefined) {
 				this.getView().getModel("local").setProperty("/newLead/LastName", data.LastName);
-			}else{
-				this.getView().getModel("local").setProperty("/newLead/LastName","");
+			} else {
+				this.getView().getModel("local").setProperty("/newLead/LastName", "");
 			}
 			if (data.Country !== "" && data.Country !== "null" && data.Country !== undefined) {
 				//this.getView().getModel("local").setProperty("/newLead/Country", data.Country);
-					this.getView().byId("country").setSelectedKey(data.Country);
-			}else{
-					this.getView().byId("country").setSelectedKey("IN");
+				this.getView().byId("country").setSelectedKey(data.Country);
+			} else {
+				this.getView().byId("country").setSelectedKey("IN");
 			}
 			if (data.Phone !== "" && data.Phone !== 0 && data.Phone !== undefined) {
 				this.getView().getModel("local").setProperty("/newLead/Phone", data.Phone);
-			}else{
+			} else {
 				this.getView().getModel("local").setProperty("/newLead/Phone", "");
 			}
 
 
 		},
-		onLiveChange: function(oEvent){
+		onLiveChange: function(oEvent) {
 			var text = oEvent.getParameter("value");
 			var that = this;
 			var oCountry = this.getView().byId("countrydata");
 			//if valid email, check
-			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(text))
-		  {
+			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(text)) {
 				oCountry.setText("");
-				$.post('/checkStudentById', { emailId : text })
-			    .done(function(data, status){
-								//sap.m.MessageBox.error(data);
-								if (data) {
-									that.setCountryData(data.country, oCountry);
-									if (data.inq) {
-										that.setOtherData(data.inq);
-									}
-
-								}
+				$.post('/checkStudentById', {
+						emailId: text
 					})
-			    .fail(function(xhr, status, error) {
-								//sap.m.MessageBox.error("Error in upload");
-								oCountry.setText("no past history");
-			    });
-		  }else{
+					.done(function(data, status) {
+						//sap.m.MessageBox.error(data);
+						if (data) {
+							that.setCountryData(data.country, oCountry);
+							if (data.inq) {
+								that.setOtherData(data.inq);
+							}
+
+						}
+					})
+					.fail(function(xhr, status, error) {
+						//sap.m.MessageBox.error("Error in upload");
+						oCountry.setText("no past history");
+					});
+			} else {
 
 			}
 		},
-		getUserId: function(usr){
+		getUserId: function(usr) {
 			return this.getModel("local").getData().CurrentUser;
 		},
 		handleUploadPress: function() {
@@ -120,7 +124,7 @@ sap.ui.define([
 				return;
 			}
 			oFileUploader.getAggregation("parameters")[0].setValue(
-																				this.getModel("local").getData().CurrentUser)
+				this.getModel("local").getData().CurrentUser)
 			oFileUploader.upload();
 		},
 		handleUploadComplete: function(oEvent) {
@@ -129,17 +133,17 @@ sap.ui.define([
 			if (sResponse) {
 				var sMsg = "";
 				debugger;
-				if(JSON.parse(sResponse.split("\">")[1].replace("</pre>","")).error_code !== 0){
-					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>","")).err_desc;
-				}else{
+				if (JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).error_code !== 0) {
+					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).err_desc;
+				} else {
 					sMsg = "Uploaded Successfully";
 				}
 				// var m = /^\[(\d\d\d)\]:(.*)$/.exec(sResponse);
 				// if (m[1] == "200") {
 				// 	console.log(this.getModel("local").getData().CurrentUser);
 				// 	oEvent.getSource().getAggregation("parameters")[0].setValue(
-    		// 																		this.getModel("local").getData().CurrentUser)
-   			// 	$.post('/upload', {
+				// 																		this.getModel("local").getData().CurrentUser)
+				// 	$.post('/upload', {
 				// 		files: oEvent.getSource().getFocusDomRef().files[0]
 				// 	})
 				// 		.done(function(data, status){
@@ -162,16 +166,16 @@ sap.ui.define([
 		// 	var oFileUploader = this.byId("fileUploader");
 		// 	oFileUploader.upload();
 		// },
-		updateInq: function(){
-				var that = this;
-				//gtest
-				$.post('/upload')
-			    .done(function(data, status){
-								sap.m.MessageBox.error("Done");
-					})
-			    .fail(function(xhr, status, error) {
-								sap.m.MessageBox.error("Error in upload");
-			    });
+		updateInq: function() {
+			var that = this;
+			//gtest
+			$.post('/upload')
+				.done(function(data, status) {
+					sap.m.MessageBox.error("Done");
+				})
+				.fail(function(xhr, status, error) {
+					sap.m.MessageBox.error("Error in upload");
+				});
 		},
 		clearForm: function() {
 			// this.getView().getModel("local").setProperty("/newLead",{
@@ -194,7 +198,7 @@ sap.ui.define([
 			for (var i = 0; i < items["length"]; i++) {
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
 
-				if(this.getView().byId("isMinakshi").getSelected()){
+				if (this.getView().byId("isMinakshi").getSelected()) {
 					if (this.passwords === "") {
 						this.passwords = prompt("Please enter your password", "");
 						if (this.passwords === "") {
@@ -202,15 +206,15 @@ sap.ui.define([
 							return;
 						}
 					}
-				}else{
+				} else {
 					this.passwords = "na";
 				}
 
 				loginPayload.password = this.passwords;
 				loginPayload.DollerQuote = this.getView().byId("doller").getSelected();
-				if(this.getView().byId("isMinakshi").getSelected()){
-						loginPayload.IsMinakshi = "X";
-				}else{
+				if (this.getView().byId("isMinakshi").getSelected()) {
+					loginPayload.IsMinakshi = "X";
+				} else {
 					loginPayload.IsMinakshi = "";
 				}
 
@@ -278,23 +282,23 @@ sap.ui.define([
 		onHover: function() {
 			sap.m.MessageBox.alert("Button was Hovered");
 		},
-		onCourseSelect: function(oEvent){
+		onCourseSelect: function(oEvent) {
 			var country = this.getView().byId("country").getSelectedKey();
 			var courseName = this.getView().byId("course").getSelectedKey();
 			var allCourses = this.getView().getModel("local").getProperty("/courses");
-			if(country === "IN"){
+			if (country === "IN") {
 				for (var i = 0; i < allCourses.length; i++) {
 					if (allCourses[i].courseName === courseName) {
-						this.getView().getModel("local").setProperty("/newLead/fees",allCourses[i].fee);
+						this.getView().getModel("local").setProperty("/newLead/fees", allCourses[i].fee);
 						this.getView().getModel("local").setProperty("/newLead/currency", "INR");
 						break;
 					}
 				}
 
-			}else{
+			} else {
 				for (var i = 0; i < allCourses.length; i++) {
 					if (allCourses[i].courseName === courseName) {
-						this.getView().getModel("local").setProperty("/newLead/fees",allCourses[i].usdFee);
+						this.getView().getModel("local").setProperty("/newLead/fees", allCourses[i].usdFee);
 						this.getView().getModel("local").setProperty("/newLead/currency", "USD");
 						break;
 					}
@@ -302,7 +306,7 @@ sap.ui.define([
 			}
 		},
 		herculis: function(oEvent) {
-			if(oEvent.getParameter("name") !== "newlead"){
+			if (oEvent.getParameter("name") !== "newlead") {
 				return;
 			}
 			//Restore the state of UI by fruitId
@@ -324,58 +328,71 @@ sap.ui.define([
 			oList.attachUpdateFinished(this.counter);
 			var that = this;
 			Format.numericFormatter(ChartFormatter.getInstance());
-      var formatPattern = ChartFormatter.DefaultPattern;
-			var oVizFrame =  this.getView().byId("idVizFrame");
-        oVizFrame.setVizProperties({
-            plotArea: {
-                dataLabel: {
-                    formatString:formatPattern.SHORTFLOAT_MFD2,
-                    visible: true
-                }
-            },
-            valueAxis: {
-                label: {
-                    formatString: formatPattern.SHORTFLOAT
-                },
-                title: {
-                    visible: false
-                }
-            },
-            categoryAxis: {
-                title: {
-                    visible: false
-                }
-            },
-            title: {
-                visible: false,
-                text: 'Total Inquiry'
-            }
-        });
-			$.get("/todayInquiry").then(function(data){
-				that.getView().getModel("local").setProperty("/AllInq",  data );
+			var formatPattern = ChartFormatter.DefaultPattern;
+			var oVizFrame = this.getView().byId("idVizFrame");
+			oVizFrame.setVizProperties({
+				plotArea: {
+					dataLabel: {
+						formatString: formatPattern.SHORTFLOAT_MFD2,
+						visible: true
+					}
+				},
+				valueAxis: {
+					label: {
+						formatString: formatPattern.SHORTFLOAT
+					},
+					title: {
+						visible: false
+					}
+				},
+				categoryAxis: {
+					title: {
+						visible: false
+					}
+				},
+				title: {
+					visible: false,
+					text: 'Total Inquiry'
+				}
+			});
+			$.get("/todayInquiry").then(function(data) {
+				that.getView().getModel("local").setProperty("/AllInq", data);
 			});
 			debugger;
 			this.setConfig();
 
 		},
-		setConfig: function(){
+		onDateChange: function() {
+			var that = this;
+			var date1 = this.byId("inqDate").getDateValue();
+			var date2 = new Date(this.byId("inqDate").getDateValue().toDateString());
+			date2.setHours(23, 59, 59, 999);
+			this.byId("idRecent").getBinding("items").filter(new Filter({
+				path: "CreatedOn",
+				operator: FilterOperator.BT,
+				value1: date1,
+				value2: date2
+			}));
+			$.get("/todayInquiry?date="+date1.toDateString()).then(function(data) {
+				that.getView().getModel("local").setProperty("/AllInq", data);
+			});
+		},
+		setConfig: function() {
 			debugger;
-			if(this.getModel("local").getData().CurrentUser === "5d947c3dab189706a40faade" ||
-				 this.getModel("local").getData().CurrentUser === "5dd6a6aea5f9e83c781b7ac0" ||
-			 	 this.getModel("local").getData().CurrentUser === "5ecc968586321064989cdc3f" ||
-			   this.getModel("local").getData().CurrentUser === "5dcf9f7183f22e7da0acdfe4" ||
-		     this.getModel("local").getData().CurrentUser === "5ea2f01d7854a13c148f18cd" ){
-					 this.getView().byId("source").setSelectedKey("L");
-					 console.log("linkedin");
-				 }
-		 else if (this.getModel("local").getData().CurrentUser === "5f1331f2e0b8524af830fa20"){
-					this.getView().byId("source").setSelectedKey("F");
-					console.log("facebook");
-		 }
-		 else{
-			 		this.getView().byId("source").setSelectedKey("R");
-					console.log("Regular");
-		 }
+			if (this.getModel("local").getData().CurrentUser === "5d947c3dab189706a40faade" ||
+				this.getModel("local").getData().CurrentUser === "5dd6a6aea5f9e83c781b7ac0" ||
+				this.getModel("local").getData().CurrentUser === "5ecc968586321064989cdc3f" ||
+				this.getModel("local").getData().CurrentUser === "5dcf9f7183f22e7da0acdfe4" ||
+				this.getModel("local").getData().CurrentUser === "5ea2f01d7854a13c148f18cd") {
+				this.getView().byId("source").setSelectedKey("L");
+				console.log("linkedin");
+			} else if (this.getModel("local").getData().CurrentUser === "5f1331f2e0b8524af830fa20") {
+				this.getView().byId("source").setSelectedKey("F");
+				console.log("facebook");
+			} else {
+				this.getView().byId("source").setSelectedKey("R");
+				console.log("Regular");
+			}
 		},
 		counter: function(oEvent) {
 			var oList = oEvent.getSource();
@@ -472,7 +489,7 @@ sap.ui.define([
 				sap.m.MessageToast.show("Enter a valid Date");
 				return "";
 			}
-			if(leadData.phone){
+			if (leadData.phone) {
 				leadData.phone = this.formatter.extractNo(leadData.phone).replace(/,/g, '');
 			}
 			var payload = {
@@ -500,15 +517,15 @@ sap.ui.define([
 			// 					sap.m.MessageBox.alert("err");
 			// 				}
 			// 			);
-			if(leadData.country === "IN" && leadData.phone !== "null" && leadData.phone !== "0" && leadData.phone !== ""){
+			if (leadData.country === "IN" && leadData.phone !== "null" && leadData.phone !== "0" && leadData.phone !== "") {
 				try {
 					var userName = leadData.FirstName;
 					var MobileNo = leadData.phone;
 					var loginPayload = {};
-					loginPayload.msgType =  "inquiry";
-					loginPayload.userName =  userName;
+					loginPayload.msgType = "inquiry";
+					loginPayload.userName = userName;
 					loginPayload.courseName = leadData.course;
-					loginPayload.Number =  MobileNo;
+					loginPayload.Number = MobileNo;
 					$.post('/requestMessage', loginPayload)
 						.done(function(data, status) {
 							sap.m.MessageToast.show("Message sent successfully");
@@ -532,20 +549,20 @@ sap.ui.define([
 					that.destroyMessagePopover();
 					if (that.getView().byId("idRecent").getBinding("items")) {
 						that.getView().byId("idRecent").getBinding("items").refresh();
-						setTimeout(function(){
-							if(this.getView().byId("autoMail").getState()){
+						setTimeout(function() {
+							if (this.getView().byId("autoMail").getState()) {
 								this.getView().byId("idRecent").setSelectedItem(that.getView().byId("idRecent").getItems()[0]);
 								this.onEmail();
 								this.getView().byId("idRecent").removeSelections();
 							}
-						}.bind(that),2000).bind(this);
+						}.bind(that), 2000).bind(this);
 					}
 				}).catch(function(oError) {
 					that.getView().setBusy(false);
 					// var oPopover = that.getErrorMessage(oError);
-					if(oError.responseText.indexOf(":") !== -1){
+					if (oError.responseText.indexOf(":") !== -1) {
 						var sText = "Inquiry already Exists";
-						var userId = oError.responseText.split(":")[oError.responseText.split(":").length - 1].replace(" ","");
+						var userId = oError.responseText.split(":")[oError.responseText.split(":").length - 1].replace(" ", "");
 						try {
 							var userName = that.getView().getModel("local").getProperty("/AppUsers")[userId].UserName
 
@@ -553,13 +570,13 @@ sap.ui.define([
 							userName = "unknown";
 						}
 						try {
-							var ctry = oError.responseText.split(":")[oError.responseText.split(":").length - 2].replace(" ","").replace(" & Created by ","");
+							var ctry = oError.responseText.split(":")[oError.responseText.split(":").length - 2].replace(" ", "").replace(" & Created by ", "");
 						} catch (e) {
 							ctry = "US";
 						}
-						sText = oError.responseText.replace(userId,userName) + "Do you want to send again?";
+						sText = oError.responseText.replace(userId, userName) + "Do you want to send again?";
 					}
-					if(sText.indexOf("Fraud") != -1){
+					if (sText.indexOf("Fraud") != -1) {
 						MessageBox.error("Emaild id is Fraud");
 						return;
 					}
@@ -593,29 +610,29 @@ sap.ui.define([
 								loginPayload.FirstName = that2.getModel("local").getProperty("/newLead/FirstName");
 								loginPayload.fees = that2.getModel("local").getProperty("/newLead/fees");
 								loginPayload.currency = that2.getModel("local").getProperty("/newLead/currency");
-								if( loginPayload.Country === "IN" ){
+								if (loginPayload.Country === "IN") {
 									for (var i = 0; i < allCourses.length; i++) {
 										if (allCourses[i].courseName === loginPayload.CourseName) {
 											loginPayload.fees = allCourses[i].fee;
-										  loginPayload.currency = "INR";
+											loginPayload.currency = "INR";
 											break;
 										}
 									}
 
-								}else{
+								} else {
 									for (var i = 0; i < allCourses.length; i++) {
 										if (allCourses[i].courseName === loginPayload.CourseName) {
 											loginPayload.fees = allCourses[i].usdFee;
-										  loginPayload.currency = "USD";
+											loginPayload.currency = "USD";
 											break;
 										}
 									}
 								}
 								var x = that2.getView().byId("rbg");
 								loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
-								if(that2.getView().byId("isMinakshi").getSelected()){
-										loginPayload.IsMinakshi = "X";
-								}else{
+								if (that2.getView().byId("isMinakshi").getSelected()) {
+									loginPayload.IsMinakshi = "X";
+								} else {
 									loginPayload.IsMinakshi = "";
 								}
 								loginPayload.source = "";
@@ -641,12 +658,12 @@ sap.ui.define([
 					}
 					//that.getView().getModel("local").getProperty("/AppUsers")["5c6d68266e62cf4cac9d8262"].UserName
 
-					if(oError.responseText.indexOf(":") !== -1){
+					if (oError.responseText.indexOf(":") !== -1) {
 						that.oLeadDuplicate.addContent(new sap.m.Text({
 							text: sText
 						}));
 						that.oLeadDuplicate.open();
-					}else{
+					} else {
 						this.getErrorMessage(oError);
 						that.oLeadDuplicate.destroyContent();
 					}
@@ -669,10 +686,10 @@ sap.ui.define([
 			});
 
 		},
-		onGetNext: function(){
+		onGetNext: function() {
 			$.post('/MoveNextAc', {})
 				.done(function(data, status) {
-					if(data.accountNo === "114705500444"){
+					if (data.accountNo === "114705500444") {
 						sap.m.MessageBox.confirm(
 							"Hello ," + "\n" + "\n" +
 							"Thanks for your confirmation, Please transfer the funds to below bank account" + "\n" + "\n" +
@@ -682,8 +699,8 @@ sap.ui.define([
 							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
 							"You can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway" + "\n" + "\n" +
 							"Note: Please share the screenshot of payment once done."
-  					);
-					}else{
+						);
+					} else {
 						sap.m.MessageBox.confirm(
 							"Hello ," + "\n" + "\n" +
 							"Thanks for your confirmation, Please transfer the funds to below bank account" + "\n" + "\n" +

@@ -36,7 +36,7 @@
 								</items>
 							</Select>
 							<Label text="Date"/>
-							<DatePicker id="inqDate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" value="{local>/newLead/date}"></DatePicker>
+							<DatePicker id="inqDate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" value="{local>/newLead/date}" change="onDateChange"></DatePicker>
 							<Label text="Name"/>
 							<Input value="{local>/newLead/FirstName}" liveChange="onSplitName"/>
 							<Input value="{local>/newLead/LastName}"/>

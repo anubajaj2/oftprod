@@ -22,11 +22,11 @@
 						<l:Grid defaultSpan="L6 M8 S12">
 							<VBox id="vBoxCol1" class="column">
 								<Label text="Date From-To"/>
-								<DateRangeSelection id="DRS3" showFooter="false" change="handleChange"/>
+								<DateRangeSelection id="DRS3" showFooter="false" change="onFilter"/>
 								<Label text="Course Name"/>
 								<Select id="idCourseName" width="100%" items="{
 						path: 'local>/inquiryLookupCourses'
-					}">
+					}" change="onFilter">
 									<core:Item key="{local>courseName}" text="{local>courseName}"/>
 								</Select>
 							</VBox>
@@ -35,8 +35,8 @@
 								<Select id="idStaffName" width="100%" items="{
 						path: '/AppUsers',
 						sorter: { path: 'UserName' }
-					}">
-									<core:Item key="{TechnicalId}" text="{UserName}"/>
+					}" change="onFilter">
+									<core:Item key="{TechnicalId} {EmailId}" text="{UserName}"/>
 								</Select>
 								<Label text="Type"/>
 								<Select width="100%" change="onChartTypeChange">
@@ -75,7 +75,8 @@
 				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
 				<ToolbarSpacer/>
 				<Button class="sapUiSmallMargin" icon="sap-icon://filter" text="Filter" press="onFilter"/>
-				<!-- <Button text="Save" type="Accept" press="onSave" id="idApr"></Button> <Button text="Get Account" press="onGetNext"/> -->
+				<Button text="Send Mail" type="Accept" press="onSendMail" id="idSendMail"></Button>
+				 <!-- <Button text="Get Account" press="onGetNext"/> -->
 			</Toolbar>
 		</footer>
 	</Page>

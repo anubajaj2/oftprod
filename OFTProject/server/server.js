@@ -67,16 +67,26 @@ app.start = function() {
 				);
 		});
 		app.get("/todayInquiry", function(req, res) {
-
-			var date = new Date();
-			date.setDate(date.getDate() - 1);
-			date.setHours(24, 0, 0, 0);
+						debugger;
+			var date1 = new Date();
+			var date2 = new Date();
+			if(req.query.date){
+				date1 = new Date(req.query.date);
+				date2 = new Date(req.query.date);
+			}
+			date1.setDate(date1.getDate() - 1);
+			date1.setHours(24, 0, 0, 0);
+			date2.setHours(23, 59, 59, 999);
 			var Inquiry = app.models.Inquiry;
 			Inquiry.find({
 					where: {
 						and: [{
 							CreatedOn: {
-								gte: date
+								gte: date1
+							}
+						},{
+							CreatedOn: {
+								lte: date2
 							}
 						}]
 					},
@@ -255,11 +265,11 @@ app.start = function() {
 			var endDate = new Date(req.body.endDate);
 			var oFilter = {
 				and: [{
-					CreatedOn: {
+					Date: {
 						gt: startDate
 					}
 				}, {
-					CreatedOn: {
+					Date: {
 						lt: endDate
 					}
 				}, {
@@ -275,16 +285,16 @@ app.start = function() {
 			Inquiry.find({
 					where: oFilter,
 					fields: {
-						"CreatedOn": true
+						"Date": true
 					}
 				})
 				.then(function(all) {
 					var countMap = new Map();
 					all.forEach(function(item) {
-						if (countMap.has(item.CreatedOn.toDateString())) {
-							countMap.set(item.CreatedOn.toDateString(), countMap.get(item.CreatedOn.toDateString())+1);
+						if (countMap.has(item.Date.toDateString())) {
+							countMap.set(item.Date.toDateString(), countMap.get(item.Date.toDateString())+1);
 						} else {
-							countMap.set(item.CreatedOn.toDateString(), 1);
+							countMap.set(item.Date.toDateString(), 1);
 						}
 					});
 					var result = [];
