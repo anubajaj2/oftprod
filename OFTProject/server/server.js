@@ -250,54 +250,48 @@ app.start = function() {
 
 		app.post("/inquiryLookup", function(req, res) {
 			var staffId = req.body.staffId;
-			var courseId = req.body.courseId;
+			var course = req.body.course;
 			var startDate = new Date(req.body.startDate);
-			// startDate.setDate(date.getDate() - 1);
-			// startDate.setHours(24, 0, 0, 0);
 			var endDate = new Date(req.body.endDate);
-			// endDate.setDate(date.getDate() + 1);
-			// endDate.setHours(0, 0, 0, 0);
-			debugger;
+			var oFilter = {
+				and: [{
+					CreatedOn: {
+						gt: startDate
+					}
+				}, {
+					CreatedOn: {
+						lt: endDate
+					}
+				}, {
+					CreatedBy: staffId
+				}]
+			};
+			if(course){
+				oFilter.and.push({
+					CourseName: course
+				});
+			}
 			var Inquiry = app.models.Inquiry;
 			Inquiry.find({
-					where: {
-						and: [
-							{
-							CreatedOn: {
-								gt: startDate
-							}
-						},{
-							CreatedOn: {
-								lt: endDate
-							}
-						},{
-							CreatedBy :   staffId
-						}
-						// ,{
-						// 	"CourseName" : courseId
-						// }
-					]
+					where: oFilter,
+					fields: {
+						"CreatedOn": true
 					}
-					// ,
-					// fields: {
-					// 	"CreatedOn": true
-					// }
 				})
 				.then(function(all) {
-					debugger;
 					var countMap = new Map();
-					all.forEach(function(item){
-						if(countMap.has(item.CreatedOn.toDateString())){
-							countMap.set(item.CreatedOn.toDateString(),countMap.get(item.CreatedOn.toDateString()));
-						}else{
-							countMap.set(item.CreatedOn.toDateString(),1);
+					all.forEach(function(item) {
+						if (countMap.has(item.CreatedOn.toDateString())) {
+							countMap.set(item.CreatedOn.toDateString(), countMap.get(item.CreatedOn.toDateString())+1);
+						} else {
+							countMap.set(item.CreatedOn.toDateString(), 1);
 						}
 					});
 					var result = [];
-					countMap.forEach(function(c,d){
+					countMap.forEach(function(c, d) {
 						result.push({
-							count : c,
-							date : d
+							count: c,
+							date: d
 						});
 					});
 					res.send(result);
@@ -2080,10 +2074,12 @@ app.start = function() {
 				});
 			});
 
-		app.get("/chala", function(){
+		app.get("/chala", function() {
 			const fs = require('fs');
 			const readline = require('readline');
-			const {google} = require('googleapis');
+			const {
+				google
+			} = require('googleapis');
 
 			// If modifying these scopes, delete token.json.
 			const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
@@ -2094,10 +2090,10 @@ app.start = function() {
 
 			// Load client secrets from a local file.
 			fs.readFile('server/credentials.json', (err, content) => {
-			  if (err) return console.log('Error loading client secret file:', err);
-			  // Authorize a client with credentials, then call the Google Drive API.
+				if (err) return console.log('Error loading client secret file:', err);
+				// Authorize a client with credentials, then call the Google Drive API.
 				console.log(JSON.parse(content));
-			  authorize(JSON.parse(content), listFiles);
+				authorize(JSON.parse(content), listFiles);
 			});
 
 			/**
@@ -2107,16 +2103,20 @@ app.start = function() {
 			 * @param {function} callback The callback to call with the authorized client.
 			 */
 			function authorize(credentials, callback) {
-			  const {client_secret, client_id, redirect_uris} = credentials.web;
-			  const oAuth2Client = new google.auth.OAuth2(
-			      client_id, client_secret, redirect_uris[0]);
+				const {
+					client_secret,
+					client_id,
+					redirect_uris
+				} = credentials.web;
+				const oAuth2Client = new google.auth.OAuth2(
+					client_id, client_secret, redirect_uris[0]);
 
-			  // Check if we have previously stored a token.
-			  fs.readFile(TOKEN_PATH, (err, token) => {
-			    if (err) return getAccessToken(oAuth2Client, callback);
-			    oAuth2Client.setCredentials(JSON.parse(token));
-			    callback(oAuth2Client);
-			  });
+				// Check if we have previously stored a token.
+				fs.readFile(TOKEN_PATH, (err, token) => {
+					if (err) return getAccessToken(oAuth2Client, callback);
+					oAuth2Client.setCredentials(JSON.parse(token));
+					callback(oAuth2Client);
+				});
 			}
 
 			/**
@@ -2126,28 +2126,28 @@ app.start = function() {
 			 * @param {getEventsCallback} callback The callback for the authorized client.
 			 */
 			function getAccessToken(oAuth2Client, callback) {
-			  const authUrl = oAuth2Client.generateAuthUrl({
-			    access_type: 'offline',
-			    scope: SCOPES,
-			  });
-			  console.log('Authorize this app by visiting this url:', authUrl);
-			  const rl = readline.createInterface({
-			    input: process.stdin,
-			    output: process.stdout,
-			  });
-			  rl.question('Enter the code from that page here: ', (code) => {
-			    rl.close();
-			    oAuth2Client.getToken(code, (err, token) => {
-			      if (err) return console.error('Error retrieving access token', err);
-			      oAuth2Client.setCredentials(token);
-			      // Store the token to disk for later program executions
-			      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-			        if (err) return console.error(err);
-			        console.log('Token stored to', TOKEN_PATH);
-			      });
-			      callback(oAuth2Client);
-			    });
-			  });
+				const authUrl = oAuth2Client.generateAuthUrl({
+					access_type: 'offline',
+					scope: SCOPES,
+				});
+				console.log('Authorize this app by visiting this url:', authUrl);
+				const rl = readline.createInterface({
+					input: process.stdin,
+					output: process.stdout,
+				});
+				rl.question('Enter the code from that page here: ', (code) => {
+					rl.close();
+					oAuth2Client.getToken(code, (err, token) => {
+						if (err) return console.error('Error retrieving access token', err);
+						oAuth2Client.setCredentials(token);
+						// Store the token to disk for later program executions
+						fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+							if (err) return console.error(err);
+							console.log('Token stored to', TOKEN_PATH);
+						});
+						callback(oAuth2Client);
+					});
+				});
 			}
 
 			/**
@@ -2155,22 +2155,25 @@ app.start = function() {
 			 * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
 			 */
 			function listFiles(auth) {
-			  const drive = google.drive({version: 'v3', auth});
-			  drive.files.list({
-			    pageSize: 10,
-			    fields: 'nextPageToken, files(id, name)',
-			  }, (err, res) => {
-			    if (err) return console.log('The API returned an error: ' + err);
-			    const files = res.data.files;
-			    if (files.length) {
-			      console.log('Files:');
-			      files.map((file) => {
-			        console.log(`${file.name} (${file.id})`);
-			      });
-			    } else {
-			      console.log('No files found.');
-			    }
-			  });
+				const drive = google.drive({
+					version: 'v3',
+					auth
+				});
+				drive.files.list({
+					pageSize: 10,
+					fields: 'nextPageToken, files(id, name)',
+				}, (err, res) => {
+					if (err) return console.log('The API returned an error: ' + err);
+					const files = res.data.files;
+					if (files.length) {
+						console.log('Files:');
+						files.map((file) => {
+							console.log(`${file.name} (${file.id})`);
+						});
+					} else {
+						console.log('No files found.');
+					}
+				});
 			}
 		});
 		app.get('/grantTrainingAccess',
@@ -2181,13 +2184,16 @@ app.start = function() {
 				//https://developers.google.com/drive/api/v3/quickstart/nodejs
 				const fs = require('fs');
 				const readline = require('readline');
-				const {google} = require('googleapis');
+				const {
+					google
+				} = require('googleapis');
 				var xoauth2 = require("xoauth2"),
-    		xoauth2gen;
+					xoauth2gen;
 				// If modifying these scopes, delete token.json.
 				const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
-											  'https://www.googleapis.com/auth/drive.activity',
-												'https://www.googleapis.com/auth/drive.file'];
+					'https://www.googleapis.com/auth/drive.activity',
+					'https://www.googleapis.com/auth/drive.file'
+				];
 				// The file token.json stores the user's access and refresh tokens, and is
 				// created automatically when the authorization flow completes for the first
 				// time.
@@ -2196,298 +2202,303 @@ app.start = function() {
 				// Load client secrets from a local file.
 				console.log(key);
 				xoauth2gen = xoauth2.createXOAuth2Generator({
-			    user: key.user,
-			    clientId: key.clientId,
-			    clientSecret: key.clientSecret,
-			    refreshToken: key.refreshToken
+					user: key.user,
+					clientId: key.clientId,
+					clientSecret: key.clientSecret,
+					refreshToken: key.refreshToken
 				});
 
 				// HTTP
 				console.log(xoauth2gen);
-				xoauth2gen.getToken(function(err, token, accessToken){
+				xoauth2gen.getToken(function(err, token, accessToken) {
 					console.log(token + ' ==============>>> ' + accessToken)
-				    if(err){
-				        return console.log(err);
-				    }
-				    console.log("Authorization: Bearer " + accessToken);
-						var tokenAuth = {"access_token": accessToken,
-						"scope":"https://www.googleapis.com/auth/drive.metadata.readonly",
-						"token_type":"Bearer"};
-						const drive = google.drive({version: 'v3', tokenAuth});
+					if (err) {
+						return console.log(err);
+					}
+					console.log("Authorization: Bearer " + accessToken);
+					var tokenAuth = {
+						"access_token": accessToken,
+						"scope": "https://www.googleapis.com/auth/drive.metadata.readonly",
+						"token_type": "Bearer"
+					};
+					const drive = google.drive({
+						version: 'v3',
+						tokenAuth
+					});
 
-						drive.files.list({
-							pageSize: 10,
-					    fields: 'nextPageToken, files(id, name)',
-						}, (err, res) => {
-							console.log(res);
-							if (err) return console.log('The API returned an error: ' + err);
-							const files = res.data.files;
-							if (files.length) {
-								console.log('Files:');
-								files.map((file) => {
-									console.log(`${file.name} (${file.id})`);
-								});
-							} else {
-								console.log('No files found.');
-							}
-						});
+					drive.files.list({
+						pageSize: 10,
+						fields: 'nextPageToken, files(id, name)',
+					}, (err, res) => {
+						console.log(res);
+						if (err) return console.log('The API returned an error: ' + err);
+						const files = res.data.files;
+						if (files.length) {
+							console.log('Files:');
+							files.map((file) => {
+								console.log(`${file.name} (${file.id})`);
+							});
+						} else {
+							console.log('No files found.');
+						}
+					});
 				});
 
 
 
 			});
 
-			app.post('/sendInquiryEmail',
-				function(req, res) {
-					//https://developers.google.com/oauthplayground/
-					//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
-					//
+		app.post('/sendInquiryEmail',
+			function(req, res) {
+				//https://developers.google.com/oauthplayground/
+				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+				//
+				debugger;
+				var nodemailer = require('nodemailer');
+				var smtpTransport = require('nodemailer-smtp-transport');
+				const xoauth2 = require('xoauth2');
+				const key = require('./samples.json');
+				console.log(req.body);
+
+				if (req.body.IsMinakshi === "X") {
+					var transporter = nodemailer.createTransport(smtpTransport({
+						service: 'gmail',
+						host: 'smtp.gmail.com',
+						auth: {
+							user: 'install.abap@gmail.com',
+							pass: req.body.password
+						}
+					}));
+				} else {
+					var transporter = nodemailer.createTransport(smtpTransport({
+						service: 'gmail',
+						host: 'smtp.gmail.com',
+						auth: {
+							xoauth2: xoauth2.createXOAuth2Generator({
+								user: key.user,
+								clientId: key.clientId,
+								clientSecret: key.clientSecret,
+								refreshToken: key.refreshToken
+							})
+						}
+					}));
+				}
+
+
+				var Subject = req.body.Subject;
+
+				if (Subject === "" || Subject === "null") {
+					//Subject = req.body.CourseName + " training";
+					switch (req.body.CourseName) {
+						case "ABAP on HANA":
+							Subject = "AoH CDS and S4 technical training";
+							break;
+						case "UI5 and Fiori":
+							Subject = "UI5 WebIDE and OData training";
+							break;
+						case "HANA XS":
+							Subject = "XS and Native xsodata training";
+							break;
+						case "Launchpad":
+							Subject = "Launchpad, Security & Extensions training";
+							break;
+						case "Hybris C4C":
+							Subject = "C4 Customer Experience training";
+							break;
+						case "SAP Cloud Platform":
+							Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+							break;
+						case "S4HANA Extension":
+							Subject = "S4 Cloud Extensions training";
+							break;
+						case "HANA Cloud Integration":
+							Subject = "Cloud Platform Integration training";
+							break;
+						case "ABAP on Cloud":
+							Subject = "RESTful Programming in Cloud training";
+							break;
+						case "Analytics Cloud":
+							Subject = "Analytics Cloud training";
+							break;
+						case "SAC Premium":
+							Subject = "SAC Premium training";
+							break;
+						case "ABAP":
+							Subject = "Core ABAP Training";
+							break;
+						case "OOPS ABAP":
+							Subject = "OOPS ABAP and Design pattern Training";
+							break;
+						case "Webdynpro":
+							Subject = "Webdynrpo training";
+							break;
+						case "Workflow":
+							Subject = "Workflow training";
+							break;
+						case "FPM":
+							Subject = "FPM training";
+							break;
+						case "BRF":
+							Subject = "BRF+ training";
+							break;
+						default:
+							Subject = req.body.CourseName + " training";
+							break;
+					}
+				}
+				//https://myaccount.google.com/lesssecureapps?pli=1
+				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
+					req.body.CourseName != "HANA XS" &&
+					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
+					req.body.CourseName != "S4HANA Extension" &&
+					req.body.CourseName != "HANA Cloud Integration" &&
+					req.body.CourseName != "SimpleLogistics" &&
+					req.body.CourseName != "ABAP on Cloud" &&
+					req.body.CourseName != "Analytics Cloud" &&
+					req.body.CourseName != "SAC Premium" &&
+					req.body.CourseName != "SAP Cloud Platform" &&
+					req.body.CourseName != "ABAP" &&
+					req.body.CourseName != "OOPS ABAP" &&
+					req.body.CourseName != "Webdynpro" &&
+					req.body.CourseName != "Workflow" &&
+					req.body.CourseName != "FPM" &&
+					req.body.CourseName != "BRF" &&
+					req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
+					req.body.CourseName = "Generic";
+					if (Subject === "" || Subject === "null") {
+						Subject = "[REPLY] Regarding training Course 🟢";
+					}
+				}
+				if (req.body.FirstName === "" || req.body.FirstName == "null") {
+					req.body.FirstName = "Sir";
+				}
+
+
+				if (req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined) {
+					req.body.mailType = "R";
+				}
+				if (req.body.CourseName === "Generic") {
+					req.body.CourseName = "Other";
+				}
+
+				var app = require('../server/server');
+				var Template = app.models.Template;
+				debugger;
+				var CourseName = req.body.CourseName;
+				if (req.body.source === "L" || req.body.source === "F") {
+					CourseName = "Linkedin";
+				}
+				Template.findOne({
+					where: {
+						and: [{
+							Type: req.body.mailType
+						}, {
+							CourseName: CourseName
+						}]
+					}
+				}).then(function(data) {
+					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
 					debugger;
-					var nodemailer = require('nodemailer');
-					var smtpTransport = require('nodemailer-smtp-transport');
-					const xoauth2 = require('xoauth2');
-					const key = require('./samples.json');
-					console.log(req.body);
+					if (!data) {
+						res.status(500).send('Template Not found for the course');
+					}
+					var contents = data.Template;
+					var demoDate = new Date(data.DemoDate);
+					Date.prototype.toShortFormat = function() {
+						var month_names = ["Jan", "Feb", "Mar",
+							"Apr", "May", "Jun",
+							"Jul", "Aug", "Sep",
+							"Oct", "Nov", "Dec"
+						];
+
+						var day = this.getDate();
+						var month_index = this.getMonth();
+						var year = this.getFullYear();
+
+						return "" + day + "-" + month_names[month_index] + "-" + year;
+					}
+					if (req.body.mailType === "A") {
+						contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+						contents = contents.replace('$$DemoLink$$', data.VideoLink);
+						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
+						contents = contents.replace('$$NextClass$$', data.NextClass);
+
+					} else if (req.body.mailType === "B") {
+						//yet to code
+						contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
+						contents = contents.replace('$$BatchTime$$', data.ClassTiming);
+						contents = contents.replace('$$DemoLink$$', data.VideoLink);
+						contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
+						contents = contents.replace('$$NextClass$$', data.FirstName);
+						contents = contents.replace('$$CALLink$$', data.Extra1);
+						contents = contents.replace('%24%24CALLink%24%24', data.Extra1);
+					}
+					contents = contents.replace('$$Extra1$$', data.Extra2);
+					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
+					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
+					contents = contents.replace('$$Name$$', req.body.FirstName)
+					debugger;
+					if (req.body.fees !== "null" && req.body.fees !== "") {
+						if (req.body.source === "L" || req.body.source === "F") {
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
+							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
+							//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+							Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
+						} else {
+							contents = contents.replace("$$fees$$", req.body.fees);
+							contents = contents.replace("$$currency$$", req.body.currency);
+						}
+
+					}
+					var ccs = [];
+					if (req.body.CourseName === "SimpleLogistics") {
+						ccs.push("paramsaddy@gmail.com");
+					} else if (req.body.CourseName === "SimpleFinance") {
+						ccs.push("info@gaurav-consulting.com");
+					}
+					var mailOptions = {};
 
 					if (req.body.IsMinakshi === "X") {
-						var transporter = nodemailer.createTransport(smtpTransport({
-							service: 'gmail',
-							host: 'smtp.gmail.com',
-							auth: {
-								user: 'install.abap@gmail.com',
-								pass: req.body.password
-							}
-						}));
+						ccs.push("contact@anubhavtrainings.com");
+						mailOptions = {
+							from: 'install.abap@gmail.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							cc: ccs,
+							subject: 'Re: ' + Subject + " 🟢",
+							html: contents
+						};
 					} else {
-						var transporter = nodemailer.createTransport(smtpTransport({
-							service: 'gmail',
-							host: 'smtp.gmail.com',
-							auth: {
-								xoauth2: xoauth2.createXOAuth2Generator({
-									user: key.user,
-									clientId: key.clientId,
-									clientSecret: key.clientSecret,
-									refreshToken: key.refreshToken
-								})
-							}
-						}));
+						mailOptions = {
+							from: 'contact@anubhavtrainings.com',
+							to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
+							cc: ccs,
+							subject: 'Re: ' + Subject + " 🟢",
+							html: contents
+						};
 					}
 
 
-					var Subject = req.body.Subject;
-
-					if (Subject === "" || Subject === "null") {
-						//Subject = req.body.CourseName + " training";
-						switch (req.body.CourseName) {
-							case "ABAP on HANA":
-								Subject = "AoH CDS and S4 technical training";
-								break;
-							case "UI5 and Fiori":
-								Subject = "UI5 WebIDE and OData training";
-								break;
-							case "HANA XS":
-								Subject = "XS and Native xsodata training";
-								break;
-							case "Launchpad":
-								Subject = "Launchpad, Security & Extensions training";
-								break;
-							case "Hybris C4C":
-								Subject = "C4 Customer Experience training";
-								break;
-							case "SAP Cloud Platform":
-								Subject = "Cloud Platform - Cloud Fondary CAPM Training";
-								break;
-							case "S4HANA Extension":
-								Subject = "S4 Cloud Extensions training";
-								break;
-							case "HANA Cloud Integration":
-								Subject = "Cloud Platform Integration training";
-								break;
-							case "ABAP on Cloud":
-								Subject = "RESTful Programming in Cloud training";
-								break;
-							case "Analytics Cloud":
-								Subject = "Analytics Cloud training";
-								break;
-							case "SAC Premium":
-								Subject = "SAC Premium training";
-								break;
-							case "ABAP":
-								Subject = "Core ABAP Training";
-								break;
-							case "OOPS ABAP":
-								Subject = "OOPS ABAP and Design pattern Training";
-								break;
-							case "Webdynpro":
-								Subject = "Webdynrpo training";
-								break;
-							case "Workflow":
-								Subject = "Workflow training";
-								break;
-							case "FPM":
-								Subject = "FPM training";
-								break;
-							case "BRF":
-								Subject = "BRF+ training";
-								break;
-							default:
-								Subject = req.body.CourseName + " training";
-								break;
-						}
-					}
-					//https://myaccount.google.com/lesssecureapps?pli=1
-					if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
-						req.body.CourseName != "HANA XS" &&
-						req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
-						req.body.CourseName != "S4HANA Extension" &&
-						req.body.CourseName != "HANA Cloud Integration" &&
-						req.body.CourseName != "SimpleLogistics" &&
-						req.body.CourseName != "ABAP on Cloud" &&
-						req.body.CourseName != "Analytics Cloud" &&
-						req.body.CourseName != "SAC Premium" &&
-						req.body.CourseName != "SAP Cloud Platform" &&
-						req.body.CourseName != "ABAP" &&
-						req.body.CourseName != "OOPS ABAP" &&
-						req.body.CourseName != "Webdynpro" &&
-						req.body.CourseName != "Workflow" &&
-						req.body.CourseName != "FPM" &&
-						req.body.CourseName != "BRF" &&
-						req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
-						req.body.CourseName = "Generic";
-						if (Subject === "" || Subject === "null") {
-							Subject = "[REPLY] Regarding training Course 🟢";
-						}
-					}
-					if (req.body.FirstName === "" || req.body.FirstName == "null") {
-						req.body.FirstName = "Sir";
-					}
-
-
-					if (req.body.mailType === "" || req.body.FirstName == "null" || req.body.mailType === undefined) {
-						req.body.mailType = "R";
-					}
-					if (req.body.CourseName === "Generic") {
-						req.body.CourseName = "Other";
-					}
-
-					var app = require('../server/server');
-					var Template = app.models.Template;
-					debugger;
-					var CourseName = req.body.CourseName;
-					if (req.body.source === "L" || req.body.source === "F") {
-						CourseName = "Linkedin";
-					}
-					Template.findOne({
-						where: {
-							and: [{
-								Type: req.body.mailType
-							}, {
-								CourseName: CourseName
-							}]
-						}
-					}).then(function(data) {
-						//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
-						debugger;
-						if (!data) {
-							res.status(500).send('Template Not found for the course');
-						}
-						var contents = data.Template;
-						var demoDate = new Date(data.DemoDate);
-						Date.prototype.toShortFormat = function() {
-							var month_names = ["Jan", "Feb", "Mar",
-								"Apr", "May", "Jun",
-								"Jul", "Aug", "Sep",
-								"Oct", "Nov", "Dec"
-							];
-
-							var day = this.getDate();
-							var month_index = this.getMonth();
-							var year = this.getFullYear();
-
-							return "" + day + "-" + month_names[month_index] + "-" + year;
-						}
-						if (req.body.mailType === "A") {
-							contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
-							contents = contents.replace('$$BatchTime$$', data.ClassTiming);
-							contents = contents.replace('$$DemoLink$$', data.VideoLink);
-							contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
-							contents = contents.replace('$$NextClass$$', data.NextClass);
-
-						} else if (req.body.mailType === "B") {
-							//yet to code
-							contents = contents.replace('$$BatchDate$$', demoDate.toShortFormat());
-							contents = contents.replace('$$BatchTime$$', data.ClassTiming);
-							contents = contents.replace('$$DemoLink$$', data.VideoLink);
-							contents = contents.replace('%24%24DemoLink%24%24', data.VideoLink);
-							contents = contents.replace('$$NextClass$$', data.FirstName);
-							contents = contents.replace('$$CALLink$$', data.Extra1);
-							contents = contents.replace('%24%24CALLink%24%24', data.Extra1);
-						}
-						contents = contents.replace('$$Extra1$$', data.Extra2);
-						var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
-						req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
-						contents = contents.replace('$$Name$$', req.body.FirstName)
-						debugger;
-						if (req.body.fees !== "null" && req.body.fees !== "") {
-							if (req.body.source === "L" || req.body.source === "F") {
-								// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
-								// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
-								// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
-								// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
-								//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
-								Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
+					transporter.sendMail(mailOptions, function(error, info) {
+						if (error) {
+							console.log(error);
+							if (error.code === "EAUTH") {
+								res.status(500).send('Username and Password not accepted, Please try again.');
 							} else {
-								contents = contents.replace("$$fees$$", req.body.fees);
-								contents = contents.replace("$$currency$$", req.body.currency);
+								res.status(500).send('Internal Error while Sending the email, Please try again.');
 							}
-
-						}
-						var ccs = [];
-						if (req.body.CourseName === "SimpleLogistics") {
-							ccs.push("paramsaddy@gmail.com");
-						} else if (req.body.CourseName === "SimpleFinance") {
-							ccs.push("info@gaurav-consulting.com");
-						}
-						var mailOptions = {};
-
-						if (req.body.IsMinakshi === "X") {
-							ccs.push("contact@anubhavtrainings.com");
-							mailOptions = {
-								from: 'install.abap@gmail.com',
-								to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-								cc: ccs,
-								subject: 'Re: ' + Subject + " 🟢",
-								html: contents
-							};
 						} else {
-							mailOptions = {
-								from: 'contact@anubhavtrainings.com',
-								to: req.body.EmailId, //req.body.EmailId    FirstName  CourseName
-								cc: ccs,
-								subject: 'Re: ' + Subject + " 🟢",
-								html: contents
-							};
+							console.log('Email sent: ' + info.response);
+							res.send("email sent");
 						}
-
-
-						transporter.sendMail(mailOptions, function(error, info) {
-							if (error) {
-								console.log(error);
-								if (error.code === "EAUTH") {
-									res.status(500).send('Username and Password not accepted, Please try again.');
-								} else {
-									res.status(500).send('Internal Error while Sending the email, Please try again.');
-								}
-							} else {
-								console.log('Email sent: ' + info.response);
-								res.send("email sent");
-							}
-						});
 					});
+				});
 
 
 
-		});
+			});
 		app.post('/sendInquiryEmail',
 			function(req, res) {
 				//https://developers.google.com/oauthplayground/

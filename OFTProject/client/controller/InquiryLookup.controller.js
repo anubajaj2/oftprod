@@ -18,21 +18,26 @@ sap.ui.define([
 		 */
 		onInit: function() {
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this.clearForm();
+			// this.clearForm();
 			this.oRouter.attachRoutePatternMatched(this.herculis, this);
-			var currentUser = this.getModel("local").getProperty("/CurrentUser");
-			if (currentUser) {
-				var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
-				this.getView().byId("idUser").setText(loginUser);
-			}
+			// var currentUser = this.getModel("local").getProperty("/CurrentUser");
+			// if (currentUser) {
+			// 	var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
+			// 	this.getView().byId("idUser").setText(loginUser);
+			// }
+			var courses = JSON.parse(JSON.stringify(this.getOwnerComponent().getModel("local").getProperty("/courses")));
+			courses.splice(0, 0, {
+				courseName: "All Courses"
+			});
+			this.getOwnerComponent().getModel("local").setProperty("/inquiryLookupCourses", courses)
 			var that = this;
 			var oDRS3 = this.byId("DRS3");
 			var date = new Date();
 			oDRS3.setDateValue(new Date(date.getFullYear(), date.getMonth(), 1));
 			oDRS3.setSecondDateValue(new Date());
-			$.get("/todayInquiry").then(function(data) {
-				that.getView().getModel("local").setProperty("/AllInq", data);
-			});
+			// $.get("/todayInquiry").then(function(data) {
+			// 	that.getView().getModel("local").setProperty("/AllInq", data);
+			// });
 		},
 		setCountryData: function(text, oCountry) {
 			var arr = text.split(", ");
@@ -411,9 +416,9 @@ sap.ui.define([
 		},
 
 		oSuppPopup: null,
-		onChartTypeChange: function(oEvent){
+		onChartTypeChange: function(oEvent) {
 			// debugger;
-			this.getView().getModel("local").setProperty("/inquiryLookupVizType",oEvent.getParameter("selectedItem").getKey());
+			this.getView().getModel("local").setProperty("/inquiryLookupVizType", oEvent.getParameter("selectedItem").getKey());
 		},
 		onFilter: function(oEvent) {
 			var that = this;
@@ -424,7 +429,7 @@ sap.ui.define([
 				startDate: dateRange.getFrom(),
 				endDate: dateRange.getTo(),
 				staffId: staffName.getSelectedKey(),
-				courseId: courseName.getSelectedKey()
+				course: courseName.getSelectedKey() === "All Courses" ? null : courseName.getSelectedKey()
 			};
 			debugger;
 			$.post('/inquiryLookup', oPayload)

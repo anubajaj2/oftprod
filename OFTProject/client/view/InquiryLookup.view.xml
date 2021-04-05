@@ -24,16 +24,15 @@
 								<Label text="Date From-To"/>
 								<DateRangeSelection id="DRS3" showFooter="false" change="handleChange"/>
 								<Label text="Course Name"/>
-								<Select id = "idCourseName" width="100%" items="{
-						path: '/Courses',
-						sorter: { path: 'Name' }
+								<Select id="idCourseName" width="100%" items="{
+						path: 'local>/inquiryLookupCourses'
 					}">
-									<core:Item key="{id}" text="{Name}"/>
+									<core:Item key="{local>courseName}" text="{local>courseName}"/>
 								</Select>
 							</VBox>
 							<VBox id="vBoxCol2" class="column">
 								<Label text="Staff Name"/>
-								<Select id = "idStaffName" width="100%" items="{
+								<Select id="idStaffName" width="100%" items="{
 						path: '/AppUsers',
 						sorter: { path: 'UserName' }
 					}">
@@ -76,8 +75,7 @@
 				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
 				<ToolbarSpacer/>
 				<Button class="sapUiSmallMargin" icon="sap-icon://filter" text="Filter" press="onFilter"/>
-				<!-- <Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
-				<Button text="Get Account" press="onGetNext"/> -->
+				<!-- <Button text="Save" type="Accept" press="onSave" id="idApr"></Button> <Button text="Get Account" press="onGetNext"/> -->
 			</Toolbar>
 		</footer>
 	</Page>
