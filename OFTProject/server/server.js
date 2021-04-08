@@ -2199,6 +2199,7 @@ app.start = function() {
 				} = require('googleapis');
 				var xoauth2 = require("xoauth2"),
 					xoauth2gen;
+				var googleAuth = require('google-auth-library');
 				// If modifying these scopes, delete token.json.
 				const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
 					'https://www.googleapis.com/auth/drive.activity',
@@ -2215,9 +2216,10 @@ app.start = function() {
 					user: key.user,
 					clientId: key.clientId,
 					clientSecret: key.clientSecret,
-					refreshToken: key.refreshToken
+					refreshToken: key.refreshToken,
+					scope: 'https://www.googleapis.com/auth/drive'
 				});
-
+				const oauth2Client = new google.auth.OAuth2();
 				// HTTP
 				console.log(xoauth2gen);
 				xoauth2gen.getToken(function(err, token, accessToken) {
@@ -2227,13 +2229,18 @@ app.start = function() {
 					}
 					console.log("Authorization: Bearer " + accessToken);
 					var tokenAuth = {
-						"access_token": accessToken,
-						"scope": "https://www.googleapis.com/auth/drive.metadata.readonly",
-						"token_type": "Bearer"
+					  "access_token": accessToken,
+					  "scope": "https://www.googleapis.com/auth/drive",
+					  "token_type": "Bearer",
+					  "expires_in": 3599,
+					  "refresh_token": "1//04h7ag_vn7UpqCgYIARAAGAQSNwF-L9IrQ9zDiySU7nI0vNOJGTW46bs23SSDrkXZpt5jRbKq6af6pPwIm2MwHkook0pJKZWGFIw"
 					};
+					accessToken = "Bearer " + accessToken;
+					oauth2Client.setCredentials(tokenAuth);
+
 					const drive = google.drive({
 						version: 'v3',
-						tokenAuth
+						auth: oauth2Client
 					});
 
 					drive.files.list({
@@ -2253,7 +2260,7 @@ app.start = function() {
 						}
 					});
 				});
-
+				//singapore
 
 
 			});
