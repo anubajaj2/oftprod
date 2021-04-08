@@ -84,7 +84,7 @@ sap.ui.define([
 					".\n\n" + dateCount + "\n\n" +
 					"Kindly check the dates where count was zero and maintain the work accordingly.\n\nRegards,\nAnubhav"
 			};
-			debugger;
+			console.log(mailContent);
 		}
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
