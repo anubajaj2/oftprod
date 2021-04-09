@@ -81,7 +81,7 @@ sap.ui.define([
 
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
 				debugger;
-				$.post('/giveAccess', loginPayload)
+				$.post('/giveAccessNew', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Access has been provided");
 					})
