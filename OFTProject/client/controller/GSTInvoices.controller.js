@@ -202,6 +202,12 @@ sap.ui.define([
 						enabled: oSub.IsWallet
 					}),
 					new sap.m.Label({
+						text: "Account No: "
+					}),
+					new sap.m.Input("idAccountNo", {
+						// value: oSub.AccountName
+					}),
+					new sap.m.Label({
 						text: "Reference: "
 					}),
 					new sap.m.Input("idReference", {
@@ -227,6 +233,7 @@ sap.ui.define([
 						var charges = Core.byId("idCharges").getValue();
 						var settleDate = Core.byId("idSettleDate").getValue();
 						var settleAmount = Core.byId("idSettleAmount").getValue();
+						var accountNo = Core.byId("idAccountNo").getValue();
 						var reference = Core.byId("idReference").getValue();
 						var payload = {};
 						if (oSub.IsWallet) {
@@ -240,6 +247,7 @@ sap.ui.define([
 								"SettleDate": settleDate,
 								"SettleAmount": settleAmount,
 								"PaymentMode": paymentMode,
+								"AccountName": accountNo,
 								"Reference": reference,
 								"ChangedBy": userId
 							}
@@ -248,6 +256,7 @@ sap.ui.define([
 								"id": id,
 								"Amount": sAmount,
 								"PaymentMode": paymentMode,
+								"AccountName": accountNo,
 								"Reference": reference,
 								"ChangedBy": userId
 							}
@@ -1545,7 +1554,24 @@ sap.ui.define([
 				}
 			});
 		},
-
+		onCopyEmail: function() {
+			if (!this.missingAddressEmails) {
+				MessageToast.show("No record with missing address");
+				return;
+			}
+			var emailBody = "Hello Sonal,\n\nKindly get the address maintained for below emails in our records\n" +
+				this.missingAddressEmails + "\n\nRegards,\nAnubhav";
+			const el = document.createElement('textarea')
+			el.value = this.missingAddressEmails
+			el.setAttribute('readonly', '')
+			el.style.position = 'absolute'
+			el.style.left = '-9999px'
+			document.body.appendChild(el)
+			el.select()
+			document.execCommand('copy')
+			document.body.removeChild(el)
+			MessageToast.show("Email Copied");
+		},
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
 			$.post('/getAmountForAccount', {
@@ -1562,6 +1588,7 @@ sap.ui.define([
 						totalAmountUSDPaypal = 0,
 						totalSettleAmountPaypal = 0,
 						totalGSTAmount = 0;
+					that.missingAddressEmails = "";
 					for (var i = 0; i < data.length; i++) {
 						data[i].Index = i + 1;
 						totalBalance = totalBalance + data[i].FullAmount;
@@ -1576,6 +1603,9 @@ sap.ui.define([
 							totalAmountUSDPaypal += data[i].USDAmount;
 						} else {
 							totalAmountNonPaypal += data[i].FullAmount;
+						}
+						if (data[i].Address === null || data[i].Address === "") {
+							that.missingAddressEmails += ("/n" + data[i].Email)
 						}
 					}
 					var oNewModel = new sap.ui.model.json.JSONModel();

@@ -1207,7 +1207,7 @@ sap.ui.define([
 			//this.getView().getModel("local").setProperty("/newRegExtension/CourseId", null);
 			this.getView().getModel("local").setProperty("/newRegExtension/PaymentDate", this.formatter.getFormattedDate(0));
 			this.getView().getModel("local").setProperty("/newRegExtension/EndDate", this.formatter.getFormattedDate(1));
-			this.getView().getModel("local").setProperty("/newRegExtension/Amount", 15000);
+			this.getView().getModel("local").setProperty("/newRegExtension/Amount", 1000);
 			this.getView().getModel("local").setProperty("/newRegExtension/Reference", null);
 			this.getView().getModel("local").setProperty("/newRegExtension/AccountName", null);
 			//sap.ui.getCore().byId("imageUploader2").setValue(null);
