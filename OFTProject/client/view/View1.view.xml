@@ -28,7 +28,7 @@
 					<StandardListItem  id="blacklisted" icon="sap-icon://cancel" title="Blacklisted Users" description=""></StandardListItem>
 					<StandardListItem  id="newTemplate" icon="sap-icon://activity-items" title="Templates" description=""></StandardListItem>
 					<StandardListItem  id="GSTInvoices" icon="sap-icon://business-one" title="GST Invoices" description=""></StandardListItem>
-					<StandardListItem  id="InquiryLookup" icon="sap-icon://business-one" title="Inquiry Lookup" description=""></StandardListItem>
+					<StandardListItem  id="InquiryLookup" icon="sap-icon://business-objects-experience" title="Inquiry Lookup" description=""></StandardListItem>
 					<StandardListItem  id="InvoiceBuilder" icon="sap-icon://create" title="Invoice Builder" description=""></StandardListItem>
 					<StandardListItem  id="accessProcessor" icon="sap-icon://key-user-settings"
 						 title="Access Manager" description=""></StandardListItem>
