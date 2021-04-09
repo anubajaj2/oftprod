@@ -144,6 +144,22 @@ sap.ui.define([
 		},
 		siteLink: "",
 		eMailId: "",
+		onGiveAccess2: function(oEvent) {
+			var that = this;
+			var items = that.getView().byId('idSubsRecent').getSelectedContexts();
+
+			for (var i = 0; i < items["length"]; i++) {
+
+				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
+				$.post('/giveAccessNew', loginPayload)
+					.done(function(data, status) {
+						sap.m.MessageToast.show("Access has been provided");
+					})
+					.fail(function(xhr, status, error) {
+						sap.m.MessageBox.error("Error in access");
+					});
+			}
+		},
 		onGiveAccess: function(oEvent) {
 			var that = this;
 			var items = that.getView().byId('idSubsRecent').getSelectedContexts();

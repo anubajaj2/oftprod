@@ -147,6 +147,7 @@
 						<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" text="cc"/>
 						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://permission" id="giveAccess2" tooltip="Provide access" press="onGiveAccess2"/>
 						<Button icon="sap-icon://refresh" press="onRefresh"/>
 					</Toolbar>
 				</headerToolbar>
