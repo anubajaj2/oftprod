@@ -17,20 +17,20 @@
 		}
 	],
 	"template": {
-		"CourseName": "",
+		"CourseName": null,
 		"Type": "R",
-		"Template": "",
-		"DemoDate": "",
-		"DemoInvite": "",
-		"VideoLink": "",
-		"CoursePage": "",
-		"ClassTiming": "",
-		"NextClass": "",
-		"Extra1": "",
-		"Extra2": "",
-		"ExtraN1": "",
-		"ExtraN2": "",
-		"ExtraN3": ""
+		"Template": null,
+		"DemoDate": null,
+		"DemoInvite": null,
+		"VideoLink": null,
+		"CoursePage": null,
+		"ClassTiming": null,
+		"NextClass": null,
+		"Extra1": null,
+		"Extra2": null,
+		"ExtraN1": null,
+		"ExtraN2": null,
+		"ExtraN3": null
 	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",

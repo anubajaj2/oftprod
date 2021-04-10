@@ -367,13 +367,32 @@ sap.ui.define([
 			var date1 = this.byId("inqDate").getDateValue();
 			var date2 = new Date(this.byId("inqDate").getDateValue().toDateString());
 			date2.setHours(23, 59, 59, 999);
-			this.byId("idRecent").getBinding("items").filter(new Filter({
-				path: "CreatedOn",
-				operator: FilterOperator.BT,
-				value1: date1,
-				value2: date2
-			}));
-			$.get("/todayInquiry?date="+date1.toDateString()).then(function(data) {
+			// this.byId("idRecent").getBinding("items").filter(new Filter({
+			// 	path: "CreatedOn",
+			// 	operator: FilterOperator.BT,
+			// 	value1: date1,
+			// 	value2: date2
+			// }));
+			var newDate = new Date();
+			newDate.setHours(0, 0, 0, 0);
+			var oSorter = new sap.ui.model.Sorter("CreatedOn", true);
+			var oList = this.getView().byId("idRecent");
+			oList.bindAggregation("items", {
+				path: '/Inquries',
+				template: new sap.m.DisplayListItem({
+					label: "{EmailId} - {CourseName} - {Country}",
+					value: "{fees} {currency} / {source} / {CreatedOn}-{CreatedBy}"
+				}),
+				filters: [new Filter({
+					path: "CreatedOn",
+					operator: FilterOperator.BT,
+					value1: date1,
+					value2: date2
+				})],
+				sorter: oSorter
+			});
+			oList.attachUpdateFinished(this.counter);
+			$.get("/todayInquiry?date=" + date1.toDateString()).then(function(data) {
 				that.getView().getModel("local").setProperty("/AllInq", data);
 			});
 		},

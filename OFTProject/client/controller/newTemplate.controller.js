@@ -27,7 +27,7 @@ sap.ui.define([
 
 		herculis: function(oEvent) {
 			var that = this;
-			if(oEvent.getParameter("name") !== "newTemplate"){
+			if (oEvent.getParameter("name") !== "newTemplate") {
 				return;
 			}
 
@@ -44,19 +44,19 @@ sap.ui.define([
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", courseName);
 			var oFilter2 = new sap.ui.model.Filter("Type", "EQ", type);
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "GET", {
-					filters: [oFilter1,oFilter2]
+					filters: [oFilter1, oFilter2]
 				}, {}, this)
-				.then(function(oData){
-					if(oData.results.length<1){
+				.then(function(oData) {
+					if (oData.results.length < 1) {
 						that.getView().byId('idSave').setEnabled(true);
 						that.getView().byId('idUpdate').setEnabled(false);
-					}
-					else{
+					} else {
+						that.getView().getModel('local').setProperty('/template', oData.results[0]);
 						that.getView().byId('idSave').setEnabled(false);
 						that.getView().byId('idUpdate').setEnabled(true);
 					}
-					that.getView().getModel('local').setProperty('/template',oData.results[0]);
-				}).catch(function(oError){
+
+				}).catch(function(oError) {
 					sap.m.MessageToast.show("template fetch failed");
 				});
 			// oList.attachUpdateFinished(this.counter);
@@ -80,50 +80,64 @@ sap.ui.define([
 			sap.ui.getCore().byId("idApp").to("idView1");
 		},
 
-		onTypeSelect : function(oEvent){
+		onTypeSelect: function(oEvent) {
 			var that = this;
 			var type = oEvent.getSource().getSelectedKey();
 			var courseName = this.getView().byId("course").getSelectedKey();
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", courseName);
 			var oFilter2 = new sap.ui.model.Filter("Type", "EQ", type);
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "GET", {
-					filters: [oFilter1,oFilter2]
+					filters: [oFilter1, oFilter2]
 				}, {}, this)
-				.then(function(oData){
-					if(oData.results.length<1){
+				.then(function(oData) {
+					if (oData.results.length < 1) {
 						that.getView().byId('idSave').setEnabled(true);
 						that.getView().byId('idUpdate').setEnabled(false);
-					}
-					else{
+					} else {
+						that.getView().getModel('local').setProperty('/template', oData.results[0]);
 						that.getView().byId('idSave').setEnabled(false);
 						that.getView().byId('idUpdate').setEnabled(true);
 					}
-					that.getView().getModel('local').setProperty('/template',oData.results[0]);
-				}).catch(function(oError){
+				}).catch(function(oError) {
 					sap.m.MessageToast.show("template fetch failed");
 				});
 		},
 
-		onCourseSelect: function(oEvent){
+		onCourseSelect: function(oEvent) {
 			var that = this;
 			var courseName = oEvent.getSource().getSelectedKey();
 			var type = this.getView().byId("type").getSelectedKey();
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", courseName);
 			var oFilter2 = new sap.ui.model.Filter("Type", "EQ", type);
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "GET", {
-					filters: [oFilter1,oFilter2]
+					filters: [oFilter1, oFilter2]
 				}, {}, this)
-				.then(function(oData){
-					if(oData.results.length<1){
+				.then(function(oData) {
+					if (oData.results.length < 1) {
+						that.getView().getModel('local').setProperty('/template', {
+							"CourseName": null,
+							"Type": "R",
+							"Template": null,
+							"DemoDate": new Date(),
+							"DemoInvite": null,
+							"VideoLink": null,
+							"CoursePage": null,
+							"ClassTiming": null,
+							"NextClass": null,
+							"Extra1": null,
+							"Extra2": null,
+							"ExtraN1": null,
+							"ExtraN2": null,
+							"ExtraN3": null
+						});
 						that.getView().byId('idSave').setEnabled(true);
 						that.getView().byId('idUpdate').setEnabled(false);
-					}
-					else{
+					} else {
+						that.getView().getModel('local').setProperty('/template', oData.results[0]);
 						that.getView().byId('idSave').setEnabled(false);
 						that.getView().byId('idUpdate').setEnabled(true);
 					}
-					that.getView().getModel('local').setProperty('/template',oData.results[0]);
-				}).catch(function(oError){
+				}).catch(function(oError) {
 					sap.m.MessageToast.show("template fetch failed");
 				});
 		},
@@ -165,21 +179,38 @@ sap.ui.define([
 			};
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", payload.CourseName);
 			var oFilter2 = new sap.ui.model.Filter("Type", "EQ", payload.Type);
-			that.getView().setBusy(true);
-			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "PUT", { filters : [oFilter1,oFilter2]},
-					payload
-					, this)
-				.then(function(oData) {
-					that.getView().setBusy(false);
-					sap.m.MessageToast.show("template updated successfully");
-					that.destroyMessagePopover();
-					if (that.getView().byId("idRecent").getBinding("items")) {
-						that.getView().byId("idRecent").getBinding("items").refresh();
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "GET", {
+					filters: [oFilter1, oFilter2]
+				}, {}, this)
+				.then(function(data, controller) {
+					if (data.results.length > 0) {
+						that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Templates('" + data.results[0].id + "')", "PUT", {},
+								payload, that)
+							.then(function(oData) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("template updated successfully");
+								that.destroyMessagePopover();
+								if (that.getView().byId("idRecent").getBinding("items")) {
+									that.getView().byId("idRecent").getBinding("items").refresh();
+								}
+							}).catch(function(oError) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("template update failed "+oError.responseText);
+							});
 					}
-				}).catch(function(oError){
-					that.getView().setBusy(false);
-					sap.m.MessageToast.show("template update failed");
+					// else {
+					// 	debugger;
+					// 	that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Students", "POST", {}, payload, that)
+					// 		.then(function(data, controller) {
+					// 			sap.m.MessageToast.show("template created successfully");
+					// 			if (that.getView().byId("idRecent").getBinding("items")) {
+					// 				that.getView().byId("idRecent").getBinding("items").refresh();
+					// 			}
+					// 		});
+					// }
 				});
+			// that.getView().setBusy(true);
+
 		},
 
 		onSave: function(oEvent) {
@@ -187,14 +218,13 @@ sap.ui.define([
 			// console.log(this.getView().getModel("local").getProperty("/template"));
 			var that = this;
 			var templateData = this.getView().getModel("local").getProperty("/template");
-			var payload = templateData;
+			var payload = templateData ? templateData : {};
 			payload.DemoDate = this.getView().byId("inqDate").getDateValue();
 			payload.CourseName = this.getView().byId("course").getSelectedKey();
 			payload.Type = this.getView().byId("type").getSelectedKey();
 			that.getView().setBusy(true);
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Templates", "POST", {},
-					payload
-					, this)
+					payload, this)
 				.then(function(oData) {
 					that.getView().setBusy(false);
 					sap.m.MessageToast.show("template Saved successfully");
@@ -202,9 +232,9 @@ sap.ui.define([
 					if (that.getView().byId("idRecent").getBinding("items")) {
 						that.getView().byId("idRecent").getBinding("items").refresh();
 					}
-				}).catch(function(oError){
+				}).catch(function(oError) {
 					that.getView().setBusy(false);
-					sap.m.MessageToast.show("template Saving failed");
+					sap.m.MessageToast.show("template Saving failed "+oError.responseText);
 				});
 		}
 		/**

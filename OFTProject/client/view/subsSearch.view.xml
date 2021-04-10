@@ -58,7 +58,7 @@
 				<Label text="Pending Payment : "/>
 				<ToolbarSpacer/>
 				<!-- <Select id="idPendingPayment" items="{local>/trueOrFalse}" change="onChangePendingPay" width="100%"> -->
-				<Select id="idPendingPayment" items="{local>/trueOrFalse}"  width="100%">
+				<Select id="idPendingPayment" items="{local>/trueOrFalse}" width="100%">
 					<items>
 						<core:Item text="{local>value}" key="{local>value}"/>
 					</items>
@@ -68,30 +68,23 @@
 				<ToolbarSpacer/>
 				<Button press="onSearchManageSubs" text="Search" icon="sap-icon://search"/>
 
-
 				<Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/>
 			</Panel>
-			<Table id="manageSubsTable" growing="true"
-				growingThreshold="50"
-				growingScrollToLoad="false" items="{/Subs}"
-				 mode="MultiSelect" class="sapUiSizeCompact"
-				 showRowCount="true" updateFinished="onUpdateFinished">
+			<Table id="manageSubsTable" growing="true" growingThreshold="50" growingScrollToLoad="false" items="{/Subs}" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
 				<!--class="tableStyle" -->
 				<headerToolbar>
 					<Toolbar>
 						<Title id="titletext"/>
 						<ToolbarSpacer/>
 						<Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/>
-						<Button icon="sap-icon://synchronize"
-							id="clearToken" tooltip="Clear Token" press="onClearToken"/>
-						<Button icon = "sap-icon://copy" tooltip="Copy Email" press = "onCopyEmail"/>
+						<Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+						<Button icon="sap-icon://copy" tooltip="Copy Email" press="onCopyEmail"/>
 						<ToolbarSpacer/>
 						<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
 						<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
 						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExport"/>
 						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
-						<Button icon="sap-icon://action"
-							id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
+						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
 						<Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
@@ -103,6 +96,7 @@
 								</layoutData>
 							</Switch>
 						</HBox>
+						<Button icon="sap-icon://refresh" press="onRefresh"/>
 					</Toolbar>
 				</headerToolbar>
 				<columns>

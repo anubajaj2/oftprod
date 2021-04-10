@@ -92,7 +92,10 @@ sap.ui.define([
 		},
 		passwords: "",
 		onRefresh: function() {
-			this.onUpdateFinished();
+			// this.onUpdateFinished();
+			var oTable = this.getView().byId("manageSubsTable");
+			oTable.refreshItems()
+			oTable.getBinding("items").refresh()
 		},
 		triggerUpdate: function(id, payload) {
 			var that = this;

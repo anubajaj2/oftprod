@@ -51,7 +51,7 @@
 
 				<Label text="DemoDate" />
         <DatePicker id="inqDate" valueFormat="dd.MM.yyyy"
-          displayFormat="dd.MM.yyyy" value="{local>/template/DemoDate}" ></DatePicker>
+          displayFormat="dd.MM.yyyy" dateValue="{local>/template/DemoDate}" ></DatePicker>
 
 		<Label text="Demo Invite" />
 		<Input value="{local>/template/DemoInvite}" />
