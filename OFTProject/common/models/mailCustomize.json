@@ -14,7 +14,7 @@
     },
     "TemplateState": {
       "type": "string",
-      "default" : "R"
+      "default" : "R",
       "required": true,
     },
     "CreatedOn": {
