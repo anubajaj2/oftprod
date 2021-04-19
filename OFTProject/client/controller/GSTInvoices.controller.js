@@ -72,9 +72,14 @@ sap.ui.define([
 				this.getView().getModel("local").setProperty("/GSTInvoices/AccountNo", accountNo);
 				var startDate = this.getView().byId("idRegDate").getValue();
 				var endDate = this.getView().byId("idRegDateTo").getValue();
+				this.accountNo = accountNo;
 				this.super(accountNo, startDate, endDate);
 				// var oFilter = new sap.ui.model.Filter("AccountNo", "EQ", bankName);
 				// this.getView().byId("idSummary").getBinding("items").filter(oFilter);
+			}else if (this.sId.indexOf("idAccountNo") !== -1) {
+
+				var accountNo = oEvent.getParameter("selectedItem").getValue();
+				Core.byId("idAccountNo").setValue(accountNo);
 			}
 		},
 		onStartDate: function() {
@@ -205,7 +210,10 @@ sap.ui.define([
 						text: "Account No: "
 					}),
 					new sap.m.Input("idAccountNo", {
-						// value: oSub.AccountName
+						value: that.accountNo,
+						showValueHelp: true,
+						valueHelpOnly: true,
+						valueHelpRequest: [that.onSelect, this]
 					}),
 					new sap.m.Label({
 						text: "Reference: "
@@ -1454,7 +1462,7 @@ sap.ui.define([
 
 			var sTitle = "",
 				sPath = "";
-			if (this.sId.indexOf("accountDetails") !== -1) {
+			if (this.sId.indexOf("accountDetails") !== -1 || this.sId.indexOf("idAccountNo") !== -1) {
 				var oAccFilter = new sap.ui.model.Filter("deleted", FilterOperator.EQ, false);
 				sTitle = "Account Search";
 				this.getCustomerPopup();
