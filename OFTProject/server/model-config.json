@@ -107,5 +107,9 @@
   "PerformaInvoice":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "MailCustomize":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }
