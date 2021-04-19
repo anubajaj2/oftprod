@@ -15,7 +15,7 @@
     "TemplateState": {
       "type": "string",
       "default" : "R",
-      "required": true,
+      "required": true
     },
     "CreatedOn": {
       "type": "date"
