@@ -247,7 +247,7 @@ sap.ui.define([
 								"SettleDate": settleDate,
 								"SettleAmount": settleAmount,
 								"PaymentMode": paymentMode,
-								"AccountName": accountNo,
+								// "AccountName": accountNo,
 								"Reference": reference,
 								"ChangedBy": userId
 							}
@@ -256,10 +256,13 @@ sap.ui.define([
 								"id": id,
 								"Amount": sAmount,
 								"PaymentMode": paymentMode,
-								"AccountName": accountNo,
+								// "AccountName": accountNo,
 								"Reference": reference,
 								"ChangedBy": userId
 							}
+						}
+						if (accountNo) {
+							payload.AccountName = accountNo;
 						}
 						if (sAmount <= 90000) {
 							$.post('/updateSubcriptionAmount', payload)
