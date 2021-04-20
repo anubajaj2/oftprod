@@ -6,8 +6,10 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	'sap/ui/model/FilterOperator',
 	'sap/viz/ui5/format/ChartFormatter',
-	'sap/viz/ui5/api/env/Format'
-], function(Controller, MessageBox, MessageToast, Formatter, Filter, FilterOperator, ChartFormatter, Format) {
+	'sap/viz/ui5/api/env/Format',
+	"sap/m/Dialog",
+	"sap/m/DialogType"
+], function(Controller, MessageBox, MessageToast, Formatter, Filter, FilterOperator, ChartFormatter, Format, Dialog, DialogType) {
 	"use strict";
 
 	return Controller.extend("oft.fiori.controller.newLead", {
@@ -26,6 +28,131 @@ sap.ui.define([
 				var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
 				this.getView().byId("idUser").setText(loginUser);
 			}
+		},
+		onCourseStateSetting: function() {
+			if (!this.courseSettingsPopup) {
+				this.courseSettingsPopup = new sap.ui.xmlfragment("oft.fiori.fragments.CourseSettingsPopup", this);
+				this.getView().addDependent(this.courseSettingsPopup);
+				var title = "Course Settings";
+				this.courseSettingsPopup.setTitle(title);
+			}
+			this.courseSettingsPopup.open();
+			// if (!this.oResizableDialog) {
+			// 	this.oResizableDialog = new Dialog({
+			// 		title: "Resizable Available Products",
+			// 		contentWidth: "550px",
+			// 		contentHeight: "300px",
+			// 		resizable: true,
+			// 		content: [
+			// 			new sap.m.Label({
+			// 				text: "Course Name: "
+			// 			}),
+			// 			new sap.m.Select("idCourseSetting", {
+			// 				// items: {
+			// 				// 	path: {'local/>courses'},
+			// 				// 	template: new sap.ui.core.ListItem({
+			// 				// 		key: "{local>courseName}",
+			// 				// 		text: "{local>courseName}"
+			// 				// 	})
+			// 				// },
+			// 				width: "100%",
+			// 				selectedKey: "UI5 and Fiori",
+			// 				items: {
+			// 					path: {
+			// 						path: 'local/>courses'
+			// 					},
+			// 					templateShareable: false,
+			// 					template: new sap.ui.core.ListItem({
+			// 						key: "{local>courseName}",
+			// 						text: "{local>courseName}"
+			// 					})
+			// 				}
+			// 			}),
+			// 			new sap.m.Label({
+			// 				text: "Course State: "
+			// 			}),
+			// 			new sap.m.Select("idCourseStateSetting", {
+			// 				items: [
+			// 					new sap.ui.core.Item({
+			// 						key: "R",
+			// 						text: "Regular"
+			// 					}),
+			// 					new sap.ui.core.Item({
+			// 						key: "B",
+			// 						text: "Before"
+			// 					}),
+			// 					new sap.ui.core.Item({
+			// 						key: "A",
+			// 						text: "After"
+			// 					})
+			// 				],
+			// 				width: "100%",
+			// 				selectedKey: "R"
+			// 			})
+			// 		],
+			// 		endButton: new sap.m.Button({
+			// 			text: "Close",
+			// 			press: function() {
+			// 				this.oResizableDialog.close();
+			// 			}.bind(this)
+			// 		})
+			// 	});
+			//
+			// 	//to get access to the controller's model
+			// 	this.getView().addDependent(this.oResizableDialog);
+			// }
+			//
+			// this.oResizableDialog.open();
+		},
+		onCloseCourseSettings: function() {
+			this.courseSettingsPopup.close();
+		},
+		onUpdateCourseSettings: function() {
+			var that  = this;
+			var courseName = this.courseSettingsPopup.getContent()[1].getSelectedKey();
+			var state = this.courseSettingsPopup.getContent()[3].getSelectedKey();
+			var payload = {
+				CourseName : courseName,
+				TemplateState : state
+			};
+			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", payload.CourseName);
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/MailCustomizes", "GET", {
+					filters: [oFilter1]
+				}, {}, this)
+				.then(function(data, controller) {
+					if (data.results.length > 0) {
+						that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/MailCustomizes('" + data.results[0].id + "')", "PUT", {},
+								payload, that)
+							.then(function(oData) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("Settings updated successfully");
+								that.destroyMessagePopover();
+								if (that.getView().byId("idRecent").getBinding("items")) {
+									that.getView().byId("idRecent").getBinding("items").refresh();
+								}
+							}).catch(function(oError) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("Settings update failed " + oError.responseText);
+							});
+					} else {
+						that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/MailCustomizes", "POST", {},
+								payload, that)
+							.then(function(oData) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("Setting Saved successfully");
+								that.destroyMessagePopover();
+								if (that.getView().byId("idRecent").getBinding("items")) {
+									that.getView().byId("idRecent").getBinding("items").refresh();
+								}
+							}).catch(function(oError) {
+								that.getView().setBusy(false);
+								sap.m.MessageToast.show("template update failed " + oError.responseText);
+							});
+					}
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("template state  load failed " + oError.responseText);
+				});;
 		},
 		setCountryData: function(text, oCountry) {
 			var arr = text.split(", ");
@@ -283,6 +410,7 @@ sap.ui.define([
 			sap.m.MessageBox.alert("Button was Hovered");
 		},
 		onCourseSelect: function(oEvent) {
+			var that  = this;
 			var country = this.getView().byId("country").getSelectedKey();
 			var courseName = this.getView().byId("course").getSelectedKey();
 			var allCourses = this.getView().getModel("local").getProperty("/courses");
@@ -304,6 +432,16 @@ sap.ui.define([
 					}
 				}
 			}
+			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", courseName);
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/MailCustomizes", "GET", {
+					filters: [oFilter1]
+				}, {}, this)
+				.then(function(data, controller) {
+					// that.getView().byId("rbg").setSelectedIndex(1);
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("template state  load failed " + oError.responseText);
+				});
 		},
 		herculis: function(oEvent) {
 			if (oEvent.getParameter("name") !== "newlead") {
@@ -359,6 +497,7 @@ sap.ui.define([
 				that.getView().getModel("local").setProperty("/AllInq", data);
 			});
 			debugger;
+			this.onCourseSelect();
 			this.setConfig();
 
 		},
