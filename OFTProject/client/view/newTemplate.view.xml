@@ -66,7 +66,8 @@
 				<Input value="{local>/template/ClassTiming}" />
         <Label text="Next Class" />
 				<Input value="{local>/template/NextClass}" />
-
+        <Label text="Calendar link" />
+				<Input value="{local>/template/Extra1}" />
         <Label text="Template" />
         <TextArea value="{local>/template/Template}" width="900px" height="400px"/>
 			</f:content>

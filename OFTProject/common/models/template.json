@@ -42,7 +42,7 @@
 		},
 		"Extra1": {
 			"type": "string",
-			"default": "null"
+			"default": null
 		},
 		"Extra2": {
 			"type": "string",

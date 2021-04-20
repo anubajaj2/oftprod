@@ -176,6 +176,7 @@ sap.ui.define([
 				"CoursePage": templateData.CoursePage,
 				"ClassTiming": templateData.ClassTiming,
 				"NextClass": templateData.NextClass,
+				"Extra1": templateData.Extra1
 			};
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", payload.CourseName);
 			var oFilter2 = new sap.ui.model.Filter("Type", "EQ", payload.Type);
