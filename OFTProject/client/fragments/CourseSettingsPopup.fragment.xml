@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
 	<Dialog contentWidth="400px" resizable="true">
 		<Label text="Course Name"/>
-		<Select id="idSettingCourse" items="{local>/courses}" selectedKey="{local>/newLead/course}" change="onCourseSelect" width="100%">
+		<Select id="idSettingCourse" items="{local>/courses}" selectedKey="UI5 and Fiori" change="onCourseSelect" width="100%">
 			<items>
 				<core:Item text="{local>courseName}" key="{local>courseName}"/>
 			</items>

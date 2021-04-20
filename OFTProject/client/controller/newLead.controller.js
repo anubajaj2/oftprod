@@ -108,12 +108,12 @@ sap.ui.define([
 			this.courseSettingsPopup.close();
 		},
 		onUpdateCourseSettings: function() {
-			var that  = this;
+			var that = this;
 			var courseName = this.courseSettingsPopup.getContent()[1].getSelectedKey();
 			var state = this.courseSettingsPopup.getContent()[3].getSelectedKey();
 			var payload = {
-				CourseName : courseName,
-				TemplateState : state
+				CourseName: courseName,
+				TemplateState: state
 			};
 			var oFilter1 = new sap.ui.model.Filter("CourseName", "EQ", payload.CourseName);
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/MailCustomizes", "GET", {
@@ -126,10 +126,7 @@ sap.ui.define([
 							.then(function(oData) {
 								that.getView().setBusy(false);
 								sap.m.MessageToast.show("Settings updated successfully");
-								that.destroyMessagePopover();
-								if (that.getView().byId("idRecent").getBinding("items")) {
-									that.getView().byId("idRecent").getBinding("items").refresh();
-								}
+								that.onCourseSelect();
 							}).catch(function(oError) {
 								that.getView().setBusy(false);
 								sap.m.MessageToast.show("Settings update failed " + oError.responseText);
@@ -140,10 +137,7 @@ sap.ui.define([
 							.then(function(oData) {
 								that.getView().setBusy(false);
 								sap.m.MessageToast.show("Setting Saved successfully");
-								that.destroyMessagePopover();
-								if (that.getView().byId("idRecent").getBinding("items")) {
-									that.getView().byId("idRecent").getBinding("items").refresh();
-								}
+								that.onCourseSelect();
 							}).catch(function(oError) {
 								that.getView().setBusy(false);
 								sap.m.MessageToast.show("template update failed " + oError.responseText);
@@ -410,7 +404,7 @@ sap.ui.define([
 			sap.m.MessageBox.alert("Button was Hovered");
 		},
 		onCourseSelect: function(oEvent) {
-			var that  = this;
+			var that = this;
 			var country = this.getView().byId("country").getSelectedKey();
 			var courseName = this.getView().byId("course").getSelectedKey();
 			var allCourses = this.getView().getModel("local").getProperty("/courses");
@@ -437,7 +431,16 @@ sap.ui.define([
 					filters: [oFilter1]
 				}, {}, this)
 				.then(function(data, controller) {
-					// that.getView().byId("rbg").setSelectedIndex(1);
+					var stateToIndex = {
+						"R": 0,
+						"B": 1,
+						"A": 2
+					};
+					if (data.results.length > 0) {
+						that.getView().byId("rbg").setSelectedIndex(stateToIndex[data.results[0].TemplateState]);
+					}else{
+						that.getView().byId("rbg").setSelectedIndex(0);
+					}
 				}).catch(function(oError) {
 					that.getView().setBusy(false);
 					sap.m.MessageToast.show("template state  load failed " + oError.responseText);
@@ -496,8 +499,9 @@ sap.ui.define([
 			$.get("/todayInquiry").then(function(data) {
 				that.getView().getModel("local").setProperty("/AllInq", data);
 			});
-			debugger;
-			this.onCourseSelect();
+			setTimeout(function(){
+				that.onCourseSelect();
+			},2000);
 			this.setConfig();
 
 		},

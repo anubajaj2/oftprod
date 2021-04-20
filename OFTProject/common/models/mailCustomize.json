@@ -1,47 +1,55 @@
 {
-  "name": "MailCustomize",
-  "plural": "MailCustomizes",
-  "base": "PersistedModel",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "properties": {
-    "CourseName": {
-      "type": "string",
-      "required": true,
-      "default": "SAP UI5 and Fiori"
-    },
-    "TemplateState": {
-      "type": "string",
-      "default" : "R",
-      "required": true
-    },
-    "CreatedOn": {
-      "type": "date"
-    },
-    "CreatedBy": {
-      "type": "string",
-      "default": "null"
-    },
-    "ChangedOn": {
-      "type": "date"
-    },
-    "ChangedBy": {
-      "type": "string",
-      "default": "null"
-    }
-  },
-  "validations": [],
-  "relations": {
-  },
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$unauthenticated",
-      "permission": "DENY"
-    }
-  ],
-  "methods": {}
+	"name": "MailCustomize",
+	"plural": "MailCustomizes",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"CourseName": {
+			"type": "string",
+			"default": "null",
+			"required": true
+		},
+		"TemplateState": {
+			"type": "string",
+			"default": "R",
+			"required": true
+		},
+		"CreatedOn": {
+			"type": "date"
+		},
+		"CreatedBy": {
+			"type": "string",
+			"default": "null"
+		},
+		"ChangedOn": {
+			"type": "date"
+		},
+		"ChangedBy": {
+			"type": "string",
+			"default": "null"
+		}
+	},
+	"validations": [],
+	"relations": {
+		"CreatedByTo": {
+			"type": "belongsTo",
+			"model": "User",
+			"foreignKey": "CreatedBy"
+		},
+		"ChangedByTo": {
+			"type": "belongsTo",
+			"model": "User",
+			"foreignKey": "ChangedBy"
+		}
+	},
+	"acls": [{
+		"accessType": "*",
+		"principalType": "ROLE",
+		"principalId": "$unauthenticated",
+		"permission": "DENY"
+	}],
+	"methods": {}
 }
