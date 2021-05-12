@@ -353,9 +353,10 @@ sap.ui.define([
 			}
 		},
 		onDataExport: function(oEvent) {
+			var date  =this.getView().byId("inqDate").getDateValue().getTime();
 			$.ajax({
 				type: 'GET', // added,
-				url: 'InquiryDownload',
+				url: 'InquiryDownload?date='+date,
 				success: function(data) {
 					sap.m.MessageToast.show("File Downloaded succesfully");
 				},

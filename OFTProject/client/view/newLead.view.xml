@@ -110,6 +110,7 @@
 						<Toolbar>
 							<Title id="titletext2"/>
 							<ToolbarSpacer></ToolbarSpacer>
+							<Button icon="sap-icon://excel-attachment" press ="onInquiryExcel"/>
 							<CheckBox visible="{= ${local>/Role} === 'Admin'}" tooltip="Dollor Quote" id="doller"/>
 							<Button icon="sap-icon://action" tooltip="send email" press="onEmail"/>
 							<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>

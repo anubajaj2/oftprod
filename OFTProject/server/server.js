@@ -1330,8 +1330,18 @@ app.start = function() {
 
 		var Inquiry = app.models.Inquiry;
 		app.get('/InquiryDownload', function(req, res) {
-
-			Inquiry.find({})
+			var where = {};
+			var startDate = new Date(new Date(parseInt(req.query.date)));
+			if (startDate.toDateString() !== (new Date()).toDateString()) {
+				var where = {
+					Date: {
+						gte: startDate
+					}
+				};
+			}
+			Inquiry.find({
+					where: where
+				})
 				.then(function(Records, err) {
 						if (Records) {
 
@@ -1339,8 +1349,9 @@ app.start = function() {
 							var workbook = new excel.Workbook(); //creating workbook
 							var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
 							sheet.addRow().values = Object.keys(Records[0].__data);
+							Records.sort(function(a, b){return new Date(b.__data.Date) - new Date(a.__data.Date)})
 							for (var i = 0; i < Records["length"]; i++) {
-								sheet.addRow().values = Object.values(Records[i].__data);
+								sheet.addRow().values = (Object.values(Records[i].__data));
 							}
 							var tempfile = require('tempfile');
 							var tempFilePath = tempfile('.xlsx');
