@@ -50,7 +50,7 @@
 										<ComboBox items="{
 												path: 'local>/CourseCollection',
 													sorter: { path: 'local>text' }
-																}" selectedKey="{local>/PerformaInvoices/CourseName}">
+																}" selectedKey="{local>/PerformaInvoices/CourseName}" change="onCourseChange">
 											<core:Item key="{local>key}" text="{local>text}"/>
 										</ComboBox>
 										<!-- <Input value="{local>/PerformaInvoices/CourseName}"/> -->
@@ -70,7 +70,11 @@
 									<!-- <f:toolbar> <Toolbar id="TB2"> <Title id="Title2" text="Summary" level="H4" titleStyle="H4"/> <ToolbarSpacer /> </Toolbar> </f:toolbar> -->
 									<f:content>
 										<Label text="Email Id"/>
-										<Input value="{local>/PerformaInvoices/Email}"/>
+										<Input id="idEmailCust1" value="{local>/PerformaInvoices/Email}" showValueHelp="true" valueHelpRequest="onSelect">
+											<suggestionItems>
+												<core:Item text="{EmailId}"/>
+											</suggestionItems>
+										</Input>
 										<Label required="true" text="Company Name"/>
 										<Input value="{local>/PerformaInvoices/CompanyName}"/>
 										<Label text="Participent Name"/>

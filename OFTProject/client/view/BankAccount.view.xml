@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
 	controllerName="oft.fiori.controller.BankAccount" xmlns:f="sap.ui.layout.form"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="Bank Account">
+	<Page title="Bank Account" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>

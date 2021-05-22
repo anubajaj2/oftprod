@@ -623,9 +623,14 @@ sap.ui.define([
 						var that = this;
 						var payload = {};
 						var Filter1 = new sap.ui.model.Filter("GmailId", "EQ", queryString);
-
+						var Filter2 = new sap.ui.model.Filter("OtherEmail1", "EQ", queryString);
+						var Filter3 = new sap.ui.model.Filter("OtherEmail2", "EQ", queryString);
+						var oFilter = new sap.ui.model.Filter({
+							filters: [Filter1, Filter2, Filter3],
+							and: false
+						});
 						this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {
-								filters: [Filter1]
+								filters: [oFilter]
 							}, payload, this)
 							.then(function(oData) {
 								// var that2 = that;

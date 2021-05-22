@@ -175,9 +175,15 @@ sap.ui.define([
 		},
 		onSplitName: function(oEvent) {
 			var text = oEvent.getParameter("value");
+			if (text) {
+				text = text.toLowerCase().split(' ').map(function(word) {
+					return (word.charAt(0).toUpperCase() + word.slice(1));
+				}).join(' ');
+			}
+			oEvent.getSource().setValue(text);
 			if (text.indexOf(" ") !== -1) {
-				var first = text.split(" ")[0];
-				var second = text.split(" ")[1];
+				var first = text.split(/\s+/)[0];
+				var second = text.split(/\s+/)[1];
 				this.getView().getModel("local").setProperty("/newLead/FirstName", first);
 				this.getView().getModel("local").setProperty("/newLead/LastName", second);
 			}
@@ -211,8 +217,11 @@ sap.ui.define([
 			var text = oEvent.getParameter("value");
 			var that = this;
 			var oCountry = this.getView().byId("countrydata");
+			oEvent.getSource().setValue(oEvent.getParameter("value").replace(/\s/gm, "").toLowerCase());
 			//if valid email, check
 			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(text)) {
+				// text = text.replace(/\s/gm, "").toLowerCase();
+				// oEvent.getSource().setValue(text);
 				oCountry.setText("");
 				$.post('/checkStudentById', {
 						emailId: text
@@ -232,7 +241,7 @@ sap.ui.define([
 						oCountry.setText("no past history");
 					});
 			} else {
-
+				MessageToast.show("Invalid Email");
 			}
 		},
 		getUserId: function(usr) {
@@ -353,10 +362,10 @@ sap.ui.define([
 			}
 		},
 		onDataExport: function(oEvent) {
-			var date  =this.getView().byId("inqDate").getDateValue().getTime();
+			var date = this.getView().byId("inqDate").getDateValue().getTime();
 			$.ajax({
 				type: 'GET', // added,
-				url: 'InquiryDownload?date='+date,
+				url: 'InquiryDownload?date=' + date,
 				success: function(data) {
 					sap.m.MessageToast.show("File Downloaded succesfully");
 				},
@@ -439,7 +448,7 @@ sap.ui.define([
 					};
 					if (data.results.length > 0) {
 						that.getView().byId("rbg").setSelectedIndex(stateToIndex[data.results[0].TemplateState]);
-					}else{
+					} else {
 						that.getView().byId("rbg").setSelectedIndex(0);
 					}
 				}).catch(function(oError) {
@@ -500,9 +509,9 @@ sap.ui.define([
 			$.get("/todayInquiry").then(function(data) {
 				that.getView().getModel("local").setProperty("/AllInq", data);
 			});
-			setTimeout(function(){
+			setTimeout(function() {
 				that.onCourseSelect();
-			},2000);
+			}, 2000);
 			this.setConfig();
 
 		},
@@ -853,26 +862,50 @@ sap.ui.define([
 			$.post('/MoveNextAc', {})
 				.done(function(data, status) {
 					if (data.accountNo === "114705500444") {
-						sap.m.MessageBox.confirm(
-							"Hello ," + "\n" + "\n" +
+						var str = "Hello ," + "\n" + "\n" +
 							"Thanks for your confirmation, Please transfer the funds to below bank account" + "\n" + "\n" +
 							"Bank Name    : " + data.BankName + "\n" +
 							"Account Name : " + data.accountName + "\n" +
 							"Account No   : " + data.accountNo + "\n" +
 							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
 							"You can also pay with barcode scan of UPI https://www.anubhavtrainings.com/upi-payment-gateway" + "\n" + "\n" +
-							"Note: Please share the screenshot of payment once done."
-						);
+							"Note: Please share the screenshot of payment once done.";
+						sap.m.MessageBox.confirm(str, function(val) {
+							if(val==="OK"){
+								const el = document.createElement('textarea')
+								el.value = str;
+								el.setAttribute('readonly', '')
+								el.style.position = 'absolute'
+								el.style.left = '-9999px'
+								document.body.appendChild(el)
+								el.select()
+								document.execCommand('copy')
+								document.body.removeChild(el)
+								MessageToast.show("Copied to Clipboard");
+							}
+						});
 					} else {
-						sap.m.MessageBox.confirm(
-							"Hello ," + "\n" + "\n" +
+						var str = "Hello ," + "\n" + "\n" +
 							"Thanks for your confirmation, Please transfer the funds to below bank account" + "\n" + "\n" +
 							"Bank Name    : " + data.BankName + "\n" +
 							"Account Name : " + data.accountName + "\n" +
 							"Account No   : " + data.accountNo + "\n" +
 							"IFSC Code    : " + data.ifsc + "\n" + "\n" +
-							"Note: Please share the screenshot of payment once done."
-						);
+							"Note: Please share the screenshot of payment once done.";
+						sap.m.MessageBox.confirm(str, function(val) {
+							if(val==="OK"){
+								const el = document.createElement('textarea')
+								el.value = str;
+								el.setAttribute('readonly', '')
+								el.style.position = 'absolute'
+								el.style.left = '-9999px'
+								document.body.appendChild(el)
+								el.select()
+								document.execCommand('copy')
+								document.body.removeChild(el)
+								MessageToast.show("Copied to Clipboard");
+							}
+						});
 					}
 
 				})

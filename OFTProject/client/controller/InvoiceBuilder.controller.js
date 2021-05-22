@@ -84,6 +84,11 @@ sap.ui.define([
 			this.getView().byId("idDueDate").setValue(rangeDate.toDateString().slice(4));
 			this.setRandomInvoiceNo();
 		},
+		onCourseChange: function(oEvent) {
+			if (oEvent.getParameter("value").includes('GST Exempt')) {
+				this.getView().byId("idGSTType").setSelectedKey("NONE")
+			}
+		},
 		onDeletePerformaInvoice: function(oEvent) {
 			var that = this;
 			var items = this.getView().byId("idPerformaInvoiceTable").getSelectedContexts();
@@ -823,6 +828,17 @@ sap.ui.define([
 						value: "{GmailId}"
 					})
 				});
+			} else if (this.sId.indexOf("idEmailCust1") !== -1) {
+				this.getCustomerPopup();
+				var title = this.getView().getModel("i18n").getProperty("customer");
+				this.searchPopup.setTitle(title);
+				this.searchPopup.bindAggregation("items", {
+					path: "/Inquries",
+					template: new sap.m.DisplayListItem({
+						label: "{EmailId}",
+						value: "{FirstName}"
+					})
+				});
 			}
 
 		},
@@ -864,6 +880,43 @@ sap.ui.define([
 				var data = this.getSelectedKey(oEvent);
 				this.SearchStuGuid = data[2];
 				this.getView().byId("idStuSearch").setValue(data[0]);
+			} else if (this.sId.indexOf("idEmailCust1") !== -1) {
+				var data = this.getSelectedKey(oEvent);
+				this.getView().byId("idEmailCust1").setValue(data[1]);
+				if (true) {
+					var that = this;
+					var payload = {};
+					var Filter1 = new sap.ui.model.Filter("GmailId", "EQ", data[1]);
+					this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {
+							filters: [Filter1]
+						}, payload, this)
+						.then(function(oData) {
+							debugger;
+							if (oData.results.length != 0) {
+								that.oLocalModel.setProperty("/PerformaInvoices", {
+									"InvoiceNo": "INV-YYYYMM-DD",
+									"CompanyName": oData.results[0].Company === "null" ? null : oData.results[0].Company,
+									"ParticipentName": oData.results[0].Name,
+									"CourseName": null,
+									"Amount": 0,
+									"GSTType": oData.results[0].GSTCharge ? "IGST" : "NONE",
+									"Date": null,
+									"DueDate": null,
+									"Address": oData.results[0].Address === "null" ? null : oData.results[0].Address,
+									"City": oData.results[0].City === "null" ? null : oData.results[0].City,
+									"Country": oData.results[0].Country,
+									"Currency": "INR",
+									"GSTIN": oData.results[0].GSTIN === "null" ? null : oData.results[0].GSTIN,
+									"Notes": null,
+									"Terms": null,
+									"AccountNo": null,
+									"Email": null
+								})
+							}
+						}).catch(function(oError) {
+							//
+						});
+				}
 			}
 		},
 		// onSearch: function(oEvent) {

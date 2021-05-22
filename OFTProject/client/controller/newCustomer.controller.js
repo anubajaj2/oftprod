@@ -18,8 +18,8 @@ sap.ui.define([
 			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.oRouter.attachRoutePatternMatched(this.herculis, this);
 			var currentUser = this.getModel("local").getProperty("/CurrentUser");
-			if(currentUser){
-			var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
+			if (currentUser) {
+				var loginUser = this.getModel("local").oData.AppUsers[currentUser].UserName;
 			}
 			loginUser = "Hey " + loginUser;
 			this.getView().byId("idUser").setText(loginUser);
@@ -29,7 +29,7 @@ sap.ui.define([
 			sap.ui.getCore().getView().byId("idApp").to("idView1");
 		},
 		herculis: function(oEvent) {
-			if(oEvent.getParameter("name") !== "newCustomer"){
+			if (oEvent.getParameter("name") !== "newCustomer") {
 				return;
 			}
 			this.getView().getModel("local").setProperty("/newCustomer/GmailId", null);
@@ -138,14 +138,14 @@ sap.ui.define([
 								}
 
 								//if (oData.results[0].Defaulter) {
-									that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
+								that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
 								//}
 								//debugger;
 								//if (oData.results[0].HighServerUsage) {
-									that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
+								that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
 								//}
 								//if (oData.results[0].Star) {
-									that.getView().byId("idStar1").setSelected(oData.results[0].Star);
+								that.getView().byId("idStar1").setSelected(oData.results[0].Star);
 								//}
 
 								that.getView().byId("createNew1").setText("Update");
@@ -287,14 +287,14 @@ sap.ui.define([
 							}
 
 							// if (oData.results[0].Defaulter) {
-								that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
+							that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
 							// }
 							//debugger;
 							// if (oData.results[0].HighServerUsage) {
-								that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
+							that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
 							// }
 							// if (oData.results[0].Star) {
-								that.getView().byId("idStar1").setSelected(oData.results[0].Star);
+							that.getView().byId("idStar1").setSelected(oData.results[0].Star);
 							// }
 
 							that.getView().byId("createNew1").setText("Update");
@@ -468,10 +468,10 @@ sap.ui.define([
 			}
 
 			if (that.UpdateCustomer == false) {
-				if(leadData.OtherEmail1){
+				if (leadData.OtherEmail1) {
 					leadData.OtherEmail1 = leadData.OtherEmail1.toLowerCase();
 				}
-				if(leadData.OtherEmail2){
+				if (leadData.OtherEmail2) {
 					leadData.OtherEmail2 = leadData.OtherEmail2.toLowerCase();
 				}
 				var payload = {
@@ -492,7 +492,7 @@ sap.ui.define([
 					"City": leadData.City,
 					"GSTIN": leadData.GSTIN,
 					"GSTCharge": leadData.GSTCharge,
-					"Company" : leadData.Company,
+					"Company": leadData.Company,
 					"Extra1": "EExtra1",
 					"Extra2": "EExtra2",
 					"CreatedOn": new Date(),
@@ -714,6 +714,9 @@ sap.ui.define([
 			//debugger;
 			var oLocal = oEvent;
 			var that = this;
+			oEvent.getSource().setValue(oEvent.getParameter("value").toLowerCase().split(' ').map(function(word) {
+				return (word.charAt(0).toUpperCase() + word.slice(1));
+			}).join(' '));
 			// that.getView().setBusy(true);
 			var leadData = this.getView().getModel("local").getProperty("/newCustomer");
 
@@ -775,6 +778,7 @@ sap.ui.define([
 			// var oItem = oEvent.getParameter("selectedItem");
 			// var oContext = oItem.getBindingContext();
 			//var oModel = this.getView().getModel().oData[oContext.sPath];
+			oEvent.getSource().setValue(oEvent.getParameter("value").replace(/\s/gm, "").toLowerCase());
 			this.getView().byId("idDelete").setEnabled(false);
 			this.vEmail = oEvent.getParameters().value;
 			var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -805,7 +809,7 @@ sap.ui.define([
 							that.getView().byId("idEmailCust1").setValue(oData.results[0].GmailId);
 							that.getView().byId("idName1").setValue(oData.results[0].Name);
 							that.getView().getModel("local").setProperty("/newCustomer",
-							oData.results[0]
+								oData.results[0]
 							);
 							if (oData.results[0].ContactNo) {
 								that.getView().byId("idPhone1").setValue(oData.results[0].ContactNo);
@@ -826,14 +830,14 @@ sap.ui.define([
 							}
 
 							// if (oData.results[0].Defaulter) {
-								that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
+							that.getView().byId("idDefaulter1").setSelected(oData.results[0].Defaulter);
 							// }
 
 							// if (oData.results[0].HighServerUsage) {
-								that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
+							that.getView().byId("idHighServerUsage1").setSelected(oData.results[0].HighServerUsage);
 							// }
 							// if (oData.results[0].Star) {
-								that.getView().byId("idStar1").setSelected(oData.results[0].Star);
+							that.getView().byId("idStar1").setSelected(oData.results[0].Star);
 							//}
 
 							that.getView().byId("createNew1").setText("Update");
@@ -989,13 +993,12 @@ sap.ui.define([
 		onDeleteCust: function(oEvent) {
 			var that = this;
 			that.getView().setBusy(true);
-			var Filter1 = new sap.ui.model.Filter("StudentId", "EQ", "'"+that.customerGUID+"'");
+			var Filter1 = new sap.ui.model.Filter("StudentId", "EQ", "'" + that.customerGUID + "'");
 			that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Subs", "GET", {
-				filters : [Filter1]
-			},
-					{}, that)
+					filters: [Filter1]
+				}, {}, that)
 				.then(function(subsData) {
-					if(subsData.results.length<1){
+					if (subsData.results.length < 1) {
 						MessageBox.confirm("Do you want to delete the selected records?", function(conf) {
 							if (conf == 'OK') {
 								var sPath = "/Students('" + that.customerGUID + "')";
@@ -1010,9 +1013,9 @@ sap.ui.define([
 									});
 							}
 						}, "Confirmation");
-					}else {
+					} else {
 						that.getView().setBusy(false);
-						sap.m.MessageToast.show(subsData.results.length+" Subscription found, can't delete");
+						sap.m.MessageToast.show(subsData.results.length + " Subscription found, can't delete");
 					}
 				}).catch(function(oError) {
 					that.getView().setBusy(false);

@@ -3,7 +3,7 @@
     xmlns:u="sap.ui.unified"
 	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="Templates"  navButtonPress="onBack">
+	<Page title="Templates"  showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 	    	<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>

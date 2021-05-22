@@ -60,6 +60,11 @@ sap.ui.define([
 					}
 				});
 		},
+		handleNavButtonPress: function() {
+			var oSplitApp = this.getView().getParent().getParent();
+			var oMaster = oSplitApp.getMasterPages()[0];
+			oSplitApp.toMaster(oMaster, "flip");
+		},
 		allAppUsers: [],
 		loadAllAppUsers: function() {
 			var that = this;

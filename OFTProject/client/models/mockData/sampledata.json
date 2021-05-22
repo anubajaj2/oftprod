@@ -2,6 +2,7 @@
 	"Authorization": "",
 	"LoginUser": "",
 	"CurrentUser": "",
+	"IsPhone": false,
 	"Role": "",
 	"messagesLength": "0",
 	"messages": [],

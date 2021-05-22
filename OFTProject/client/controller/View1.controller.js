@@ -19,8 +19,11 @@ sap.ui.define([
 			this.loadAllStudents();
 			this.loadAllAppUsers();
 			this.initAccounts();
+			if (sap.ui.Device.system.phone) {
+				this.getOwnerComponent().getModel("local").setProperty("/IsPhone", true);
+			}
 		},
-		onSuggest: function(oEvent){
+		onSuggest: function(oEvent) {
 			var suggestVal = oEvent.getParameter("suggestValue");
 			//oEvent.getSource().suggest();
 			// var oFilterName = new sap.ui.model.Filter(
@@ -30,12 +33,12 @@ sap.ui.define([
 			// oEvent.getSource().getBinding("suggestionItems").filter(oFilterName);
 
 		},
-		onDelete: function(oEvent){
+		onDelete: function(oEvent) {
 			var oList = oEvent.getSource();
 			var oItemToBeDeleted = oEvent.getParameter("listItem");
 			oList.removeItem(oItemToBeDeleted);
 		},
-		onSelectItem: function(oEvent){
+		onSelectItem: function(oEvent) {
 
 			var oListItem = oEvent.getParameter("listItem");
 			var sPath = oListItem.getBindingContextPath();
@@ -58,10 +61,10 @@ sap.ui.define([
 			// this.onNext();
 			// //debugger;
 		},
-		onSearch: function(oEvent){
+		onSearch: function(oEvent) {
 			//debugger;
 			var searchStr = oEvent.getParameter("query");
-			if(!searchStr){
+			if (!searchStr) {
 				searchStr = oEvent.getParameter("newValue");
 			}
 			var oFilterName = new sap.ui.model.Filter(
@@ -84,7 +87,7 @@ sap.ui.define([
 
 		},
 
-		onNext: function(){
+		onNext: function() {
 
 			//step 1: Get the object of the app control (parent for both view)
 			var oApp = sap.ui.getCore().byId("idApp");
@@ -92,7 +95,7 @@ sap.ui.define([
 			oApp.to("idView2");
 
 		},
-		onOrange: function(){
+		onOrange: function() {
 			alert("welcome to orange");
 		}
 		/**

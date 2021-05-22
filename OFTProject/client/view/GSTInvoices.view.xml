@@ -10,7 +10,7 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="GST invoices" navButtonPress="onBack">
+	<Page title="GST invoices" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
