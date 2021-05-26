@@ -1633,10 +1633,10 @@ sap.ui.define([
 							totalAmountNonPaypal += data[i].FullAmount;
 						}
 						if (data[i].Address === null || data[i].Address === "" || data[i].Address === "null") {
-							if (missingAddressEmailsCollection.has((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)")))) {
-								missingAddressEmailsCollection.get((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)"))).push(data[i].Email);
+							if (missingAddressEmailsCollection.has((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy)))) {
+								missingAddressEmailsCollection.get((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy))).push(data[i].Email);
 							} else {
-								missingAddressEmailsCollection.set((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)")), [data[i].Email]);
+								missingAddressEmailsCollection.set((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy)), [data[i].Email]);
 							}
 						}
 					}
