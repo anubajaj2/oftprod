@@ -697,6 +697,7 @@ app.start = function() {
 								"Amount": true,
 								"ChartedValid": true,
 								"InvoiceNo": true,
+								"CreatedBy": true,
 								"id": true
 							}
 						}).then(function(subcriptions) {
@@ -719,6 +720,7 @@ app.start = function() {
 									"Amount": item.Amount,
 									"ChartedValid": item.ChartedValid,
 									"InvoiceNo": item.InvoiceNo,
+									"CreatedBy": item.CreatedBy,
 									"id": item.id
 								});
 								subsMap.get("course").set(item.CourseId.toString(), null);
@@ -844,6 +846,7 @@ app.start = function() {
 								"Reference": item.Reference,
 								"IsWallet": isWallet,
 								"IsGST": isGST,
+								"CreatedBy": item.CreatedBy,
 								"id": item.id
 							});
 						});

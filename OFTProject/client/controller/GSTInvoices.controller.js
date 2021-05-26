@@ -76,7 +76,7 @@ sap.ui.define([
 				this.super(accountNo, startDate, endDate);
 				// var oFilter = new sap.ui.model.Filter("AccountNo", "EQ", bankName);
 				// this.getView().byId("idSummary").getBinding("items").filter(oFilter);
-			}else if (this.sId.indexOf("idAccountNo") !== -1) {
+			} else if (this.sId.indexOf("idAccountNo") !== -1) {
 
 				var accountNo = oEvent.getParameter("selectedItem").getValue();
 				Core.byId("idAccountNo").setValue(accountNo);
@@ -1570,10 +1570,12 @@ sap.ui.define([
 				MessageToast.show("No record with missing address");
 				return;
 			}
-			var emailBody = "Hello Sonal,\n\nKindly get the address maintained for below emails in our records\n" +
-				this.missingAddressEmails + "\n\nRegards,\nAnubhav";
+			var emailBody = "Hello Team,\n\nThe following entries made by you has missing addess for the students, kindly check below and maintain the addess asap.\n\n" +
+				this.missingAddressEmails +
+				"\nNote: This is a system generated email, if already done, please ignore.\n" +
+				"\n\nRegards,\nSystem.";
 			const el = document.createElement('textarea')
-			el.value = this.missingAddressEmails
+			el.value = emailBody
 			el.setAttribute('readonly', '')
 			el.style.position = 'absolute'
 			el.style.left = '-9999px'
@@ -1581,7 +1583,8 @@ sap.ui.define([
 			el.select()
 			document.execCommand('copy')
 			document.body.removeChild(el)
-			MessageToast.show("Email Copied");
+			MessageToast.show("Emails Copied");
+			console.log(emailBody);
 		},
 		super: function(accountNo, startDate, endDate) {
 			var that = this;
@@ -1599,7 +1602,21 @@ sap.ui.define([
 						totalAmountUSDPaypal = 0,
 						totalSettleAmountPaypal = 0,
 						totalGSTAmount = 0;
-					that.missingAddressEmails = "";
+					that.missingAddressEmails = [];
+					var missingAddressEmailsCollection = new Map();
+					var users = {
+						"5c187036dba2681834ffe305": "sonal",
+						"5c187035dba2681834ffe301": "ANubhav",
+						"5d947c3dab189706a40faade": "Servers",
+						"5dd6a6aea5f9e83c781b7ac0": "shanu",
+						"5ea2f01d7854a13c148f18cd": "Manish",
+						'5db594b9b06bff3ffcbba53c': "shalu",
+						"5dcf9f7183f22e7da0acdfe4": "vaishali",
+						"5ecc968586321064989cdc3f": "kajol",
+						"5f1331f2e0b8524af830fa20": "shalini",
+						"5f4d01c50815a314ec9238d2": "khushbu",
+						"5d518381f516afc51c793ce0": "Demo"
+					};
 					for (var i = 0; i < data.length; i++) {
 						data[i].Index = i + 1;
 						totalBalance = totalBalance + data[i].FullAmount;
@@ -1615,10 +1632,17 @@ sap.ui.define([
 						} else {
 							totalAmountNonPaypal += data[i].FullAmount;
 						}
-						if (data[i].Address === null || data[i].Address === "") {
-							that.missingAddressEmails += ("/n" + data[i].Email)
+						if (data[i].Address === null || data[i].Address === "" || data[i].Address === "null") {
+							if (missingAddressEmailsCollection.has((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)")))) {
+								missingAddressEmailsCollection.get((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)"))).push(data[i].Email);
+							} else {
+								missingAddressEmailsCollection.set((users[data[i].CreatedBy] ? users[data[i].CreatedBy] : (data[i].CreatedBy + "(UNKNOWN)")), [data[i].Email]);
+							}
 						}
 					}
+					missingAddressEmailsCollection.forEach(function(value, key) {
+						that.missingAddressEmails += ("\n" + key + "(" + value.length + ")" + "\n" + value.toString() + "\n");
+					});
 					var oNewModel = new sap.ui.model.json.JSONModel();
 					oNewModel.setData({
 						"records": data
