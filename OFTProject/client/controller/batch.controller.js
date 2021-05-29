@@ -96,7 +96,24 @@ sap.ui.define([
 
 			//	that.getView().setBusy(false);
 		},
-
+		onReplicateBatches: function() {
+			var that = this;
+			MessageBox.confirm("are you sure?", function(val) {
+				if (val === "OK") {
+					that.getView().byId("idReplicateBatches").setEnabled(false);
+					MessageToast.show("Replication started, Please Wait...");
+					$.get('/replicateBatchesToStudentPortal')
+						.done(function(data, status) {
+							MessageBox.success(JSON.stringify(data));
+							that.getView().byId("idReplicateBatches").setEnabled(true);
+						})
+						.fail(function(xhr, status, error) {
+							that.getView().byId("idReplicateBatches").setEnabled(true);
+							MessageBox.error("Error in access");
+						});
+				}
+			});
+		},
 		onStartChange: function(oEvent) {
 			var dateString = oEvent.getSource().getValue();
 			var from = dateString.split(".");
@@ -110,7 +127,7 @@ sap.ui.define([
 			console.log(blogDate);
 		},
 		herculis: function(oEvent) {
-			if(oEvent.getParameter("name") !== "batch"){
+			if (oEvent.getParameter("name") !== "batch") {
 				return;
 			}
 			this.getView().getModel("local").setProperty("/newBatch/startDate", this.formatter.getFormattedDate(0));
@@ -218,7 +235,7 @@ sap.ui.define([
 
 					//--- BOC - VCHIKKAM
 					var bHidden = oModel.hidden;
-          var bBatchHide;
+					var bBatchHide;
 					if (bHidden === true) {
 						bBatchHide = this.getView().byId("idChkBtcHid").setSelected(true);
 					} else {
@@ -227,7 +244,7 @@ sap.ui.define([
 					//--- EOC - VCHIKKAM
 
 
- 					var oAnalysis = oModel.analysis;
+					var oAnalysis = oModel.analysis;
 					if (oAnalysis === true) {
 						var analysis = this.getView().byId("idAnalysis").setSelected(true);
 					} else {

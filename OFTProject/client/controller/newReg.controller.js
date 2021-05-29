@@ -153,12 +153,30 @@ sap.ui.define([
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
 				$.post('/giveAccessNew', loginPayload)
 					.done(function(data, status) {
-						sap.m.MessageToast.show("Access has been provided");
+						MessageToast.show("Access has been provided");
 					})
 					.fail(function(xhr, status, error) {
-						sap.m.MessageBox.error("Error in access");
+						MessageBox.error("Error in access");
 					});
 			}
+		},
+		onReplicateStudents: function() {
+			var that = this;
+			MessageBox.confirm("are you sure?", function(val) {
+				if (val === "OK") {
+					that.getView().byId("idReplicateStudents").setEnabled(false);
+					MessageToast.show("Replication started, Please Wait...");
+					$.get('/replicateStudentsToStudentPortal')
+						.done(function(data, status) {
+							MessageBox.success(JSON.stringify(data));
+							that.getView().byId("idReplicateStudents").setEnabled(true);
+						})
+						.fail(function(xhr, status, error) {
+							that.getView().byId("idReplicateStudents").setEnabled(true);
+							MessageBox.error("Error in access");
+						});
+				}
+			});
 		},
 		onGiveAccess: function(oEvent) {
 			var that = this;
@@ -410,14 +428,14 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
 			this.getView().getModel("local").setProperty("/newRegistration/Amount", (amt * exchange).toFixed(2));
 		},
-		onChargesChange : function(oEvent){
+		onChargesChange: function(oEvent) {
 			var charges = oEvent.getParameter("value");
 			var amt = this.getView().getModel("local").getProperty("/newRegistration/USDAmount");
 			var exchange = this.getView().getModel("local").getProperty("/newRegistration/Exchange");
 			this.getView().getModel("local").setProperty("/newRegistration/Charges", charges);
 			this.getView().getModel("local").setProperty("/newRegistration/SettleAmount", ((amt - charges) * exchange).toFixed(2));
 		},
-		onExchangeChange : function(oEvent){
+		onExchangeChange: function(oEvent) {
 			var exchange = oEvent.getParameter("value");
 			var charges = this.getView().getModel("local").getProperty("/newRegistration/Charges");
 			var amt = this.getView().getModel("local").getProperty("/newRegistration/USDAmount");
@@ -449,7 +467,7 @@ sap.ui.define([
 					return "";
 				}
 			}
-			if (this.getView().byId("paymentMode").getSelectedKey()==="PAYPAL" && this.getView().byId("idUSDAmount").getValue() < 1) {
+			if (this.getView().byId("paymentMode").getSelectedKey() === "PAYPAL" && this.getView().byId("idUSDAmount").getValue() < 1) {
 				MessageBox.alert("USD Amount can't be 0 / less than 0");
 				return "";
 			}

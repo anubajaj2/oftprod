@@ -21,6 +21,8 @@
     "fs": "0.0.1-security",
     "googleapi": "^1.0.2",
     "googleapis": "^43.0.0",
+    "jquery": "^3.6.0",
+    "jsdom": "^16.6.0",
     "log4js": "^0.6.38",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",

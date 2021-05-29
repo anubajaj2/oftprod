@@ -6,6 +6,7 @@ var fileUpload = require('express-fileupload');
 var fs = require('fs');
 var xlstojson = require("xls-to-json-lc");
 var xlsxtojson = require("xlsx-to-json-lc");
+var studentPortalAPI = require("./api_student_portal");
 var express = require('express');
 var fs = require('fs');
 var app = express();
@@ -66,8 +67,150 @@ app.start = function() {
 
 				);
 		});
+		app.get("/getStudentPortalStudents", async function(req, res) {
+			var r = await studentPortalAPI.studentPortal("GET", "students");
+			res.send(r);
+		});
+		app.get("/replicateStudentsToStudentPortal", function(req, res) {
+			var Students = app.models.Student;
+			Students.find().then(function(results) {
+				portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						"name": item.Name,
+						"email": item.GmailId,
+						"companyMail": item.CompanyMail === "null" ? undefined : item.CompanyMail,
+						"otherEmail1": item.OtherEmail1 === "null" ? undefined : item.OtherEmail1,
+						"otherEmail2": item.OtherEmail2 === "null" ? undefined : item.OtherEmail2,
+						// "gender": null,
+						"contactNo": item.ContactNo === "null" ? undefined : item.ContactNo.toString(),
+						// "officecontactNo": null,
+						// "experience": null,
+						"address": item.Address === "null" ? undefined : item.Address,
+						"city": item.City === "null" ? undefined : item.City,
+						// "state": null,
+						"country": item.Country === "null" ? undefined : item.Country,
+						"designation": item.Designation === "null" ? undefined : item.Designation,
+						"star": item.Star === "null" ? undefined : item.Star,
+						// "draft": null,
+						// "draftRejection": null,
+						// "draftRejectionReason": null,
+						"defaulter": item.Defaulter,
+						"highServerUsage": item.HighServerUsage,
+						"Skills": item.Skills === "null" ? undefined : item.Skills,
+						"Resume": item.Resume === "null" ? undefined : item.Resume,
+						// "Photo": null,
+						"extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+						"extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+						"GSTIN": item.GSTIN === "null" ? undefined : item.GSTIN,
+						"company": item.Company === "null" ? undefined : item.Company,
+						"GSTCharge": item.GSTCharge === "null" ? undefined : item.GSTCharge,
+						"CreatedOn": item.CreatedOn,
+						"ChangedOn": item.ChangedOn,
+						"CreatedBy": item.CreatedBy,
+						"ChangedBy": item.ChangedBy,
+						// "userId": null,
+					});
+				});
+
+				// portalRecords.forEach(async function(item) {
+				// 	try {
+				// 		await studentPortalAPI.studentPortal("POST", "students", item);
+				// 	} catch (err) {
+				// 		console.log(err.responseJSON.error.message);
+				// 	}
+				// });
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "students", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
+		app.get("/replicateBatchesToStudentPortal", function(req, res) {
+			var Courses = app.models.Course;
+			Courses.find().then(function(results) {
+				var portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						Name: item.Name,
+						BatchNo: item.BatchNo,
+						DemoStartDate: item.DemoStartDate,
+						StartDate: item.StartDate,
+						EndDate: item.EndDate,
+						BlogEndDate: item.BlogEndDate,
+						Link: item.Link,
+						Weekend: item.Weekend,
+						Timings: item.Timings === 'null' ? undefined : item.Timings,
+						Fee: item.Fee,
+						Extra: item.Extra === 'null' ? undefined : item.Extra,
+						Extra1: item.Extra1 === 'null' ? undefined : item.Extra1,
+						CalendarId: item.CalendarId === 'null' ? undefined : item.CalendarId,
+						EventId: item.EventId === 'null' ? undefined : item.EventId,
+						DriveId: item.DriveId === 'null' ? undefined : item.DriveId,
+						hidden: item.hidden,
+						CreatedOn: item.CreatedOn,
+						CreatedBy: item.CreatedBy,
+						ChangedOn: item.ChangedOn,
+						ChangedBy: item.ChangedBy,
+						analysis: item.analysis,
+						status: item.status === ' ' ? undefined : item.status
+					});
+				});
+				// portalRecords.forEach(async function(item) {
+				// 	try {
+				// 		await studentPortalAPI.studentPortal("POST", "students", item);
+				// 	} catch (err) {
+				// 		console.log(err.responseJSON.error.message);
+				// 	}
+				// });
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "batches", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
 		app.get("/todayInquiry", function(req, res) {
-			debugger;
+
 			var date1 = new Date();
 			var date2 = new Date();
 			if (req.query.date) {
@@ -173,7 +316,7 @@ app.start = function() {
 				});
 		});
 		app.post('/checkStudentById', function(req, res) {
-			debugger;
+
 			var emailId = req.body.emailId;
 			var lv_countries = "";
 			var completeData = {};
@@ -309,7 +452,7 @@ app.start = function() {
 		});
 
 		app.post('/requestMessage', function(req, res) {
-			debugger;
+
 			var msg = "";
 			var typeMsg = req.body.msgType;
 			switch (typeMsg) {
@@ -975,7 +1118,7 @@ app.start = function() {
 			var AccountEntry = app.models.AccountBalance;
 
 			var async = require('async');
-			debugger;
+
 			async.waterfall([
 					function(callback) {
 						Account.find({
@@ -1042,7 +1185,7 @@ app.start = function() {
 				],
 				function(err, accountRecords, accountBalances, Records) {
 					// result now equals 'done'
-					debugger;
+
 					try {
 						var responseData = [];
 						for (var i = 0; i < accountRecords.length; i++) {
@@ -1352,7 +1495,9 @@ app.start = function() {
 							var workbook = new excel.Workbook(); //creating workbook
 							var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
 							sheet.addRow().values = Object.keys(Records[0].__data);
-							Records.sort(function(a, b){return new Date(b.__data.Date) - new Date(a.__data.Date)})
+							Records.sort(function(a, b) {
+								return new Date(b.__data.Date) - new Date(a.__data.Date)
+							})
 							for (var i = 0; i < Records["length"]; i++) {
 								sheet.addRow().values = (Object.values(Records[i].__data));
 							}
@@ -1407,7 +1552,7 @@ app.start = function() {
 			var Students = app.models.Student;
 			var Courses = app.models.Course;
 			var async = require('async');
-			debugger;
+
 			async.waterfall([
 				function(callback) {
 					Students.find().then(function(students) {
@@ -1472,7 +1617,7 @@ app.start = function() {
 			], function(err, Records) {
 				// result now equals 'done'
 				try {
-					debugger;
+
 					var excel = require('exceljs');
 					var workbook = new excel.Workbook(); //creating workbook
 					var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
@@ -1508,7 +1653,7 @@ app.start = function() {
 			var Students = app.models.Student;
 			var Courses = app.models.Course;
 			var async = require('async');
-			debugger;
+
 			async.waterfall([
 				function(callback) {
 					Students.find({
@@ -1566,7 +1711,7 @@ app.start = function() {
 			], function(err, Records) {
 				// result now equals 'done'
 				try {
-					debugger;
+
 					var excel = require('exceljs');
 					var workbook = new excel.Workbook(); //creating workbook
 					var sheet = workbook.addWorksheet('MySheet'); //creating worksheet
@@ -2027,14 +2172,14 @@ app.start = function() {
 				var templateName = "";
 				this.password = req.body.password;
 				this.isServer2 = req.body.isServer2;
-				debugger;
+
 				if (req.body.isServer2 === "false") {
 					templateName = 'Server';
 				} else {
 					templateName = 'Server2';
 				}
 				var Template = app.models.Template;
-				debugger;
+
 				Template.findOne({
 					where: {
 						and: [{
@@ -2339,7 +2484,7 @@ app.start = function() {
 				//https://developers.google.com/oauthplayground/
 				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
 				//
-				debugger;
+
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				const xoauth2 = require('xoauth2');
@@ -2469,7 +2614,7 @@ app.start = function() {
 
 				var app = require('../server/server');
 				var Template = app.models.Template;
-				debugger;
+
 				var CourseName = req.body.CourseName;
 				if (req.body.source === "L" || req.body.source === "F") {
 					CourseName = "Linkedin";
@@ -2484,7 +2629,7 @@ app.start = function() {
 					}
 				}).then(function(data) {
 					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
-					debugger;
+
 					if (!data) {
 						res.status(500).send('Template Not found for the course');
 					}
@@ -2524,7 +2669,7 @@ app.start = function() {
 					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
 					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
 					contents = contents.replace('$$Name$$', req.body.FirstName)
-					debugger;
+
 					if (req.body.fees !== "null" && req.body.fees !== "") {
 						if (req.body.source === "L" || req.body.source === "F") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
@@ -2590,7 +2735,7 @@ app.start = function() {
 				//https://developers.google.com/oauthplayground/
 				//https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
 				//
-				debugger;
+
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				const xoauth2 = require('xoauth2');
@@ -2720,7 +2865,7 @@ app.start = function() {
 
 				var app = require('../server/server');
 				var Template = app.models.Template;
-				debugger;
+
 				var CourseName = req.body.CourseName;
 				if (req.body.source === "L" || req.body.source === "F") {
 					CourseName = "Linkedin";
@@ -2735,7 +2880,7 @@ app.start = function() {
 					}
 				}).then(function(data) {
 					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
-					debugger;
+
 					if (!data) {
 						res.status(500).send('Template Not found for the course');
 					}
@@ -2775,7 +2920,7 @@ app.start = function() {
 					var result = req.body.FirstName.replace(/([A-Z])/g, " $1");
 					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
 					contents = contents.replace('$$Name$$', req.body.FirstName)
-					debugger;
+
 					if (req.body.fees !== "null" && req.body.fees !== "") {
 						if (req.body.source === "L" || req.body.source === "F") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
@@ -3438,7 +3583,7 @@ app.start = function() {
 							auth: sampleClient.oAuth2Client,
 						});
 
-						debugger;
+
 						if (that2.isCalRequire === true &&
 							(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
 								courseStr.EventId != "null" && courseStr.EventId != "")
@@ -3775,7 +3920,7 @@ app.start = function() {
 					}
 				})
 				.then(function(record) {
-					debugger;
+
 					var app = require('../server/server');
 					var AccountBalance = app.models.AccountBalance;
 					if (record) {
@@ -3800,7 +3945,7 @@ app.start = function() {
 								}
 							}, newRec)
 							.then(function(inq) {
-								debugger;
+
 								console.log("created successfully");
 							})
 							.catch(function(err) {
@@ -3813,7 +3958,7 @@ app.start = function() {
 		});
 		app.post('/upload',
 			function(req, res) {
-				debugger;
+
 				if (!req.files.myFileUpload) {
 					res.send('No files were uploaded.');
 					return;
@@ -3907,7 +4052,7 @@ app.start = function() {
 												})
 												.then(function(stu) {
 													if (stu.length > 0) {
-														debugger;
+
 														console.log(stu[0].GmailId + " found");
 													}
 												});
@@ -3925,7 +4070,7 @@ app.start = function() {
 														var Student = app.models.Student;
 														var Server = app.models.Server;
 														var newRecord = {};
-														debugger;
+
 														newRecord.CreatedOn = getMyDate("20180101");
 														newRecord.CreatedBy = "5c187035dba2681834ffe301";
 														newRecord.ChangedOn = getMyDate("20180101");
@@ -3979,7 +4124,7 @@ app.start = function() {
 												})
 												.then(function(stu) {
 													if (stu) {
-														debugger;
+
 														var app = require('../server/server');
 														var Student = app.models.Student;
 														var id = stu.id;
@@ -4024,7 +4169,7 @@ app.start = function() {
 													}
 												}, newRec)
 												.then(function(inq) {
-													debugger;
+
 													console.log("created successfully");
 												})
 												.catch(function(err) {
@@ -4058,7 +4203,7 @@ app.start = function() {
 													}
 												}, newRec)
 												.then(function(inq) {
-													debugger;
+
 													console.log("created successfully");
 												})
 												.catch(function(err) {
@@ -4168,7 +4313,7 @@ app.start = function() {
 													}
 												}, newRec)
 												.then(function(inq) {
-													debugger;
+
 													console.log("created successfully");
 												})
 												.catch(function(err) {
@@ -4195,7 +4340,7 @@ app.start = function() {
 											// 		}
 											// 	}, newRec)
 											// 	.then(function(inq) {
-											// 		debugger;
+											//
 											// 		console.log("created successfully");
 											// 	})
 											// 	.catch(function(err) {
@@ -4231,7 +4376,7 @@ app.start = function() {
 											// 			}
 											// 		}, studentRec)
 											// 		.then(function(inq) {
-											// 			debugger;
+											//
 											// 			console.log("Student also created successfully");
 											// 		})
 											// 		.catch(function(err) {
@@ -4322,7 +4467,7 @@ app.start = function() {
 															}
 														}, studentRec)
 														.then(function(inq) {
-															debugger;
+
 															console.log("Student also created successfully");
 														})
 														.catch(function(err) {
@@ -4436,7 +4581,7 @@ app.start = function() {
 																'studentid', studentsx);
 															newRec.StudentId = studentsx;
 															newRec.CourseId = batchid;
-															debugger;
+
 															Sub.findOrCreate({
 																	"where": {
 																		"and": [{

@@ -202,6 +202,7 @@
 		<footer>
 			<Toolbar>
 				<ToolbarSpacer/>
+				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateStudents" id="idReplicateStudents"></Button>
 				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear"></Button>
 				<Button text="New Customer" icon="sap-icon://add-employee" type="Accept" press="onCustomer" id="idCust"></Button>
 				<Button text="Save" type="Accept" press="onSaveSubs" id="idApr"></Button>
