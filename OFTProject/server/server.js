@@ -477,11 +477,14 @@ app.start = function() {
 			msg = urlencode(msg);
 			var number = req.body.Number;
 			//var username='anubhav.abap@gmail.com';
-			var username = 'anubhav.abap@gmail.com';
-			var hash = 'faffa687d5142e5af59d8e892b9802651a63fd3185d4fdcc5aad716065320bf7'; // The hash key could be found under Help->All Documentation->Your hash key. Alternatively you can use your Textlocal password in plain text.
+			var username = 'contact@soyuztechnologies.com';
+			var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
+
+			// The hash key could be found under Help->All Documentation->Your hash key.
+			// Alternatively you can use your Textlocal password in plain text.
 			//var hash = 'eef684d01be7535d39d7f409a1b8e888f874e9a05243b4fb3db2426f99aed5ba';
 			//var sender='ONLTRN';
-			var sender = "ONLTRN";
+			var sender = "395558";
 			var data = 'username=' + username + '&hash=' + hash + '&sender=' + sender + '&numbers=' + number + '&message=' + msg
 			var options = {
 				host: 'api.textlocal.in',
