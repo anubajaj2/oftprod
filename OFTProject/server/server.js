@@ -503,6 +503,7 @@ app.start = function() {
 				});
 			}
 			//console.log('hello js'))
+			console.log(options.host + options.path);
 			http.request(options, callback).end();
 		});
 
