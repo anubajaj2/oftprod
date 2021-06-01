@@ -111,5 +111,13 @@
   "MailCustomize":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "Dump":{
+    "dataSource": "mongoatlas",
+    "public": true
+  },
+  "DumpSold":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }

@@ -1,0 +1,91 @@
+{
+  "name": "DumpSold",
+  "plural": "DumpSolds",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "EmailId": {
+      "type": "string",
+      "required": true
+    },
+    "DumpCode": {
+      "type": "string",
+      "default": "null",
+      "required": true
+    },
+    "FirstName": {
+      "type": "string",
+      "default": "null"
+    },
+    "LastName": {
+      "type": "string",
+      "default": null
+    },
+    "Date": {
+      "type": "date"
+    },
+    "Country": {
+      "type": "string",
+      "default": "null"
+    },
+    "Phone": {
+      "type": "number",
+      "default":0
+    },
+    "CreatedOn": {
+      "type": "date"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "ChangedOn": {
+      "type": "date"
+    },
+    "ChangedBy": {
+      "type": "string",
+      "default": "null"
+    },
+    "fees":{
+      "type": "string",
+      "default": "5000"
+    },
+    "currency":{
+      "type": "string",
+      "default": "INR"
+    },
+    "account":{
+      "type": "string",
+      "default": "null"
+    },
+    "source":{
+      "type": "string",
+      "default": "R"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "CreatedByTo": {
+			"type": "belongsTo",
+			"model": "User",
+			"foreignKey": "CreatedBy"
+		},
+    "ChangedByTo": {
+			"type": "belongsTo",
+			"model": "User",
+			"foreignKey": "ChangedBy"
+		}
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
