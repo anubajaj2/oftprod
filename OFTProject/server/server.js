@@ -209,6 +209,300 @@ app.start = function() {
 				res.send(oError.responseJSON.error.message);
 			});
 		});
+		app.get("/replicateSubsToStudentPortal", function(req, res) {
+			var Subs = app.models.Sub;
+			Subs.find().then(function(results) {
+				debugger;
+				portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						"StudentId": item.StudentId,
+						"CourseId": item.CourseId,
+						"PaymentDate": item.PaymentDate,
+						"Mode": item.Mode === "null" ? undefined : item.Mode,
+						"StartDate": item.StartDate,
+						"EndDate": item.EndDate,
+						"PaymentMode": item.PaymentMode === "null" ? undefined : item.PaymentMode,
+						"BankName": item.BankName === "null" ? undefined : item.BankName,
+						"AccountName": item.AccountName === "null" ? undefined : item.AccountName,
+						"Amount": item.Amount,
+						"Reference": item.Reference === "null" ? undefined : item.Reference,
+						"Remarks": item.Remarks === "null" ? undefined : item.Remarks,
+						"PendingAmount": item.PendingAmount,
+						"Waiver": item.Waiver,
+						"DropOut": item.DropOut,
+						"PaymentScreenshot": item.PaymentScreenshot === "null" ? undefined : item.PaymentScreenshot,
+						"PartialPayment": item.PartialPayment,
+						"Extended": item.Extended,
+						"PaymentDueDate": item.PaymentDueDate,
+						"InvoiceNo": item.InvoiceNo === "null" ? undefined : item.InvoiceNo,
+						"USDAmount": item.USDAmount,
+						"CurrencyCode": item.CurrencyCode === "null" ? undefined : item.CurrencyCode,
+						"Exchange": item.Exchange,
+						"Charges": item.Charges,
+						"SettleDate": item.SettleDate,
+						"SettleAmount": item.SettleAmount,
+						"ValidationDone": item.ValidationDone,
+						"Extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+						"Extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+						"ExtraN1": item.ExtraN1,
+						"ExtraN2": item.ExtraN2,
+						"ExtraN3": item.ExtraN3,
+						"UpdatePayment": item.UpdatePayment,
+						"MostRecent": item.MostRecent,
+						"CreatedOn": item.CreatedOn,
+						"CreatedBy": item.CreatedBy === "null" ? undefined : item.CreatedBy,
+						"ChangedOn": item.ChangedOn === "null" ? undefined : item.ChangedOn,
+						"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
+						"Status": item.Status === "null" ? undefined : item.Status,
+						"ChartedValid": item.ChartedValid
+					});
+				});
+
+				// portalRecords.forEach(async function(item) {
+				// 	try {
+				// 		await studentPortalAPI.studentPortal("POST", "students", item);
+				// 	} catch (err) {
+				// 		console.log(err.responseJSON.error.message);
+				// 	}
+				// });
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "subscriptions", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
+		app.post('/replicateOneStudentToStudentPortal', async function(req, res) {
+			var mailId = req.body.mailId;
+			var Students = app.models.Student;
+			Students.find({
+				where: {
+					or: [{
+							GmailId: mailId
+						},
+						{
+							OtherEmail1: mailId
+						},
+						{
+							OtherEmail2: mailId
+						}
+					]
+				}
+			}).then(function(results) {
+				portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						"name": item.Name,
+						"email": item.GmailId,
+						"companyMail": item.CompanyMail === "null" ? undefined : item.CompanyMail,
+						"otherEmail1": item.OtherEmail1 === "null" ? undefined : item.OtherEmail1,
+						"otherEmail2": item.OtherEmail2 === "null" ? undefined : item.OtherEmail2,
+						// "gender": null,
+						"contactNo": item.ContactNo === "null" ? undefined : item.ContactNo.toString(),
+						// "officecontactNo": null,
+						// "experience": null,
+						"address": item.Address === "null" ? undefined : item.Address,
+						"city": item.City === "null" ? undefined : item.City,
+						// "state": null,
+						"country": item.Country === "null" ? undefined : item.Country,
+						"designation": item.Designation === "null" ? undefined : item.Designation,
+						"star": item.Star === "null" ? undefined : item.Star,
+						// "draft": null,
+						// "draftRejection": null,
+						// "draftRejectionReason": null,
+						"defaulter": item.Defaulter,
+						"highServerUsage": item.HighServerUsage,
+						"Skills": item.Skills === "null" ? undefined : item.Skills,
+						"Resume": item.Resume === "null" ? undefined : item.Resume,
+						// "Photo": null,
+						"extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+						"extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+						"GSTIN": item.GSTIN === "null" ? undefined : item.GSTIN,
+						"company": item.Company === "null" ? undefined : item.Company,
+						"GSTCharge": item.GSTCharge === "null" ? undefined : item.GSTCharge,
+						"CreatedOn": item.CreatedOn,
+						"ChangedOn": item.ChangedOn,
+						"CreatedBy": item.CreatedBy,
+						"ChangedBy": item.ChangedBy,
+					});
+				});
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "students", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
+		app.get("/replicateBatchesToStudentPortal", function(req, res) {
+			var Courses = app.models.Course;
+			Courses.find().then(function(results) {
+				var portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						Name: item.Name,
+						BatchNo: item.BatchNo,
+						DemoStartDate: item.DemoStartDate,
+						StartDate: item.StartDate,
+						EndDate: item.EndDate,
+						BlogEndDate: item.BlogEndDate,
+						Link: item.Link,
+						Weekend: item.Weekend,
+						Timings: item.Timings === 'null' ? undefined : item.Timings,
+						Fee: item.Fee,
+						Extra: item.Extra === 'null' ? undefined : item.Extra,
+						Extra1: item.Extra1 === 'null' ? undefined : item.Extra1,
+						CalendarId: item.CalendarId === 'null' ? undefined : item.CalendarId,
+						EventId: item.EventId === 'null' ? undefined : item.EventId,
+						DriveId: item.DriveId === 'null' ? undefined : item.DriveId,
+						hidden: item.hidden,
+						CreatedOn: item.CreatedOn,
+						CreatedBy: item.CreatedBy,
+						ChangedOn: item.ChangedOn,
+						ChangedBy: item.ChangedBy,
+						analysis: item.analysis,
+						status: item.status === ' ' ? undefined : item.status
+					});
+				});
+				// portalRecords.forEach(async function(item) {
+				// 	try {
+				// 		await studentPortalAPI.studentPortal("POST", "students", item);
+				// 	} catch (err) {
+				// 		console.log(err.responseJSON.error.message);
+				// 	}
+				// });
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "batches", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
+		app.post('/replicateOneBatchToStudentPortal', async function(req, res) {
+			const name = req.body.Name;
+			const batchNo = req.body.BatchNo;
+			var Courses = app.models.Course;
+			Courses.find({
+				where: {
+					and: [{
+							Name: name
+						},
+						{
+							BatchNo: batchNo
+						}
+					]
+				}
+			}).then(function(results) {
+				portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						Name: item.Name,
+						BatchNo: item.BatchNo,
+						DemoStartDate: item.DemoStartDate,
+						StartDate: item.StartDate,
+						EndDate: item.EndDate,
+						BlogEndDate: item.BlogEndDate,
+						Link: item.Link,
+						Weekend: item.Weekend,
+						Timings: item.Timings === 'null' ? undefined : item.Timings,
+						Fee: item.Fee,
+						Extra: item.Extra === 'null' ? undefined : item.Extra,
+						Extra1: item.Extra1 === 'null' ? undefined : item.Extra1,
+						CalendarId: item.CalendarId === 'null' ? undefined : item.CalendarId,
+						EventId: item.EventId === 'null' ? undefined : item.EventId,
+						DriveId: item.DriveId === 'null' ? undefined : item.DriveId,
+						hidden: item.hidden,
+						CreatedOn: item.CreatedOn,
+						CreatedBy: item.CreatedBy,
+						ChangedOn: item.ChangedOn,
+						ChangedBy: item.ChangedBy,
+						analysis: item.analysis,
+						status: item.status === ' ' ? undefined : item.status
+					});
+				});
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "batches", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
 		app.get("/todayInquiry", function(req, res) {
 
 			var date1 = new Date();

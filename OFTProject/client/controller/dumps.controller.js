@@ -13,7 +13,7 @@ sap.ui.define([
 ], function(Controller, MessageBox, MessageToast, Formatter, oFilter, oToken, FilterOperator) { //PJHA
 	"use strict";
 
-	return Controller.extend("oft.fiori.controller.newReg", {
+	return Controller.extend("oft.fiori.controller.dumps", {
 		formatter: Formatter,
 
 		fnOnUpLoadFile: function(oEvent) {

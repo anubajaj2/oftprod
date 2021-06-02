@@ -204,6 +204,11 @@
 								"target": ["donald", "mobileView"]
 							},
 							{
+								"pattern": "dumps",
+								"name": "dumps",
+								"target": ["donald", "dumps"]
+							},
+							{
 								"pattern": "newTemplate",
 								"name": "newTemplate",
 								"target": ["donald", "newTemplate"]
@@ -409,6 +414,15 @@
 					"clearAggregation": true,
 					"viewName": "mobileView",
 					"viewId": "idMobileView",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"dumps":{
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "dumps",
+					"viewId": "idDumps",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},

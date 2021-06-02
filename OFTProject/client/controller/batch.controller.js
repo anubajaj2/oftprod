@@ -114,6 +114,34 @@ sap.ui.define([
 				}
 			});
 		},
+		onReplicateOneBatch: function() {
+			var that = this;
+			const courseId = this.getView().byId("idCourseId").getValue();
+			const name = this.getView().byId("batch").getValue();
+			var payload = {
+				Name: name,
+				BatchNo: courseId
+			};
+			if (courseId && name) {
+				MessageBox.confirm("are you sure?", function(val) {
+					if (val === "OK") {
+						that.getView().byId("idReplicateBatches").setEnabled(false);
+						MessageToast.show("Replication started, Please Wait...");
+						$.post('/replicateOneBatchToStudentPortal', payload)
+							.done(function(data, status) {
+								MessageBox.success(JSON.stringify(data));
+								that.getView().byId("idReplicateBatches").setEnabled(true);
+							})
+							.fail(function(xhr, status, error) {
+								that.getView().byId("idReplicateBatches").setEnabled(true);
+								MessageBox.error("Error in access");
+							});
+					}
+				});
+			} else {
+				MessageToast.show("Please select a batch");
+			}
+		},
 		onStartChange: function(oEvent) {
 			var dateString = oEvent.getSource().getValue();
 			var from = dateString.split(".");

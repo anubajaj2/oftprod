@@ -140,6 +140,8 @@
 		<footer>
 			<Toolbar>
 				<ToolbarSpacer/>
+				<Button text="Replicate selected to Student Portal" icon="sap-icon://repost" type="Accept" press="onReplicateOneStudent" id="idReplicateOneStudent"></Button>
+				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateStudents" id="idReplicateStudents"></Button>
 				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear1"></Button>
 				<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport" id="idDownload" text="Download"/>
 				<!-- <Button text="New Customer" icon="sap-icon://add-employee" type="Accept" press="onCustomer" id="idCust1"></Button> -->

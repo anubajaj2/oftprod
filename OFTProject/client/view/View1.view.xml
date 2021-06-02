@@ -26,6 +26,7 @@
 					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="BankAccount" icon="sap-icon://money-bills" title="Accounts" description=""></StandardListItem>
 					<StandardListItem  id="mobileView" icon="sap-icon://iphone" title="Inquiry Search" description=""></StandardListItem>
 					<StandardListItem  id="blacklisted" icon="sap-icon://cancel" title="Blacklisted Users" description=""></StandardListItem>
+					<StandardListItem  id="dumps" icon="sap-icon://e-learning" title="Dumps" description=""></StandardListItem>
 					<StandardListItem  id="newTemplate" icon="sap-icon://activity-items" title="Templates" description=""></StandardListItem>
 					<StandardListItem  id="GSTInvoices" icon="sap-icon://business-one" title="GST Invoices" description=""></StandardListItem>
 					<StandardListItem  id="InquiryLookup" icon="sap-icon://business-objects-experience" title="Inquiry Lookup" description=""></StandardListItem>

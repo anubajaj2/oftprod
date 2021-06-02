@@ -67,6 +67,7 @@
 		<footer>
 			<Toolbar>
 				<ToolbarSpacer/>
+				<Button text="Replicate selected to Student Portal" icon="sap-icon://repost" type="Accept" press="onReplicateOneBatch" id="idReplicateOneBatch"></Button>
 				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateBatches" id="idReplicateBatches"></Button>
 				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear"></Button>
 				<Button text="Save" type="Accept" press="onSave" id="idBatch"></Button>

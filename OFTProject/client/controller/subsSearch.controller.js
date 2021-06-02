@@ -142,6 +142,24 @@ sap.ui.define([
 				});
 			}
 		},
+		onReplicateSubs: function() {
+			var that = this;
+			MessageBox.confirm("are you sure?", function(val) {
+				if (val === "OK") {
+					that.getView().byId("idReplicateSubs").setEnabled(false);
+					$.get('/replicateSubsToStudentPortal')
+						.done(function(data, status) {
+							MessageBox.success(JSON.stringify(data));
+							that.getView().byId("idReplicateSubs").setEnabled(true);
+						})
+						.fail(function(xhr, status, error) {
+							that.getView().byId("idReplicateSubs").setEnabled(true);
+							MessageBox.error("Error in access");
+						});
+					MessageToast.show("Replication started, Please Wait...");
+				}
+			});
+		},
 		onRecent: function(oEvent) {
 			var that = this;
 			var items = that.getView().byId('manageSubsTable').getSelectedContexts();

@@ -298,5 +298,11 @@
 			<!-- </Table>-->
 			<!-- </smartTable:SmartTable>-->
 		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateSubs" id="idReplicateSubs"></Button>
+			</Toolbar>
+		</footer>
 	</Page>
 </mvc:View>

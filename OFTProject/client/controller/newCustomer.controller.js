@@ -55,7 +55,117 @@ sap.ui.define([
 			this.customerGUID = null;
 
 		},
+		onReplicateOneStudent: function() {
+			// this.vEmail = oEvent.getParameters().value;
+			var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if (regEx.test(this.vEmail)) {
+				$.post('/replicateOneStudentToStudentPortal', {
+						mailId: this.vEmail
+					})
+					.done(function(data, status) {
+						MessageToast.show(MessageBox.success(JSON.stringify(data)));
+						that.getView().byId("idReplicateOneStudent").setEnabled(true);
+					})
+					.fail(function(xhr, status, error) {
+						MessageBox.error("Error in access");
+						that.getView().byId("idReplicateOneStudent").setEnabled(true);
+					});
+				// var that = this;
+				// // that.getView().setBusy(true);
+				//
+				// var payload = {};
+				//
+				// var Filter1 = new sap.ui.model.Filter("GmailId", "EQ", that.vEmail);
+				// var Filter2 = new sap.ui.model.Filter("OtherEmail1", "EQ", that.vEmail);
+				// var Filter3 = new sap.ui.model.Filter("OtherEmail2", "EQ", that.vEmail);
+				//
+				//
+				// var oFilter = new sap.ui.model.Filter({
+				// 	filters: [Filter1, Filter2, Filter3],
+				// 	and: false
+				// });
+				//
+				// // debugger;
+				// this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Students", "GET", {
+				// 		// filters: [Filter1]
+				// 		filters: [oFilter]
+				// 	}, payload, this)
+				// 	.then(function(oData) {
+				// 		// if (oData.results.length != 0) {
+				// 		// 	var item = oData.results[0];
+				// 		// 	var payload = {
+				// 		// 		"name": item.Name,
+				// 		// 		"email": item.GmailId,
+				// 		// 		"companyMail": item.CompanyMail === "null" ? undefined : item.CompanyMail,
+				// 		// 		"otherEmail1": item.OtherEmail1 === "null" ? undefined : item.OtherEmail1,
+				// 		// 		"otherEmail2": item.OtherEmail2 === "null" ? undefined : item.OtherEmail2,
+				// 		// 		// "gender": null,
+				// 		// 		"contactNo": item.ContactNo === "null" ? undefined : item.ContactNo.toString(),
+				// 		// 		// "officecontactNo": null,
+				// 		// 		// "experience": null,
+				// 		// 		"address": item.Address === "null" ? undefined : item.Address,
+				// 		// 		"city": item.City === "null" ? undefined : item.City,
+				// 		// 		// "state": null,
+				// 		// 		"country": item.Country === "null" ? undefined : item.Country,
+				// 		// 		"designation": item.Designation === "null" ? undefined : item.Designation,
+				// 		// 		"star": item.Star === "null" ? undefined : item.Star,
+				// 		// 		// "draft": null,
+				// 		// 		// "draftRejection": null,
+				// 		// 		// "draftRejectionReason": null,
+				// 		// 		"defaulter": item.Defaulter,
+				// 		// 		"highServerUsage": item.HighServerUsage,
+				// 		// 		"Skills": item.Skills === "null" ? undefined : item.Skills,
+				// 		// 		"Resume": item.Resume === "null" ? undefined : item.Resume,
+				// 		// 		// "Photo": null,
+				// 		// 		"extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+				// 		// 		"extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+				// 		// 		"GSTIN": item.GSTIN === "null" ? undefined : item.GSTIN,
+				// 		// 		"company": item.Company === "null" ? undefined : item.Company,
+				// 		// 		"GSTCharge": item.GSTCharge === "null" ? undefined : item.GSTCharge,
+				// 		// 		"CreatedOn": item.CreatedOn,
+				// 		// 		"ChangedOn": item.ChangedOn,
+				// 		// 		"CreatedBy": item.CreatedBy,
+				// 		// 		"ChangedBy": item.ChangedBy,
+				// 		// 		// "userId": null,
+				// 		// 	};
+				// 		// 	$.post('/replicateOneStudentToStudentPortal', JSON.parse(JSON.stringify(payload)))
+				// 		// 		.done(function(data, status) {
+				// 		// 			MessageToast.show(data);
+				// 		// 		})
+				// 		// 		.fail(function(xhr, status, error) {
+				// 		// 			MessageBox.error();
+				// 		// 		});
+				// 		// } else {
+				// 		//
+				// 		// }
+				// 	}).catch(function(oError) {
+				//
+				// 		var oPopover = that.getErrorMessage(oError);
+				// 	});
 
+			} else {
+				sap.m.MessageToast.show("Invalid email id");
+				return "";
+			}
+		},
+		onReplicateStudents: function() {
+			var that = this;
+			MessageBox.confirm("are you sure?", function(val) {
+				if (val === "OK") {
+					that.getView().byId("idReplicateStudents").setEnabled(false);
+					MessageToast.show("Replication started, Please Wait...");
+					$.get('/replicateStudentsToStudentPortal')
+						.done(function(data, status) {
+							MessageBox.success(JSON.stringify(data));
+							that.getView().byId("idReplicateStudents").setEnabled(true);
+						})
+						.fail(function(xhr, status, error) {
+							that.getView().byId("idReplicateStudents").setEnabled(true);
+							MessageBox.error("Error in access");
+						});
+				}
+			});
+		},
 		onSelect: function(oEvent) {
 			this.sId = oEvent.getSource().getId();
 
@@ -773,16 +883,10 @@ sap.ui.define([
 
 		},
 		onEnter: function(oEvent) {
-			debugger;
-
-			// var oItem = oEvent.getParameter("selectedItem");
-			// var oContext = oItem.getBindingContext();
-			//var oModel = this.getView().getModel().oData[oContext.sPath];
 			oEvent.getSource().setValue(oEvent.getParameter("value").replace(/\s/gm, "").toLowerCase());
 			this.getView().byId("idDelete").setEnabled(false);
 			this.vEmail = oEvent.getParameters().value;
 			var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 			if (regEx.test(this.vEmail)) {
 				var that = this;
 				// that.getView().setBusy(true);
