@@ -1,0 +1,20 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+	<Dialog contentWidth="400px" resizable="true">
+		<Label text="Dump Code"/>
+		<Input />
+		<Label text="Dump Name"/>
+		<Input />
+		<Label text="Fees"/>
+		<Input />
+		<Label text="Currency"/>
+		<Input />
+		<Label text="Link"/>
+		<Input />
+		<beginButton>
+			<Button text="Create" press="onSaveDump"/>
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onCloseDump"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

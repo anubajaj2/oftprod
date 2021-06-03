@@ -9,12 +9,12 @@
   "properties": {
     "DumpCode": {
       "type": "string",
-      "default": "null",
+      "default": null,
       "required": true
     },
     "DumpName": {
       "type": "string",
-      "default": "null",
+      "default": null,
       "required": true
     },
     "fees": {
@@ -27,7 +27,7 @@
     },
     "Link":{
       "type": "string",
-      "default": "null"
+      "default": null
     }
   },
   "validations": [],

@@ -33,6 +33,23 @@
 		"ExtraN2": null,
 		"ExtraN3": null
 	},
+	"dumpSold": {
+		"EmailId": null,
+		"DumpCode": null,
+		"FirstName": null,
+		"LastName": null,
+		"Date": null,
+		"Country": null,
+		"Phone": 0,
+		"CreatedOn": null,
+		"CreatedBy": null,
+		"ChangedOn": null,
+		"ChangedBy": null,
+		"fees": null,
+		"currency": null,
+		"account": null,
+		"source": null
+	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",
 			"fee": "20 k",
