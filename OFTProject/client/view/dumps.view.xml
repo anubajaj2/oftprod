@@ -30,9 +30,13 @@
 								<DatePicker id="idDate" displayFormat="dd.MM.yyyy" required="true" value="{local>/dumpSold/Date}" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker>
 								<Label text="Customer Id"/>
 								<Input id="customerId" required="true" value="{local>/dumpSold/EmailId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true"/>
+								<Label text="Firt Name"/>
+								<Input value="{local>/dumpSold/FirstName}"/>
+								<!-- <Label text="Last Name"/> -->
+								<Input value="{local>/dumpSold/LastName}"/>
 								<Label text="Dump Code"/>
 								<Select forceSelection="false" selectedKey="{local>/dumpSold/DumpCode}" items="{path: '/Dumps', sorter: { path: 'DumpName' }}">
-									<core:Item key="{DumpCode}" text="{DumpName}"/>
+									<core:Item key="{DumpCode}" text="{DumpName}-{DumpCode}"/>
 								</Select>
 								<Button text="Create" press="onCreateDump"/>
 								<Label text="Country"/>
@@ -40,11 +44,13 @@
 								<Label text="Phone"/>
 								<Input id="idPhone" type="Number" value="{local>/dumpSold/Phone}"></Input>
 								<Label text="Fees"/>
-								<Input value="{local>/dumpSold/Fees}"></Input>
+								<Input value="{local>/dumpSold/fees}"></Input>
 								<Label text="Currency"/>
-								<Input value="{local>/dumpSold/Currency}"></Input>
+								<Input value="{local>/dumpSold/currency}"></Input>
 								<Label text="Account"/>
-								<Input id="accountDetails" required="false" value="{local>/dumpSold/Account}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+								<Input id="accountDetails" required="false" value="{local>/dumpSold/account}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+								<Label text="Source"/>
+								<Input value="{local>/dumpSold/source}"></Input>
 							</f:content>
 						</f:SimpleForm>
 					</FlexBox>
@@ -55,6 +61,7 @@
 					<Toolbar>
 						<Title id="titletext11"/>
 						<ToolbarSpacer></ToolbarSpacer>
+						<Button text="Delete" type="Reject" press="onDeleteDumpSold"/>
 					</Toolbar>
 				</headerToolbar>
 				<columns>
@@ -94,7 +101,7 @@
 		<footer>
 			<Toolbar>
 				<ToolbarSpacer/>
-				<Button icon="sap-icon://save" text="Save"/>
+				<Button icon="sap-icon://save" text="Save" press="onSaveDumpSold"/>
 				<Button icon="sap-icon://sys-cancel" type="Neutral" text="Clear" press="onClearScreen"/>
 			</Toolbar>
 		</footer>

@@ -77,6 +77,7 @@ app.start = function() {
 				portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						"Name": item.Name,
 						"Email": item.GmailId,
 						"CompanyMail": item.CompanyMail === "null" ? undefined : item.CompanyMail,
@@ -152,6 +153,7 @@ app.start = function() {
 				var portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						Name: item.Name,
 						BatchNo: item.BatchNo,
 						DemoStartDate: item.DemoStartDate,
@@ -216,6 +218,7 @@ app.start = function() {
 				portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						"StudentId": item.StudentId,
 						"CourseId": item.CourseId,
 						"PaymentDate": item.PaymentDate,
@@ -312,6 +315,7 @@ app.start = function() {
 				portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						"Name": item.Name,
 						"Email": item.GmailId,
 						"CompanyMail": item.CompanyMail === "null" ? undefined : item.CompanyMail,
@@ -378,6 +382,7 @@ app.start = function() {
 				var portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						Name: item.Name,
 						BatchNo: item.BatchNo,
 						DemoStartDate: item.DemoStartDate,
@@ -453,6 +458,7 @@ app.start = function() {
 				portalRecords = [];
 				results.forEach(function(item) {
 					portalRecords.push({
+						"ats_id": item.id,
 						Name: item.Name,
 						BatchNo: item.BatchNo,
 						DemoStartDate: item.DemoStartDate,
@@ -485,6 +491,91 @@ app.start = function() {
 					if (items.length > index) {
 						try {
 							await studentPortalAPI.studentPortal("POST", "batches", items[index]);
+							response.newRecordsAdded += 1;
+						} catch (err) {
+							if (response.error[err.responseJSON.error.message]) {
+								response.error[err.responseJSON.error.message] += 1;
+							} else {
+								response.error[err.responseJSON.error.message] = 1;
+							}
+						}
+						postRecord(items, ++index);
+					} else {
+						res.send(response);
+					}
+				}
+				postRecord(portalRecords);
+			}).catch(function(oError) {
+				res.send(oError.responseJSON.error.message);
+			});
+		});
+		app.post("/replicateOneSubToStudentPortal", function(req, res) {
+			const id = req.body.id;
+			var Subs = app.models.Sub;
+			Subs.findById(id).then(function(result) {
+				results = [result];
+				portalRecords = [];
+				results.forEach(function(item) {
+					portalRecords.push({
+						"ats_id": item.id,
+						"StudentId": item.StudentId,
+						"CourseId": item.CourseId,
+						"PaymentDate": item.PaymentDate,
+						"Mode": item.Mode === "null" ? undefined : item.Mode,
+						"StartDate": item.StartDate,
+						"EndDate": item.EndDate,
+						"PaymentMode": item.PaymentMode === "null" ? undefined : item.PaymentMode,
+						"BankName": item.BankName === "null" ? undefined : item.BankName,
+						// "AccountName": item.AccountName === "null" ? undefined : item.AccountName,
+						"Amount": item.Amount,
+						"Reference": item.Reference === "null" ? undefined : item.Reference,
+						"Remarks": item.Remarks === "null" ? undefined : item.Remarks,
+						"PendingAmount": item.PendingAmount,
+						"Waiver": item.Waiver,
+						"DropOut": item.DropOut,
+						"PaymentScreenshot": item.PaymentScreenshot === "null" ? undefined : item.PaymentScreenshot,
+						"PartialPayment": item.PartialPayment,
+						"Extended": item.Extended,
+						"PaymentDueDate": item.PaymentDueDate,
+						"InvoiceNo": item.InvoiceNo === "null" ? undefined : item.InvoiceNo,
+						"USDAmount": item.USDAmount,
+						"CurrencyCode": item.CurrencyCode === "null" ? undefined : item.CurrencyCode,
+						"Exchange": item.Exchange,
+						"Charges": item.Charges,
+						"SettleDate": item.SettleDate,
+						"SettleAmount": item.SettleAmount,
+						"ValidationDone": item.ValidationDone,
+						"Extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+						"Extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+						"ExtraN1": item.ExtraN1,
+						"ExtraN2": item.ExtraN2,
+						"ExtraN3": item.ExtraN3,
+						"UpdatePayment": item.UpdatePayment,
+						"MostRecent": item.MostRecent,
+						"CreatedOn": item.CreatedOn,
+						"CreatedBy": item.CreatedBy === "null" ? undefined : item.CreatedBy,
+						"ChangedOn": item.ChangedOn === "null" ? undefined : item.ChangedOn,
+						"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
+						"Status": item.Status === "null" ? undefined : item.Status,
+						"ChartedValid": item.ChartedValid
+					});
+				});
+
+				// portalRecords.forEach(async function(item) {
+				// 	try {
+				// 		await studentPortalAPI.studentPortal("POST", "students", item);
+				// 	} catch (err) {
+				// 		console.log(err.responseJSON.error.message);
+				// 	}
+				// });
+				var response = {
+					newRecordsAdded: 0,
+					error: {}
+				};
+				async function postRecord(items, index = 0) {
+					if (items.length > index) {
+						try {
+							await studentPortalAPI.studentPortal("POST", "subscriptions", items[index]);
 							response.newRecordsAdded += 1;
 						} catch (err) {
 							if (response.error[err.responseJSON.error.message]) {

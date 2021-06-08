@@ -171,6 +171,51 @@ sap.ui.define([
 		},
 		siteLink: "",
 		eMailId: "",
+		onSaveDump: function() {
+			var that = this;
+			var payload = this.getView().getModel("local").getProperty("/dump");
+			var keys = Object.keys(payload);
+			for (var i = 0; i < keys.length; i++) {
+				if (payload[keys[i]] === null) {
+					return;
+				}
+			}
+			that.getView().setBusy(true);
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Dumps", "POST", {},
+					payload, this)
+				.then(function(oData) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("dump Saved successfully");
+					this.createDumpPopup.close();
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("dump Saving failed " + oError.responseText);
+				});
+		},
+		onSaveDumpSold: function() {
+			// debugger;
+			var that = this;
+			var payload = this.getView().getModel("local").getProperty("/dumpSold");
+			// var keys = Object.keys(payload);
+			// for (var i = 0; i < keys.length; i++) {
+			// 	if (payload[keys[i]] === null) {
+			// 		return;
+			// 	}
+			// }
+			that.getView().setBusy(true);
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/DumpSolds", "POST", {},
+					payload, this)
+				.then(function(oData) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("dump Saved successfully");
+					if (that.getView().byId("idRecent").getBinding("items")) {
+						that.getView().byId("idRecent").getBinding("items").refresh();
+					}
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					sap.m.MessageToast.show("dump sold Saving failed " + oError.responseText);
+				});
+		},
 		// onGiveAccess2: function(oEvent) {
 		// 	var that = this;
 		// 	var items = that.getView().byId('idRecent').getSelectedContexts();
@@ -353,7 +398,7 @@ sap.ui.define([
 		// 	this.oSuppPopup.open();
 		// },
 
-		onDelete: function(oEvent) {
+		onDeleteDumpSold: function(oEvent) {
 			var that = this;
 			MessageBox.confirm("Do you want to delete the selected records?", function(conf) {
 				if (conf == 'OK') {
@@ -1127,7 +1172,7 @@ sap.ui.define([
 			if (this.sId.indexOf("accountDetails") !== -1) {
 
 				var bankName = oEvent.getParameter("selectedItem").getValue();
-				this.getView().getModel("local").setProperty("/newRegistration/AccountName", bankName);
+				this.getView().getModel("local").setProperty("/dumpSold/account", bankName);
 			} else if (this.sId.indexOf("customerId") !== -1) {
 
 				var data = this.getSelectedKey(oEvent);
@@ -2129,7 +2174,7 @@ sap.ui.define([
 			}
 			this.createDumpPopup.open();
 		},
-		onCloseDump: function(){
+		onCloseDump: function() {
 			this.createDumpPopup.close();
 		},
 		onSave: function() {
