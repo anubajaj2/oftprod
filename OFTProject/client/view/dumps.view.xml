@@ -30,12 +30,12 @@
 								<DatePicker id="idDate" displayFormat="dd.MM.yyyy" required="true" value="{local>/dumpSold/Date}" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker>
 								<Label text="Customer Id"/>
 								<Input id="customerId" required="true" value="{local>/dumpSold/EmailId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true"/>
-								<Label text="Firt Name"/>
+								<Label text="First Name"/>
 								<Input value="{local>/dumpSold/FirstName}"/>
 								<!-- <Label text="Last Name"/> -->
 								<Input value="{local>/dumpSold/LastName}"/>
 								<Label text="Dump Code"/>
-								<Select forceSelection="false" selectedKey="{local>/dumpSold/DumpCode}" items="{path: '/Dumps', sorter: { path: 'DumpName' }}">
+								<Select forceSelection="false" selectedKey="{local>/dumpSold/DumpCode}" items="{path: '/Dumps', sorter: { path: 'DumpName' }}" change="onDumpChange">
 									<core:Item key="{DumpCode}" text="{DumpName}-{DumpCode}"/>
 								</Select>
 								<Button text="Create" press="onCreateDump"/>
@@ -61,7 +61,8 @@
 					<Toolbar>
 						<Title id="titletext11"/>
 						<ToolbarSpacer></ToolbarSpacer>
-						<Button text="Delete" type="Reject" press="onDeleteDumpSold"/>
+						<Button text="Mail" icon="sap-icon://email" type="Reject" press="onEmailDumpSold"/>
+						<Button text="Delete" icon="sap-icon://delete" type="Reject" press="onDeleteDumpSold"/>
 					</Toolbar>
 				</headerToolbar>
 				<columns>

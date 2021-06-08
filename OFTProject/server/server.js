@@ -219,8 +219,8 @@ app.start = function() {
 				results.forEach(function(item) {
 					portalRecords.push({
 						"ats_id": item.id,
-						"StudentId": item.StudentId,
-						"CourseId": item.CourseId,
+						"studentId": item.StudentId,
+						"batchId": item.CourseId,
 						"PaymentDate": item.PaymentDate,
 						"Mode": item.Mode === "null" ? undefined : item.Mode,
 						"StartDate": item.StartDate,
@@ -233,15 +233,15 @@ app.start = function() {
 						"Remarks": item.Remarks === "null" ? undefined : item.Remarks,
 						"PendingAmount": item.PendingAmount,
 						"Waiver": item.Waiver,
-						"DropOut": item.DropOut,
+						// "DropOut": item.DropOut,
 						"PaymentScreenshot": item.PaymentScreenshot === "null" ? undefined : item.PaymentScreenshot,
 						"PartialPayment": item.PartialPayment,
-						"Extended": item.Extended,
+						// "Extended": item.Extended,
 						"PaymentDueDate": item.PaymentDueDate,
 						"InvoiceNo": item.InvoiceNo === "null" ? undefined : item.InvoiceNo,
 						"USDAmount": item.USDAmount,
 						"CurrencyCode": item.CurrencyCode === "null" ? undefined : item.CurrencyCode,
-						"Exchange": item.Exchange,
+						// "Exchange": item.Exchange,
 						"Charges": item.Charges,
 						"SettleDate": item.SettleDate,
 						"SettleAmount": item.SettleAmount,
@@ -250,7 +250,7 @@ app.start = function() {
 						"Extra2": item.Extra2 === "null" ? undefined : item.Extra2,
 						"ExtraN1": item.ExtraN1,
 						"ExtraN2": item.ExtraN2,
-						"ExtraN3": item.ExtraN3,
+						// "ExtraN3": item.ExtraN3,
 						"UpdatePayment": item.UpdatePayment,
 						"MostRecent": item.MostRecent,
 						"CreatedOn": item.CreatedOn,
@@ -258,7 +258,8 @@ app.start = function() {
 						"ChangedOn": item.ChangedOn === "null" ? undefined : item.ChangedOn,
 						"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
 						"Status": item.Status === "null" ? undefined : item.Status,
-						"ChartedValid": item.ChartedValid
+						"ChartedValid": item.ChartedValid,
+						"ValidPeriod":3
 					});
 				});
 
@@ -513,61 +514,53 @@ app.start = function() {
 			const id = req.body.id;
 			var Subs = app.models.Sub;
 			Subs.findById(id).then(function(result) {
-				results = [result];
+				item = result;
 				portalRecords = [];
-				results.forEach(function(item) {
-					portalRecords.push({
-						"ats_id": item.id,
-						"StudentId": item.StudentId,
-						"CourseId": item.CourseId,
-						"PaymentDate": item.PaymentDate,
-						"Mode": item.Mode === "null" ? undefined : item.Mode,
-						"StartDate": item.StartDate,
-						"EndDate": item.EndDate,
-						"PaymentMode": item.PaymentMode === "null" ? undefined : item.PaymentMode,
-						"BankName": item.BankName === "null" ? undefined : item.BankName,
-						// "AccountName": item.AccountName === "null" ? undefined : item.AccountName,
-						"Amount": item.Amount,
-						"Reference": item.Reference === "null" ? undefined : item.Reference,
-						"Remarks": item.Remarks === "null" ? undefined : item.Remarks,
-						"PendingAmount": item.PendingAmount,
-						"Waiver": item.Waiver,
-						"DropOut": item.DropOut,
-						"PaymentScreenshot": item.PaymentScreenshot === "null" ? undefined : item.PaymentScreenshot,
-						"PartialPayment": item.PartialPayment,
-						"Extended": item.Extended,
-						"PaymentDueDate": item.PaymentDueDate,
-						"InvoiceNo": item.InvoiceNo === "null" ? undefined : item.InvoiceNo,
-						"USDAmount": item.USDAmount,
-						"CurrencyCode": item.CurrencyCode === "null" ? undefined : item.CurrencyCode,
-						"Exchange": item.Exchange,
-						"Charges": item.Charges,
-						"SettleDate": item.SettleDate,
-						"SettleAmount": item.SettleAmount,
-						"ValidationDone": item.ValidationDone,
-						"Extra1": item.Extra1 === "null" ? undefined : item.Extra1,
-						"Extra2": item.Extra2 === "null" ? undefined : item.Extra2,
-						"ExtraN1": item.ExtraN1,
-						"ExtraN2": item.ExtraN2,
-						"ExtraN3": item.ExtraN3,
-						"UpdatePayment": item.UpdatePayment,
-						"MostRecent": item.MostRecent,
-						"CreatedOn": item.CreatedOn,
-						"CreatedBy": item.CreatedBy === "null" ? undefined : item.CreatedBy,
-						"ChangedOn": item.ChangedOn === "null" ? undefined : item.ChangedOn,
-						"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
-						"Status": item.Status === "null" ? undefined : item.Status,
-						"ChartedValid": item.ChartedValid
-					});
+				portalRecords.push({
+					"ats_id": item.id,
+					"studentId": item.StudentId,
+					"batchId": item.CourseId,
+					"PaymentDate": item.PaymentDate,
+					"Mode": item.Mode === "null" ? undefined : item.Mode,
+					"StartDate": item.StartDate,
+					"EndDate": item.EndDate,
+					"PaymentMode": item.PaymentMode === "null" ? undefined : item.PaymentMode,
+					"BankName": item.BankName === "null" ? undefined : item.BankName,
+					// "AccountName": item.AccountName === "null" ? undefined : item.AccountName,
+					"Amount": item.Amount,
+					"Reference": item.Reference === "null" ? undefined : item.Reference,
+					"Remarks": item.Remarks === "null" ? undefined : item.Remarks,
+					"PendingAmount": item.PendingAmount,
+					"Waiver": item.Waiver,
+					// "DropOut": item.DropOut,
+					"PaymentScreenshot": item.PaymentScreenshot === "null" ? undefined : item.PaymentScreenshot,
+					"PartialPayment": item.PartialPayment,
+					// "Extended": item.Extended,
+					"PaymentDueDate": item.PaymentDueDate,
+					"InvoiceNo": item.InvoiceNo === "null" ? undefined : item.InvoiceNo,
+					"USDAmount": item.USDAmount,
+					"CurrencyCode": item.CurrencyCode === "null" ? undefined : item.CurrencyCode,
+					// "Exchange": item.Exchange,
+					"Charges": item.Charges,
+					"SettleDate": item.SettleDate,
+					"SettleAmount": item.SettleAmount,
+					"ValidationDone": item.ValidationDone,
+					"Extra1": item.Extra1 === "null" ? undefined : item.Extra1,
+					"Extra2": item.Extra2 === "null" ? undefined : item.Extra2,
+					"ExtraN1": item.ExtraN1,
+					"ExtraN2": item.ExtraN2,
+					// "ExtraN3": item.ExtraN3,
+					"UpdatePayment": item.UpdatePayment,
+					"MostRecent": item.MostRecent,
+					"CreatedOn": item.CreatedOn,
+					"CreatedBy": item.CreatedBy === "null" ? undefined : item.CreatedBy,
+					"ChangedOn": item.ChangedOn === "null" ? undefined : item.ChangedOn,
+					"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
+					"Status": item.Status === "null" ? undefined : item.Status,
+					"ChartedValid": item.ChartedValid,
+					"ValidPeriod":3
 				});
 
-				// portalRecords.forEach(async function(item) {
-				// 	try {
-				// 		await studentPortalAPI.studentPortal("POST", "students", item);
-				// 	} catch (err) {
-				// 		console.log(err.responseJSON.error.message);
-				// 	}
-				// });
 				var response = {
 					newRecordsAdded: 0,
 					error: {}

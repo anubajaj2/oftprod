@@ -165,16 +165,17 @@ sap.ui.define([
 			var items = that.getView().byId('manageSubsTable').getSelectedContexts();
 			that.totalCount = that.totalCount - items.length;
 			for (var i = 0; i < items["length"]; i++) {
+				that.getView().byId("idReplicateOneSub").setEnabled(false);
 				$.post('/replicateOneSubToStudentPortal', {
 						id: items[i].getPath().split("'")[1]
 					})
 					.done(function(data, status) {
 						MessageToast.show(MessageBox.success(JSON.stringify(data)));
-						that.getView().byId("idReplicateOneStudent").setEnabled(true);
+						that.getView().byId("idReplicateOneSub").setEnabled(true);
 					})
 					.fail(function(xhr, status, error) {
 						MessageBox.error("Error in access");
-						that.getView().byId("idReplicateOneStudent").setEnabled(true);
+						that.getView().byId("idReplicateOneSub").setEnabled(true);
 					});
 			}
 		},

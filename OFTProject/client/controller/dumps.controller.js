@@ -216,6 +216,12 @@ sap.ui.define([
 					sap.m.MessageToast.show("dump sold Saving failed " + oError.responseText);
 				});
 		},
+		onDumpChange: function(oEvent) {
+			var dump = oEvent.getParameter("selectedItem").getBindingContext().getObject();
+			this.getView().getModel("local").setProperty("/dumpSold/fees", dump.fees);
+			this.getView().getModel("local").setProperty("/dumpSold/currency", dump.currency);
+			this.getView().getModel("local").setProperty("/dumpSold/source", dump.Link);
+		},
 		// onGiveAccess2: function(oEvent) {
 		// 	var that = this;
 		// 	var items = that.getView().byId('idRecent').getSelectedContexts();
@@ -1176,9 +1182,15 @@ sap.ui.define([
 			} else if (this.sId.indexOf("customerId") !== -1) {
 
 				var data = this.getSelectedKey(oEvent);
-				this.getView().byId("customerId").setValue(data[0]);
+				// this.getView().byId("customerId").setValue(data[0]);
 				this.isDefaulter = data[1].endsWith("(Defaulter)");
 				this.customerId = data[2];
+				var student = oEvent.getParameter("selectedItem").getBindingContext().getObject();
+				this.getView().getModel("local").setProperty("/dumpSold/EmailId", student.GmailId);
+				this.getView().getModel("local").setProperty("/dumpSold/FirstName", (student.Name).split(' ')[0]);
+				this.getView().getModel("local").setProperty("/dumpSold/LastName", student.Name.split(' ').length > 0 ? student.Name.split(' ')[1] : null);
+				this.getView().getModel("local").setProperty("/dumpSold/Country", student.Country);
+				this.getView().getModel("local").setProperty("/dumpSold/Phone", student.ContactNo);
 			} else if (this.sId.indexOf("courseId") !== -1) {
 
 				// var data = this.getSelectedKey(oEvent);
