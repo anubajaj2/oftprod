@@ -835,7 +835,8 @@ app.start = function() {
 			var typeMsg = req.body.msgType;
 			switch (typeMsg) {
 				case "inquiry":
-					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details to your email id, please write to us on contact@anubhavtrainings.com";
+					//msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details to your email id, please write to us on contact@anubhavtrainings.com";
+					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details of #COURSE# to your email id.";
 					msg = msg.replace("#COURSE#", req.body.courseName);
 					break;
 				case "courseapprove":
