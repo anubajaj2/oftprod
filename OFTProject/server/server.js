@@ -2999,7 +2999,7 @@ app.start = function() {
 				var Template = app.models.Template;
 
 				var CourseName = req.body.CourseName;
-				if (req.body.source === "L" || req.body.source === "F") {
+				if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 					CourseName = "Linkedin";
 				}
 				Template.findOne({
@@ -3054,7 +3054,7 @@ app.start = function() {
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 
 					if (req.body.fees !== "null" && req.body.fees !== "") {
-						if (req.body.source === "L" || req.body.source === "F") {
+						if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
@@ -3250,7 +3250,7 @@ app.start = function() {
 				var Template = app.models.Template;
 
 				var CourseName = req.body.CourseName;
-				if (req.body.source === "L" || req.body.source === "F") {
+				if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 					CourseName = "Linkedin";
 				}
 				Template.findOne({
@@ -3305,7 +3305,7 @@ app.start = function() {
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 
 					if (req.body.fees !== "null" && req.body.fees !== "") {
-						if (req.body.source === "L" || req.body.source === "F") {
+						if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");

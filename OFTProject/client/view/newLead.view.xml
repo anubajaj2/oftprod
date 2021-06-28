@@ -62,6 +62,7 @@
 									<core:Item text="Privy" key="P"/>
 									<core:Item text="Whatsapp" key="W"/>
 									<core:Item text="Reference" key="R"/>
+									<core:Item text="Naukri" key="N"/>
 									<core:Item text="Other" key="O"/>
 								</items>
 							</Select>
