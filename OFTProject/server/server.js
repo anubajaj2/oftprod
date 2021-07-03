@@ -2487,9 +2487,25 @@ app.start = function() {
 						allAc = allAc.sort(function(a, b) {
 							return a.counterall > b.counterall;
 						});
-						allAc = allAc.sort(function(a, b) {
-							return a.counterall > b.counterall;
-						});
+						// allAc = allAc.sort(function(a, b) {
+						// 	return a.counterall > b.counterall;
+						// });
+						const sort_by = (field, reverse, primer) => {
+																											  const key = primer ?
+																											    function(x) {
+																											      return primer(x[field])
+																											    } :
+																											    function(x) {
+																											      return x[field]
+																											    };
+
+																											  reverse = !reverse ? 1 : -1;
+
+																											  return function(a, b) {
+																											    return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+																											  }
+																											};
+						allAc = allAc.sort(sort_by('counterall', false, parseInt))
 						var item = allAc[0];
 						var app = require('../server/server');
 						var Account = app.models.Account;
