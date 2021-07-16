@@ -627,6 +627,7 @@ app.start = function() {
 					// 5ecc968586321064989cdc3f --> kajol
 					// 5f1331f2e0b8524af830fa20 --> shalini
 					// 5f4d01c50815a314ec9238d2 --> khushbu
+					// 60f0f06da1cf875cb8045975	 --> anjali
 					var lv_manish = 0,
 						lv_khushbu = 0,
 						lv_shalu = 0,
@@ -648,15 +649,18 @@ app.start = function() {
 							case "5c187036dba2681834ffe305":
 								lv_sonal = lv_sonal + 1;
 								break;
-							case "5f1331f2e0b8524af830fa20":
-								lv_manish = lv_manish + 1;
-								break;
+							// case "5f1331f2e0b8524af830fa20":
+							// 	lv_manish = lv_manish + 1;
+							// 	break;
 							case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;
 							case "5f4d01c50815a314ec9238d2":
 								lv_khushbu = lv_khushbu + 1;
 								break;
+							case "60f0f06da1cf875cb8045975":
+									lv_anjali = lv_anjali + 1;
+									break;
 							default:
 
 						}
@@ -688,6 +692,10 @@ app.start = function() {
 						{
 							"name": "khushbu",
 							count: lv_khushbu
+						},
+						{
+							"name": "anjali",
+							count: lv_anjali
 						}
 					];
 					res.send(coll);
