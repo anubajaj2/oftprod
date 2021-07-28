@@ -627,6 +627,7 @@ app.start = function() {
 					// 5ecc968586321064989cdc3f --> kajol
 					// 5f1331f2e0b8524af830fa20 --> shalini
 					// 5f4d01c50815a314ec9238d2 --> khushbu
+					// 60f0f06da1cf875cb8045975	 --> anjali
 					var lv_manish = 0,
 						lv_khushbu = 0,
 						lv_shalu = 0,
@@ -648,15 +649,18 @@ app.start = function() {
 							case "5c187036dba2681834ffe305":
 								lv_sonal = lv_sonal + 1;
 								break;
-							case "5f1331f2e0b8524af830fa20":
-								lv_manish = lv_manish + 1;
-								break;
+							// case "5f1331f2e0b8524af830fa20":
+							// 	lv_manish = lv_manish + 1;
+							// 	break;
 							case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;
 							case "5f4d01c50815a314ec9238d2":
 								lv_khushbu = lv_khushbu + 1;
 								break;
+							case "60f0f06da1cf875cb8045975":
+									lv_anjali = lv_anjali + 1;
+									break;
 							default:
 
 						}
@@ -688,6 +692,10 @@ app.start = function() {
 						{
 							"name": "khushbu",
 							count: lv_khushbu
+						},
+						{
+							"name": "anjali",
+							count: lv_anjali
 						}
 					];
 					res.send(coll);
@@ -838,8 +846,9 @@ app.start = function() {
 			var typeMsg = req.body.msgType;
 			switch (typeMsg) {
 				case "inquiry":
-					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details to your email id, please write to us on contact@anubhavtrainings.com";
-					msg = msg.replace("#COURSE#", req.body.courseName);
+					//msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details to your email id, please write to us on contact@anubhavtrainings.com";
+					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details of #COURSE# to your email id, please write to us on contact@anubhavtrainings.com";
+					msg = msg.replace("#COURSE#", req.body.userName.substring(0, 15));
 					break;
 				case "courseapprove":
 					msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on contact@anubhavtrainings.com for more queries';;
@@ -852,7 +861,7 @@ app.start = function() {
 					return;
 
 			}
-			msg = msg.replace("#FirstName#", req.body.userName);
+			msg = msg.replace("#FirstName#", req.body.userName.substring(0, 15));
 			var http = require('http');
 			var urlencode = require('urlencode');
 			msg = urlencode(msg);
@@ -2489,9 +2498,25 @@ app.start = function() {
 						allAc = allAc.sort(function(a, b) {
 							return a.counterall > b.counterall;
 						});
-						allAc = allAc.sort(function(a, b) {
-							return a.counterall > b.counterall;
-						});
+						// allAc = allAc.sort(function(a, b) {
+						// 	return a.counterall > b.counterall;
+						// });
+						const sort_by = (field, reverse, primer) => {
+																											  const key = primer ?
+																											    function(x) {
+																											      return primer(x[field])
+																											    } :
+																											    function(x) {
+																											      return x[field]
+																											    };
+
+																											  reverse = !reverse ? 1 : -1;
+
+																											  return function(a, b) {
+																											    return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+																											  }
+																											};
+						allAc = allAc.sort(sort_by('counterall', false, parseInt))
 						var item = allAc[0];
 						var app = require('../server/server');
 						var Account = app.models.Account;
@@ -3001,7 +3026,7 @@ app.start = function() {
 				var Template = app.models.Template;
 
 				var CourseName = req.body.CourseName;
-				if (req.body.source === "L" || req.body.source === "F") {
+				if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 					CourseName = "Linkedin";
 				}
 				Template.findOne({
@@ -3056,7 +3081,7 @@ app.start = function() {
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 
 					if (req.body.fees !== "null" && req.body.fees !== "") {
-						if (req.body.source === "L" || req.body.source === "F") {
+						if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
@@ -3252,7 +3277,7 @@ app.start = function() {
 				var Template = app.models.Template;
 
 				var CourseName = req.body.CourseName;
-				if (req.body.source === "L" || req.body.source === "F") {
+				if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 					CourseName = "Linkedin";
 				}
 				Template.findOne({
@@ -3307,7 +3332,7 @@ app.start = function() {
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 
 					if (req.body.fees !== "null" && req.body.fees !== "") {
-						if (req.body.source === "L" || req.body.source === "F") {
+						if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");

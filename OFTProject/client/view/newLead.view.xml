@@ -10,7 +10,7 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="New Lead (Version 1.0.29)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+	<Page title="New Lead (Version 1.0.31)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
@@ -62,6 +62,7 @@
 									<core:Item text="Privy" key="P"/>
 									<core:Item text="Whatsapp" key="W"/>
 									<core:Item text="Reference" key="R"/>
+									<core:Item text="Naukri" key="N"/>
 									<core:Item text="Other" key="O"/>
 								</items>
 							</Select>
