@@ -259,7 +259,7 @@ app.start = function() {
 						"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
 						"Status": item.Status === "null" ? undefined : item.Status,
 						"ChartedValid": item.ChartedValid,
-						"ValidPeriod":3
+						"ValidPeriod": 3
 					});
 				});
 
@@ -558,7 +558,7 @@ app.start = function() {
 					"ChangedBy": item.ChangedBy === "null" ? undefined : item.ChangedBy,
 					"Status": item.Status === "null" ? undefined : item.Status,
 					"ChartedValid": item.ChartedValid,
-					"ValidPeriod":3
+					"ValidPeriod": 3
 				});
 
 				var response = {
@@ -810,12 +810,15 @@ app.start = function() {
 					}
 				})
 				.then(function(all) {
-					var countMap = new Map();
+					var countMap = new Map(),
+						dt = new Date(startDate);
+					while (dt <= endDate) {
+						countMap.set(new Date(dt).toDateString(), 0);
+						dt.setDate(dt.getDate() + 1);
+					}
 					all.forEach(function(item) {
 						if (countMap.has(item.Date.toDateString())) {
 							countMap.set(item.Date.toDateString(), countMap.get(item.Date.toDateString()) + 1);
-						} else {
-							countMap.set(item.Date.toDateString(), 1);
 						}
 					});
 					var result = [];
