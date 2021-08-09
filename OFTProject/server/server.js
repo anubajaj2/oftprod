@@ -649,9 +649,9 @@ app.start = function() {
 							case "5c187036dba2681834ffe305":
 								lv_sonal = lv_sonal + 1;
 								break;
-							// case "5f1331f2e0b8524af830fa20":
-							// 	lv_manish = lv_manish + 1;
-							// 	break;
+								// case "5f1331f2e0b8524af830fa20":
+								// 	lv_manish = lv_manish + 1;
+								// 	break;
 							case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;
@@ -659,8 +659,8 @@ app.start = function() {
 								lv_khushbu = lv_khushbu + 1;
 								break;
 							case "60f0f06da1cf875cb8045975":
-									lv_anjali = lv_anjali + 1;
-									break;
+								lv_anjali = lv_anjali + 1;
+								break;
 							default:
 
 						}
@@ -840,6 +840,148 @@ app.start = function() {
 				});
 		});
 
+		app.post("/inquiryLookupMarketingReport", function(req, res) {
+			// var course = req.body.course;
+			var startDate = new Date(req.body.startDate);
+			var endDate = new Date(req.body.endDate);
+			var oFilter = {
+				and: [{
+					CreatedOn: {
+						gt: startDate
+					}
+				}, {
+					CreatedOn: {
+						lt: endDate
+					}
+				}]
+			};
+			var Sub = app.models.Sub;
+			Sub.find({
+					where: oFilter,
+					include: [{
+						relation: 'Student',
+						scope: {
+							fields: ['GmailId', 'OtherEmail1']
+						}
+					}],
+					fields: {
+						"StudentId": true
+					}
+				})
+				.then(function(subs) {
+					var gmails = [];
+					subs.forEach(item => {
+						if (item.__data.Student && item.__data.Student.$GmailId) {
+							gmails.push(item.__data.Student.$GmailId);
+						}
+					});
+					debugger;
+					var Inquiry = app.models.Inquiry;
+					Inquiry.find({
+							where: {
+								"EmailId": {
+									inq: gmails
+								}
+							},
+							fields: {
+								"EmailId": true,
+								"source": true
+							}
+						})
+						.then(function(all) {
+							debugger;
+							var countMap = new Map([
+								["R", 0],
+								["L", 0],
+								["F", 0],
+								["C", 0],
+								["P", 0],
+								["W", 0],
+								["N", 0],
+								["O", 0]
+							]);
+							var source = {
+								"R": "Website",
+								"L": "Linkedin",
+								"F": "Facebook",
+								"C": "Chatbot",
+								"P": "Privy",
+								"W": "Whatsapp",
+								"N": "Naukri",
+								"O": "Other"
+							};
+							all.forEach(function(item) {
+								if (countMap.has(item.source)) {
+									countMap.set(item.source, countMap.get(item.source) + 1);
+								} else {
+									countMap.set(item.source, 1);
+								}
+							});
+							var result = [];
+							countMap.forEach(function(c, d) {
+								result.push({
+									count: c,
+									marketingSource: source[d]
+								});
+							});
+							debugger;
+							res.send(result);
+						});
+				});
+		});
+
+		app.post("/inquiryLookupStaffReport", function(req, res) {
+			var course = req.body.course;
+			var startDate = new Date(req.body.startDate);
+			var endDate = new Date(req.body.endDate);
+			var oFilter = {
+				and: [{
+					Date: {
+						gt: startDate
+					}
+				}, {
+					Date: {
+						lt: endDate
+					}
+				}, {
+					CreatedBy: staffId
+				}]
+			};
+			if (course) {
+				oFilter.and.push({
+					CourseName: course
+				});
+			}
+			var Inquiry = app.models.Inquiry;
+			Inquiry.find({
+					where: oFilter,
+					fields: {
+						"Date": true
+					}
+				})
+				.then(function(all) {
+					var countMap = new Map(),
+						dt = new Date(startDate);
+					while (dt <= endDate) {
+						countMap.set(new Date(dt).toDateString(), 0);
+						dt.setDate(dt.getDate() + 1);
+					}
+					all.forEach(function(item) {
+						if (countMap.has(item.Date.toDateString())) {
+							countMap.set(item.Date.toDateString(), countMap.get(item.Date.toDateString()) + 1);
+						}
+					});
+					var result = [];
+					countMap.forEach(function(c, d) {
+						result.push({
+							count: c,
+							date: d
+						});
+					});
+					res.send(result);
+				});
+		});
+
 		app.post('/requestMessage', function(req, res) {
 
 			var msg = "";
@@ -897,8 +1039,6 @@ app.start = function() {
 			http.request(options, callback).end();
 		});
 
-
-
 		app.get('/ServerDownloadInAct', function(req, res) {
 
 			var date = new Date();
@@ -945,6 +1085,7 @@ app.start = function() {
 
 				);
 		});
+
 		app.get('/getExcelForGST', function(req, res) {
 			var Records = [];
 			var accountNo = req.query.AccountNo;
@@ -1177,6 +1318,7 @@ app.start = function() {
 				}
 			);
 		});
+
 		app.post('/getAmountForAccount', function(req, res) {
 			var responseData = [];
 			var accountNo = req.body.AccountNo;
@@ -2186,6 +2328,7 @@ app.start = function() {
 					}
 				});
 			});
+
 		app.post('/getAllForAccount',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2215,6 +2358,7 @@ app.start = function() {
 				});
 			}
 		);
+
 		app.post('/getAllStudents',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2269,6 +2413,7 @@ app.start = function() {
 					});
 			}
 		);
+
 		app.post('/updateSubcriptionAmount',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2299,6 +2444,7 @@ app.start = function() {
 				});
 			}
 		);
+
 		app.post('/getInvoiceNo',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2344,6 +2490,7 @@ app.start = function() {
 				});
 			}
 		);
+
 		app.post('/clearInvoiceHistory',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2405,6 +2552,7 @@ app.start = function() {
 				});
 			}
 		);
+
 		app.post('/ChartedValidRating',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2420,6 +2568,7 @@ app.start = function() {
 				});
 			}
 		);
+
 		app.get('/getLogo',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2427,6 +2576,7 @@ app.start = function() {
 				res.send(logo);
 			}
 		);
+
 		app.get('/getAnubhavTrainingsLogo',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2434,6 +2584,7 @@ app.start = function() {
 				res.send(logo);
 			}
 		);
+
 		app.get('/getSignature',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2441,6 +2592,7 @@ app.start = function() {
 				res.send(signature);
 			}
 		);
+
 		app.get('/getSoyuzSignature',
 			function(req, res) {
 				var app = require('../server/server');
@@ -2502,20 +2654,20 @@ app.start = function() {
 						// 	return a.counterall > b.counterall;
 						// });
 						const sort_by = (field, reverse, primer) => {
-																											  const key = primer ?
-																											    function(x) {
-																											      return primer(x[field])
-																											    } :
-																											    function(x) {
-																											      return x[field]
-																											    };
+							const key = primer ?
+								function(x) {
+									return primer(x[field])
+								} :
+								function(x) {
+									return x[field]
+								};
 
-																											  reverse = !reverse ? 1 : -1;
+							reverse = !reverse ? 1 : -1;
 
-																											  return function(a, b) {
-																											    return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-																											  }
-																											};
+							return function(a, b) {
+								return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+							}
+						};
 						allAc = allAc.sort(sort_by('counterall', false, parseInt))
 						var item = allAc[0];
 						var app = require('../server/server');

@@ -31,10 +31,16 @@ sap.ui.define([
 			});
 			this.getOwnerComponent().getModel("local").setProperty("/inquiryLookupCourses", courses)
 			var that = this;
-			var oDRS3 = this.byId("DRS3");
 			var date = new Date();
+			var oDRS3 = this.byId("DRS3");
 			oDRS3.setDateValue(new Date(date.getFullYear(), date.getMonth(), 1));
 			oDRS3.setSecondDateValue(new Date());
+			var oDRS32 = this.byId("DRS32");
+			oDRS32.setDateValue(new Date(date.getFullYear(), date.getMonth(), 1));
+			oDRS32.setSecondDateValue(new Date());
+			var oDRS33 = this.byId("DRS33");
+			oDRS33.setDateValue(new Date(date.getFullYear(), date.getMonth(), 1));
+			oDRS33.setSecondDateValue(new Date());
 		},
 		onBack: function() {
 			sap.ui.getCore().byId("idApp").to("idView1");
@@ -43,6 +49,7 @@ sap.ui.define([
 			var that = this;
 			setTimeout(function() {
 				that.onFilter();
+				that.onFilter2();
 			}, 2000);
 		},
 		onChartTypeChange: function(oEvent) {
@@ -63,6 +70,42 @@ sap.ui.define([
 				.done(function(data, status) {
 					debugger;
 					that.getView().getModel("local").setProperty("/IquiryLookup", data);
+				})
+				.fail(function(xhr, status, error) {
+					MessageBox.error("Error in access");
+				});
+		},
+		onFilter2: function() {
+			var that = this;
+			var dateRange = this.byId("DRS32");
+			var oPayload = {
+				startDate: dateRange.getFrom(),
+				endDate: dateRange.getTo(),
+				// staffId: staffName.getSelectedKey().split(" ")[0],
+				// course: courseName.getSelectedKey() === "All Courses" ? null : courseName.getSelectedKey()
+			};
+			$.post('/inquiryLookupMarketingReport', oPayload)
+				.done(function(data, status) {
+					debugger;
+					that.getView().getModel("local").setProperty("/IquiryLookupMarketingReport", data);
+				})
+				.fail(function(xhr, status, error) {
+					MessageBox.error("Error in access");
+				});
+		},
+		onFilter3: function() {
+			var that = this;
+			var dateRange = this.byId("DRS33");
+			var oPayload = {
+				startDate: dateRange.getFrom(),
+				endDate: dateRange.getTo(),
+				staffId: staffName.getSelectedKey().split(" ")[0],
+				course: courseName.getSelectedKey() === "All Courses" ? null : courseName.getSelectedKey()
+			};
+			$.post('/inquiryLookupStaff', oPayload)
+				.done(function(data, status) {
+					debugger;
+					that.getView().getModel("local").setProperty("/IquiryLookupStaffReport", data);
 				})
 				.fail(function(xhr, status, error) {
 					MessageBox.error("Error in access");
