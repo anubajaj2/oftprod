@@ -931,54 +931,83 @@ app.start = function() {
 		});
 
 		app.post("/inquiryLookupStaffReport", function(req, res) {
-			var course = req.body.course;
 			var startDate = new Date(req.body.startDate);
 			var endDate = new Date(req.body.endDate);
 			var oFilter = {
 				and: [{
-					Date: {
+					CreatedOn: {
 						gt: startDate
 					}
 				}, {
-					Date: {
+					CreatedOn: {
 						lt: endDate
 					}
-				}, {
-					CreatedBy: staffId
 				}]
 			};
-			if (course) {
-				oFilter.and.push({
-					CourseName: course
-				});
-			}
-			var Inquiry = app.models.Inquiry;
-			Inquiry.find({
+			var Sub = app.models.Sub;
+			Sub.find({
 					where: oFilter,
+					include: [{
+						relation: 'Student',
+						scope: {
+							fields: ['GmailId', 'OtherEmail1']
+						}
+					}],
 					fields: {
-						"Date": true
+						"StudentId": true
 					}
 				})
-				.then(function(all) {
-					var countMap = new Map(),
-						dt = new Date(startDate);
-					while (dt <= endDate) {
-						countMap.set(new Date(dt).toDateString(), 0);
-						dt.setDate(dt.getDate() + 1);
-					}
-					all.forEach(function(item) {
-						if (countMap.has(item.Date.toDateString())) {
-							countMap.set(item.Date.toDateString(), countMap.get(item.Date.toDateString()) + 1);
+				.then(function(subs) {
+					var gmails = [];
+					subs.forEach(item => {
+						if (item.__data.Student && item.__data.Student.$GmailId) {
+							gmails.push(item.__data.Student.$GmailId);
 						}
 					});
-					var result = [];
-					countMap.forEach(function(c, d) {
-						result.push({
-							count: c,
-							date: d
+					var Inquiry = app.models.Inquiry;
+					Inquiry.find({
+							where: {
+								"EmailId": {
+									inq: gmails
+								}
+							},
+							fields: {
+								"EmailId": true,
+								"CreatedBy": true
+							}
+						})
+						.then(function(all) {
+							var AppUser = app.models.AppUser;
+							AppUser.find({
+								fields: {
+									"TechnicalId": true,
+									"UserName": true
+								}
+							}).then(function(appUsers) {
+								var userNameById = {};
+								var userCollectionForMap= [];
+								appUsers.forEach(function(item){
+									userNameById[item.TechnicalId]=item.UserName;
+									userCollectionForMap.push([item.TechnicalId,0])
+								});
+								var countMap = new Map(userCollectionForMap);
+								all.forEach(function(item) {
+									if (countMap.has(item.CreatedBy.toString())) {
+										countMap.set(item.CreatedBy.toString(), countMap.get(item.CreatedBy.toString()) + 1);
+									} else {
+										countMap.set(item.CreatedBy.toString(), 1);
+									}
+								});
+								var result = [];
+								countMap.forEach(function(c, d) {
+									result.push({
+										count: c,
+										staff: userNameById[d]
+									});
+								});
+								res.send(result);
+							});
 						});
-					});
-					res.send(result);
 				});
 		});
 

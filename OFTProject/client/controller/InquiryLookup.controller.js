@@ -50,6 +50,7 @@ sap.ui.define([
 			setTimeout(function() {
 				that.onFilter();
 				that.onFilter2();
+				that.onFilter3();
 			}, 2000);
 		},
 		onChartTypeChange: function(oEvent) {
@@ -98,11 +99,9 @@ sap.ui.define([
 			var dateRange = this.byId("DRS33");
 			var oPayload = {
 				startDate: dateRange.getFrom(),
-				endDate: dateRange.getTo(),
-				staffId: staffName.getSelectedKey().split(" ")[0],
-				course: courseName.getSelectedKey() === "All Courses" ? null : courseName.getSelectedKey()
+				endDate: dateRange.getTo()
 			};
-			$.post('/inquiryLookupStaff', oPayload)
+			$.post('/inquiryLookupStaffReport', oPayload)
 				.done(function(data, status) {
 					debugger;
 					that.getView().getModel("local").setProperty("/IquiryLookupStaffReport", data);

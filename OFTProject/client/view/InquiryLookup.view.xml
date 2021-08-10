@@ -120,7 +120,7 @@
 									<l:Grid defaultSpan="L6 M8 S12">
 										<VBox id="vBoxCol13" class="column">
 											<Label text="Date From-To"/>
-											<DateRangeSelection id="DRS33" showFooter="false" change="onFilter"/>
+											<DateRangeSelection id="DRS33" showFooter="false" change="onFilter3"/>
 										</VBox>
 										<VBox id="vBoxCol23" class="column">
 											<Label text="Type"/>
@@ -151,7 +151,7 @@
 							</viz:dataset>
 							<viz:feeds>
 								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
-								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Date"/>
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Staff"/>
 							</viz:feeds>
 						</viz:VizFrame>
 					</IconTabFilter>
