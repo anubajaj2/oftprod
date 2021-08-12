@@ -17,7 +17,7 @@
 		</headerContent>
 		<content>
 			<FlexBox renderType="Bare">
-				<FlexBox class="columns" width="60%" renderType="Bare">
+				<FlexBox class="columns" width="70%" renderType="Bare">
 					<f:SimpleForm id="SimpleFormToolbar" editable="true" ariaLabelledBy="New Inquiry">
 						<f:toolbar>
 							<Toolbar id="TB1">
@@ -84,7 +84,7 @@
 
 				</FlexBox>
 
-				<FlexBox direction="RowReverse" alignItems="Right">
+				<FlexBox direction="RowReverse" alignItems="Center">
 					<viz:VizFrame id="idVizFrame" width="350px" height="470px"
 						uiConfig="{applicationSet:'fiori'}" vizType="column">
 						<viz:dataset>
