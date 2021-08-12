@@ -10,14 +10,14 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="New Lead (Version 1.0.31)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+	<Page title="New Lead (Version 1.0.32)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
 		</headerContent>
 		<content>
 			<FlexBox renderType="Bare">
-				<FlexBox class="columns" width="70%" renderType="Bare">
+				<FlexBox class="columns" width="60%" renderType="Bare">
 					<f:SimpleForm id="SimpleFormToolbar" editable="true" ariaLabelledBy="New Inquiry">
 						<f:toolbar>
 							<Toolbar id="TB1">
@@ -84,8 +84,9 @@
 
 				</FlexBox>
 
-				<FlexBox direction="RowReverse" alignItems="Center">
-					<viz:VizFrame id="idVizFrame" width="300px" height="400px" uiConfig="{applicationSet:'fiori'}" vizType="column">
+				<FlexBox direction="RowReverse" alignItems="Right">
+					<viz:VizFrame id="idVizFrame" width="350px" height="470px"
+						uiConfig="{applicationSet:'fiori'}" vizType="column">
 						<viz:dataset>
 							<viz.data:FlattenedDataset data="{local>/AllInq}">
 								<viz.data:dimensions>

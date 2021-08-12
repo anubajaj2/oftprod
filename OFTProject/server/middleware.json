@@ -32,7 +32,7 @@
   },
   "files": {
     "loopback#static": {
-      "params": "$!../client/dist"
+      "params": "$!../client/webapp"
     }
   },
   "final": {
