@@ -1,0 +1,1 @@
+sap.ui.define(["oft/fiori/controller/BaseController"],function(e){"use strict";return e.extend("oft.fiori.controller.ServerDetails",{onInit:function(){var e=this.getModel("local").getProperty("/CurrentUser");if(e){var t=this.getModel("local").oData.AppUsers[e].UserName}t="Hey "+t;this.getView().byId("idUser").setText(t)}})});

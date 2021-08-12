@@ -1,0 +1,78 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.serverPayment"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Server Payments" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<f:SimpleForm id="serverPay" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+				adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+				singleContainerFullSize="false">
+				<RadioButtonGroup id="idRBG" buttons="rbg" width="500px" class="sapUiMediumMarginBottom" select="radiobuttonselect">
+					<RadioButton id="idPay" text="{i18n>Payment}" selected="true"/>
+					<RadioButton id="idAdv" text="{i18n>Advances}" selected="{}"/>
+				</RadioButtonGroup>
+				<Label text="{i18n>customerId}"/>
+				<Input id="customerId" required="true" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" enabled="false"/>
+				<Text id="name" text=""/>
+				<Label text="{i18n>payDate}"/>
+				<DatePicker id="payDate" required="true" displayFormat="dd.MM.yyyy" valueFormat="dd.MM.yyyy" type="sap.ui.model.type.Date"
+					value="{local>/newServerPay/PaymentDate}"></DatePicker>
+				<Label text="{i18n>amount}"/>
+				<Input id="amount" type="Number"></Input>
+				<Label text="{i18n>Remarks}"></Label>
+				<TextArea id="Remarks"></TextArea>
+				<Input id="cid" value="{StudentId}" visible="false"></Input>
+			</f:SimpleForm>
+			<Table id="serTable" items="{/ServerPays}" growing="true" growingThreshold="100" growingScrollToLoad="false" mode="MultiSelect"
+				class="sapUiSizeCompact">
+				<headerToolbar>
+					<Toolbar>
+						<ToolbarSpacer></ToolbarSpacer>
+						<Button icon="sap-icon://delete" press="onDelete"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Text text="{i18n>type}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>payDate}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>customerId}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>Amount}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>Remarks}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>Extra}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
+						<cells>
+							<Text text="{Type}"></Text>
+							<Text text="{ path: 'PaymentDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<Text text="{StudentId}" modelContextChange="onStudenIdChange"></Text>
+							<Text text="{Amount}"></Text>
+							<TextArea value="{Remarks}" editable="false"></TextArea>
+							<Text text="{Extra}"></Text>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

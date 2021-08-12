@@ -1,0 +1,71 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+    controllerName="oft.fiori.controller.mobileView"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Mobile Center"  navButtonPress="onBack">
+		<headerContent>
+	    	<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormToolbar"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="4"
+			labelSpanL="3"
+			labelSpanM="4"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="4"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="2"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false"
+			ariaLabelledBy="New Inquiry" >
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="Lead Search" level="H4" titleStyle="H4"/>
+					<ToolbarSpacer />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+				<Label text="Phone" />
+				<Input  value="{local>/newLead/phone}" submit="onSearchNo" />
+        <CheckBox selected="false" id="keySearch" text="Key Search" />
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
+	<VBox>
+		<List id="idRecent" growing="true" mode="MultiSelect"
+			growingThreshold="100" growingScrollToLoad="false"
+			class="sapUiSizeCompact">
+      <headerToolbar>
+				<Toolbar>
+        <Title
+            id="titletext2"/>
+				<ToolbarSpacer></ToolbarSpacer>
+        <CheckBox visible="{= ${local>/Role} === 'Admin'}" tooltip="Dollor Quote" id="doller" />
+        <Button icon="sap-icon://action" tooltip="send email" press="onEmail"/>
+				<Button icon="sap-icon://delete" press="onDelete"/>
+				<Button	visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport" />
+			</Toolbar>
+			</headerToolbar>
+		</List>
+	</VBox>
+
+		</content>
+		<footer>
+			<Toolbar>
+        <Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized"
+						press="handleMessagePopoverPress"/>
+				<ToolbarSpacer/>
+				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+        <Button text="Get Account" press="onGetNext" />
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

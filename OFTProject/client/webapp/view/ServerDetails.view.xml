@@ -1,0 +1,43 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.ServerDetails"
+	xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<headerContent>
+		    	<Text id="idUser"></Text>				
+				<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+			</headerContent>
+			<Page title="Title">
+				<VBox class="sapUiSmallMargin">
+					<f:SimpleForm id="serverSubs" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+						adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+						singleContainerFullSize="false">
+						<f:content>
+							<Label text="{i18n>payDate}"/>
+							<DatePicker id="payDate" displayFormat="dd.MM.yyyy" required="true" value="{local>/newServer/payDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+							<Label text="{i18n>user}"/>
+							<Input id="serverUId" required="true" value="{local>/newServer/userName}"/>
+							<Label text="{i18n>customerId}"/>
+							<Input id="customerId" required="true" value="{local>/newServer/studentId}" showValueHelp="true" valueHelpRequest="onSelect"/>
+							<Text id="name" text=""/>
+							<Label text="{i18n>startDate}"/>
+							<DatePicker id="startDate" displayFormat="dd.MM.yyyy" value="{local>/newServer/startDate}" valueFormat="dd.MM.yyyy" change="onStartChange"></DatePicker>
+							<Label text="{i18n>endDate}"/>
+							<DatePicker id="endDate" displayFormat="dd.MM.yyyy" value="{local>/newServer/endDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+							<Label text="{i18n>UserEndDate}"/>
+							<DatePicker id="userEndDate" displayFormat="dd.MM.yyyy" value="{local>/newServer/userEndDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+							<Label text="{i18n>RDPPwd}"/>
+							<Input id="rdpPass" value="{local>/newServer/passwordRdp}"/>
+							<Label text="{i18n>GUIPwd}"/>
+							<Input id="passGui" value="{local>/newServer/passwordGui}"/>
+							<Label text="{i18n>amount}"/>
+							<Input id="amount" type="Number" value="{local>/newServer/amount}"></Input>
+							<Label text="{i18n>freeAccess}"></Label>
+							<CheckBox id="freeAccess" selected="{local>/newServer/freeAccess}" select="onWaiver"></CheckBox>
+							<Input id="id" value="{local>/newServer/id}" visible="false"></Input>
+						</f:content>
+					</f:SimpleForm>
+				</VBox>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

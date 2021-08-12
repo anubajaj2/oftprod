@@ -1,0 +1,77 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="oft.fiori.controller.batch" xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="New Batch" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<f:SimpleForm
+					id="createCustomer"
+					editable="true"
+					layout="ResponsiveGridLayout"
+					labelSpanXL="4"
+					labelSpanL="3"
+					labelSpanM="4"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="4"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false">
+					<f:content>
+						<Label text="Batch Id" required="true"/>
+						<Input id="idCourseId" required="true" value="{local>/newBatch/courseId}" showValueHelp="true" valueHelpRequest="onBatchSelect"/>
+						<Label text="{i18n>courseName}"/>
+						<Input id="batch" required="true" valueHelpOnly="true" value="{local>/newBatch/courseName}" showValueHelp="true" valueHelpRequest="onSelect"/>
+						<Label text="Demo Start Date"/>
+						<DatePicker id="idDemoDate" displayFormat="dd.MM.yyyy" value="{local>/newBatch/demoStartDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+						<Label text="Start Date"/>
+						<DatePicker id="idStartDate" displayFormat="dd.MM.yyyy" value="{local>/newBatch/startDate}" valueFormat="dd.MM.yyyy" change="onStartChange"></DatePicker>
+						<Label text="End Date"/>
+						<DatePicker id="idEndDate" enabled="true" displayFormat="dd.MM.yyyy" value="{local>/newBatch/endDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+						<Label text="Blog End Date"/>
+						<DatePicker id="idBlogEnd" enabled="true" displayFormat="dd.MM.yyyy" value="{local>/newBatch/blogDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+						<Label text="Minimum Fee"/>
+						<Input id="idFee" required="true" type="Number" value="{local>/newBatch/courseFee}"/>
+						<Label text="Link"/>
+						<Input id="idLink" value="{local>/newBatch/link}"/>
+						<Label text="Drive Id"/>
+						<Input id="idDrive" value="{local>/newBatch/DriveId}"/>
+						<Label text="Cal Id"/>
+						<Input id="idCalId" value="{local>/newBatch/CalendarId}"/>
+						<Label text="Event id"/>
+						<Input id="idEvent" value="{local>/newBatch/EventId}"/>
+						<Label text="Timing"/>
+						<Input id="idTiming" value="{local>/newBatch/timing}"/>
+						<Label text="Weekend Batch"></Label>
+						<CheckBox id="idWeekend" selected="{local>/newBatch/weekend}"></CheckBox>
+						<!-- <CheckBox id="idWeekend" selected="{=${local>/newBatch/weekend} === false ? false : true}"></CheckBox> -->
+						<Label text="Hide Batch"></Label>
+						<CheckBox id="idChkBtcHid" selected="{local>/newBatch/hidden}"></CheckBox>
+						<Label text="Status"></Label>
+						<ComboBox id="idStatus"	items="{local>/status}" selectedKey="{local>/newBatch/status}">
+						<core:Item key="{local>key}" text="{local>value}"  />
+						</ComboBox>
+						<Label text="Analysis"/>
+						<CheckBox id="idAnalysis" selected="{local>/newBatch/analysis}"></CheckBox>
+					</f:content>
+				</f:SimpleForm>
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Replicate selected to Student Portal" icon="sap-icon://repost" type="Accept" press="onReplicateOneBatch" id="idReplicateOneBatch"></Button>
+				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateBatches" id="idReplicateBatches"></Button>
+				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear"></Button>
+				<Button text="Save" type="Accept" press="onSave" id="idBatch"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

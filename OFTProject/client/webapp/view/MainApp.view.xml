@@ -1,0 +1,84 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:tnt="sap.tnt"
+controllerName="oft.fiori.controller.MainApp"
+	xmlns:html="http://www.w3.org/1999/xhtml" >
+	<App id="idMainApp">
+		<Page title="www.anubhavtrainings.com">
+			<content>
+				<!-- <tnt:ToolHeader>
+					<ToolbarSpacer />
+					<Text text="" />
+					<ToolbarSpacer />
+				</tnt:ToolHeader> -->
+
+				<!-- <VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center">
+					<items>
+						<Label text="User/Email Id" />
+						<Input id="userid" />
+							<Label text="Password (Case-Sensitive)" />
+							<Input type="Password" id="pwd" submit="onSubmit" />
+								<Button text="login" press="Login" width="12rem" type="Accept"></Button>
+					</items>
+				</VBox> -->
+
+				<VBox alignItems="Center" direction="Column" fitContainer="true" width="100%" height="100%" justifyContent="Center" renderType="Div"
+		visible="true" displayInline="false">
+		<items>
+			<form:Form width="100%" editable="false" visible="true">
+				<form:title>
+					<core:Title text="Enter Login Details" level="H1" icon="sap-icon://visits"/>
+				</form:title>
+				<form:formContainers>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="" design="Bold" width="100%" required="false" textAlign="Center" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="userid" placeholder="User Name / Email Id" type="Text" width="auto"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="" design="Bold" width="100%" required="false" textAlign="Center" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input placeholder="Password (Case-Sensitive)" type="Password" id="pwd" submit="onSubmit" enabled="true" visible="true" width="auto"
+										maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Button text="Login" press="Login" type="Emphasized" icon="sap-icon://feeder-arrow" iconFirst="false" width="auto"
+										iconDensityAware="false"/>
+								</form:fields>
+							</form:FormElement>
+							<!--<form:FormElement visible="true">-->
+							<!--	<form:label>-->
+							<!--		<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>-->
+							<!--	</form:label>-->
+							<!--	<form:fields>-->
+							<!--		<Button text="Clear" type="Reject" icon="sap-icon://refresh" iconFirst="false" width="auto" enabled="true" visible="true"-->
+							<!--			iconDensityAware="false" press="_onButtonPress1"/>-->
+							<!--	</form:fields>-->
+							<!--</form:FormElement>-->
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+				</form:layout>
+			</form:Form>
+		</items>
+		<layoutData/>
+	</VBox>
+			</content>
+			<footer>
+			</footer>
+		</Page>
+	</App>
+</mvc:View>

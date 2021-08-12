@@ -1,0 +1,102 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+    controllerName="oft.fiori.controller.newTemplate"
+    xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Templates"  showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+	    	<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormToolbar"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="4"
+			labelSpanL="3"
+			labelSpanM="4"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="4"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="2"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<!-- <f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="New Lead" level="H4" titleStyle="H4"/>
+					<ToolbarSpacer />
+				</Toolbar>
+			</f:toolbar> -->
+			<f:content>
+				<Label text="Course Name"  />
+        <Select  id="course" items="{local>/courses}" change="onCourseSelect">
+					<items>
+						<core:Item text="{local>courseName}" key="{local>courseName}"/>
+					</items>
+				</Select>
+
+				<Label text="Type" />
+        <Select  id="type" change="onTypeSelect">
+					<items>
+						<core:Item text="Regular" key="R"/>
+            <core:Item text="Before Batch" key="B"/>
+            <core:Item text="After Batch" key="A"/>
+					</items>
+				</Select>
+
+				<Label text="DemoDate" />
+        <DatePicker id="inqDate" valueFormat="dd.MM.yyyy"
+          displayFormat="dd.MM.yyyy" dateValue="{local>/template/DemoDate}" ></DatePicker>
+
+		<Label text="Demo Invite" />
+		<Input value="{local>/template/DemoInvite}" />
+
+        <Label text="Video Link" />
+        <Input value="{local>/template/VideoLink}" />
+
+        <Label text="Course Page" />
+				<Input value="{local>/template/CoursePage}" />
+
+        <Label text="Class Timing" />
+				<Input value="{local>/template/ClassTiming}" />
+        <Label text="Next Class" />
+				<Input value="{local>/template/NextClass}" />
+        <Label text="Calendar link" />
+				<Input value="{local>/template/Extra1}" />
+        <Label text="Template" />
+        <TextArea value="{local>/template/Template}" width="900px" height="400px"/>
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
+			<VBox>
+		<List id="idRecent" growing="true" mode="MultiSelect"
+			growingThreshold="100" growingScrollToLoad="false"
+			class="sapUiSizeCompact">
+      <headerToolbar>
+				<Toolbar>
+        <Title
+            id="titletext2"/>
+				<ToolbarSpacer></ToolbarSpacer>
+				<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
+			</Toolbar>
+			</headerToolbar>
+		</List>
+	</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+        <!-- <Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized"
+						press="handleMessagePopoverPress"/> -->
+				<ToolbarSpacer/>
+        <Button text="Update" icon="sap-icon://save" type="Accept" enabled="false" press="onUpdate" id="idUpdate"></Button>
+				<Button text="Save" icon="sap-icon://save" type="Reject" enabled = "false" press="onSave" id="idSave"></Button>
+        <!-- <Button text="Get Account" press="onGetNext" /> -->
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

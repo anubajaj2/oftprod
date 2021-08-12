@@ -1,0 +1,19 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+  <ViewSettingsDialog confirm="onConfirmSetting">
+    <sortItems>
+      <ViewSettingsItem selected="true" key="StudentId" text="Student Id"/>
+      <ViewSettingsItem key="CourseId" text="Course Id"/>
+    </sortItems>
+    <!-- <groupItems>
+      <ViewSettingsItem key="StudentId" text="Student Id"/>
+    </groupItems> -->
+    <!-- <filterItems> -->
+      <!--<ViewSettingsFilterItem key="StudentId" text="Student Id" multiSelect="false">-->
+      <!--  <items>-->
+      <!--    <ViewSettingsItem key="Age___GT___25___X" text="Greater than 25"/>-->
+      <!--  </items>-->
+      <!--</ViewSettingsFilterItem>-->
+
+    <!-- </filterItems> -->
+  </ViewSettingsDialog>
+</core:FragmentDefinition>

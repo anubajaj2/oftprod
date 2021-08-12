@@ -1,0 +1,66 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+    controllerName="oft.fiori.controller.accessProcessor"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Access Manager Mass"  navButtonPress="onBack">
+		<headerContent>
+	    	<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormToolbar"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanXL="4"
+			labelSpanL="3"
+			labelSpanM="4"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="4"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="2"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false"
+			ariaLabelledBy="New Inquiry" >
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="Lead Search" level="H4" titleStyle="H4"/>
+					<ToolbarSpacer />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+				<Label text="Batch Select" />
+				<Select items="{/Courses}" change="onSearchNo" id="courseSel">
+          <core:Item text="{BatchNo}" key="{id}" />
+
+        </Select>
+        <Button press="onShooter" icon="sap-icon://heating-cooling"/>
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
+	<VBox>
+		<List id="idRecent" growing="true" mode="SingleSelectMaster"
+			growingThreshold="100" growingScrollToLoad="false" visible="{= ${local>/Role} === 'Admin'}"
+			class="sapUiSizeCompact">
+      <headerToolbar>
+				<Toolbar>
+        <Title
+            id="titletext2"/>
+				<ToolbarSpacer></ToolbarSpacer>
+        <Button press="onFilters"  icon="sap-icon://filter"/>
+
+			</Toolbar>
+			</headerToolbar>
+		</List>
+	</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

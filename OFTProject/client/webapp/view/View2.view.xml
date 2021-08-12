@@ -1,0 +1,37 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.View2"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="View 2"  navButtonPress="onBack">
+		<content>
+			<!--<Button text="Back" press="onBack"></Button>-->
+			<ObjectHeader title="{SalesOrderID}" intro="{Note}" 
+			 number="{GrossAmount}" numberUnit="{CurrencyCode}">
+				<attributes>
+					<ObjectAttribute title="Customer Name" text="{CustomerName}"></ObjectAttribute>
+				</attributes>
+			</ObjectHeader>
+			
+			<IconTabBar>
+				<items>
+					<IconTabFilter text="Info" icon="sap-icon://hint">
+						<core:Fragment fragmentName="oft.fiori.fragments.fruitProperties" type="XML"></core:Fragment>
+					</IconTabFilter>
+					<IconTabFilter text="More Data" icon="sap-icon://search">
+						<core:Fragment fragmentName="oft.fiori.fragments.dropdowns" type="XML"></core:Fragment>
+					</IconTabFilter>
+					<IconTabFilter text="Suppliers" icon="sap-icon://supplier" >
+						<core:Fragment fragmentName="oft.fiori.fragments.supplierTable" type="XML"></core:Fragment>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+			
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer />
+				<Button text="Approve" type="Accept" press="onApprove" id="idApr"></Button>
+				<Button text="Dis-approved" type="Reject"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

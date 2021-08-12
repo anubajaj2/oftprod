@@ -1,0 +1,304 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.InvoiceBuilder"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Invoice Builder" navButtonPress="onBack">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<IconTabBar id="idIconTabBarNoIcons" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="Performa Invoices" key="info">
+						<!-- <HBox alignItems="Center" alignContent="Center" justifyContent="Center" class="sapUiSmallMarginTop" backgroundDesign="Solid"> <VBox> <Label wrapping="true" text="Account" class="sapUiSmallMarginEnd"></Label> <Input id="accountDetails"
+						required="true" value="{local>/PerformaInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/> <Label text="Terms" wrapping="true" class="sapUiSmallMargin"/> <Input value="{local>/PerformaInvoices/Terms}"
+						class="sapUiTinyMarginBottom"/> </VBox> <Label text="Notes" wrapping="true" class="sapUiSmallMargin"/> <TextArea height="160px" width="400px" value="{local>/PerformaInvoices/Notes}" class="sapUiTinyMarginBottom"/> </HBox> -->
+						<FlexBox renderType="Bare">
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm editable="true" ariaLabelledBy="Filter">
+									<!-- <f:toolbar> <Toolbar id="TB1"> <Title id="Title1" text="Filter" level="H4" titleStyle="H4"/> <ToolbarSpacer /> </Toolbar> </f:toolbar> -->
+									<f:content>
+										<Label text="Date"/>
+										<DatePicker id="idDate" displayFormat="dd.MM.yyyy" dateValue="{local>/PerformaInvoices/Date}" valueFormat="MMM dd yyyy" change="onStartDate"></DatePicker>
+										<Label text="Due Date"/>
+										<DatePicker id="idDueDate" displayFormat="dd.MM.yyyy" dateValue="{local>/PerformaInvoices/DueDate}" valueFormat="MMM dd yyyy" change="onEndDate"></DatePicker>
+										<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+										id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+
+										<Label required="true" text="Invoice No"/>
+										<Input value="{local>/PerformaInvoices/InvoiceNo}"/>
+										<Label text="GST Type"/>
+										<Select selectedKey="{local>/PerformaInvoices/GSTType}" id="idGSTType" change="onGSTType">
+											<items>
+												<core:Item text="IGST" key="IGST"/>
+												<core:Item text="SGST" key="SGST"/>
+												<core:Item text="NONE" key="NONE"/>
+											</items>
+										</Select>
+										<Label text="GSTIN"/>
+										<Input value="{local>/PerformaInvoices/GSTIN}"/>
+										<Label text="Course Name"/>
+										<ComboBox items="{
+												path: 'local>/CourseCollection',
+													sorter: { path: 'local>text' }
+																}" selectedKey="{local>/PerformaInvoices/CourseName}" change="onCourseChange">
+											<core:Item key="{local>key}" text="{local>text}"/>
+										</ComboBox>
+										<!-- <Input value="{local>/PerformaInvoices/CourseName}"/> -->
+										<Label text="Amount"/>
+										<Input value="{local>/PerformaInvoices/Amount}" change="onAmount"/>
+										<Label wrapping="true" text="Account" class="sapUiSmallMarginEnd"></Label>
+										<Input id="accountDetails" required="true" value="{local>/PerformaInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+										<Label text="Currency"/>
+										<Input value="{local>/PerformaInvoices/Currency}" change="onCurrencyChange" liveChange="onCurrencyLiveChange"/>
+										<Label text="Terms" wrapping="true" class="sapUiSmallMarginEnd"/>
+										<Input value="{local>/PerformaInvoices/Terms}" class="sapUiTinyMarginBottom"/>
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm id="SimpleFormSummary" editable="true" ariaLabelledBy="Summary">
+									<!-- <f:toolbar> <Toolbar id="TB2"> <Title id="Title2" text="Summary" level="H4" titleStyle="H4"/> <ToolbarSpacer /> </Toolbar> </f:toolbar> -->
+									<f:content>
+										<Label text="Email Id"/>
+										<Input id="idEmailCust1" value="{local>/PerformaInvoices/Email}" showValueHelp="true" valueHelpRequest="onSelect">
+											<suggestionItems>
+												<core:Item text="{EmailId}"/>
+											</suggestionItems>
+										</Input>
+										<Label required="true" text="Company Name"/>
+										<Input value="{local>/PerformaInvoices/CompanyName}"/>
+										<Label text="Participent Name"/>
+										<Input value="{local>/PerformaInvoices/ParticipentName}"/>
+										<Label text="Address"/>
+										<Input value="{local>/PerformaInvoices/Address}"/>
+										<Label text="City"/>
+										<Input value="{local>/PerformaInvoices/City}"/>
+										<Label text="State"/>
+										<Input value="{local>/PerformaInvoices/State}"/>
+										<Label text="Country"/>
+										<Input value="{local>/PerformaInvoices/Country}"/>
+										<Label text="Notes" wrapping="true" class="sapUiSmallMarginEnd"/>
+										<TextArea height="140px" value="{local>/PerformaInvoices/Notes}" class="sapUiTinyMarginBottom"/>
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
+						</FlexBox>
+
+						<Panel>
+							<Table
+								id="idPerformaInvoiceTable"
+								items="{
+					           path: '/PerformaInvoices',
+					             sorter: {
+					             path: 'ChangedOn',
+					             descending: 'true'
+					             }
+					           }"
+								mode="MultiSelect"
+								alternateRowColors="true"
+								class="sapUiSizeCompact"
+								updateFinished="onUpdateFinishedPerforma"
+								fixedLayout="false">
+								<headerToolbar>
+									<Toolbar>
+										<Title id="newtitle" text="Entries"/>
+										<ToolbarSpacer></ToolbarSpacer>
+										<!-- <Button icon="sap-icon://email" text="For Address Maintenance" press="onAddressMail" type="Accept"/> -->
+										<!-- <Button icon="sap-icon://generate-shortcut" text="Generate Invoice No" type="Accept" press="onGenerateInvoiceNo"/> -->
+										<Button icon="sap-icon://delete" text="" type="Reject" press="onDeletePerformaInvoice"/>
+										<Button icon="sap-icon://full-screen" text="Show Fullscreen" press="onFullScreen" type="Accept"/>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<Column>
+										<Label text="Date" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Due Date" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Company Name" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Course Name" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Amount" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="City" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="GST No" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Create Date" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Created By" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Invoice" class="columnLabelStyle"/>
+									</Column>
+									<!-- <Column> <Label text="Total " class="columnLabelStyle"/> </Column> <Column> <Label text="Pay Mode" class="columnLabelStyle"/> </Column> <Column> <Label text="Reference No." class="columnLabelStyle"/> </Column> <Column> <Label text="Edit"
+									class="columnLabelStyle"/> </Column> <Column> <Label text="Invoice" class="columnLabelStyle"/> </Column> <Column> <Label text="Verify" class="columnLabelStyle"/> </Column> -->
+								</columns>
+								<items>
+									<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active" highlight="{ path: 'viewModel>Address', formatter: '.formatter.gstTableAddressHighlight'}">
+										<cells>
+											<!-- <ObjectNumber number="{viewModel>Index}"/> -->
+											<!-- <DateTimeField dateValue="{path : 'Date', formatter: '.formatter.getDateObject'}" valueFormat="dd.MM.yyyy" editable="false"></DateTimeField> -->
+											<Text text="{ path: 'Date', formatter: '.formatter.getIndianDateFormat'}"></Text>
+											<Text text="{ path: 'DueDate', formatter: '.formatter.getIndianDateFormat'}"></Text>
+											<Text text="{CompanyName}"></Text>
+											<!-- <Text text="{CourseName}"></Text> -->
+
+											<Text text="{CourseName}"></Text>
+											<Text text="{path: 'Amount', formatter: '.formatter.getIndianCurr'}"></Text>
+											<!-- <ObjectNumber number="{path: 'viewModel>Amount', formatter: '.formatter.getIndianCurr'}"/> -->
+											<!-- <Text text="{path: 'viewModel>CGST', formatter: '.formatter.getIndianCurr'}"></Text> -->
+											<!-- <ObjectNumber number="{path: 'viewModel>CGST', formatter: '.formatter.getIndianCurr'}"/> -->
+											<!-- <Text text="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}"></Text> -->
+											<!-- <ObjectNumber number="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}"/> -->
+											<!-- <Text text="{path: 'viewModel>FullAmount', formatter: '.formatter.getIndianCurr'}"></Text> -->
+											<!-- <ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>USDAmount', 'viewModel>Exchange'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/> -->
+											<Text text="{City}"></Text>
+											<Text text="{GSTIN}"/>
+											<Text text="{ path: 'CreatedOn', formatter: '.formatter.getIndianDateFormat'}"/>
+											<Text text="{CreatedBy}"/>
+											<!-- <Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled="{viewModel>IsWallet}" press="onReference"></Link> -->
+											<!-- <Button icon="sap-icon://edit" press="onEditInfo" text="Edit" type="{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button> -->
+											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onPerformaInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+											<!-- <RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/> -->
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+					</IconTabFilter>
+					<IconTabFilter text="Invoice" key="attachments">
+						<FlexBox renderType="Bare">
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm editable="true">
+									<f:content>
+										<Label text="Payment Date"/>
+										<DatePicker id="idPaymentdate" displayFormat="dd.MM.yyyy" placeholder="Payment Date" required="true" valueFormat="dd.MM.yyyy" change="onSearchManageSubs"></DatePicker>
+										<Label text="Student Email"/>
+										<Input id="idStuSearch" value="{local>/InvoiceBuilder/StudentId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="false" placeholder="Select student email"/>
+										<Label text="Search"/>
+										<Button press="onSearchManageSubs" icon="sap-icon://search"/>
+										<Button press="onClearSearchFilter" icon="sap-icon://clear-filter"/>
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
+							<FlexBox class="columns" renderType="Bare" width="50%">
+								<f:SimpleForm editable="true">
+									<f:content>
+										<Label text="Batch"/>
+										<Input id="idCourseSearch" value="{local>/InvoiceBuilder/CourseId}" submit="onSearchManageSubs" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true" placeholder="Select a batch"/>
+										<Label wrapping="true" text="Account" class="sapUiSmallMarginEnd"></Label>
+										<Input id="accountDetails2" required="true" value="{local>/PerformaInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+										<!-- <Button press="onClearSearchFilter" text="Clear Search" icon="sap-icon://delete"/> -->
+									</f:content>
+								</f:SimpleForm>
+							</FlexBox>
+						</FlexBox>
+						<!-- <VBox> </VBox> -->
+						<Panel>
+							<Table id="invoiceTabTable" growing="true" growingThreshold="50" growingScrollToLoad="false" items="{/Subs}" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
+								<!--class="tableStyle" -->
+								<headerToolbar>
+									<Toolbar>
+										<Title id="titletext"/>
+										<ToolbarSpacer/>
+										<!-- <Button press="onTableSettings" visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://drop-down-list" tooltip="Settings"/> <Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/> <ToolbarSpacer/>
+										<CheckBox id="includeX" tooltip="Include in CC" text="cc"/> <Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All"
+										press="onDataExport"/> <Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/> <Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/> <Button
+										icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/> <Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/> <Button visible="{= ${local>/Role} === 'Admin'}"
+										icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/> <Text text="Display Most Recent records?"/> <HBox visible="{= ${local>/Role} === 'Admin'}"> <Switch idstate="true" customTextOn="Yes" customTextOff="No"
+										change="onSwitchToggle"> <layoutData> <FlexItemData growFactor="1"/> </layoutData> </Switch> </HBox> -->
+										<CheckBox id="idNoGST" text="No GST" tooltip="Download Non-GST Invoice"/>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<!-- <Column> <Text text="SubGuid"/> </Column> -->
+									<Column>
+										<Label text="{i18n>customerId}" class="columnLabelStyle"/>
+									</Column>
+									<Column hAlign="Center">
+										<Label text="Status" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>courseName}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>payDate}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="{i18n>Amount}" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Payment Mode" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Account No" class="columnLabelStyle"/>
+									</Column>
+									<Column>
+										<Label text="Invoice" class="columnLabelStyle"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
+										<cells>
+											<!-- <Text text="{id}"></Text> -->
+											<Text text="{StudentId}"></Text>
+											<core:Icon
+												src="sap-icon://status-positive"
+												size="1.5rem"
+												color="{path:'PartialPayment', formatter:'.formatter.formatIconColor'}"
+												activeColor=""
+												width=""
+												height=""
+												backgroundColor=""
+												hoverBackgroundColor=""
+												activeBackgroundColor=""
+												decorative="true"
+												press="fnOnValidate"/>
+											<!-- <Text text="{CourseId}" modelContextChange="onCourseIdChange" ></Text> <Text text="{StudentId}" ></Text> -->
+											<Text text="{CourseId}"></Text>
+											<Text text="{ path: 'PaymentDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+											<Text text="{ path: 'Amount'}"></Text>
+											<Text text="{PaymentMode}"/>
+											<Text text="{ path: 'AccountName'}"></Text>
+											<Button
+												icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }"
+												text="{path : 'InvoiceNo', formatter: '.formatter.buttonTextforDownload' }"
+												press="onDownloadInvoice"
+												type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</Panel>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Save" width="7rem" type="Accept" press="onSave" id="idApr"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>
