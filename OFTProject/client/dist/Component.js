@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/UIComponent","oft/fiori/models/models","sap/ui/model/json/JSONModel"],function(o,i,t){return o.extend("oft.fiori.Component",{metadata:{manifest:"json"},init:function(){sap.ui.core.UIComponent.prototype.init.apply(this);var o=this.getRouter();o.initialize()},destroy:function(){}})});

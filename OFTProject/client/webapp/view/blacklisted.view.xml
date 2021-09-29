@@ -1,0 +1,64 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+  controllerName="oft.fiori.controller.blacklisted"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="New Lead"  navButtonPress="onBack">
+		<headerContent>
+	    	<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+    <VBox>
+    <f:SimpleForm id="SimpleFormToolbar"
+			editable="true"
+			ariaLabelledBy="New Inquiry" >
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="New Lead" level="H4" titleStyle="H4"/>
+					<ToolbarSpacer />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+        <Label text="Date"  />
+        <DatePicker id="inqDate" valueFormat="dd.MM.yyyy"
+          displayFormat="dd.MM.yyyy" value="{local>/block/date}" ></DatePicker>
+				<Label text="Email Id"  />
+				<Input required="true" type="Email" value="{local>/block/emailId}"/>
+				<Label text="Name" />
+				<Input value="{local>/block/FirstName}"/>
+				<Label text="Country" />
+				<ComboBox id="country" items="{local>/countries}"
+          change="onCourseSelect"
+          selectedKey="{local>/block/country}">
+					<items>
+						<core:Item text="{local>name}" key="{local>code}"/>
+					</items>
+				</ComboBox>
+				<Label text="Reason" />
+				<TextArea value="{local>/block/message}">
+				</TextArea>
+			</f:content>
+		</f:SimpleForm>
+		<List id="idRecent" growing="true" mode="MultiSelect"
+			growingThreshold="100" growingScrollToLoad="false" 
+			class="sapUiSizeCompact">
+      <headerToolbar>
+				<Toolbar>
+        <Title
+            id="titletext2"/>
+				<ToolbarSpacer></ToolbarSpacer>
+				<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
+				<Button	visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport" />
+			</Toolbar>
+			</headerToolbar>
+		</List>
+	</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

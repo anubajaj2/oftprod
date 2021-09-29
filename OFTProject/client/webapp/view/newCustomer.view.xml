@@ -1,0 +1,157 @@
+<!-- <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.newCustomer" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml"> -->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.newCustomer" xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified" xmlns:html="http://www.w3.org/1999/xhtml">
+	<!-- <Dialog title="New Customer"> -->
+
+	<Page title="New Customer" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<f:SimpleForm
+					id="createCustomer1"
+					editable="true"
+					layout="ResponsiveGridLayout"
+					labelSpanXL="4"
+					labelSpanL="3"
+					labelSpanM="4"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="4"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false">
+					<f:content>
+						<Label text="Email Id"/>
+						<Input
+							required="true"
+							type="Email"
+							value="{local>/newCustomer/GmailId}"
+							id="idEmailCust1"
+							showValueHelp="true"
+							valueHelpRequest="onSelect"
+							liveChange="onEmail"
+							submit="onEnter"
+							placeholder="Enter Email Id ..."
+							showSuggestion="true"
+							suggestionItems="{/Inquries}"
+							suggestionItemSelected="suggestionItemSelected">
+							<suggestionItems>
+								<core:Item text="{EmailId}"/>
+							</suggestionItems>
+
+						</Input>
+						<!-- suggestionItems="{Students}" -->
+						<Label required="true" text="Name"/>
+						<Input id="idName1" value="{local>/newCustomer/Name}" liveChange="onEmailExist"/>
+						<Label text="Country"/>
+						<ComboBox id="idCountry1" items="{local>/countries}" selectedKey="{local>/newCustomer/Country}">
+							<items>
+								<core:Item text="{local>name}" key="{local>code}"/>
+							</items>
+						</ComboBox>
+						<Label text="Phone"/>
+						<Input id="idPhone1" type="number" value="{local>/newCustomer/ContactNo}"></Input>
+						<Label text="Other Email 1"/>
+						<Input id="idOtherEmail11" type="Email" required="false" value="{local>/newCustomer/OtherEmail1}"/>
+
+						<Label text="Company Name"/>
+						<Input id="idCompany" required="false" value="{local>/newCustomer/Company}"/>
+
+						<Label text="HR/Corporate Mail"/>
+						<Input id="idOtherEmail21" type="Email" required="false" value="{local>/newCustomer/OtherEmail2}"/>
+
+						<Label text="Address"/>
+						<Input id="idAddress" required="false" value="{local>/newCustomer/Address}"/>
+						<Label text="City"/>
+						<Input id="idCity" required="false" value="{local>/newCustomer/City}"/>
+						<Label text="GSTIN"/>
+						<Input id="idGSTIN" required="false" value="{local>/newCustomer/GSTIN}"/>
+						<Label text="GST Charge"/>
+						<CheckBox id="idGSTCharge" required="false"
+							checked="{local>/newCustomer/GSTCharge}"/>
+
+						<Label text="Skills"/>
+						<!-- <MultiInput id="multiInputID" width="350px" suggestionItems="{local>/skills}" showValueHelp="false" value="{local>/newCustomer/Skills}"> <core:Item key="{local>key}" text="{local>text}"/> </MultiInput> -->
+						<MultiComboBox id="idSkills1" selectionChange="handleSkillChange" selectionFinish="handleSkillFinish" width="350px" items="{
+                path: 'local>/skills',
+                sorter: { path: 'text' }
+              }">
+							<core:Item key="{local>key}" text="{local>text}"/>
+						</MultiComboBox>
+
+						<!--<Input value="{local>/newCustomer/Skills}"/>-->
+						<!--<MultiInput id="multiInputID" width="350px" placeholder= "Writ skill(e.g.ABAP) and hit ENTER" showValueHelp="false"-->
+						<!--enableMultiLineMode="true"/>-->
+						<Label text="Resume"/>
+						<u:FileUploader id="idFileUploader1" placeholder="Word or PDF files only"></u:FileUploader>
+						<Label text="Power Customer"></Label>
+						<CheckBox id="idStar1" selected="{local>/newCustomer/Star}"></CheckBox>
+						<Label text="Defaulter"></Label>
+						<CheckBox id="idDefaulter1" selected="{local>/newCustomer/Defaulter}"></CheckBox>
+						<Label text="High Server Usage"></Label>
+						<CheckBox id="idHighServerUsage1" selected="{local>/newCustomer/HighServerUsage}"></CheckBox>
+					</f:content>
+				</f:SimpleForm>
+
+				<Panel expandable="true" expanded="false" headerText="Subscriptions" width="auto" class="sapUiResponsiveMargin">
+					<!-- <List id="idSubs" /> -->
+					<Table id="idSubs" items="{local>/AllSubs}" growing="true" growingThreshold="200" growingScrollToLoad="false" mode="none">
+						<columns>
+							<Column hAlign="Left">
+								<Label text="Batch" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Amount" class="columnLabelStyle"/>
+							</Column>
+							<Column hAlign="Left">
+								<Label text="Payment Date" class="columnLabelStyle"/>
+							</Column>
+							<Column>
+								<Label text="Subscription End Date" class="columnLabelStyle"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem id="idColumnlist" type="Active" highlight="{path:'local>PartialPayment', formatter:'.formatter.formatRowHighlight'}">
+								<cells>
+									<Text text="{local>CourseId}" modelContextChange="onStudentIdChange"></Text>
+									<Text text="{local>Amount}" modelContextChange="onStudentIdChange"></Text>
+									<Text text="{local>PaymentDate}" modelContextChange="onStudentIdChange"></Text>
+									<Text text="{local>EndDate}" modelContextChange="onStudentIdChange"></Text>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="Servers" width="auto" class="sapUiResponsiveMargin">
+					<List id="idServer"/>
+				</Panel>
+				<Panel expandable="true" expanded="false" headerText="Inquiries" width="auto" class="sapUiResponsiveMargin">
+					<List id="idInquiries"/>
+				</Panel>
+
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Replicate selected to Student Portal" icon="sap-icon://repost" type="Accept" press="onReplicateOneStudent" id="idReplicateOneStudent"></Button>
+				<Button text="Replicate All to Student Portal" icon="sap-icon://repost" type="Reject" press="onReplicateStudents" id="idReplicateStudents"></Button>
+				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear1"></Button>
+				<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport" id="idDownload" text="Download"/>
+				<!-- <Button text="New Customer" icon="sap-icon://add-employee" type="Accept" press="onCustomer" id="idCust1"></Button> -->
+				<Button text="Create" type="Accept" press="onCreateCust" id="createNew1"></Button>
+				<Button visible="{= ${local>/Role} === 'Admin'}" text="Delete Customer" icon="sap-icon://delete" type="Reject" press="onDeleteCust" id="idDelete" enabled="false"></Button>
+
+			</Toolbar>
+		</footer>
+		<!-- <beginButton> <Button id="createNew" text="Create" icon="sap-icon://save" press="onCreateCust"></Button> </beginButton> <endButton> <Button id="closeItem" text="Close" press="onClose"></Button> </endButton> -->
+		<!-- </Dialog> -->
+	</Page>
+	<!-- <Page title="New Customer" navButtonPress="onBack"> <content> </content> <footer> <Toolbar> <ToolbarSpacer/> <Button text="Save" type="Accept" press="onSave" id="idApr"></Button> </Toolbar> </footer> </Page> -->
+</mvc:View>

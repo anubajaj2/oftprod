@@ -1,0 +1,24 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+	<Dialog contentWidth="400px" resizable="true">
+		<Label text="Course Name"/>
+		<Select id="idSettingCourse" items="{local>/courses}" selectedKey="UI5 and Fiori" change="onCourseSelect" width="100%">
+			<items>
+				<core:Item text="{local>courseName}" key="{local>courseName}"/>
+			</items>
+		</Select>
+		<Label text="Course State"/>
+		<Select id="idSettingCourseState" selectedKey="R" width="100%">
+			<items>
+				<core:Item text="Regular" key="R"/>
+				<core:Item text="Before" key="B"/>
+				<core:Item text="After" key="A"/>
+			</items>
+		</Select>
+		<beginButton>
+			<Button text="Update" press="onUpdateCourseSettings"/>
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onCloseCourseSettings"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

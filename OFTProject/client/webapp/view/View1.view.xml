@@ -1,0 +1,44 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="oft.fiori.controller.View1"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page icon="sap-icon://" title="Select Option" showHeader="true">
+		<headerContent>
+			<Button icon="sap-icon://arrow-right" press="onNext"></Button>
+		</headerContent>
+		<content>
+			<!--<Button text="go to next screen" press="onNext"></Button>-->
+			<List id="idFruitsList" growing="true" growingThreshold="10"
+					mode="SingleSelectMaster" delete="onDelete"
+			      selectionChange="onSelectItem">
+				<items>
+					<StandardListItem id="newlead" icon="sap-icon://leads" title="New Lead" description=""></StandardListItem>
+					<StandardListItem id="newCustomer" icon="sap-icon://customer" title="New Customer" description=""></StandardListItem>
+					<StandardListItem id="newreg" icon="sap-icon://collections-insight" title="New Registration" description=""></StandardListItem>
+					<StandardListItem id="server" icon="sap-icon://it-system" title="Server" description=""></StandardListItem>
+					<StandardListItem id="serverPayment" icon="sap-icon://batch-payments" title="Server Payments" description=""></StandardListItem>
+					<StandardListItem id="ServerOverview" icon="sap-icon://customer-view" title="Server Overview" description=""></StandardListItem>
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="batch" icon="sap-icon://sys-add" title="New Batch" description=""></StandardListItem>
+					<StandardListItem id="subsSearch" icon="sap-icon://crm-sales" title="Manage Subscriptions" description=""></StandardListItem>
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="dataMaintenance" icon="sap-icon://database" title="Data Maintenance" description=""></StandardListItem>
+					<!--<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="downloadQueries" icon="sap-icon://business-by-design" title="Reports and Run Queries" description=""></StandardListItem>-->
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="adminPanel" icon="sap-icon://key-user-settings" title="Admin Panel" description=""></StandardListItem>
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="analytical" icon="sap-icon://bar-chart" title="Analytical Panel" description=""></StandardListItem>
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="BankAccount" icon="sap-icon://money-bills" title="Accounts" description=""></StandardListItem>
+					<StandardListItem  id="mobileView" icon="sap-icon://iphone" title="Inquiry Search" description=""></StandardListItem>
+					<StandardListItem  id="blacklisted" icon="sap-icon://cancel" title="Blacklisted Users" description=""></StandardListItem>
+					<StandardListItem  id="dumps" icon="sap-icon://e-learning" title="Dumps" description=""></StandardListItem>
+					<StandardListItem  id="newTemplate" icon="sap-icon://activity-items" title="Templates" description=""></StandardListItem>
+					<StandardListItem  id="GSTInvoices" icon="sap-icon://business-one" title="GST Invoices" description=""></StandardListItem>
+					<StandardListItem  id="InquiryLookup" icon="sap-icon://business-objects-experience" title="Inquiry Lookup" description=""></StandardListItem>
+					<StandardListItem  id="InvoiceBuilder" icon="sap-icon://create" title="Invoice Builder" description=""></StandardListItem>
+					<StandardListItem  id="accessProcessor" icon="sap-icon://key-user-settings"
+						 title="Access Manager" description=""></StandardListItem>
+
+				</items>
+			</List>
+		</content>
+		<footer>
+			<Toolbar></Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

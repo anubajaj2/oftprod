@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="Title"
+		class="sapUiPopupWithPadding"
+		placement="Right"
+		initialFocus="action">
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button
+					id="action"
+					text="Close"
+					press="handleActionPress" />
+			</Toolbar>
+		</footer>
+		<VBox>
+		<Title text="Title" />
+		</VBox>
+	</Popover>
+</core:FragmentDefinition>

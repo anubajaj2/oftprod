@@ -1,0 +1,177 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.GSTInvoices"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="GST invoices" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<FlexBox 	renderType="Bare">
+        <FlexBox class="columns" renderType="Bare" width="50%" backgroundDesign="Solid">
+					<f:SimpleForm editable="true"
+					ariaLabelledBy="Filter" >
+						<f:toolbar>
+							<Toolbar id="TB1">
+								<Title id="Title1" text="Filter" level="H4" titleStyle="H4"/>
+								<ToolbarSpacer />
+							</Toolbar>
+						</f:toolbar>
+						<f:content>
+							<Label text="Date Range"/>
+							<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy" value="" valueFormat="MMM dd yyyy" change="onStartDate"></DatePicker>
+							<DatePicker id="idRegDateTo" displayFormat="dd.MM.yyyy" value="" valueFormat="MMM dd yyyy" change="onEndDate"></DatePicker>
+							<!-- <SearchField id="idStuSearch" search="onStuSearch" placeholder="Enter Student Email Id" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idCourseSearch" search="onCourseSearch" placeholder="Enter Only Course Name(not batch
+							id)" icon="sap-icon://search" width="100%" height="30%"/> <SearchField id="idPartPaySearch" search="onPartPaySearch" placeholder="Enter true or false(for Partial Payment)" icon="sap-icon://search" width="100%" height="30%"/> -->
+
+							<Label text="Account No"/>
+							<Input id="accountDetails" required="true" value="{local>/GSTInvoices/AccountNo}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+							<Label text="Pay Mode"/>
+							<Select  id="idPaymentMode" change="onPayModeSelect">
+								<items>
+									<core:Item text="All" key="ALL"/>
+									<core:Item text="Paypal" key="PAYPAL"/>
+									<core:Item text="Non-Paypal" key="NON-PAYPAL"/>
+								</items>
+							</Select>
+							<Label text="Wallet"/>
+							<Button text = "Calculater" icon="sap-icon://simulate" width = "35%" press="onWalletCalculator" type = "Accept"/>
+							<Label text="Download" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Label text="Invoice History" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Button text = "Clear" icon="sap-icon://sys-cancel-2" width = "35%" press="onClearInvoice" type = "Reject" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+						</f:content>
+					</f:SimpleForm>
+				</FlexBox>
+				<FlexBox class="columns" renderType="Bare" width="50%">
+					<f:SimpleForm id="SimpleFormSummary"
+						editable="true"
+						ariaLabelledBy="Summary" >
+						<f:toolbar>
+							<Toolbar id="TB2">
+								<Title id="Title2" text="Summary" level="H4" titleStyle="H4"/>
+								<ToolbarSpacer />
+							</Toolbar>
+						</f:toolbar>
+						<f:content>
+							<Label text="Total Entries (Indian)"/>
+							<Text  text = "{local>/totalProperties/TotalIndianEntries}"/>
+							<Label text="Total Enties (Foreigners)"/>
+							<Text  text = "{local>/totalProperties/TotalForeignersEntries}"/>
+							<Label text="Total Amount (Non Paypal)"/>
+							<Text  text = "{local>/totalProperties/TotalAmountNonPaypal}"/>
+							<Label text=" Total Amount (USD- Paypal)"/>
+							<Text  text = "{local>/totalProperties/TotalAmountUSDPaypal}"/>
+							<Label text="Total Settle Amount (Paypal)"/>
+							<Text  text = "{local>/totalProperties/TotalSettleAmountPaypal}"/>
+							<Label text="Total GST Amount"/>
+							<Text  text = "{local>/totalProperties/TotalGSTAmount}"/>
+						</f:content>
+					</f:SimpleForm>
+			</FlexBox>
+    </FlexBox>
+
+			<Panel>
+				<Table id="idSummary" items="{ path : 'viewModel>/records'}" mode="MultiSelect" alternateRowColors="true" class="sapUiSizeCompact" updateFinished="onUpdateFinished" fixedLayout="false">
+					<headerToolbar>
+						<Toolbar>
+							<Title id="newtitle" text="Entries"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<Button icon="sap-icon://email" text= "For Address Maintenance" press ="onAddressMail" type="Accept"/>
+							<Button icon="sap-icon://copy" text= "Missing Address Email" press ="onCopyEmail" type="Accept"/>
+							<Button icon="sap-icon://generate-shortcut" text="Generate Invoice No" type="Accept" press="onGenerateInvoiceNo" />
+							<Button icon="sap-icon://download" text="Selected Invoice" type="Accept" press="onDownloadAllInvoice" />
+							<Button icon="sap-icon://full-screen" text = "Show Fullscreen" press ="onFullScreen" type="Accept"/>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column>
+							<Label text="Sr." class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Payment Date" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Email Address" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Name" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Course Name" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Amount" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="CGST(9%)" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="SGST(9%)" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Total " class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Pay Mode" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Reference No." class="columnLabelStyle"/>
+						</Column>
+            <Column>
+							<Label text="Edit" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Invoice" class="columnLabelStyle"/>
+						</Column>
+						<Column>
+							<Label text="Verify" class="columnLabelStyle"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem id="idColumnlistSumm" press="onItemPress" type="Active" highlight="{ path: 'viewModel>Address', formatter: '.formatter.gstTableAddressHighlight'}">
+							<cells>
+								<ObjectNumber number="{viewModel>Index}"/>
+								<!-- <DateTimeField dateValue="{path : 'viewModel>PaymentDate', formatter: '.formatter.getDateObject'}" valueFormat="dd.MM.yyyy" editable="false"></DateTimeField> -->
+								<Text text="{ path: 'viewModel>PaymentDate', formatter: '.formatter.getIndianDateFormat'}"></Text>
+								<Text text="{viewModel>Email}"></Text>
+								<Text text="{viewModel>Name} ({viewModel>Country})"></Text>
+
+								<Text text="{viewModel>CourseName}"></Text>
+								<!-- <Text text="{path: 'viewModel>Amount',
+  										formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{path: 'viewModel>Amount', formatter: '.formatter.getIndianCurr'}" />
+								<!-- <Text text="{path: 'viewModel>CGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{path: 'viewModel>CGST', formatter: '.formatter.getIndianCurr'}" />
+								<!-- <Text text="{path: 'viewModel>SGST',
+    									formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{path: 'viewModel>SGST', formatter: '.formatter.getIndianCurr'}" />
+								<!-- <Text text="{path: 'viewModel>FullAmount',
+      									formatter: '.formatter.getIndianCurr'}"></Text> -->
+								<ObjectNumber number="{parts: [ 'viewModel>IsWallet', 'viewModel>FullAmount', 'viewModel>USDAmount', 'viewModel>Exchange'], formatter: '.formatter.getFullAmountForGST'}" unit="INR"/>
+								<Text text="{viewModel>PaymentMode}"></Text>
+								<Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled = "{viewModel>IsWallet}" press = "onReference"></Link>
+								<Button icon="sap-icon://edit" press="onEditInfo" text = "Edit" type = "{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+                <Button icon="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onDownloadInvoice" type = "{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+								<RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</Panel>
+		</content>
+		<footer>
+			<Toolbar></Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

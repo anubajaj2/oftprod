@@ -635,6 +635,7 @@ app.start = function() {
 						lv_sonal = 0,
 						lv_vaishali = 0,
 						lv_kajol = 0;
+						lv_anjali = 0;
 					for (var i = 0; i < all.length; i++) {
 						switch (all[i].CreatedBy.toString()) {
 							case "5dd6a6aea5f9e83c781b7ac0":
@@ -649,9 +650,10 @@ app.start = function() {
 							case "5c187036dba2681834ffe305":
 								lv_sonal = lv_sonal + 1;
 								break;
-								// case "5f1331f2e0b8524af830fa20":
-								// 	lv_manish = lv_manish + 1;
-								// 	break;
+						  case "5f1331f2e0b8524af830fa20":
+									//variable used for shalini
+								 	lv_manish = lv_manish + 1;
+								 	break;
 							case "5ecc968586321064989cdc3f":
 								lv_kajol = lv_kajol + 1;
 								break;

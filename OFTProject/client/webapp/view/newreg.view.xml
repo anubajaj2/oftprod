@@ -1,0 +1,212 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.newReg" xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="New Registration" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<FlexBox>
+					<FlexBox renderType="Bare" width="60%">
+						<f:SimpleForm
+							id="createCustomer"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="4"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false">
+							<f:content>
+								<Label text="Payment Date"/>
+								<!--<DateTimePicker id="idPayDate" -->
+								<!-- value="{path:'/dateValue', type:'sap.ui.model.type.DateTime', formatOptions: { style: 'medium', strictParsing: true}}"-->
+								<!-- class="sapUiSmallMarginBottom"/>-->
+								<DatePicker id="idPayDate" displayFormat="dd.MM.yyyy" required="true" value="{local>/newRegistration/PaymentDate}" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker>
+
+								<Label text="Payment Due Date"/>
+								<DatePicker id="idPayDueDate" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/PaymentDueDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+								<!--value="{local>/newRegistration/StudentId}" -->
+								<Label text="Customer Id"/>
+								<!--<Input id="customerId" required="true" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpOnly="true"-->
+								<!-- valueHelpRequest="onSelect" showSuggestion="true" suggestionItems="{/Students}">-->
+								<!-- <suggestionItems>-->
+								<!-- <core:Item text="{GmailId}"/>-->
+								<!-- <core:Item text="{Name}"/>-->
+								<!-- </suggestionItems>-->
+								<!--</Input>-->
+
+								<Input id="customerId" required="true" value="{local>/newRegistration/StudentId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true"/>
+
+								<Label text="Batch"/>
+								<!--<Input id="courseId" required="true" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpOnly="true"-->
+								<!-- valueHelpRequest="onSelect" showSuggestion="true" suggestionItems="{/Courses}">-->
+								<!-- <suggestionItems>-->
+								<!-- <core:Item text="{BatchNo}"/>-->
+								<!-- <core:Item text="{Name}"/>-->
+								<!-- </suggestionItems>-->
+								<!--</Input>-->
+								<Input id="courseId" required="true" value="{local>/newRegistration/CourseId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true"/>
+								<Text id="idCourseName" text=""/>
+								<Label text="Training Mode"/>
+								<Select id="trainingMode" selectedKey="{local>/newRegistration/Mode}">
+									<core:Item key="L" text="Live Mode"></core:Item>
+									<core:Item key="V" text="Video Mode"></core:Item>
+								</Select>
+								<Label text="Reg. Date"/>
+								<DatePicker id="idRegDate" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/StartDate}" valueFormat="dd.MM.yyyy" change="onStartChange"></DatePicker>
+								<Label text="Blog End Date"/>
+								<DatePicker id="idRegEndDate" displayFormat="dd.MM.yyyy" value="{local>/newRegistration/EndDate}" valueFormat="dd.MM.yyyy"></DatePicker>
+								<Label text="Payment Mode"/>
+								<Select id="paymentMode" required="true" selectedKey="{local>/newRegistration/PaymentMode}">
+									<core:Item key="IMPS" text="Internet Banking"></core:Item>
+									<core:Item key="PAYTM" text="PayTM"></core:Item>
+									<core:Item key="PAYPAL" text="Paypal/Xoom"></core:Item>
+									<core:Item key="PAYU" text="PayUMoney"></core:Item>
+									<core:Item key="USA" text="Wire Transfer"></core:Item>
+									<core:Item key="FOREIGN" text="Foreign Transfer"></core:Item>
+								</Select>
+								<Label text="Account Details"/>
+								<!--<Input id="accountDetails" type="Email" required="true" value="{local>/newRegistration/AccountName}" showValueHelp="true"-->
+								<Input id="accountDetails" required="false" value="{local>/newRegistration/AccountName}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+								<Label text="Amount"/>
+								<Input id="idAmount" type="Number" value="{local>/newRegistration/Amount}" liveChange="onAmountChange"></Input>
+								<Label text="Pending Amount"/>
+								<Input id="idPendingAmount" type="Number" value="{local>/newRegistration/PendingAmount}"></Input>
+								<Label text="Partial Payment"></Label>
+								<CheckBox id="idPartPay" selected="{local>/newRegistration/PartialPayment}" select="onPartPay"></CheckBox>
+								<Label text="Reference No"/>
+								<Input value="{local>/newRegistration/Reference}"></Input>
+								<Label text="Remarks"/>
+								<Input value="{local>/newRegistration/Extra2}"></Input>
+								<!--<Label text="Moved"></Label>-->
+								<!--<CheckBox selected="{local>/newRegistration/Moved}"></CheckBox>-->
+								<Label text="Waiver Provided"></Label>
+								<CheckBox id="idWaiver" selected="{local>/newRegistration/Waiver}" select="onWaiver"></CheckBox>
+								<Label text="Attachments"/>
+								<u:FileUploader id="imageUploader" maximumFileSize="0.1" fileType="png,jpg" fileSizeExceed="handleSizeExceed" typeMissmatch="handleTypeMissmatch" fileAllowed='fnOnUpLoadFile' placeholder="Payment Screenshot - PNG/JPG"></u:FileUploader>
+								<Label text="Interested in next batch flag"></Label>
+								<CheckBox id="idInterested"></CheckBox>
+								<!--<Button width="33%" padding="0px" margin="0px" text="Upload" press="onUpload" icon="sap-icon://upload"></Button>-->
+							</f:content>
+						</f:SimpleForm>
+					</FlexBox>
+					<FlexBox alignItems="Center">
+						<f:SimpleForm
+							id="walletPaymentDetail"
+							editable="true"
+							visible="{=${local>/newRegistration/PaymentMode}==='PAYPAL' || ${local>/newRegistration/PaymentMode}==='FOREIGN' ?true:false}"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="4"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false"
+							backgroundDesign="Solid">
+							<f:content>
+								<Label required="true" text="USD Amount"/>
+								<Input id="idUSDAmount" type="Number" value="{local>/newRegistration/USDAmount}" liveChange="onUSDAmountChange"></Input>
+								<Label text="Charge"/>
+								<!-- <Input id="idCharges2" type="Number" value="{parts :[path : '{local>/newRegistration/Charges}', path : '{local>/newRegistration/USDAmount}'], formatter='.formatter.getPaypalCharges'}"></Input> -->
+								<Input id="idCharges2" type="Number" value="{local>/newRegistration/Charges}" liveChange="onChargesChange"></Input>
+								<Label text="Exchange Rate"/>
+								<Input id="idExchangeRate" type="Number" value="{local>/newRegistration/Exchange}" liveChange="onExchangeChange"></Input>
+								<Label text="Settle Amount"/>
+								<Input id="idSettleAmount" type="Number" value="{local>/newRegistration/SettleAmount}" enabled="false"></Input>
+							</f:content>
+						</f:SimpleForm>
+					</FlexBox>
+				</FlexBox>
+			</VBox>
+			<!-- <VBox> <List id="idSubsByDate" growing="true" growingThreshold="2000" growingScrollToLoad="false" class="sapUiSizeCompact"> <headerToolbar> <Toolbar> <Title id="titletext1"/> <ToolbarSpacer></ToolbarSpacer> </Toolbar> </headerToolbar> </List>
+			</VBox> -->
+			<Table id="idSubsRecent" items="{/Subs}" growing="true" growingThreshold="2000" growingScrollToLoad="false" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
+				<headerToolbar>
+					<Toolbar>
+						<Title id="titletext11"/>
+						<Button icon="sap-icon://synchronize" id="clearToken" tooltip="Clear Token" press="onClearToken"/>
+						<ToolbarSpacer></ToolbarSpacer>
+
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
+						<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" text="cc"/>
+						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
+						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://permission" id="giveAccess2" tooltip="Provide access" press="onGiveAccess2"/>
+						<Button icon="sap-icon://refresh" press="onRefresh"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Label text="{i18n>customerId}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>courseName}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Status" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Created On" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Created By" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Screen Shot" class="columnLabelStyle"/>
+					</Column>
+					<Column visible="{= ${local>/Role} === 'Admin'}">
+						<Label text="Amount" class="columnLabelStyle"/>
+					</Column>
+					<Column visible="{= ${local>/Role} === 'Admin'}">
+						<Label text="Remarks" class="columnLabelStyle"/>
+					</Column>
+					<!-- <Column> <Label visible="false" text="Status" class="columnLabelStyle"/> </Column> -->
+				</columns>
+				<items>
+					<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
+						<cells>
+							<Text text="{StudentId}" modelContextChange="onStudentIdChange"></Text>
+							<Text text="{CourseId}"></Text>
+							<HBox>
+								<Button text="{Status}" press="onApprove"></Button>
+								<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://loan" press="onBank"></Button>
+							</HBox>
+							<Text text="{ path: 'CreatedOn', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<Text text="{CreatedBy}"></Text>
+							<!-- <Button text="{CourseId}" press="onScreenShot"></Button> -->
+							<!-- <Link text="Payment Proof" href="" press="onScreenShot" /> -->
+							<RatingIndicator id="RI_L" maxValue="2" class="sapUiSmallMarginBottom" change="onRate" value="{path: 'ExtraN1'}" iconSize="32px" tooltip="Follow Up"/>
+							<Text visible="{= ${local>/Role} === 'Admin'}" text="{Amount}"/>
+							<Text visible="{= ${local>/Role} === 'Admin'}" text="{Remarks}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="Replicate selected to Student Portal" icon="sap-icon://repost" type="Accept" press="onReplicateOneSub" id="idReplicateOneSub"></Button>
+				<Button text="Clear Screen" icon="sap-icon://sys-minus" type="Reject" press="onClearScreen" id="idClear"></Button>
+				<Button text="New Customer" icon="sap-icon://add-employee" type="Accept" press="onCustomer" id="idCust"></Button>
+				<Button text="Save" type="Accept" press="onSaveSubs" id="idApr"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,1 @@
+sap.ui.define([],function(){sap.ui.core.Control.extend("oft.fiori.controls.myCustom",{metadata:{properties:{ninja:"",turtle:"",stark:""},events:{},aggregation:{}},init:function(){},renderer:function(t,e){t.write("<h1");t.addStyle("color",e.getTurtle());t.addStyle("border",e.getStark());t.writeStyles();t.write(">"+e.getNinja()+"</h1>")}})});

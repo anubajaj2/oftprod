@@ -1,0 +1,172 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.InquiryLookup"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Inquiry Lookup" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<IconTabBar id="idIconTabBarNoIcons" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="Inquiry Lookup | Daily Report" key="DailyReport">
+						<f:SimpleForm id="selectionId" editable="true">
+							<f:content>
+								<VBox>
+									<l:Grid defaultSpan="L6 M8 S12">
+										<VBox id="vBoxCol1" class="column">
+											<Label text="Date From-To"/>
+											<DateRangeSelection id="DRS3" showFooter="false" change="onFilter"/>
+											<Label text="Course Name"/>
+											<Select id="idCourseName" width="100%" items="{
+									path: 'local>/inquiryLookupCourses'
+								}" change="onFilter">
+												<core:Item key="{local>courseName}" text="{local>courseName}"/>
+											</Select>
+										</VBox>
+										<VBox id="vBoxCol22" class="column">
+											<Label text="Staff Name"/>
+											<Select id="idStaffName" width="100%" items="{
+									path: '/AppUsers',
+									sorter: { path: 'UserName' }
+								}" change="onFilter">
+												<core:Item key="{TechnicalId} {EmailId}" text="{UserName}"/>
+											</Select>
+											<Label text="Type"/>
+											<Select width="100%" change="onChartTypeChange">
+												<core:Item key="line" text="Line"/>
+												<core:Item key="column" text="Column"/>
+											</Select>
+											<!-- <Label text="{i18n>Search}"/> -->
+											<!-- <Button class="sapUiSmallMarginLeft" icon="sap-icon://search" text="Go" width="50%"/> -->
+											<layoutData>
+												<l:GridData span="L6 M6 S10"/>
+											</layoutData>
+										</VBox>
+									</l:Grid>
+								</VBox>
+							</f:content>
+						</f:SimpleForm>
+						<viz:VizFrame id="idVizFrame" height="400px" width="100%" uiConfig="{applicationSet:'fiori'}" vizType="{local>/inquiryLookupVizType}">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{local>/IquiryLookup}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Date" value="{local>date}" dataType="date"/>
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Date"/>
+							</viz:feeds>
+						</viz:VizFrame>
+					</IconTabFilter>
+					<IconTabFilter text="Inquiry Lookup | Marketing Report" key="MarketingReport">
+						<f:SimpleForm id="selectionId2" editable="true">
+							<f:content>
+								<VBox>
+									<l:Grid defaultSpan="L6 M8 S12">
+										<VBox id="vBoxCol12" class="column">
+											<Label text="Date From-To"/>
+											<DateRangeSelection id="DRS32" showFooter="false" change="onFilter2"/>
+										</VBox>
+										<VBox id="vBoxCol2" class="column">
+											<Label text="Type"/>
+											<Select width="100%" change="onChartTypeChange">
+												<core:Item key="line" text="Line"/>
+												<core:Item key="column" text="Column"/>
+											</Select>
+											<layoutData>
+												<l:GridData span="L6 M6 S10"/>
+											</layoutData>
+										</VBox>
+									</l:Grid>
+								</VBox>
+							</f:content>
+						</f:SimpleForm>
+						<viz:VizFrame id="idVizFrame2" height="400px" width="100%" uiConfig="{applicationSet:'fiori'}" vizType="{local>/inquiryLookupVizType}">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{local>/IquiryLookupMarketingReport}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="MarketingSource" value="{local>marketingSource}" dataType="string"/>
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="MarketingSource"/>
+							</viz:feeds>
+						</viz:VizFrame>
+					</IconTabFilter>
+					<IconTabFilter text="Inquiry Lookup | Staff Report" key="StaffWiseReport">
+						<f:SimpleForm id="selectionId3" editable="true">
+							<f:content>
+								<VBox>
+									<l:Grid defaultSpan="L6 M8 S12">
+										<VBox id="vBoxCol13" class="column">
+											<Label text="Date From-To"/>
+											<DateRangeSelection id="DRS33" showFooter="false" change="onFilter3"/>
+										</VBox>
+										<VBox id="vBoxCol23" class="column">
+											<Label text="Type"/>
+											<Select width="100%" change="onChartTypeChange">
+												<core:Item key="line" text="Line"/>
+												<core:Item key="column" text="Column"/>
+											</Select>
+											<!-- <Label text="{i18n>Search}"/> -->
+											<!-- <Button class="sapUiSmallMarginLeft" icon="sap-icon://search" text="Go" width="50%"/> -->
+											<layoutData>
+												<l:GridData span="L6 M6 S10"/>
+											</layoutData>
+										</VBox>
+									</l:Grid>
+								</VBox>
+							</f:content>
+						</f:SimpleForm>
+						<viz:VizFrame id="idVizFrame3" height="400px" width="100%" uiConfig="{applicationSet:'fiori'}" vizType="{local>/inquiryLookupVizType}">
+							<viz:dataset>
+								<viz.data:FlattenedDataset data="{local>/IquiryLookupStaffReport}">
+									<viz.data:dimensions>
+										<viz.data:DimensionDefinition name="Staff" value="{local>staff}" dataType="date"/>
+									</viz.data:dimensions>
+									<viz.data:measures>
+										<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
+									</viz.data:measures>
+								</viz.data:FlattenedDataset>
+							</viz:dataset>
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+								<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Staff"/>
+							</viz:feeds>
+						</viz:VizFrame>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+
+		</content>
+		<footer>
+			<Toolbar>
+				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
+				<ToolbarSpacer/>
+				<Button class="sapUiSmallMargin" icon="sap-icon://filter" text="Filter" press="onFilter"/>
+				<Button text="Send Mail" type="Accept" press="onSendMail" id="idSendMail"></Button>
+				<!-- <Button text="Get Account" press="onGetNext"/> -->
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

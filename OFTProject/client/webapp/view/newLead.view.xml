@@ -1,0 +1,150 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.newLead"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="New Lead (Version 1.0.32)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<FlexBox renderType="Bare">
+				<FlexBox class="columns" width="70%" renderType="Bare">
+					<f:SimpleForm id="SimpleFormToolbar" editable="true" ariaLabelledBy="New Inquiry">
+						<f:toolbar>
+							<Toolbar id="TB1">
+								<Title id="Title1" text="New Lead" level="H4" titleStyle="H4"/>
+								<ToolbarSpacer/>
+							</Toolbar>
+						</f:toolbar>
+						<f:content>
+							<Label text="Email Id"/>
+							<Input required="true" type="Email" value="{local>/newLead/emailId}" change="onLiveChange"/>
+							<Text id="countrydata"/>
+							<Label text="Course"/>
+							<Select id="course" items="{local>/courses}" selectedKey="{local>/newLead/course}" change="onCourseSelect">
+								<items>
+									<core:Item text="{local>courseName}" key="{local>courseName}"/>
+								</items>
+							</Select>
+							<Label text="Date"/>
+							<DatePicker id="inqDate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" value="{local>/newLead/date}" change="onDateChange"></DatePicker>
+							<Label text="Name"/>
+							<Input value="{local>/newLead/FirstName}" change="onSplitName"/>
+							<Input value="{local>/newLead/LastName}"/>
+							<Label text="Country"/>
+							<ComboBox id="country" items="{local>/countries}" change="onCourseSelect" selectedKey="{local>/newLead/country}">
+								<items>
+									<core:Item text="{local>name}" key="{local>code}"/>
+								</items>
+							</ComboBox>
+							<Label text="Fees"/>
+							<Input value="{local>/newLead/fees}"/>
+							<Label text="Currency"/>
+							<Input value="{local>/newLead/currency}"/>
+							<Label text="Phone"/>
+							<Input value="{local>/newLead/phone}"></Input>
+							<Label text="Source"/>
+							<Select id="source" selectedKey="{local>/newLead/source}">
+								<items>
+									<core:Item text="Website" key="R"/>
+									<core:Item text="Linkedin" key="L"/>
+									<core:Item text="Facebook" key="F"/>
+									<core:Item text="Chatbot" key="C"/>
+									<core:Item text="Privy" key="P"/>
+									<core:Item text="Whatsapp" key="W"/>
+									<core:Item text="Reference" key="R"/>
+									<core:Item text="Naukri" key="N"/>
+									<core:Item text="Other" key="O"/>
+								</items>
+							</Select>
+							<Label text="Use Gmail Only"/>
+							<CheckBox tooltip="Is Minakshi" id="isMinakshi"/>
+							<Label text="Subject"/>
+							<Input value="{local>/newLead/subject}"></Input>
+							<Label text="Message"/>
+							<TextArea value="{local>/newLead/message}"></TextArea>
+							<Label/>
+							<RadioButtonGroup id="rbg" columns="3" class="sapUiMediumMarginBottom">
+								<RadioButton id="R" text="Regular"/>
+								<RadioButton id="B" text="Before Demo"/>
+								<RadioButton id="A" text="After Demo"/>
+							</RadioButtonGroup>
+							<Button icon="sap-icon://action-settings" press="onCourseStateSetting"/>
+						</f:content>
+					</f:SimpleForm>
+
+				</FlexBox>
+
+				<FlexBox direction="RowReverse" alignItems="Center">
+					<viz:VizFrame id="idVizFrame" width="350px" height="470px"
+						uiConfig="{applicationSet:'fiori'}" vizType="column">
+						<viz:dataset>
+							<viz.data:FlattenedDataset data="{local>/AllInq}">
+								<viz.data:dimensions>
+									<viz.data:DimensionDefinition name="Name" value="{local>name}"/>
+								</viz.data:dimensions>
+								<viz.data:measures>
+									<viz.data:MeasureDefinition name="Count" value="{local>count}"/>
+								</viz.data:measures>
+							</viz.data:FlattenedDataset>
+						</viz:dataset>
+						<viz:feeds>
+							<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+							<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Name"/>
+						</viz:feeds>
+					</viz:VizFrame>
+
+				</FlexBox>
+			</FlexBox>
+
+			<VBox>
+				<List id="idRecent" growing="true" mode="MultiSelect" growingThreshold="100" growingScrollToLoad="false" class="sapUiSizeCompact">
+					<headerToolbar>
+						<Toolbar>
+							<Title id="titletext2"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<Button icon="sap-icon://excel-attachment" press ="onInquiryExcel"/>
+							<CheckBox visible="{= ${local>/Role} === 'Admin'}" tooltip="Dollor Quote" id="doller"/>
+							<Button icon="sap-icon://action" tooltip="send email" press="onEmail"/>
+							<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
+							<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://download" press="onDataExport"/>
+							<Switch visible="{= ${local>/Role} === 'Admin'}" id="autoMail" state="false"/>
+
+						</Toolbar>
+					</headerToolbar>
+				</List>
+			</VBox>
+			<VBox class="sapUiSmallMargin">
+				<l:VerticalLayout>
+					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress" tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+						<u:parameters>
+							<u:FileUploaderParameter name="createdBy"/>
+						</u:parameters>
+					</u:FileUploader>
+
+					<Button text="Upload File" press="handleUploadPress"/>
+					<!-- <Button text="Update Inquiry" press="updateInq"/> -->
+					<!--<Button text="Fill Coll" press="fillColl"/> <Button text="Take backup" press="TakeBackup" />-->
+
+				</l:VerticalLayout>
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<Button icon="sap-icon://message-popup" text="{local>/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>
+				<ToolbarSpacer/>
+				<Button text="Save" type="Accept" press="onSave" id="idApr"></Button>
+				<Button text="Get Account" press="onGetNext"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,110 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="oft.fiori.controller.dumps" xmlns:f="sap.ui.layout.form" xmlns:u="sap.ui.unified" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Dumps" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<FlexBox>
+					<FlexBox renderType="Bare" width="60%">
+						<f:SimpleForm
+							id="createCustomer"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="4"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false">
+							<f:content>
+								<Label text="Date"/>
+								<DatePicker id="idDate" displayFormat="dd.MM.yyyy" required="true" value="{local>/dumpSold/Date}" valueFormat="dd.MM.yyyy" change="onPayDateChange"></DatePicker>
+								<Label text="Customer Id"/>
+								<Input id="customerId" required="true" value="{local>/dumpSold/EmailId}" showValueHelp="true" valueHelpRequest="onSelect" valueHelpOnly="true"/>
+								<Label text="First Name"/>
+								<Input value="{local>/dumpSold/FirstName}"/>
+								<!-- <Label text="Last Name"/> -->
+								<Input value="{local>/dumpSold/LastName}"/>
+								<Label text="Dump Code"/>
+								<Select forceSelection="false" selectedKey="{local>/dumpSold/DumpCode}" items="{path: '/Dumps', sorter: { path: 'DumpName' }}" change="onDumpChange">
+									<core:Item key="{DumpCode}" text="{DumpName}-{DumpCode}"/>
+								</Select>
+								<Button text="Create" press="onCreateDump"/>
+								<Label text="Country"/>
+								<Input id="idCountry" value="{local>/dumpSold/Country}" liveChange=""></Input>
+								<Label text="Phone"/>
+								<Input id="idPhone" type="Number" value="{local>/dumpSold/Phone}"></Input>
+								<Label text="Fees"/>
+								<Input value="{local>/dumpSold/fees}"></Input>
+								<Label text="Currency"/>
+								<Input value="{local>/dumpSold/currency}"></Input>
+								<Label text="Account"/>
+								<Input id="accountDetails" required="false" value="{local>/dumpSold/account}" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="onSelect"/>
+								<Label text="Source"/>
+								<Input value="{local>/dumpSold/source}"></Input>
+							</f:content>
+						</f:SimpleForm>
+					</FlexBox>
+				</FlexBox>
+			</VBox>
+			<Table id="idRecent" items="{/DumpSolds}" growing="true" growingThreshold="2000" growingScrollToLoad="false" mode="MultiSelect" class="sapUiSizeCompact" showRowCount="true" updateFinished="onUpdateFinished">
+				<headerToolbar>
+					<Toolbar>
+						<Title id="titletext11"/>
+						<ToolbarSpacer></ToolbarSpacer>
+						<Button text="Mail" icon="sap-icon://email" type="Reject" press="onEmailDumpSold"/>
+						<Button text="Delete" icon="sap-icon://delete" type="Reject" press="onDeleteDumpSold"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Label text="{i18n>EmailId}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="{i18n>DumpCode}" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Date" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Country" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="Phone" class="columnLabelStyle"/>
+					</Column>
+					<Column>
+						<Label text="fees" class="columnLabelStyle"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem id="idColumnlist" press="onItemPress" type="Active">
+						<cells>
+							<Text text="{EmailId}" modelContextChange="onStudentIdChange"></Text>
+							<Text text="{DumpCode}"></Text>
+							<Text text="{ path: 'Date', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<Text text="{Country}"></Text>
+							<Text text="{Phone}"/>
+							<Text text="{fees}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button icon="sap-icon://save" text="Save" press="onSaveDumpSold"/>
+				<Button icon="sap-icon://sys-cancel" type="Neutral" text="Clear" press="onClearScreen"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>
