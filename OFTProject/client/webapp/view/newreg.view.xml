@@ -168,6 +168,9 @@
 						<Label text="Created By" class="columnLabelStyle"/>
 					</Column>
 					<Column>
+						<Label text="Member" class="columnLabelStyle"/>
+					</Column>
+					<Column>
 						<Label text="Screen Shot" class="columnLabelStyle"/>
 					</Column>
 					<Column visible="{= ${local>/Role} === 'Admin'}">
@@ -191,6 +194,7 @@
 							<Text text="{CreatedBy}"></Text>
 							<!-- <Button text="{CourseId}" press="onScreenShot"></Button> -->
 							<!-- <Link text="Payment Proof" href="" press="onScreenShot" /> -->
+							<Switch state="{Member}" change="onMemberStateChange"/>
 							<RatingIndicator id="RI_L" maxValue="2" class="sapUiSmallMarginBottom" change="onRate" value="{path: 'ExtraN1'}" iconSize="32px" tooltip="Follow Up"/>
 							<Text visible="{= ${local>/Role} === 'Admin'}" text="{Amount}"/>
 							<Text visible="{= ${local>/Role} === 'Admin'}" text="{Remarks}"/>

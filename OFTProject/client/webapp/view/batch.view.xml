@@ -41,14 +41,18 @@
 						<Input id="idFee" required="true" type="Number" value="{local>/newBatch/courseFee}"/>
 						<Label text="Link"/>
 						<Input id="idLink" value="{local>/newBatch/link}"/>
-						<Label text="Drive Id"/>
+						<Label text="Drive ID"/>
 						<Input id="idDrive" value="{local>/newBatch/DriveId}"/>
-						<Label text="Cal Id"/>
+						<Label text="Cal ID"/>
 						<Input id="idCalId" value="{local>/newBatch/CalendarId}"/>
-						<Label text="Event id"/>
+						<Label text="Event ID"/>
 						<Input id="idEvent" value="{local>/newBatch/EventId}"/>
+						<Label text="Role ID"/>
+						<Input id="idRole" value="{local>/newBatch/RoleId}" maxLength="120"/>
 						<Label text="Timing"/>
 						<Input id="idTiming" value="{local>/newBatch/timing}"/>
+						<Label text="Editor Site"/>
+						<TextArea id="idEditorSite" value="{local>/newBatch/EditorSite}"/>
 						<Label text="Weekend Batch"></Label>
 						<CheckBox id="idWeekend" selected="{local>/newBatch/weekend}"></CheckBox>
 						<!-- <CheckBox id="idWeekend" selected="{=${local>/newBatch/weekend} === false ? false : true}"></CheckBox> -->

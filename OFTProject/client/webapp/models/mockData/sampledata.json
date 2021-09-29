@@ -180,6 +180,8 @@
 		"id": "",
 		"DriveId": "",
 		"EventId": "",
+		"RoleId":null,
+		"EditorSite":null,
 		"CalendarId": "",
 		"status": "",
 		"analysis": false

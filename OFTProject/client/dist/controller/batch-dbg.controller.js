@@ -285,6 +285,8 @@ sap.ui.define([
 					this.getView().byId("idCalId").setValue(oModel.CalendarId);
 					this.getView().byId("idEvent").setValue(oModel.EventId);
 					this.getView().byId("idDrive").setValue(oModel.DriveId);
+					this.getView().byId("idRole").setValue(oModel.RoleId);
+					this.getView().byId("idEditorSite").setValue(oModel.EditorSite);
 					this.getView().byId("idStatus").setValue(oModel.status);
 
 
@@ -303,6 +305,8 @@ sap.ui.define([
 			this.getView().byId("idCalId").setValue("");
 			this.getView().byId("idEvent").setValue("");
 			this.getView().byId("idDrive").setValue("");
+			this.getView().byId("idRole").setValue("");
+			this.getView().byId("idEditorSite").setValue("");
 			// this.getView().byId("idWeekend").setValue("");
 			this.getView().byId("idStatus").setValue("");
 			this.getView().byId("idAnalysis").setValue("");

@@ -421,6 +421,21 @@ sap.ui.define([
 
 				});
 		},
+		onMemberStateChange: function(oEvent){
+			var sPath = oEvent.getSource().getBindingContext().sPath;
+			var that = this;
+				var payload = {
+					"Member": oEvent.getParameter("state")
+				};
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload, this)
+				.then(function(oData) {
+					sap.m.MessageToast.show("State Modified");
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					var oPopover = that.getErrorMessage(oError);
+
+				});
+		},
 		onUSDAmountChange: function(oEvent) {
 			var amt = oEvent.getParameter("value");
 			var charges = amt > 0 ? ((amt * 0.044 + 0.30) * 1.18).toFixed(2) : 0;
