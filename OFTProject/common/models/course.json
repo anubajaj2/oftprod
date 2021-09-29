@@ -63,6 +63,14 @@
       "type": "string",
       "default": "null"
     },
+    "RoleId": {
+      "type": "string",
+      "default": null
+    },
+    "EditorSite": {
+      "type": "string",
+      "default": null
+    },
     "CalendarId": {
       "type": "string",
       "default": "null"

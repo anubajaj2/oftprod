@@ -2134,6 +2134,22 @@ sap.ui.define([
 			}
 
 		},
+		onMemberStateChange: function(oEvent) {
+			debugger;
+			var sPath = oEvent.getSource().getBindingContext().sPath;
+			var that = this;
+				var payload = {
+					"Member": oEvent.getParameter("state")
+				};
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload, this)
+				.then(function(oData) {
+					sap.m.MessageToast.show("State Modified");
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					var oPopover = that.getErrorMessage(oError);
+
+				});
+		},
 		onUpload: function(oEvent) {
 
 		}

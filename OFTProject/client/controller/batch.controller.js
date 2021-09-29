@@ -56,6 +56,8 @@ sap.ui.define([
 				"CalendarId": batchData.CalendarId,
 				"EventId": batchData.EventId,
 				"DriveId": batchData.DriveId,
+				"RoleId":batchData.RoleId,
+				"EditorSite":batchData.EditorSite,
 				"status": batchData.status,
 				"analysis": batchData.analysis
 			};
