@@ -224,6 +224,30 @@ sap.ui.define([
 					});
 			}
 		},
+		onAddMember: function(oEvent) {
+			var that = this;
+			var items = that.getView().byId('idSubsRecent').getSelectedContexts();
+
+			for (var i = 0; i < items["length"]; i++) {
+
+				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
+				debugger;
+				// this.ODataHelper.callOData(this.getOwnerComponent().getModel(),
+				// 		"/Students('" + loginPayload.StudentId + "')",
+				// 		"GET", {}, {}, this)
+				// 	.then(function(oData) {
+				// 		var that2 = that;
+				// 		that.eMailId = oData.GmailId;
+				that.ODataHelper.callOData(that.getOwnerComponent().getModel(),
+						"/Courses('" + loginPayload.CourseId + "')",
+						"GET", {}, {}, that)
+					.then(function(oData) {
+						var myUri = "https://manage.wix.com/dashboard/5364c41b-ca7d-4184-9aec-39408726278b/member-permissions/roles/" + oData.RoleId;
+						// myUri = myUri.replace("//", "/");
+						window.open(myUri);
+					});
+			}
+		},
 		onClearToken: function() {
 			$.post('/clearToken')
 				.done(function(data, status) {
@@ -421,12 +445,12 @@ sap.ui.define([
 
 				});
 		},
-		onMemberStateChange: function(oEvent){
+		onMemberStateChange: function(oEvent) {
 			var sPath = oEvent.getSource().getBindingContext().sPath;
 			var that = this;
-				var payload = {
-					"Member": oEvent.getParameter("state")
-				};
+			var payload = {
+				"Member": oEvent.getParameter("state")
+			};
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload, this)
 				.then(function(oData) {
 					sap.m.MessageToast.show("State Modified");
