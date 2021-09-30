@@ -3595,9 +3595,9 @@ app.start = function() {
 					//console.log(req.body);
 					var payload = req.body;
 					var that = this;
-					if (payload.member) {
-						
-						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
+					if (payload.Member === "true") {
+
+						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'paymentM.html', 'utf8');
 						if (payload.includeX.indexOf("Renewal") !== -1) {
 							this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
 							var x = new Date(payload.EndDate);

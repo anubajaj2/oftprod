@@ -296,6 +296,8 @@ sap.ui.define([
 				}
 				loginPayload.password = that.passwords;
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
+				loginPayload.Member = that.getView().byId('idSubsRecent').getSelectedItems()[i].getCells()[8].getProperty("state");
+				//console.log(loginPayload.Member);
 				$.post('/sendSubscriptionEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");
@@ -454,6 +456,7 @@ sap.ui.define([
 			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload, this)
 				.then(function(oData) {
 					sap.m.MessageToast.show("State Modified");
+					that.onRefresh();
 				}).catch(function(oError) {
 					that.getView().setBusy(false);
 					var oPopover = that.getErrorMessage(oError);
@@ -1033,6 +1036,8 @@ sap.ui.define([
 
 				loginPayload.password = that.passwords;
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
+				console.log(loginPayload.Member);
+
 				$.post('/sendSubscriptionEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");
