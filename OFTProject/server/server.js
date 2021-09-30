@@ -3595,20 +3595,40 @@ app.start = function() {
 					//console.log(req.body);
 					var payload = req.body;
 					var that = this;
-					this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
-					if (payload.includeX.indexOf("Renewal") !== -1) {
-						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
-						var x = new Date(payload.EndDate);
-						this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
-					}
-					if (payload.PartialPayment === "true") {
+					if (payload.member) {
+						
+						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
+						if (payload.includeX.indexOf("Renewal") !== -1) {
+							this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
+							var x = new Date(payload.EndDate);
+							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
+						}
+						if (payload.PartialPayment === "true") {
 
-						var x = new Date(payload.PaymentDueDate);
-						this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
-						this.mailContent = this.mailContent.replace("$$DueAmount$$", payload.PendingAmount);
-					} else {
-						//else : remove the line
-						this.mailContent = this.mailContent.replace("<p>Please note that your next payment is due on $$DueDate$$ with amount $$DueAmount$$ INR.</p>", "");
+							var x = new Date(payload.PaymentDueDate);
+							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
+							this.mailContent = this.mailContent.replace("$$DueAmount$$", payload.PendingAmount);
+						} else {
+							//else : remove the line
+							this.mailContent = this.mailContent.replace("<p>Please note that your next payment is due on $$DueDate$$ with amount $$DueAmount$$ INR.</p>", "");
+						}
+					}else{
+
+						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
+						if (payload.includeX.indexOf("Renewal") !== -1) {
+							this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
+							var x = new Date(payload.EndDate);
+							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
+						}
+						if (payload.PartialPayment === "true") {
+
+							var x = new Date(payload.PaymentDueDate);
+							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
+							this.mailContent = this.mailContent.replace("$$DueAmount$$", payload.PendingAmount);
+						} else {
+							//else : remove the line
+							this.mailContent = this.mailContent.replace("<p>Please note that your next payment is due on $$DueDate$$ with amount $$DueAmount$$ INR.</p>", "");
+						}
 					}
 
 					var app = require('../server/server');
