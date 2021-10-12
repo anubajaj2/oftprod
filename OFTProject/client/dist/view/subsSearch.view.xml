@@ -86,6 +86,7 @@
 						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
 						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
+						<Button icon="sap-icon://kpi-managing-my-area" id="idAddMember" tooltip="Add Member" press="onAddMember"/>
 						<Button icon="sap-icon://payment-approval" id="idClearDue" tooltip="Clear Dues" press="onClearDue"/>
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://badge" id="idMostRecent" tooltip="Set as Most Recent" press="onRecent"/>
 						<Text text="Display Most Recent records?"/>
