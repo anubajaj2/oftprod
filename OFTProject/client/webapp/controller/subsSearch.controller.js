@@ -349,6 +349,7 @@ sap.ui.define([
 				if (oModel) {
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[2].setText(CourseName);
+					itemList[i].getCells()[7].setEnabled(Boolean(oModel.RoleId && oModel.RoleId.includes("AnubhavTrainings")))
 				}
 				var vStudent = itemList[i].getCells()[0].getText();
 				var oStudentId = 'Students(\'' + vStudent + '\')';
@@ -1917,6 +1918,21 @@ sap.ui.define([
 				}
 			});
 
+		},
+		onMemberStateChange: function(oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().sPath;
+			var that = this;
+			var payload = {
+				"Member": oEvent.getParameter("state")
+			};
+			this.ODataHelper.callOData(this.getOwnerComponent().getModel(), sPath, "PUT", {}, payload, this)
+				.then(function(oData) {
+					sap.m.MessageToast.show("State Modified");
+				}).catch(function(oError) {
+					that.getView().setBusy(false);
+					var oPopover = that.getErrorMessage(oError);
+
+				});
 		},
 		onExpiredExport: function(oEvent) {
 			$.ajax({

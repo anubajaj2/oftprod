@@ -122,6 +122,9 @@
 					<Column>
 						<Label text="Batch End Date" class="columnLabelStyle"/>
 					</Column>
+					<Column>
+						<Label text="Member" class="columnLabelStyle"/>
+					</Column>
 				</columns>
 				<items>
 					<ColumnListItem id="idColumnlist" press="onItemPress" type="Active" highlight="{path:'PartialPayment', formatter:'.formatRowHighlight'}">
@@ -146,6 +149,7 @@
 							<Text text="{ path: 'PaymentDueDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
 							<CheckBox selected="{PartialPayment}" editable="false"></CheckBox>
 							<Text text="{ path: 'EndDate', type:'sap.ui.model.type.Date', formatOptions:{ pattern:'dd.MM.YYYY' } }"></Text>
+							<Switch state="{Member}" change="onMemberStateChange"/>
 						</cells>
 					</ColumnListItem>
 				</items>
