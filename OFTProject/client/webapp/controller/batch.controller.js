@@ -56,8 +56,8 @@ sap.ui.define([
 				"CalendarId": batchData.CalendarId,
 				"EventId": batchData.EventId,
 				"DriveId": batchData.DriveId,
-				"RoleId":batchData.RoleId,
-				"EditorSite":batchData.EditorSite,
+				"RoleId": batchData.RoleId,
+				"EditorSite": batchData.EditorSite,
 				"status": batchData.status,
 				"analysis": batchData.analysis
 			};
@@ -335,24 +335,44 @@ sap.ui.define([
 			if (!queryString) {
 				queryString = oEvent.getParameter("value");
 			}
+			if (this.flag === "courseName") {
+				if (queryString) {
+					var oFilter1 = new sap.ui.model.Filter("courseName", sap.ui.model.FilterOperator.Contains, queryString);
 
-			if (queryString) {
-				var oFilter1 = new sap.ui.model.Filter("courseName", sap.ui.model.FilterOperator.Contains, queryString);
-
-				var oFilter = new sap.ui.model.Filter({
-					filters: [oFilter1],
-					and: false
-				});
-				var aFilter = [oFilter];
-				this.searchPopup.getBinding("items").filter(aFilter);
-			} else {
-				this.searchPopup.bindAggregation("items", {
-					path: "local>/courses",
-					template: new sap.m.DisplayListItem({
-						label: "{local>courseName}"
-					})
-				});
-				this.searchPopup.getBinding("items").filter([]);
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1],
+						and: false
+					});
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+				} else {
+					// this.searchPopup.bindAggregation("items", {
+					// 	path: "local>/courses",
+					// 	template: new sap.m.DisplayListItem({
+					// 		label: "{local>courseName}"
+					// 	})
+					// });
+					this.searchPopup.getBinding("items").filter([]);
+				}
+			} else if (this.flag === "batchid") {
+				if (queryString) {
+					var oFilter1 = new sap.ui.model.Filter("BatchNo", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter2 = new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.Contains, queryString);
+					var oFilter = new sap.ui.model.Filter({
+						filters: [oFilter1, oFilter2],
+						and: false
+					});
+					var aFilter = [oFilter];
+					this.searchPopup.getBinding("items").filter(aFilter);
+				} else {
+					// this.searchPopup.bindAggregation("items", {
+					// 	path: "local>/courses",
+					// 	template: new sap.m.DisplayListItem({
+					// 		label: "{local>courseName}"
+					// 	})
+					// });
+					this.searchPopup.getBinding("items").filter([]);
+				}
 			}
 
 		}

@@ -561,7 +561,6 @@ sap.ui.define([
 					return "";
 				}
 			}
-
 			//check for existing inquiry for given email id and course id:
 			// var sPath = oEvent.getSource().oPropagatedProperties.oBindingContexts.undefined.sPath;
 			// sPath = sPath.split("/")[1];
@@ -644,26 +643,40 @@ sap.ui.define([
 				"Exchange": leadData.Exchange,
 				"SettleAmount": leadData.SettleAmount
 			};
+			var Filter1 = new sap.ui.model.Filter("StudentId", "EQ", "'" + this.customerId + "'");
+			var Filter2 = new sap.ui.model.Filter("PartialPayment", "EQ", true);
+			that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Subs", "GET", {
+					filters: [Filter1, Filter2]
+				}, {}, that)
+				.then(function(oData) {
+					// debugger;
+					if (oData.results.length > 0) {
+						MessageBox.error("Payment Pending for previous course");
+					} else {
+						if (!that.isDefaulter) {
+							that.getView().setBusy(true);
+							that.ODataHelper.callOData(that.getOwnerComponent().getModel(), "/Subs", "POST", {},
+									payload, that)
+								.then(function(oData) {
 
-			if (!this.isDefaulter) {
-				that.getView().setBusy(true);
-				this.ODataHelper.callOData(this.getOwnerComponent().getModel(), "/Subs", "POST", {},
-						payload, this)
-					.then(function(oData) {
+									that.getView().setBusy(false);
+									that.subsciptionSaved = "true";
+									sap.m.MessageToast.show("Subscription Saved successfully");
+									that.destroyMessagePopover();
+								}).catch(function(oError) {
 
-						that.getView().setBusy(false);
-						that.subsciptionSaved = "true";
-						sap.m.MessageToast.show("Subscription Saved successfully");
-						that.destroyMessagePopover();
-					}).catch(function(oError) {
+									that.getView().setBusy(false);
+									that.subsciptionSaved = "false";
+									var oPopover = that.getErrorMessage(oError);
+								});
+						} else {
+							sap.m.MessageToast.show("Student is defaulter");
+						}
 
-						that.getView().setBusy(false);
-						that.subsciptionSaved = "false";
-						var oPopover = that.getErrorMessage(oError);
-					});
-			} else {
-				sap.m.MessageToast.show("Student is defaulter");
-			}
+					}
+				}).catch(function(oError) {
+					// debugger;
+				});
 		},
 
 		onStartChange: function(oEvent) {
@@ -868,7 +881,7 @@ sap.ui.define([
 				if (oModel) {
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[1].setText(CourseName);
-					itemList[i].getCells()[8].setEnabled(Boolean(oModel.RoleId && oModel.RoleId.includes("AnubhavTrainings")))
+					itemList[i].getCells()[8].setEnabled(Boolean(oModel.link && oModel.link.includes("AnubhavTrainings")))
 				}
 				if (itemList[i].getCells()[0].getText().indexOf("@") === -1) {
 					allStudents.push(itemList[i].getCells()[0].getText());

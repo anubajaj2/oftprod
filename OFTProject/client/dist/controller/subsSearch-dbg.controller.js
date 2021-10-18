@@ -349,7 +349,7 @@ sap.ui.define([
 				if (oModel) {
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[2].setText(CourseName);
-					itemList[i].getCells()[7].setEnabled(Boolean(oModel.RoleId && oModel.RoleId.includes("AnubhavTrainings")))
+					itemList[i].getCells()[7].setEnabled(Boolean(oModel.link && oModel.link.includes("AnubhavTrainings")))
 				}
 				var vStudent = itemList[i].getCells()[0].getText();
 				var oStudentId = 'Students(\'' + vStudent + '\')';
