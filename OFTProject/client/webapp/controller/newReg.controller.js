@@ -881,7 +881,7 @@ sap.ui.define([
 				if (oModel) {
 					var CourseName = oModel.BatchNo + ': ' + oModel.Name; //got the course anme from screen
 					itemList[i].getCells()[1].setText(CourseName);
-					itemList[i].getCells()[8].setEnabled(Boolean(oModel.link && oModel.link.includes("AnubhavTrainings")))
+					itemList[i].getCells()[8].setEnabled(Boolean(oModel.Link && oModel.Link.includes("anubhavtrainings")))
 				}
 				if (itemList[i].getCells()[0].getText().indexOf("@") === -1) {
 					allStudents.push(itemList[i].getCells()[0].getText());
