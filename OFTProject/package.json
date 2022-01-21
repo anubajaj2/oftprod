@@ -23,7 +23,7 @@
     "googleapis": "^43.0.0",
     "jquery": "^3.6.0",
     "jsdom": "^16.6.0",
-    "log4js": "^0.6.38",
+    "log4js": "^6.4.0",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.3.1",
