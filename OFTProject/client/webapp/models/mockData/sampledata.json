@@ -72,6 +72,10 @@
 			"fee": "20 k",
 			"usdFee": 350
 		}, {
+			"courseName": "HANA Cloud CAPM",
+			"fee": "25 k",
+			"usdFee": 400
+		}, {
 			"courseName": "Analytics Cloud",
 			"fee": "25 k",
 			"usdFee": 400
