@@ -3126,6 +3126,9 @@ app.start = function() {
 						case "Launchpad":
 							Subject = "Launchpad, Security & Extensions training";
 							break;
+						case "HANA Cloud CAPM":
+								Subject = "HANA Cloud CAPM training";
+								break;
 						case "Hybris C4C":
 							Subject = "C4 Customer Experience training";
 							break;
@@ -3173,6 +3176,7 @@ app.start = function() {
 				//https://myaccount.google.com/lesssecureapps?pli=1
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
 					req.body.CourseName != "HANA XS" &&
+					req.body.CourseName !=  "HANA Cloud CAPM" &&
 					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
 					req.body.CourseName != "S4HANA Extension" &&
 					req.body.CourseName != "HANA Cloud Integration" &&
