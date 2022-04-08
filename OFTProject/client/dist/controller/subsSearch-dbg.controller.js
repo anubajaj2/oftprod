@@ -674,63 +674,63 @@ sap.ui.define([
 								// var that2 = that;
 								debugger;
 								var aFilter = [new sap.ui.model.Filter("StudentId", "EQ", "'" + oData.results[0].id + "'")];
-								if (that.getView().getModel("local").getProperty("/Role") !== 'Admin' &&
-									that.getView().getModel("local").getProperty("/CurrentUser") !== '5c187036dba2681834ffe305' &&
-									that.getView().getModel("local").getProperty("/CurrentUser") !== '5ecc968586321064989cdc3f') {
-									that.getView().byId("manageSubsTable").bindItems({
-										path: "/Subs",
-										template: new sap.m.ColumnListItem({
-											cells: [
-												new sap.m.Text({
-													text: {
-														path: "StudentId"
-													}
-												}),
-												new sap.ui.core.Icon({
-													src: "sap-icon://status-positive",
-													size: "1.5rem",
-													color: {
-														path: 'PartialPayment',
-														formatter: that.formatter.formatIconColor
-													}
-												}),
-												new sap.m.Text({
-													text: "{CourseId}"
-												}),
-												new sap.m.Text({
-													text: {
-														path: 'PaymentDate',
-														type: 'sap.ui.model.type.Date',
-														formatOptions: {
-															pattern: 'dd.MM.YYYY'
-														}
-													}
-												}),
-												new sap.m.Text({
-													text: {
-														path: 'PaymentDueDate',
-														type: 'sap.ui.model.type.Date',
-														formatOptions: {
-															pattern: 'dd.MM.YYYY'
-														}
-													}
-												}),
-												new sap.m.CheckBox({
-													selected: "{PartialPayment}"
-												}),
-												new sap.m.Text({
-													text: {
-														path: 'EndDate',
-														type: 'sap.ui.model.type.Date',
-														formatOptions: {
-															pattern: 'dd.MM.YYYY'
-														}
-													}
-												})
-											]
-										})
-									});
-								}
+								// if (that.getView().getModel("local").getProperty("/Role") !== 'Admin' &&
+								// 	that.getView().getModel("local").getProperty("/CurrentUser") !== '5c187036dba2681834ffe305' &&
+								// 	that.getView().getModel("local").getProperty("/CurrentUser") !== '5ecc968586321064989cdc3f') {
+								// 	that.getView().byId("manageSubsTable").bindItems({
+								// 		path: "/Subs",
+								// 		template: new sap.m.ColumnListItem({
+								// 			cells: [
+								// 				new sap.m.Text({
+								// 					text: {
+								// 						path: "StudentId"
+								// 					}
+								// 				}),
+								// 				new sap.ui.core.Icon({
+								// 					src: "sap-icon://status-positive",
+								// 					size: "1.5rem",
+								// 					color: {
+								// 						path: 'PartialPayment',
+								// 						formatter: that.formatter.formatIconColor
+								// 					}
+								// 				}),
+								// 				new sap.m.Text({
+								// 					text: "{CourseId}"
+								// 				}),
+								// 				new sap.m.Text({
+								// 					text: {
+								// 						path: 'PaymentDate',
+								// 						type: 'sap.ui.model.type.Date',
+								// 						formatOptions: {
+								// 							pattern: 'dd.MM.YYYY'
+								// 						}
+								// 					}
+								// 				}),
+								// 				new sap.m.Text({
+								// 					text: {
+								// 						path: 'PaymentDueDate',
+								// 						type: 'sap.ui.model.type.Date',
+								// 						formatOptions: {
+								// 							pattern: 'dd.MM.YYYY'
+								// 						}
+								// 					}
+								// 				}),
+								// 				new sap.m.CheckBox({
+								// 					selected: "{PartialPayment}"
+								// 				}),
+								// 				new sap.m.Text({
+								// 					text: {
+								// 						path: 'EndDate',
+								// 						type: 'sap.ui.model.type.Date',
+								// 						formatOptions: {
+								// 							pattern: 'dd.MM.YYYY'
+								// 						}
+								// 					}
+								// 				})
+								// 			]
+								// 		})
+								// 	});
+								// }
 								that.getView().byId("manageSubsTable").getBinding("items").filter(aFilter);
 
 								// var oItemTemplate = new sap.m.ColumnListItem({
@@ -799,11 +799,11 @@ sap.ui.define([
 				}
 			} else {
 				debugger;
-				if (this.getView().getModel("local").getProperty("/Role") === 'Admin') {
+				// if (this.getView().getModel("local").getProperty("/Role") === 'Admin') {
 
 					this.getView().byId("manageSubsTable").getBinding("items").filter([]);
 
-				}
+				// }
 
 			}
 

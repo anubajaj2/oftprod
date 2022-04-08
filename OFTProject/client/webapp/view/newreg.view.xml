@@ -144,7 +144,7 @@
 						<ToolbarSpacer></ToolbarSpacer>
 
 						<Button visible="{= ${local>/Role} === 'Admin'}" icon="sap-icon://delete" press="onDelete"/>
-						<CheckBox visible="{= ${local>/Role} === 'Admin'}" id="includeX" text="cc"/>
+						<CheckBox selected="true" id="includeX" text="cc"/>
 						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button icon="sap-icon://kpi-managing-my-area" id="idAddMember" tooltip="Add Member" press="onAddMember"/>
 						<!-- <Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/> -->
