@@ -3174,6 +3174,7 @@ app.start = function() {
 					}
 				}
 				//https://myaccount.google.com/lesssecureapps?pli=1
+				//https://www.ibm.com/docs/en/app-connect/containers_eus?topic=gmail-connecting-google-application-by-providing-credentials-app-connect-use-basic-oauth
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
 					req.body.CourseName != "HANA XS" &&
 					req.body.CourseName !=  "HANA Cloud CAPM" &&
