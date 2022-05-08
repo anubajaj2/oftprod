@@ -3704,7 +3704,7 @@ app.start = function() {
 							}
 							if (courseStr.Name === "Hybris C4C" ||
 								courseStr.Name === "HANA Cloud Integration") {
-								ccs.push("sam4dsouza@gmail.com");
+								//ccs.push("sam4dsouza@gmail.com");
 							}
 							var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 							if (emailPattern.test(that2.studentEmail1)) {
