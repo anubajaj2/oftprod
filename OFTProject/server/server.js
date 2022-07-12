@@ -628,6 +628,7 @@ app.start = function() {
 					// 5f1331f2e0b8524af830fa20 --> shalini
 					// 5f4d01c50815a314ec9238d2 --> khushbu
 					// 60f0f06da1cf875cb8045975	 --> anjali
+					// 62b2b992d2f8f989d8c38d2f	 --> vibha
 					var lv_manish = 0,
 						lv_khushbu = 0,
 						lv_shalu = 0,
@@ -647,7 +648,7 @@ app.start = function() {
 							case "5db594b9b06bff3ffcbba53c":
 								lv_shalu = lv_shalu + 1;
 								break;
-							case "5c187036dba2681834ffe305":
+							case "62b2b992d2f8f989d8c38d2f":
 								lv_sonal = lv_sonal + 1;
 								break;
 						  case "5f1331f2e0b8524af830fa20":
@@ -680,7 +681,7 @@ app.start = function() {
 							count: lv_shalu
 						},
 						{
-							"name": "sonal",
+							"name": "vibha",
 							count: lv_sonal
 						},
 						{
