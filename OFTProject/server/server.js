@@ -3690,6 +3690,16 @@ app.start = function() {
 								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayment.html', 'utf8');;
 								that2.mailContent = that2.mailContent.replace("$$MLink$$", '<a href="' + courseStr.DriveId + '">' + courseStr.DriveId + '</a>');
 							}
+							if(courseStr.Name === "MM" ||
+							courseStr.Name === "PP" ||
+							courseStr.Name === "SimpleLogistics" ||
+							courseStr.Name === "BW/4HANA" ||
+							courseStr.Name === "MDG" ||
+							courseStr.Name === "BODS" ||
+							courseStr.Name === "BPC" ||
+							courseStr.Name === "ALEIDOC"){
+								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayments.html', 'utf8');;
+							}
 
 							///Replace the link in the contents
 							that2.mailContent = that2.mailContent.replace("$$Link$$", '<a href="' + courseStr.Link + '">' + courseStr.Link + '</a>');
