@@ -46,12 +46,12 @@
 		"account": null,
 		"source": null
 	},
-	"dump":{
-  "DumpCode": null,
-  "DumpName": null,
-  "fees": null,
-  "currency": "INR",
-  "Link": null
+	"dump": {
+		"DumpCode": null,
+		"DumpName": null,
+		"fees": null,
+		"currency": "INR",
+		"Link": null
 	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",
@@ -157,11 +157,83 @@
 		}, {
 			"courseName": "SimpleLogistics",
 			"fee": "18 k",
-			"usdFee": 350
+			"usdFee": 300,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "SAP S4 HANA Simple Logistics,Deep Dive - What is S/4HANA,Architecture, Data Provision, Modelling,S4 Simplification, Data Simplification, S4 HANA changes in SD, MM, PP & Other Modules, S4 Hana Scenarios - Brownfield, Greenfield, SAP Activate Methodology, SAP S4 HANA Manufacturing Improvement & PP,SAP S4 HANA Sourcing & Procurement,Certification Exam Tips & Tricks,SAP S4 HANA New tools & Usage ",
+			"trainingLink": "https://docs.google.com/document/d/1JJIQtrgToaltwjR5fQJbILgPwpBkyXPy/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1BT_IY1kyKo-HtSea0LDsluiLsrdwHZdr/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
 		}, {
-			"courseName": "SimpleFinance",
+			"courseName": "BW/4HANA",
 			"fee": "18 k",
-			"usdFee": 350
+			"usdFee": 300,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Modelling with new objects like Composite Provider, ADSOs, Enhanced Master Data, Working with new Layered Scalable Architecture(LSA) concepts, Data lifecycle maintenance in BW4 HANA 2.0 with DTO(Data Tiering Optimization),Working with new ODP framework, Enhanced Master Data, Working with new Layered Scalable Architecture(LSA) concepts, Data lifecycle maintenance in BW4 HANA 2.0 with DTO(Data Tiering Optimization),Working with new ODP framework with ODQMON,Learn to create and use Core Data Services(CDS) Extractors,Learn to create ABAP Managed Database Procedure(AMDP),Working with Native HANA views and Mixed Hybrid Scenario, Creation of Process Chain in BW4HANA Cockpit(New UI), Working with Inventory data in BW4HANA 2.0,v Learn about Snapshot Support, Stock Coverage features in BW4HANA 2.0, Lots of useful Tcodes with BW4HANA 2.0, Creating and using Customer exit in BW4HANA 2.0, How Semantic Group(SEGR) works",
+			"trainingLink": "https://docs.google.com/document/d/10TOFnh4TvF7R-plLvnnxUbXxhlA-oCqO/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1Jr0jOLEHKhVCfx7ivWuf7fMlS12CWLCR/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "MM",
+			"fee": "8 k",
+			"usdFee": 110,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Gain knowledge to become a top SAP MM Consultant, Master SAP MM module from beginner to expert level, Introduction to ERP and SAP, Master Data, Configuration of Organizational Structures and Material Master,Purchasing and Release Procedure Document Types for Purchasing Documents, Purchasing Optimization, Pricing in MM and Pricing Procedure, External Service Management, Consumption Based Planning and Forecast, Inventory Management and Movement Types, Physical Inventory, Special Stocks and Special Procurement Types, Procurement Process, Valuation and Account Determination, Logistics Invoice Verification, Cross Functional Customizing in MM",
+			"trainingLink": "https://docs.google.com/document/d/1EpmmT7d6QkQ1tHMkj1efiqOIuCzY72Pl/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1O9jgbUWscaktkRDDJAPv77otu9_S15lJ/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "PP",
+			"fee": "8 k",
+			"usdFee": 110,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Comprehensive knowledge on SAP PP module, Understand the core concepts of SAP PP and their use in the industry,Practical demonstration of all configurationsand activities in PP,Learn SAP PP from beginner to advanced level in a step - by - step manner, Become an SAP PP consultant or manager, Prepare for SAP PP Certification exam, Apply for SAP PP jobs and prepare for interviews ",
+			"trainingLink": "https://docs.google.com/document/d/1029xPK73opY6JRSoIFXxNhEITgv10EVJ/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/16FJtV5s7gEXwrj86Kw2T37u3aexsN-O9/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "MDG",
+			"fee": "12 k",
+			"usdFee": 175,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "You will learn the basics of SAP MDG, You will learn how to configure BRF,Workflows, You will learn how to create Rule based workflows including creation of the decision tables and linking it with BADI s for context determination, You will learn how to handle dynamic context determination and extend decision tables with custom columns in rule based workflow, You will learn how to dynamically Determine agents in the rule based workflow, You will learn how to debug a rule based workflow and correct it, You will also learn and build a static workflow ",
+			"trainingLink": "https://docs.google.com/document/d/1-GtUrLz5HUKoxOXZ_ppfTxgQNImAqmOy/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/13WuMmBLjLyVXZds0VY39vGuDcFBg4uQT/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "BODS",
+			"fee": "10 k",
+			"usdFee": 150,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "how to create various BODS objects, BODS from scratch with all Hand-On exercise, how to migrate data to S4HANA, various BODS functionality in detail, how to connect BODS to Data Source and various File formats, how to consume and produce various XML files and Nested structures, How to work with Data Quality Transforms, How to work with Information Stewards ",
+			"trainingLink": "https://docs.google.com/document/d/1QgzmPPXIWbyEL1c1ewovo0h-F9Zv-ibe/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/16Bi51gdFhwL4A_gbwr89sfVnQd_BOz5o/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "BPC",
+			"fee": "10 k",
+			"usdFee": 150,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Get the relevant knowledge required to clear the SAP certification exam, Understand the core concepts of SAP BPC module, Learn to automate and streamline business forecast, planning, and consolidation activities in an organization, Learn to manage processes, models & reports, SAP BPC for Netweaver Architecture, Designing a Model with SAP BPC, Loading, Scheduling and Managing Data in SAP BPC, Reporting, Planning and Analysis in SAP BPC ",
+			"trainingLink": "https://docs.google.com/document/d/12mrpWZgK2RJwkkLdFcYjJ59R1wY-MjMw/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1Q8shmP4PGt6_1ulxZGRh3KgpkQlbDwMD/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "ALEIDOC",
+			"fee": "7 k",
+			"usdFee": 120,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Overview of IDoc, Business Requirements related to IDoc, Roles of a Functional Consultant in an IDoc Setup, Configuring IDoc, Testing of IDoc, Introduction and usage of ALE, introduction to idoc and step by step configuration of idoc objects for data transfer, Handling Issues related to IDoc ",
+			"trainingLink": "https://docs.google.com/document/d/1ctsoAHBV_7EFDTlXABdcTej5zIukfpr1/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1grZTSU71IydkIbc138MDE2yjxC6BILE0/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
 		}, {
 			"courseName": "Google Blockly",
 			"fee": "8 k",
@@ -184,8 +256,8 @@
 		"id": "",
 		"DriveId": "",
 		"EventId": "",
-		"RoleId":null,
-		"EditorSite":null,
+		"RoleId": null,
+		"EditorSite": null,
 		"CalendarId": "",
 		"status": "",
 		"analysis": false

@@ -3182,7 +3182,6 @@ app.start = function() {
 					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
 					req.body.CourseName != "S4HANA Extension" &&
 					req.body.CourseName != "HANA Cloud Integration" &&
-					req.body.CourseName != "SimpleLogistics" &&
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "SAC Premium" &&
@@ -3193,6 +3192,9 @@ app.start = function() {
 					req.body.CourseName != "Workflow" &&
 					req.body.CourseName != "FPM" &&
 					req.body.CourseName != "BRF" &&
+					req.body.CourseName != "SimpleLogistics" && req.body.CourseName != "BW/4HANA" &&
+					req.body.CourseName != "MM" && req.body.CourseName != "PP" && req.body.CourseName != "MDG" &&
+					req.body.CourseName != "BODS" && req.body.CourseName != "BPC" && req.body.CourseName != "ALEIDOC" &&
 					req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 					if (Subject === "" || Subject === "null") {
@@ -3214,7 +3216,14 @@ app.start = function() {
 				var app = require('../server/server');
 				var Template = app.models.Template;
 
-				var CourseName = req.body.CourseName;
+				if(req.body.CourseName === "SimpleLogistics" || req.body.CourseName === "BW/4HANA" ||
+				req.body.CourseName === "MM" || req.body.CourseName === "PP" || req.body.CourseName === "MDG" ||
+				req.body.CourseName === "BODS" || req.body.CourseName === "BPC" || req.body.CourseName === "ALEIDOC" ){
+						var CourseName = "Other";
+				}else{
+						var CourseName = req.body.CourseName;
+				}
+
 				if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 					CourseName = "Linkedin";
 				}
@@ -3269,6 +3278,20 @@ app.start = function() {
 					req.body.FirstName = result.charAt(0).toUpperCase() + result.slice(1);
 					contents = contents.replace('$$Name$$', req.body.FirstName)
 
+					//Support for new courses in video mode - 19-08-2022
+					contents = contents.replace('$$TRAINING_NAME$$', req.body.CourseName)
+					contents = contents.replace('$$TRAINING_DURATION$$', req.body.trainingDuration)
+					contents = contents.replace('$$TRAINING_TOPICS$$', req.body.trainingTopics)
+					contents = contents.replace('$$TRAINING_LINK$$', req.body.trainingLink)
+					contents = contents.replace('$$TRAINING_DEMO$$', req.body.trainingDemo)
+
+					if (req.body.currency === "INR") {
+							contents = contents.replace('$$TRAINING_SERVER$$', req.body.trainingServer)
+					}else{
+						contents = contents.replace('$$TRAINING_SERVER$$', req.body.trainingServerUsd)
+					}
+
+
 					if (req.body.fees !== "null" && req.body.fees !== "") {
 						if (req.body.source === "L" || req.body.source === "F" || req.body.source === "N") {
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
@@ -3280,15 +3303,16 @@ app.start = function() {
 						} else {
 							contents = contents.replace("$$fees$$", req.body.fees);
 							contents = contents.replace("$$currency$$", req.body.currency);
+							contents = contents.replace("$$currency$$", req.body.currency);
 						}
 
 					}
 					var ccs = [];
-					if (req.body.CourseName === "SimpleLogistics") {
-						ccs.push("paramsaddy@gmail.com");
-					} else if (req.body.CourseName === "SimpleFinance") {
-						ccs.push("info@gaurav-consulting.com");
-					}
+					// if (req.body.CourseName === "SimpleLogistics") {
+					// 	ccs.push("paramsaddy@gmail.com");
+					// } else if (req.body.CourseName === "SimpleFinance") {
+					// 	ccs.push("info@gaurav-consulting.com");
+					// }
 					var mailOptions = {};
 
 					if (req.body.IsMinakshi === "X") {

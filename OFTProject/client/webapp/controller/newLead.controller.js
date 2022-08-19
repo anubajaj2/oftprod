@@ -351,6 +351,20 @@ sap.ui.define([
 				var x = this.getView().byId("rbg");
 				loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
 				loginPayload.source = this.getView().byId("source").getSelectedKey();
+
+				var allCourses = this.getView().getModel("local").getProperty("/courses");
+				for (var i = 0; i < allCourses.length; i++) {
+					if (allCourses[i].courseName === loginPayload.CourseName && allCourses[i].hasOwnProperty('trainingDuration')) {
+						loginPayload.trainingDuration = allCourses[i].trainingDuration;
+						loginPayload.trainingTopics = allCourses[i].trainingTopics;
+						loginPayload.trainingLink = allCourses[i].trainingLink;
+						loginPayload.trainingDemo = allCourses[i].trainingDemo;
+						loginPayload.trainingServer = allCourses[i].trainingServer;
+						loginPayload.trainingServerUsd = allCourses[i].trainingServerUsd;
+						break;
+					}
+				}
+
 				$.post('/sendInquiryEmail', loginPayload)
 					.done(function(data, status) {
 						sap.m.MessageToast.show("Email sent successfully");
@@ -787,6 +801,14 @@ sap.ui.define([
 										if (allCourses[i].courseName === loginPayload.CourseName) {
 											loginPayload.fees = allCourses[i].fee;
 											loginPayload.currency = "INR";
+											if(allCourses[i].hasOwnProperty('trainingDuration')){
+												loginPayload.trainingDuration = allCourses[i].trainingDuration;
+												loginPayload.trainingTopics = allCourses[i].trainingTopics;
+												loginPayload.trainingLink = allCourses[i].trainingLink;
+												loginPayload.trainingDemo = allCourses[i].trainingDemo;
+												loginPayload.trainingServer = allCourses[i].trainingServer;
+												loginPayload.trainingServerUsd = allCourses[i].trainingServerUsd;
+											}
 											break;
 										}
 									}
@@ -796,10 +818,19 @@ sap.ui.define([
 										if (allCourses[i].courseName === loginPayload.CourseName) {
 											loginPayload.fees = allCourses[i].usdFee;
 											loginPayload.currency = "USD";
+											if(allCourses[i].hasOwnProperty('trainingDuration')){
+												loginPayload.trainingDuration = allCourses[i].trainingDuration;
+												loginPayload.trainingTopics = allCourses[i].trainingTopics;
+												loginPayload.trainingLink = allCourses[i].trainingLink;
+												loginPayload.trainingDemo = allCourses[i].trainingDemo;
+												loginPayload.trainingServer = allCourses[i].trainingServer;
+												loginPayload.trainingServerUsd = allCourses[i].trainingServerUsd;
+											}
 											break;
 										}
 									}
 								}
+
 								var x = that2.getView().byId("rbg");
 								loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
 								if (that2.getView().byId("isMinakshi").getSelected()) {
@@ -808,6 +839,7 @@ sap.ui.define([
 									loginPayload.IsMinakshi = "";
 								}
 								loginPayload.source = "";
+
 								$.post('/sendInquiryEmail', loginPayload)
 									.done(function(data, status) {
 										sap.m.MessageToast.show("Email sent successfully");
