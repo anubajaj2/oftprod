@@ -199,7 +199,7 @@
 			"fee": "12 k",
 			"usdFee": 175,
 			"trainingDuration": "30 Hours",
-			"trainingTopics": "You will learn the basics of SAP MDG, You will learn how to configure BRF,Workflows, You will learn how to create Rule based workflows including creation of the decision tables and linking it with BADI s for context determination, You will learn how to handle dynamic context determination and extend decision tables with custom columns in rule based workflow, You will learn how to dynamically Determine agents in the rule based workflow, You will learn how to debug a rule based workflow and correct it, You will also learn and build a static workflow ",
+			"trainingTopics": "basics of SAP MDG, You will learn how to configure BRF,Workflows, You will learn how to create Rule based workflows including creation of the decision tables and linking it with BADI s for context determination, You will learn how to handle dynamic context determination and extend decision tables with custom columns in rule based workflow, You will learn how to dynamically Determine agents in the rule based workflow, You will learn how to debug a rule based workflow and correct it, You will also learn and build a static workflow ",
 			"trainingLink": "https://docs.google.com/document/d/1-GtUrLz5HUKoxOXZ_ppfTxgQNImAqmOy/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
 			"trainingDemo": "https://drive.google.com/file/d/13WuMmBLjLyVXZds0VY39vGuDcFBg4uQT/view?usp=sharing",
 			"trainingServer": "4 k",
@@ -233,6 +233,56 @@
 			"trainingLink": "https://docs.google.com/document/d/1ctsoAHBV_7EFDTlXABdcTej5zIukfpr1/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
 			"trainingDemo": "https://drive.google.com/file/d/1grZTSU71IydkIbc138MDE2yjxC6BILE0/view?usp=sharing",
 			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "EWM",
+			"fee": "10 k",
+			"usdFee": 120,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "what can be done with S/4 HANA EWM, Create the necessary Organizational Units and Master Data for working with S/4 HANA EWM, understand the differences between S/4 HANA EWM and SAP WM",
+			"trainingLink": "https://docs.google.com/document/d/13-A1OoLVUv_1ZLUtl9x28hYKjBoehrzW/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1xM6i_Fq8o4p004fNTbnNhF3jKDAkB0uQ/view?usp=sharing",
+			"trainingServer": "6 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "HCM",
+			"fee": "10 k",
+			"usdFee": 120,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Understanding SAP ERP Human Capital ManagementIn depth explanation of SAP HCM module, Understand the Navigation and Terminology of SAP HCM pctical examples and scenarios demonstration Learn Business Processes",
+			"trainingLink": "https://docs.google.com/document/d/1LKwq_-b4Uc3Qc4h6jnbJTbO2B-FU4S01/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1pcD_MqVfzezQGerrfFOVeBCIz1e0Bg3Y/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "ARIBA",
+			"fee": "15 k",
+			"usdFee": 250,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Introduction to Ariba Sourcing Events, Overview of Ariba Architecture",
+			"trainingLink": "https://docs.google.com/document/d/1m8HCnGQFP3ol7KaTM5AhN88nVgMeHi16/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1QbeqavxeebVlpqPR3A8nMqKhSfxrNbMl/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "FICO",
+			"fee": "8 k",
+			"usdFee": 120,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Configuration and Implementation for SAP FICO module, Ruirements gathering for the Business Record to Report process cycle,SAP Business analysis to improve financial activities,Hands on experience with SAP system,Be able to take SAP FI Certification exam,Be able to work as both SAP End-User and Consultant,Understand how a required business process runs on SAP,Integration of SAP FICO with SAP MM and SAP SD",
+			"trainingLink": "https://docs.google.com/document/d/15nNVzFBfPTuFIUx-jnFbsV3GLbcWSCKP/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1OdLdDrB8_2ypReKzX4hyrsWUyD8NkD3Z/view?usp=sharing",
+			"trainingServer": "4 k",
+			"trainingServerUsd": 40
+		}, {
+			"courseName": "PIPO",
+			"fee": "10 k",
+			"usdFee": 180,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "Learn to Build Interface with File, FTP, JDBC, SOAP, JDBC, HTTP_AAE, MAIL, IDOC_AAE, RFC, and REST,You will learn to Build Interface Scenarios with SAP PO Tool,End to End Interface Development with Standard Adapters,Complete Development of Webservice and API with Eclipse and Jersey Libraries,Learn to use all the Standard Adapter and Build Interface,Complete Handson on the Mapping, Configuration and Testing of the Interface,Learn to build Interface with Different,Scenarios and Data,Learn Testing tools like SOAPUI, POSTMAN and WE19",
+			"trainingLink": "https://docs.google.com/document/d/1IUpo1m1IM4FNH6V5Y6Qq76N0cL9jy9Co/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1I5yAIU4lU7E7gXs6eC4IroRGcQjjhHuL/view?usp=sharing",
+			"trainingServer": "5 k",
 			"trainingServerUsd": 40
 		}, {
 			"courseName": "Google Blockly",
