@@ -52,7 +52,6 @@
     },
     "key":{
       "type": "string",
-      "required": true,
       "default":"null"
     },
     "current": {
@@ -62,17 +61,14 @@
     },
     "server": {
       "type": "boolean",
-      "required": true,
       "default":false
     },
     "extra1": {
       "type": "string",
-      "required": true,
       "default":"null"
     },
     "extra2": {
       "type": "string",
-      "required": true,
       "default":"null"
     },
     "deleted":{
