@@ -285,6 +285,16 @@
 			"trainingServer": "5 k",
 			"trainingServerUsd": 40
 		}, {
+			"courseName": "GRC",
+			"fee": "10 k",
+			"usdFee": 180,
+			"trainingDuration": "30 Hours",
+			"trainingTopics": "important concepts related to SAP GRC Access Control 10.1 and 10.1 and 12.0,Do practical configuration and implementation of SAP Access Control 10.1 and 10.1 and 12.0,End to end implementation of GRC Access Control,Mock Tests",
+			"trainingLink": "https://docs.google.com/document/d/1Nes0YyIvOWcSMo6WKNBOJaxYOnVrouLZ/edit?usp=sharing&ouid=104238599758721557896&rtpof=true&sd=true",
+			"trainingDemo": "https://drive.google.com/file/d/1KfN3l9ffVZt5Ylbz_OHE7yEpCesKOUbj/view?usp=sharing",
+			"trainingServer": "5 k",
+			"trainingServerUsd": 40
+		}, {
 			"courseName": "Google Blockly",
 			"fee": "8 k",
 			"usdFee": 150

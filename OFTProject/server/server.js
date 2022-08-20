@@ -3196,7 +3196,7 @@ app.start = function() {
 					req.body.CourseName != "MM" && req.body.CourseName != "PP" && req.body.CourseName != "MDG" &&
 					req.body.CourseName != "BODS" && req.body.CourseName != "BPC" && req.body.CourseName != "ALEIDOC" &&
 					req.body.CourseName != "HCM" && req.body.CourseName != "EWM" && req.body.CourseName != "ARIBA" &&
-					req.body.CourseName != "FICO" && req.body.CourseName != "PIPO" &&
+					req.body.CourseName != "FICO" && req.body.CourseName != "PIPO" && req.body.CourseName != "GRC" &&
 					req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 					if (Subject === "" || Subject === "null") {
@@ -3221,8 +3221,8 @@ app.start = function() {
 				if(req.body.CourseName === "SimpleLogistics" || req.body.CourseName === "BW/4HANA" ||
 				req.body.CourseName === "MM" || req.body.CourseName === "PP" || req.body.CourseName === "MDG" ||
 				req.body.CourseName === "BODS" || req.body.CourseName === "BPC" || req.body.CourseName === "ALEIDOC" ||
-				req.body.CourseName != "HCM" || req.body.CourseName != "EWM" || req.body.CourseName != "ARIBA" ||
-				req.body.CourseName != "FICO" || req.body.CourseName != "PIPO"){
+				req.body.CourseName === "HCM" || req.body.CourseName === "EWM" || req.body.CourseName === "ARIBA" ||
+				req.body.CourseName === "FICO" || req.body.CourseName === "PIPO" || req.body.CourseName === "GRC"){
 						var CourseName = "Other";
 				}else{
 						var CourseName = req.body.CourseName;
@@ -3475,7 +3475,7 @@ app.start = function() {
 					req.body.CourseName != "MM" && req.body.CourseName != "PP" && req.body.CourseName != "MDG" &&
 					req.body.CourseName != "BODS" && req.body.CourseName != "BPC" && req.body.CourseName != "ALEIDOC" &&
 					req.body.CourseName != "HCM" && req.body.CourseName != "EWM" && req.body.CourseName != "ARIBA" &&
-					req.body.CourseName != "FICO" && req.body.CourseName != "PIPO" &&
+					req.body.CourseName != "FICO" && req.body.CourseName != "PIPO" && req.body.CourseName != "GRC" &&
 					req.body.CourseName != "Google Blockly" && req.body.CourseName != "SimpleFinance") {
 					req.body.CourseName = "Generic";
 					if (Subject === "" || Subject === "null") {
@@ -3710,6 +3710,7 @@ app.start = function() {
 							courseStr.Name === "FICO" ||
 							courseStr.Name === "ARIBA" ||
 							courseStr.Name === "EWM" ||
+							courseStr.Name === "GRC" ||
 							courseStr.Name === "HCM" ){
 								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayments.html', 'utf8');;
 							}
