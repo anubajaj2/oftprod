@@ -3163,6 +3163,9 @@ app.start = function() {
 						case "Workflow":
 							Subject = "Workflow training";
 							break;
+						case "Cloud Workflow":
+	 						 Subject = "BTP Workflow training";
+	 						 break;
 						case "FPM":
 							Subject = "FPM training";
 							break;
@@ -3192,6 +3195,7 @@ app.start = function() {
 					req.body.CourseName != "Workflow" &&
 					req.body.CourseName != "FPM" &&
 					req.body.CourseName != "BRF" &&
+					req.body.CourseName != "Cloud Workflow" &&
 					req.body.CourseName != "SimpleLogistics" && req.body.CourseName != "BW/4HANA" &&
 					req.body.CourseName != "MM" && req.body.CourseName != "PP" && req.body.CourseName != "MDG" &&
 					req.body.CourseName != "BODS" && req.body.CourseName != "BPC" && req.body.CourseName != "ALEIDOC" &&
@@ -3441,6 +3445,9 @@ app.start = function() {
 						case "Webdynpro":
 							Subject = "Webdynrpo training";
 							break;
+						case "Cloud Workflow":
+	 						 Subject = "BTP Cloud Workflow training";
+	 						 break;
 						case "Workflow":
 							Subject = "Workflow training";
 							break;
@@ -3471,6 +3478,7 @@ app.start = function() {
 					req.body.CourseName != "Workflow" &&
 					req.body.CourseName != "FPM" &&
 					req.body.CourseName != "BRF" &&
+					req.body.CourseName != "Cloud Workflow" &&
 					req.body.CourseName != "SimpleLogistics" && req.body.CourseName != "BW/4HANA" &&
 					req.body.CourseName != "MM" && req.body.CourseName != "PP" && req.body.CourseName != "MDG" &&
 					req.body.CourseName != "BODS" && req.body.CourseName != "BPC" && req.body.CourseName != "ALEIDOC" &&

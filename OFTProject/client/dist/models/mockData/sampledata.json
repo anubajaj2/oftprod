@@ -79,6 +79,10 @@
 			"courseName": "Analytics Cloud",
 			"fee": "25 k",
 			"usdFee": 400
+		}, {
+			"courseName": "Cloud Workflow",
+			"fee": "18 k",
+			"usdFee": 250
 		},
 		{
 			"courseName": "SAC Premium",
