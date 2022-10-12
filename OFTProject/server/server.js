@@ -1066,7 +1066,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on ABAP on HANA is going to start on Saturday. kindly email contact@anubhavtrainings.com";
+									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on ABAP on HANA is going to start on Weekend. kindly email contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -1091,13 +1091,13 @@ app.start = function() {
 
 										//the whole response has been recieved, so we just print it out here
 										response.on('end', function() {
-											res.send("message sent");
+											///res.send("message sent");
 											console.log(str);
 										});
 									}
 
 									console.log(options.host + options.path);
-									//http.request(options, callback).end();
+									http.request(options, callback).end();
 
 
 
