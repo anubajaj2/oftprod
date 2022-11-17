@@ -1028,7 +1028,7 @@ app.start = function() {
 															SoftDelete : false
 														},
 														{
-															CourseName: 'ABAP on HANA'
+															CourseName: 'UI5 and Fiori'
 														},
 														{
 															Country: 'IN'
@@ -1054,7 +1054,7 @@ app.start = function() {
 									var loginPayload = {};
 									loginPayload.msgType = "demostart";
 									loginPayload.userName = Records[i].__data.FirstName;
-									loginPayload.courseName = "ABAP on HANA";
+									loginPayload.courseName = "SAP BTP";
 									loginPayload.Number = Records[i].__data.Phone;
 
 									count = count + 1;
@@ -1066,7 +1066,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on ABAP on HANA is going to start on Today. kindly email contact@anubhavtrainings.com";
+									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on SAP UI5 Fiori is going to start on Today. kindly email contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -3220,6 +3220,9 @@ app.start = function() {
 						case "UI5 and Fiori":
 							Subject = "UI5 WebIDE and OData training";
 							break;
+						case "Hybrid Fiori MDK":
+								Subject = "Hybrid Fiori MDK training";
+								break;
 						case "HANA XS":
 							Subject = "XS and Native xsodata training";
 							break;
@@ -3279,6 +3282,7 @@ app.start = function() {
 				//https://myaccount.google.com/lesssecureapps?pli=1
 				//https://www.ibm.com/docs/en/app-connect/containers_eus?topic=gmail-connecting-google-application-by-providing-credentials-app-connect-use-basic-oauth
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
+				  req.body.CourseName != "Hybrid Fiori MDK" &&
 					req.body.CourseName != "HANA XS" &&
 					req.body.CourseName !=  "HANA Cloud CAPM" &&
 					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
@@ -3508,6 +3512,9 @@ app.start = function() {
 						case "UI5 and Fiori":
 							Subject = "UI5 WebIDE and OData training";
 							break;
+						case "Hybrid Fiori MDK":
+								Subject = "Hybrid Fiori MDK training";
+								break;
 						case "HANA XS":
 							Subject = "XS and Native xsodata training";
 							break;
@@ -3564,6 +3571,7 @@ app.start = function() {
 				//https://myaccount.google.com/lesssecureapps?pli=1
 				if (req.body.CourseName != "ABAP on HANA" && req.body.CourseName != "UI5 and Fiori" &&
 					req.body.CourseName != "HANA XS" &&
+					req.body.CourseName != "Hybrid Fiori MDK" &&
 					req.body.CourseName != "Launchpad" && req.body.CourseName != "Hybris C4C" &&
 					req.body.CourseName != "S4HANA Extension" &&
 					req.body.CourseName != "HANA Cloud Integration" &&
@@ -4440,7 +4448,154 @@ app.start = function() {
 				});
 			});
 
-		app.post('/giveAccessNew',
+			app.post('/giveAccessNew',
+				function(req, res) {
+					var app = require('../server/server');
+					var Student = app.models.Student;
+					this.StudentId = req.body.StudentId;
+					this.CourseId = req.body.CourseId;
+					var that = this;
+					Student.findById(this.StudentId).then(function(singleStu) {
+						var app = require('../server/server');
+						var Course = app.models.Course;
+						var that2 = that;
+						that.studentEmailId = singleStu.GmailId;
+						that.studentName = singleStu.Name.split(" ")[0];
+						Course.findById(that.CourseId).then(function(courseStr) {
+							console.log(that2.studentEmailId + "," + that2.studentName);
+							console.log(courseStr);
+							console.log(that2.mailContent);
+							var endDate = new Date(courseStr.EndDate);
+							var abhi = new Date();
+							if (abhi > endDate) {
+								that2.isCalRequire = false;
+							} else {
+								that2.isCalRequire = true;
+							}
+							//const sampleClient = require('../google/sampleclient');
+							//new codee starts OtherEmail1
+							const fs = require('fs');
+							const {
+								google
+							} = require('googleapis');
+							var xoauth2 = require("xoauth2"),
+								xoauth2gen;
+							// If modifying these scopes, delete token.json.
+							const SCOPES = ['https://www.googleapis.com/auth/calendar',
+								'https://www.googleapis.com/auth/drive'
+							];
+							const key = require('./samples.json');
+							// Load client secrets from a local file.
+							console.log(key);
+							xoauth2gen = xoauth2.createXOAuth2Generator({
+								user: key.user,
+								clientId: key.clientId,
+								clientSecret: key.clientSecret,
+								refreshToken: key.refreshToken,
+								scope: SCOPES
+							});
+							const oauth2Client = new google.auth.OAuth2();
+							xoauth2gen.getToken(function(err, token, accessToken) {
+								//console.log(token + ' ==============>>> ' + accessToken)
+								if (err) {
+									return console.log(err);
+								}
+								//console.log("Authorization: Bearer " + accessToken);
+								var tokenAuth = {
+									"access_token": accessToken,
+									"scope": ["https://www.googleapis.com/auth/drive",
+										"https://www.googleapis.com/auth/calendar"
+									],
+									"token_type": "Bearer",
+									"expires_in": 3599,
+									"refresh_token": "1//04KHYEQyBDMOwCgYIARAAGAQSNwF-L9IrqyiSM9pXWseKqZE2F2oySo3USLsGwF8hgpwsKcMqn4LOEt2PCjNxuI8cFBtoP_1WwxQ"
+								};
+								//accessToken = "Bearer " + accessToken;
+								oauth2Client.setCredentials(tokenAuth);
+								const drive = google.drive({
+									version: 'v3',
+									auth: oauth2Client
+								});
+								if (that2.isCalRequire === true &&
+									(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
+										courseStr.EventId != "null" && courseStr.EventId != "")
+								) {
+									const calendar = google.calendar({
+										version: 'v3',
+										auth: oauth2Client
+									});
+									that2.CalendarId = courseStr.CalendarId;
+									that2.EventId = courseStr.EventId;
+									that2.calendar = calendar;
+								}
+
+								that2.DriveId = courseStr.DriveId;
+
+								var that3 = that2;
+								console.log("trying mail " + that3.studentEmailId + "----<>"  + that3.DriveId);
+								drive.permissions.create({
+									fileId: that3.DriveId,
+									sendNotificationEmail: false,
+									resource: {
+										role: 'reader',
+										type: 'user',
+										emailAddress: that3.studentEmailId,
+									}
+								}, (error, permissionResponse) => {
+									if (error) {
+										console.log(error);
+									} else {
+										res.send("drive access granted");
+									}
+								});
+
+								if (that2.isCalRequire === true &&
+									(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
+										courseStr.EventId != "null" && courseStr.EventId != "")) {
+									that2.calendar.events.get({
+										calendarId: that2.CalendarId + 'roup.calendar.google.com',
+										eventId: that2.EventId
+									}, function(err, something) {
+										if (err) {
+											console.log("CALENDAR NOT FOUND");
+											res.send("calendar not found");
+											return;
+										}
+										something.data.attendees.push({
+											"email": that3.studentEmailId
+										});
+										that3.calendar.events.patch({
+											calendarId: that3.CalendarId + 'roup.calendar.google.com',
+											eventId: that3.EventId,
+											resource: {
+												attendees: something.data.attendees,
+												recurrence: something.data.recurrence,
+												end: something.data.end,
+												start: something.data.start
+											}
+										}, function(err, something) {
+											if (err) {
+												console.error(err);
+											} else {
+												res.send("calendar access granted");
+											}
+										});
+									});
+								}
+
+							});
+
+
+							///new code ends OtherEmail1
+							// const drive = google.drive({
+							// 	version: 'v3',
+							// 	auth: sampleClient.oAuth2Client,
+							// });
+						});
+					});
+				});
+
+		app.post('/giveAccessNewBackup',
 			function(req, res) {
 				var app = require('../server/server');
 				var Student = app.models.Student;
@@ -5047,6 +5202,15 @@ app.start = function() {
 													newRec.currency = "INR";
 												} else {
 													newRec.fees = "400";
+													newRec.currency = "USD";
+												}
+											} else if (singleRec.url.indexOf("hybrid-mdk-app-development") !== -1) {
+												singleRec.url = "Hybrid Fiori MDK";
+												if (singleRec.country_code === "IN") {
+													newRec.fees = "25 k";
+													newRec.currency = "INR";
+												} else {
+													newRec.fees = "350";
 													newRec.currency = "USD";
 												}
 											} else {

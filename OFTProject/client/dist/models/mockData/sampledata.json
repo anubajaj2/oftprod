@@ -85,6 +85,11 @@
 			"usdFee": 250
 		},
 		{
+			"courseName": "Hybrid Fiori MDK",
+			"fee": "25 k",
+			"usdFee": 350
+		},
+		{
 			"courseName": "SAC Premium",
 			"fee": "15 k",
 			"usdFee": 150
