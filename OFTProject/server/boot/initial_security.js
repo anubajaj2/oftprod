@@ -10,7 +10,29 @@ var InitSecurity = (function () {
     } ;
     InitSecurity.prototype.init = function () {
         var _this = this;
-
+        // this.User.findOne({where: {email: 'anubhav.abap@gmail\.com'}}).then((user) => {
+    		// 	if(!user) {
+    		// 		// create user if not already exists
+    		// 		this.User.create({username: 'kajol', email: 'kajoljain@evotrainingsolutions\.com', password: 'Kajol@123'}).then((user) => {
+    		// 			if(user) {
+    		// 				logger.debug(`User created: ${JSON.stringify(user.toJSON())}`);
+    		// 				this.initRoleForUser(user);
+    		// 			} else {
+    		// 				logger.error(`user 'kajol' could not be created. Program may not work as expected`);
+    		// 			}
+    		// 		});
+    		// 	} else {
+    		// 		//this.initRoleForUser(user);
+        //     debugger;
+        //     user.updateAttribute('password', "Anubhav@123", function(err, user) {
+        //                                                                          if (err) return res.sendStatus(404);
+        //                                                                            console.log('> password reset processed successfully');
+        //                                                                          }
+        //     );
+    		// 	}
+    		// }).catch((err) => {
+    		// 	logger.error(`error: ${err}`);
+    		// });
     };
     return InitSecurity;
 }());

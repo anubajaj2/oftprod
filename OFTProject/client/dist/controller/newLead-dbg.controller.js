@@ -353,14 +353,14 @@ sap.ui.define([
 				loginPayload.source = this.getView().byId("source").getSelectedKey();
 
 				var allCourses = this.getView().getModel("local").getProperty("/courses");
-				for (var i = 0; i < allCourses.length; i++) {
-					if (allCourses[i].courseName === loginPayload.CourseName && allCourses[i].hasOwnProperty('trainingDuration')) {
-						loginPayload.trainingDuration = allCourses[i].trainingDuration;
-						loginPayload.trainingTopics = allCourses[i].trainingTopics;
-						loginPayload.trainingLink = allCourses[i].trainingLink;
-						loginPayload.trainingDemo = allCourses[i].trainingDemo;
-						loginPayload.trainingServer = allCourses[i].trainingServer;
-						loginPayload.trainingServerUsd = allCourses[i].trainingServerUsd;
+				for (var j = 0; j < allCourses.length; j++) {
+					if (allCourses[j].courseName === loginPayload.CourseName && allCourses[j].hasOwnProperty('trainingDuration')) {
+						loginPayload.trainingDuration = allCourses[j].trainingDuration;
+						loginPayload.trainingTopics = allCourses[j].trainingTopics;
+						loginPayload.trainingLink = allCourses[j].trainingLink;
+						loginPayload.trainingDemo = allCourses[j].trainingDemo;
+						loginPayload.trainingServer = allCourses[j].trainingServer;
+						loginPayload.trainingServerUsd = allCourses[j].trainingServerUsd;
 						break;
 					}
 				}
