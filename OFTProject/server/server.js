@@ -5153,19 +5153,19 @@ app.start = function() {
 											if (singleRec.url.indexOf("abap-on-hana-training") !== -1) {
 												singleRec.url = "ABAP on HANA";
 												if (singleRec.country_code === "IN") {
-													newRec.fees = "20 k";
+													newRec.fees = "22 k";
 													newRec.currency = "INR";
 												} else {
-													newRec.fees = "350";
+													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
 											} else if (singleRec.url.indexOf("abap-on-cloud-training") !== -1) {
 												singleRec.url = "ABAP on Cloud";
 												if (singleRec.country_code === "IN") {
-													newRec.fees = "20 k";
+													newRec.fees = "22 k";
 													newRec.currency = "INR";
 												} else {
-													newRec.fees = "280";
+													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
 											} else if (singleRec.url.indexOf("sap-analytics-cloud-training") !== -1) {
@@ -5216,10 +5216,10 @@ app.start = function() {
 											} else {
 												singleRec.url = "UI5 and Fiori";
 												if (singleRec.country_code === "IN") {
-													newRec.fees = "20 k";
+													newRec.fees = "22 k";
 													newRec.currency = "INR";
 												} else {
-													newRec.fees = "350";
+													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
 											}
