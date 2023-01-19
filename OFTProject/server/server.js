@@ -1014,6 +1014,102 @@ app.start = function() {
 				});
 		});
 
+		app.get("/sendPromotionsSMS", function () {
+			var where = {};
+			var startDate = new Date();
+			startDate.setMonth(startDate.getMonth() - 3);
+			//var startDate = new Date(new Date(parseInt(req.query.date)));
+			if (startDate.toDateString() !== (new Date()).toDateString()) {
+				var where = {
+										$and: [ {
+																$or: [ { source : 'C' }, { source : 'W' }, { source : 'R' } ]
+														},
+														{
+															SoftDelete : false
+														},
+														{
+															CourseName: 'UI5 and Fiori'
+														},
+														{
+															Country: 'IN'
+														},
+														{
+															Phone: { $ne : 0 }
+														}
+													]
+										}	;
+			}
+			var count = 0;
+			Inquiry.find({
+					where: where
+				})
+				.then(function(Records, err) {
+						if (Records) {
+							Records.sort(function(a, b) {
+								return new Date(b.__data.Date) - new Date(a.__data.Date)
+							})
+							for (var i = 0; i < Records["length"]; i++) {
+								if(new Date(Records[i].__data.Date) >= startDate){
+									//console.log(Records[i].__data);
+									var loginPayload = {};
+									loginPayload.msgType = "demostart";
+									loginPayload.userName = Records[i].__data.FirstName;
+									loginPayload.courseName = "SAP BTP";
+									loginPayload.Number = Records[i].__data.Phone;
+
+									count = count + 1;
+
+									var http = require('https');
+									var urlencode = require('urlencode');
+									msg = urlencode(msg);
+									var number = loginPayload.Number;
+									//var username='anubhav.abap@gmail.com';
+									var username = 'contact@soyuztechnologies.com';
+									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
+									var msg = "Hello, Join free demo on #COURSE# here #LINK# email contact@anubhavtrainings.com to connect";
+									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
+									if(loginPayload.userName === "null"){
+										loginPayload.userName = "Sir";
+									}
+									msg = msg.replace("#FirstName#", loginPayload.userName.substring(0, 15));
+															// The hash key could be found under Help->All Documentation->Your hash key.
+									// Alternatively you can use your Textlocal password in plain text.
+									//var hash = 'eef684d01be7535d39d7f409a1b8e888f874e9a05243b4fb3db2426f99aed5ba';
+									//var sender='ONLTRN';
+									var sender = "395558";
+									var data = 'username=' + username + '&hash=' + hash + '&sender=' + sender + '&numbers=' + number + '&message=' + encodeURIComponent(msg)
+									console.log(data);
+									var options = {
+										host: 'api.textlocal.in',
+										path: '/send?' + data
+									};
+									callback = function(response) {
+										var str = '';
+										response.on('data', function(chunk) {
+											str += chunk;
+										});
+
+										//the whole response has been recieved, so we just print it out here
+										response.on('end', function() {
+											///res.send("message sent");
+											console.log(str);
+										});
+									}
+
+									console.log(options.host + options.path);
+									http.request(options, callback).end();
+
+
+
+								}
+							}
+							console.log("anubhav it was " + count.toString() + "/" + Records["length"].toString());
+						}
+					}
+
+				);
+		});
+
 		app.get("/newDemoSendSMS", function () {
 			var where = {};
 			var startDate = new Date();
@@ -5150,6 +5246,9 @@ app.start = function() {
 											///cusromer based on TRUE flag
 											var newRec = {};
 											newRec.EmailId = singleRec.email.toLowerCase();
+											if (newRec.EmailId === "" || newRec.EmailId === undefined) {
+												continue;
+											}
 											if (singleRec.url.indexOf("abap-on-hana-training") !== -1) {
 												singleRec.url = "ABAP on HANA";
 												if (singleRec.country_code === "IN") {
