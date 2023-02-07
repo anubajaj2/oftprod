@@ -119,5 +119,9 @@
   "DumpSold":{
     "dataSource": "mongoatlas",
     "public": true
+  },
+  "SMSText":{
+    "dataSource": "mongoatlas",
+    "public": true
   }
 }

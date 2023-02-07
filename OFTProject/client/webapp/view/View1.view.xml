@@ -33,6 +33,7 @@
 					<StandardListItem  id="InvoiceBuilder" icon="sap-icon://create" title="Invoice Builder" description=""></StandardListItem>
 					<StandardListItem  id="accessProcessor" icon="sap-icon://key-user-settings"
 						 title="Access Manager" description=""></StandardListItem>
+					<StandardListItem visible="{= ${local>/Role} === 'Admin'}" id="smsCenter" icon="sap-icon://iphone" title="SMS Center" description=""></StandardListItem>
 
 				</items>
 			</List>

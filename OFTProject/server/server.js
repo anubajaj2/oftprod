@@ -1113,7 +1113,7 @@ app.start = function() {
 		app.get("/newDemoSendSMS", function () {
 			var where = {};
 			var startDate = new Date();
-			startDate.setMonth(startDate.getMonth() - 3);
+			startDate.setMonth(startDate.getMonth() - 4);
 			//var startDate = new Date(new Date(parseInt(req.query.date)));
 			if (startDate.toDateString() !== (new Date()).toDateString()) {
 				var where = {
@@ -1162,7 +1162,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on SAP UI5 Fiori is going to start on Today. kindly email contact@anubhavtrainings.com";
+									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on SAP UI5 Fiori is going to start on Monday. kindly email contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -4994,13 +4994,24 @@ app.start = function() {
 
 				sampleFile = req.files.myFileUpload;
 				var createdBy = req.body.createdBy;
-				if (createdBy === "" || createdBy === null) {
-					res.json({
-						error_code: 1,
-						err_desc: "Name is empty"
-					});
-					return "Error";
+				var uploadKind  = "";
+				var createdOn  = "";
+				var type  = "";
+				var finalData = JSON.parse(req.body.data);
+				if (finalData.type) {
+					uploadKind = finalData.kind;
+					createdOn = finalData.createdOn;
+					type = finalData.type;
+				}else{
+					if (createdBy === "" || createdBy === null) {
+						res.json({
+							error_code: 1,
+							err_desc: "Name is empty"
+						});
+						return "Error";
+					}
 				}
+
 				sampleFile.mv('./uploads/' + req.files.myFileUpload.name, function(err) {
 					if (err) {
 						console.log("eror saving");
@@ -5045,29 +5056,51 @@ app.start = function() {
 								var Batch = app.models.Course;
 								var Account = app.models.Account;
 								var Subs = app.models.Sub;
+								var SMSTexts = app.models.SMSText;
+
 								var uploadType = "Inquiry";
+								debugger;
+								if (uploadKind !== "") {
+									uploadType = uploadKind;
+								}
 								///*****Code to update the batchs
 								this.allResult = [];
-								// switch (uploadType) {
-								// 	case "Email":
-								// 		for (var j = 0; j < result.length; j++) {
-								// 			this.allResult[result[j].email] = result[j];
-								// 		}
-								// 		break;
-								// 	case "Server":
-								// 		for (var j = 0; j < result.length; j++) {
-								// 			this.allResult[result[j].email] = result[j];
-								// 		}
-								// 		break;
-								// 	default:
-								//
-								// }
 
 								///Process the result json and send to mongo for creating all inquiries
 								for (var j = 0; j < result.length; j++) {
 									var singleRec = result[j];
 
 									switch (uploadType) {
+										case "SMSCenter":
+											var newRec = {};
+											if (singleRec.phoneno === "" || singleRec.phoneno === undefined) {
+												continue;
+											}
+											newRec.phoneNo = singleRec.phoneno.replace(" ","");
+											newRec.phoneNo = newRec.phoneNo.replace("+","");
+											const regexExp = /^((\91?)|\+)?[7-9][0-9]{9}$/;
+											const result = regexExp.test(newRec.phoneNo);
+											if (result === false) {
+												newRec.phoneNo = "91" + newRec.phoneNo;
+											}
+											if (newRec.phoneNo.length > 12 || newRec.phoneNo.length < 12) {
+												continue;
+											}
+											newRec.type = type;
+											newRec.blocked = false;
+											newRec.createdOn = new Date();
+											SMSTexts.findOrCreate({
+																"where": {
+																	"phoneNo": newRec.phoneNo
+																}
+															}, newRec)
+												.then(function(batch) {
+													console.log("SMS Record successfully");
+												})
+												.catch(function(err) {
+													console.log(err);
+												});
+											break;
 										case "Check":
 											var GmailId = singleRec.email;
 											Student.find({

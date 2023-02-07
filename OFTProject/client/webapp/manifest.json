@@ -222,11 +222,12 @@
 								"pattern": "blacklisted",
 								"name": "blacklisted",
 								"target": ["donald", "blacklisted"]
+							},
+							{
+								"pattern": "smsCenter",
+								"name": "smsCenter",
+								"target": ["donald", "smsCenter"]
 							}
-
-
-
-
 						]
 					}
 
@@ -441,6 +442,15 @@
 					"clearAggregation": true,
 					"viewName": "accessProcessor",
 					"viewId": "idaccessProcessor",
+					"viewLevel": 2,
+					"controlAggregation": "detailPages"
+				},
+				"smsCenter":{
+					"transition": "slide",
+					"controlId":"__xmlview0--idSplitApp",
+					"clearAggregation": true,
+					"viewName": "smsCenter",
+					"viewId": "idSmsCenter",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				}

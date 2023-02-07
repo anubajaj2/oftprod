@@ -1,0 +1,73 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="oft.fiori.controller.smsCenter"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:u="sap.ui.unified"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="SMS Center" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+		<headerContent>
+			<Text id="idUser"></Text>
+			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
+		</headerContent>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<l:VerticalLayout>
+					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress"
+						tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+						<u:parameters>
+							<u:FileUploaderParameter name="createdBy"/>
+							<u:FileUploaderParameter name="data"/>
+						</u:parameters>
+					</u:FileUploader>
+					<Button text="Upload File" press="handleUploadPress"/>
+				</l:VerticalLayout>
+			</VBox>
+			<FlexBox renderType="Bare">
+				<FlexBox class="columns" width="70%" renderType="Bare">
+					<f:SimpleForm id="SimpleFormToolbar" editable="true" ariaLabelledBy="New Inquiry">
+						<f:toolbar>
+							<Toolbar id="TB1">
+								<Title id="Title1" text="New SMS Center" level="H4" titleStyle="H4"/>
+								<ToolbarSpacer/>
+							</Toolbar>
+						</f:toolbar>
+						<f:content>
+							<Select id="course" selectedKey="{local>/smsCenter/type}" change="onCourseSelect">
+								<items>
+									<core:Item text="DataCenter" key="DataCenter"/>
+									<core:Item text="AnubhavTraining" key="AnubhavTraining"/>
+									<core:Item text="OtherCenter" key="OtherCenter"/>
+								</items>
+							</Select>
+							<Label text="Date"/>
+							<DatePicker id="inqDate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" value="{local>/smsCenter/date}"></DatePicker>
+							<Label text="SMS Template"/>
+							<TextArea value="{local>/smsCenter/smsText}" id="smsText"/>
+						</f:content>
+					</f:SimpleForm>
+				</FlexBox>
+			</FlexBox>
+			<VBox>
+				<List id="idRecent" growing="true" mode="MultiSelect" growingThreshold="100" growingScrollToLoad="false" class="sapUiSizeCompact">
+					<headerToolbar>
+						<Toolbar>
+							<Title id="titletext2"/>
+							<ToolbarSpacer></ToolbarSpacer>
+							<Button icon="sap-icon://iphone" tooltip="Send SMS" id="sendSMS" press="onSendSMS"/>
+						</Toolbar>
+					</headerToolbar>
+				</List>
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

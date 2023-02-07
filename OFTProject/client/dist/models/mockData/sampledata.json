@@ -499,6 +499,12 @@
 		"currency": "INR",
 		"source": "L"
 	},
+	"smsCenter": {
+		"type": "DataCenter",
+		"date": "",
+		"smsText": "",
+		"blocked": ""
+	},
 	"block": {
 		"emailId": "",
 		"course": " ",

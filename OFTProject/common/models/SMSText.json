@@ -1,0 +1,39 @@
+{
+  "name": "SMSText",
+  "plural": "SMSTexts",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "phoneNo": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "string",
+      "default": "null"
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "CreatedOn": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {
+
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
