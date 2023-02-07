@@ -540,42 +540,42 @@ sap.ui.define([
 			that.getView().setBusy(true);
 			var leadData = this.getView().getModel("local").getProperty("/newCustomer");
 			debugger;
-			var oFileUploader = this.getView().byId("idFileUploader1");
-			var domRef = oFileUploader.getFocusDomRef();
-			var file = domRef.files[0];
-			if (file) {
-				var that = this;
-				var fileName = file.name.split(".");
-				var i = fileName.length;
-
-				var filetype = file.type.split("/")[1];
-				var file_ext = fileName[i - 1];
-				if ((file_ext == "PDF") || (file_ext == "DOCX") || (file_ext == "DOC") ||
-					(file_ext == "pdf") || (file_ext == "docx") || (file_ext == "doc") ||
-					(file_ext == "msword") || (file_ext == "MSWORD")) {
-
-					var reader = new FileReader();
-					reader.onload = function(e) {
-
-						//get an access to the content of the file
-						if ((file_ext == "PDF") || (file_ext == "pdf")) {
-							that.FileContent = e.currentTarget.result.replace("data:application/pdf;base64,", "");
-						} else {
-							if (filetype == "msword") {
-								that.FileContent = e.currentTarget.result.replace("data:application/msword;base64,", "");
-							} else {
-								that.FileContent = e.currentTarget.result.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
-							}
-						}
-						//that.encoded = btoa(encodeURI(that.imgContent));
-					};
-					//File Reader will start reading the file
-					reader.readAsDataURL(file);
-				} else {
-					sap.m.MessageToast.show("File Type should be PDF or DOC");
-					return "";
-				}
-			}
+			// var oFileUploader = this.getView().byId("idFileUploader1");
+			// var domRef = oFileUploader.getFocusDomRef();
+			// var file = domRef.files[0];
+			// if (file) {
+			// 	var that = this;
+			// 	var fileName = file.name.split(".");
+			// 	var i = fileName.length;
+			//
+			// 	var filetype = file.type.split("/")[1];
+			// 	var file_ext = fileName[i - 1];
+			// 	if ((file_ext == "PDF") || (file_ext == "DOCX") || (file_ext == "DOC") ||
+			// 		(file_ext == "pdf") || (file_ext == "docx") || (file_ext == "doc") ||
+			// 		(file_ext == "msword") || (file_ext == "MSWORD")) {
+			//
+			// 		var reader = new FileReader();
+			// 		reader.onload = function(e) {
+			//
+			// 			//get an access to the content of the file
+			// 			if ((file_ext == "PDF") || (file_ext == "pdf")) {
+			// 				that.FileContent = e.currentTarget.result.replace("data:application/pdf;base64,", "");
+			// 			} else {
+			// 				if (filetype == "msword") {
+			// 					that.FileContent = e.currentTarget.result.replace("data:application/msword;base64,", "");
+			// 				} else {
+			// 					that.FileContent = e.currentTarget.result.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
+			// 				}
+			// 			}
+			// 			//that.encoded = btoa(encodeURI(that.imgContent));
+			// 		};
+			// 		//File Reader will start reading the file
+			// 		reader.readAsDataURL(file);
+			// 	} else {
+			// 		sap.m.MessageToast.show("File Type should be PDF or DOC");
+			// 		return "";
+			// 	}
+			// }
 
 			if (that.UpdateCustomer == false) {
 				if (leadData.OtherEmail1) {
