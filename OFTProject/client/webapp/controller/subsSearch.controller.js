@@ -1621,40 +1621,40 @@ sap.ui.define([
 				}
 			}
 
-			var oFileUploader = sap.ui.getCore().byId("imageUploader2");
-			var domRef = oFileUploader.getFocusDomRef();
-			var file = domRef.files[0];
-			if (file) {
-				var that = this;
-				//	this.fileName = file.name;
-				//this.fileType = file.type;
-				var fileName = file.name.split(".");
-				var i = fileName.length;
-
-				//var filetype = file.type.split("/")[1];
-				var file_ext = fileName[i - 1];
-
-				if ((file_ext == "jpg") || (file_ext == "jpeg") || (file_ext == "png") ||
-					(file_ext == "JPG") || (file_ext == "JPEG") || (file_ext == "PNG")) {
-					var reader = new FileReader();
-					reader.onload = function(e) {
-						if ((file_ext == "jpg") || (file_ext == "jpeg") || (file_ext == "JPG") || (file_ext == "JPEG")) {
-							//get an access to the content of the file
-							that.screenShotContent = e.currentTarget.result.replace("data:image/jpeg;base64,", "");
-							//that.encoded = btoa(encodeURI(that.imgContent));
-						} else {
-							that.screenShotContent = e.currentTarget.result.replace("data:image/png;base64,", "");
-						}
-					};
-					//File Reader will start reading the file
-					reader.readAsDataURL(file);
-				} else {
-					sap.m.MessageToast.show("Upload only jpg/png files");
-					// sap.ui.getCore().byId("imageUploader2");
-					sap.ui.getCore().byId("imageUploader2").setValue(null);
-					return "";
-				}
-			}
+			// var oFileUploader = sap.ui.getCore().byId("imageUploader2");
+			// var domRef = oFileUploader.getFocusDomRef();
+			// var file = domRef.files[0];
+			// if (file) {
+			// 	var that = this;
+			// 	//	this.fileName = file.name;
+			// 	//this.fileType = file.type;
+			// 	var fileName = file.name.split(".");
+			// 	var i = fileName.length;
+			//
+			// 	//var filetype = file.type.split("/")[1];
+			// 	var file_ext = fileName[i - 1];
+			//
+			// 	if ((file_ext == "jpg") || (file_ext == "jpeg") || (file_ext == "png") ||
+			// 		(file_ext == "JPG") || (file_ext == "JPEG") || (file_ext == "PNG")) {
+			// 		var reader = new FileReader();
+			// 		reader.onload = function(e) {
+			// 			if ((file_ext == "jpg") || (file_ext == "jpeg") || (file_ext == "JPG") || (file_ext == "JPEG")) {
+			// 				//get an access to the content of the file
+			// 				that.screenShotContent = e.currentTarget.result.replace("data:image/jpeg;base64,", "");
+			// 				//that.encoded = btoa(encodeURI(that.imgContent));
+			// 			} else {
+			// 				that.screenShotContent = e.currentTarget.result.replace("data:image/png;base64,", "");
+			// 			}
+			// 		};
+			// 		//File Reader will start reading the file
+			// 		reader.readAsDataURL(file);
+			// 	} else {
+			// 		sap.m.MessageToast.show("Upload only jpg/png files");
+			// 		// sap.ui.getCore().byId("imageUploader2");
+			// 		sap.ui.getCore().byId("imageUploader2").setValue(null);
+			// 		return "";
+			// 	}
+			// }
 
 			if (!(sap.ui.getCore().byId("idAmount_upd1").getValue()) || (sap.ui.getCore().byId("idAmount_upd1").getValue() == 0)) {
 				var vWaiver = true;
