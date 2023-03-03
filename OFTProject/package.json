@@ -53,7 +53,7 @@
     "chai-json-schema": "^1.2.0",
     "jshint": "^2.5.6",
     "loopback-testing": "^1.2.0",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "read-excel-file": "^2.0.5",
     "typescript": "^1.8.10"
   },
