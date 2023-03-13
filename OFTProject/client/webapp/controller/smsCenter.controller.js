@@ -61,7 +61,9 @@ sap.ui.define([
 					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).err_desc;
 				} else {
 					sMsg = "Uploaded Successfully";
+					this.getView().byId("fileUploader").setValue();
 				}
+				this.getView().byId("idRecent").getModel().refresh();
 				MessageToast.show(sMsg);
 			}
 		},
@@ -94,7 +96,7 @@ sap.ui.define([
 				return;
 			}
 			//Restore the state of UI by fruitId
-			this.getView().getModel("local").setProperty("/newLead/date", this.formatter.getFormattedDate(0));
+			this.getView().getModel("local").setProperty("/smsCenter/date", this.formatter.getFormattedDate(0));
 			var newDate = new Date();
 			newDate.setHours(0, 0, 0, 0);
 			var oSorter = new sap.ui.model.Sorter("CreatedOn", true);

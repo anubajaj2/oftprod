@@ -4982,7 +4982,7 @@ app.start = function() {
 
 		});
 		app.post('/upload',
-			function(req, res) {
+			 function(req, res) {
 
 				if (!req.files.myFileUpload) {
 					res.send('No files were uploaded.');
@@ -5017,16 +5017,18 @@ app.start = function() {
 						console.log("eror saving");
 					} else {
 						console.log("saved");
+						const filePath = './uploads/' + req.files.myFileUpload.name;
 						if (req.files.myFileUpload.name.split('.')[req.files.myFileUpload.name.split('.').length - 1] === 'xlsx') {
 							exceltojson = xlsxtojson;
-							console.log("xlxs");
+							console.log("xlsx");
 						} else {
 							exceltojson = xlstojson;
 							console.log("xls");
 						}
+						// await fs.writeFileSync(filePath, req.files.myFileUpload.data); // write the buffer to the temporary file
 						try {
 							exceltojson({
-								input: './uploads/' + req.files.myFileUpload.name,
+								input: filePath,
 								output: null, //since we don't need output.json
 								lowerCaseHeaders: true
 							}, function(err, result) {
@@ -5059,7 +5061,7 @@ app.start = function() {
 								var SMSTexts = app.models.SMSText;
 
 								var uploadType = "Inquiry";
-								debugger;
+								// debugger;
 								if (uploadKind !== "") {
 									uploadType = uploadKind;
 								}
@@ -5076,14 +5078,14 @@ app.start = function() {
 											if (singleRec.phoneno === "" || singleRec.phoneno === undefined) {
 												continue;
 											}
-											newRec.phoneNo = singleRec.phoneno.replace(" ","");
+											newRec.phoneNo = singleRec.phoneno.replace(/\s+/g,"");
 											newRec.phoneNo = newRec.phoneNo.replace("+","");
-											const regexExp = /^((\91?)|\+)?[7-9][0-9]{9}$/;
+											const regexExp = /^91\d{10}$/g;
 											const result = regexExp.test(newRec.phoneNo);
 											if (result === false) {
 												newRec.phoneNo = "91" + newRec.phoneNo;
 											}
-											if (newRec.phoneNo.length > 12 || newRec.phoneNo.length < 12) {
+											if (newRec.phoneNo.length !== 12) {
 												continue;
 											}
 											newRec.type = type;

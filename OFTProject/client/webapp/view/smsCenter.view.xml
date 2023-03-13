@@ -16,18 +16,6 @@
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
 		</headerContent>
 		<content>
-			<VBox class="sapUiSmallMargin">
-				<l:VerticalLayout>
-					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress"
-						tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
-						<u:parameters>
-							<u:FileUploaderParameter name="createdBy"/>
-							<u:FileUploaderParameter name="data"/>
-						</u:parameters>
-					</u:FileUploader>
-					<Button text="Upload File" press="handleUploadPress"/>
-				</l:VerticalLayout>
-			</VBox>
 			<FlexBox renderType="Bare">
 				<FlexBox class="columns" width="70%" renderType="Bare">
 					<f:SimpleForm id="SimpleFormToolbar" editable="true" ariaLabelledBy="New Inquiry">
@@ -38,6 +26,7 @@
 							</Toolbar>
 						</f:toolbar>
 						<f:content>
+							<Label text="Type"/>
 							<Select id="course" selectedKey="{local>/smsCenter/type}" change="onCourseSelect">
 								<items>
 									<core:Item text="DataCenter" key="DataCenter"/>
@@ -49,17 +38,39 @@
 							<DatePicker id="inqDate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" value="{local>/smsCenter/date}"></DatePicker>
 							<Label text="SMS Template"/>
 							<TextArea value="{local>/smsCenter/smsText}" id="smsText"/>
+							<Label text=""/>
+							<u:FileUploader id="fileUploader" width="100%" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress"
+								tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+								<u:parameters>
+									<u:FileUploaderParameter name="createdBy"/>
+									<u:FileUploaderParameter name="data"/>
+								</u:parameters>
+							</u:FileUploader>
+							<Label text=""/>
+							<Button text="Upload" press="handleUploadPress"/>
 						</f:content>
 					</f:SimpleForm>
 				</FlexBox>
 			</FlexBox>
+			<!-- <VBox class="sapUiSmallMargin">
+				<l:VerticalLayout>
+					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress"
+						tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+						<u:parameters>
+							<u:FileUploaderParameter name="createdBy"/>
+							<u:FileUploaderParameter name="data"/>
+						</u:parameters>
+					</u:FileUploader>
+					<Button text="Upload File" press="handleUploadPress"/>
+				</l:VerticalLayout>
+			</VBox> -->
 			<VBox>
 				<List id="idRecent" growing="true" mode="MultiSelect" growingThreshold="100" growingScrollToLoad="false" class="sapUiSizeCompact">
 					<headerToolbar>
 						<Toolbar>
 							<Title id="titletext2"/>
 							<ToolbarSpacer></ToolbarSpacer>
-							<Button icon="sap-icon://iphone" tooltip="Send SMS" id="sendSMS" press="onSendSMS"/>
+							<Button icon="sap-icon://iphone" tooltip="Send SMS" text="Send" id="sendSMS" press="onSendSMS"/>
 						</Toolbar>
 					</headerToolbar>
 				</List>
