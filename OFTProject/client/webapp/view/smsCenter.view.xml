@@ -71,6 +71,8 @@
 							<Title id="titletext2"/>
 							<ToolbarSpacer></ToolbarSpacer>
 							<Button icon="sap-icon://iphone" tooltip="Send SMS" text="Send" id="sendSMS" press="onSendSMS"/>
+							<Button icon="sap-icon://delete" tooltip="Delete Selected" type="Attention" text="Delete" id="deleteSelected" press="onSelectedDelete"/>
+							<Button icon="sap-icon://delete" tooltip="Delete All" type="Negative" text="Delete All" id="deleteAll" press="onDeleteAll"/>
 						</Toolbar>
 					</headerToolbar>
 				</List>

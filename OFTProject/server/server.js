@@ -4981,6 +4981,20 @@ app.start = function() {
 
 
 		});
+		app.get('/deleteAllSMSText',
+			function(req, res) {
+				var SMSTexts = app.models.SMSText;
+				// call the 'destroyAll' method to delete all records
+				SMSTexts.destroyAll({}, (err, info) => {
+				  if (err) {
+				    res.send(err);
+				    return;
+				  }
+					res.send(info);
+				  // console.log(`Deleted ${info.count} records`);
+				});
+
+			});
 		app.post('/upload',
 			 function(req, res) {
 

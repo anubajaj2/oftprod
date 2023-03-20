@@ -56,7 +56,6 @@ sap.ui.define([
 			var oFiler = oEvent.getSource();
 			if (sResponse) {
 				var sMsg = "";
-				debugger;
 				if (JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).error_code !== 0) {
 					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).err_desc;
 				} else {
@@ -90,6 +89,46 @@ sap.ui.define([
 		},
 		onBack: function() {
 			sap.ui.getCore().byId("idApp").to("idView1");
+		},
+		onSelectedDelete: function(oEvent){
+			var that = this;
+			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			if (items.length > 0) {
+				MessageBox.confirm("Are you sure, you want to delete selected the records?",function(val){
+					if(val==="OK"){
+						items.forEach(function(item) {
+							that.ODataHelper.callOData(that.getOwnerComponent().getModel(), item, "DELETE", {}, {}, that)
+								.then(function(oData) {
+									MessageToast.show("Deleted succesfully");
+								}).catch(function(oError) {
+									that.getView().setBusy(false);
+									that.oPopover = that.getErrorMessage(oError);
+									that.getView().setBusy(false);
+								});
+						});
+					}
+				});
+			} else {
+				MessageToast.show("Please select an item");
+			}
+		},
+		onDeleteAll: function(oEvent){
+			var that = this;
+			MessageBox.confirm("Are you sure, you want to delete all the records?", function(val){
+				if(val==="OK"){
+					$.ajax({
+						type: 'GET', // added,
+						url: 'deleteAllSMSText',
+						success: function(data) {
+							that.getView().byId("idRecent").getModel().refresh();
+							MessageToast.show(`Deleted all(${data.count}) records`);
+						},
+						error: function(xhr, status, error) {
+							sap.m.MessageToast.show("Error in Deletion");
+						}
+					});
+				}
+			})
 		},
 		herculis: function(oEvent) {
 			if (oEvent.getParameter("name") !== "smsCenter") {
