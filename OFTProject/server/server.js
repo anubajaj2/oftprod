@@ -1014,6 +1014,65 @@ app.start = function() {
 				});
 		});
 
+
+		app.get("/sendPromoSms", async function (req,res) {
+			var username = 'contact@soyuztechnologies.com';
+			var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
+			var msg = "Hello, Greetings www.anubhavtrainings.com, Checkout latest courses on UI5, Fiori, CDS views, BTP, Analytics Cloud. kindly email contact@anubhavtrainings.com.";
+			var http = require('https');
+			var urlencode = require('urlencode');
+
+			var number = req.query.number;
+			if(!number){
+				return res.status(400).json({ errors: 'Number not provided' });
+				return "";
+			}
+
+			// Get the current time
+			const now = new Date();
+			const hours = now.getHours();
+			const minutes = now.getMinutes();
+
+			// Check if the current time is between 10am and 8:45pm
+			if (hours >= 10 && (hours < 20 || (hours === 20 && minutes <= 45))) {
+			  //console.log("The current time is between 10am and 8:45pm.");
+			} else {
+					return res.status(400).json({ errors: 'Time issue while calling API not provided' });
+
+			}
+
+			const regex = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+  		if(!regex.test(number)){
+				return res.status(400).json({ errors: 'Not a valid number' });
+			};
+
+			var sender = "395558";
+			var data = 'username=' + username + '&hash=' + hash + '&sender=' + sender + '&numbers=' + number + '&message=' + encodeURIComponent(msg)
+			console.log(data);
+
+			var options = {
+				host: 'api.textlocal.in',
+				path: '/send?' + data
+			};
+			callback = function(response) {
+				var str = '';
+				response.on('data', function(chunk) {
+					str += chunk;
+				});
+
+				//the whole response has been recieved, so we just print it out here
+				response.on('end', function() {
+					///res.send("message sent");
+					console.log(str);
+				});
+			}
+
+			console.log(options.host + options.path);
+			return await http.request(options, callback).end();
+
+
+		});
+
 		app.get("/sendPromotionsSMS", function () {
 			var where = {};
 			var startDate = new Date();
