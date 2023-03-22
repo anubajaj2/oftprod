@@ -21,6 +21,9 @@
     },
     "CreatedOn": {
       "type": "date"
+    },
+    "ChangedOn": {
+      "type": "date"
     }
   },
   "validations": [],

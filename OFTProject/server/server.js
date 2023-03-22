@@ -1054,23 +1054,51 @@ app.start = function() {
 				host: 'api.textlocal.in',
 				path: '/send?' + data
 			};
-			callback = function(response) {
+			// callback = function(response) {
+			// 	var str = '';
+			// 	response.on('data', function(chunk) {
+			// 		str += chunk;
+			// 	});
+			//
+			// 	//the whole response has been recieved, so we just print it out here
+			// 	response.on('end', function() {
+			// 		///res.send("message sent");
+			// 		console.log(str);
+			// 	});
+			// }
+			//
+			// console.log(options.host + options.path);
+			// return await http.request(options, callback).end();
+			const SMSTexts = app.models.SMSText;
+			const where = { "phoneNo": number };
+			const updateData = { ChangedOn: new Date() };
+			const htttpReq = http.request(options, (response) => {
+			  console.log(`statusCode: ${res.statusCode}`);
 				var str = '';
-				response.on('data', function(chunk) {
-					str += chunk;
-				});
-
-				//the whole response has been recieved, so we just print it out here
+			  response.on('data', (chunk) => {
+			    	str+=chunk;
+				  });
 				response.on('end', function() {
-					///res.send("message sent");
-					console.log(str);
-				});
-			}
+					var result;
+					if(JSON.parse(str).status==='failure'){
+						result = JSON.parse(str).errors[0].message;
+					}else{
+						result = JSON.parse(str).status;
+						SMSTexts.updateAll(where, updateData)
+							.then(function(info) {
+								res.send(result);
+							})
+							.catch(function(err) {
+								res.send(result);
+							});
+					}
+					});
+			});
 
-			console.log(options.host + options.path);
-			return await http.request(options, callback).end();
-
-
+			htttpReq.on('error', (error) => {
+			  res.send(error);
+			});
+			htttpReq.end();
 		});
 
 		app.get("/sendPromotionsSMS", function () {
@@ -5163,7 +5191,7 @@ app.start = function() {
 											}
 											newRec.type = type;
 											newRec.blocked = false;
-											newRec.createdOn = new Date();
+											newRec.CreatedOn = new Date();
 											SMSTexts.findOrCreate({
 																"where": {
 																	"phoneNo": newRec.phoneNo

@@ -83,9 +83,40 @@ sap.ui.define([
 				});
 		},
 		passwords: "",
-		onSendSMS: function() {
+		sendSms : function(numberList, index){
 			var that = this;
-
+			$.ajax({
+				type: 'GET', // added,
+				url: 'sendPromoSms?number='+numberList[index],
+				success: function(data) {
+					if(++index < numberList.length){
+						sendSms(numberList, index);
+					}else{
+						that.getView().byId("idRecent").removeSelections();
+						that.getView().byId("idRecent").getModel().refresh();
+						MessageToast("SMS Sent Successfully");
+					}
+				},
+				error: function(xhr, status, error) {
+					if(++index < numberList.length){
+						that.sendSms(numberList, index);
+					}else{
+						that.getView().byId("idRecent").removeSelections();
+						that.getView().byId("idRecent").getModel().refresh();
+						MessageToast.show("SMS Sent Successfully");
+					}
+				}
+			});
+		},
+		onSendSMS: function(oEvent) {
+			var that = this,
+			 items = oEvent.getSource().getParent().getParent().getSelectedContextPaths(),
+			 numberList = [];
+			 debugger;
+			items.forEach(item=>{
+				numberList.push(that.getView().getModel().getProperty(item).phoneNo);
+			});
+			that.sendSms(numberList, 0);
 		},
 		onBack: function() {
 			sap.ui.getCore().byId("idApp").to("idView1");
@@ -138,16 +169,16 @@ sap.ui.define([
 			this.getView().getModel("local").setProperty("/smsCenter/date", this.formatter.getFormattedDate(0));
 			var newDate = new Date();
 			newDate.setHours(0, 0, 0, 0);
-			var oSorter = new sap.ui.model.Sorter("CreatedOn", true);
+			var oSorter = new sap.ui.model.Sorter("ChangedOn", false);
 			var oList = this.getView().byId("idRecent");
 			oList.bindAggregation("items", {
 				path: '/SMSTexts',
 				template: new sap.m.DisplayListItem({
 					label: "{phoneNo}",
-					value: "{type} / {CreatedOn} / {blocked}"
+					value: "{type} / {CreatedOn} / {blocked} / {ChangedOn}"
 				}),
 				//filters: [new Filter("CreatedOn", "GE", newDate)],
-				//sorter: oSorter
+				sorter: oSorter
 			});
 		}
 	});
