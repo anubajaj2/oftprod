@@ -1,1 +1,2 @@
 sap.ui.define(["oft/fiori/controller/BaseController"],function(t){"use strict";return t.extend("oft.fiori.controller.Supplier",{onInit:function(){this.oRouter=sap.ui.core.UIComponent.getRouterFor(this);this.oRouter.attachRoutePatternMatched(this.mySupplierLoad,this)},mySupplierLoad:function(t){var e=t.getParameter("arguments").suppId;e="/suppliers/"+e;this.getView().bindElement(e)}})});
+//# sourceMappingURL=Supplier.controller.js.map

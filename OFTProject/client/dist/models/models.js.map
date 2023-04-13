@@ -1,0 +1,1 @@
+{"version":3,"file":"models.js","names":["sap","ui","define","JSONModel","createFruitModel","oModel","loadData"],"sources":["models-dbg.js"],"mappings":"AAAAA,IAAIC,GAAGC,OACN,CAAC,+BACD,SAASC,GACR,MAAO,CACNC,iBAAkB,WAEjB,IAAIC,EAAS,IAAIF,EACjBE,EAAOC,SAAS,+BAChB,OAAOD,CAER,EAEF"}

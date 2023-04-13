@@ -31,7 +31,7 @@
     "loopback-connector-mongodb": "^3.8.0",
     "loopback-context": "^1.0.0",
     "loopback-datasource-juggler": "^2.39.0",
-    "mongodb": "^3.1.6",
+    "mongodb": "^4.15.0",
     "n-odata-server": "^0.4.0",
     "nconf": "^0.10.0",
     "nodemailer": "^6.4.2",

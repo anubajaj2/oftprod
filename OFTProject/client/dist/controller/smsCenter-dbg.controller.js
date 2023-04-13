@@ -56,12 +56,13 @@ sap.ui.define([
 			var oFiler = oEvent.getSource();
 			if (sResponse) {
 				var sMsg = "";
-				debugger;
 				if (JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).error_code !== 0) {
 					sMsg = JSON.parse(sResponse.split("\">")[1].replace("</pre>", "")).err_desc;
 				} else {
 					sMsg = "Uploaded Successfully";
+					this.getView().byId("fileUploader").setValue();
 				}
+				this.getView().byId("idRecent").getModel().refresh();
 				MessageToast.show(sMsg);
 			}
 		},
@@ -82,31 +83,102 @@ sap.ui.define([
 				});
 		},
 		passwords: "",
-		onSendSMS: function() {
+		sendSms : function(numberList, index){
 			var that = this;
-
+			$.ajax({
+				type: 'GET', // added,
+				url: 'sendPromoSms?number='+numberList[index],
+				success: function(data) {
+					if(++index < numberList.length){
+						sendSms(numberList, index);
+					}else{
+						that.getView().byId("idRecent").removeSelections();
+						that.getView().byId("idRecent").getModel().refresh();
+						MessageToast("SMS Sent Successfully");
+					}
+				},
+				error: function(xhr, status, error) {
+					if(++index < numberList.length){
+						that.sendSms(numberList, index);
+					}else{
+						that.getView().byId("idRecent").removeSelections();
+						that.getView().byId("idRecent").getModel().refresh();
+						MessageToast.show("SMS Sent Successfully");
+					}
+				}
+			});
+		},
+		onSendSMS: function(oEvent) {
+			var that = this,
+			 items = oEvent.getSource().getParent().getParent().getSelectedContextPaths(),
+			 numberList = [];
+			 debugger;
+			items.forEach(item=>{
+				numberList.push(that.getView().getModel().getProperty(item).phoneNo);
+			});
+			that.sendSms(numberList, 0);
 		},
 		onBack: function() {
 			sap.ui.getCore().byId("idApp").to("idView1");
+		},
+		onSelectedDelete: function(oEvent){
+			var that = this;
+			var items = oEvent.getSource().getParent().getParent().getSelectedContextPaths();
+			if (items.length > 0) {
+				MessageBox.confirm("Are you sure, you want to delete selected the records?",function(val){
+					if(val==="OK"){
+						items.forEach(function(item) {
+							that.ODataHelper.callOData(that.getOwnerComponent().getModel(), item, "DELETE", {}, {}, that)
+								.then(function(oData) {
+									MessageToast.show("Deleted succesfully");
+								}).catch(function(oError) {
+									that.getView().setBusy(false);
+									that.oPopover = that.getErrorMessage(oError);
+									that.getView().setBusy(false);
+								});
+						});
+					}
+				});
+			} else {
+				MessageToast.show("Please select an item");
+			}
+		},
+		onDeleteAll: function(oEvent){
+			var that = this;
+			MessageBox.confirm("Are you sure, you want to delete all the records?", function(val){
+				if(val==="OK"){
+					$.ajax({
+						type: 'GET', // added,
+						url: 'deleteAllSMSText',
+						success: function(data) {
+							that.getView().byId("idRecent").getModel().refresh();
+							MessageToast.show(`Deleted all(${data.count}) records`);
+						},
+						error: function(xhr, status, error) {
+							sap.m.MessageToast.show("Error in Deletion");
+						}
+					});
+				}
+			})
 		},
 		herculis: function(oEvent) {
 			if (oEvent.getParameter("name") !== "smsCenter") {
 				return;
 			}
 			//Restore the state of UI by fruitId
-			this.getView().getModel("local").setProperty("/newLead/date", this.formatter.getFormattedDate(0));
+			this.getView().getModel("local").setProperty("/smsCenter/date", this.formatter.getFormattedDate(0));
 			var newDate = new Date();
 			newDate.setHours(0, 0, 0, 0);
-			var oSorter = new sap.ui.model.Sorter("CreatedOn", true);
+			var oSorter = new sap.ui.model.Sorter("ChangedOn", false);
 			var oList = this.getView().byId("idRecent");
 			oList.bindAggregation("items", {
 				path: '/SMSTexts',
 				template: new sap.m.DisplayListItem({
 					label: "{phoneNo}",
-					value: "{type} / {CreatedOn} / {blocked}"
+					value: "{type} / {CreatedOn} / {blocked} / {ChangedOn}"
 				}),
 				//filters: [new Filter("CreatedOn", "GE", newDate)],
-				//sorter: oSorter
+				sorter: oSorter
 			});
 		}
 	});
