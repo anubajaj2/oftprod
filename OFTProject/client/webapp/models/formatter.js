@@ -62,6 +62,13 @@ sap.ui.define([], function() {
 			}
 
 		},
+	formatDateTime: (date) => {
+		  const oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+		    pattern: "dd/MM/yyyy HH:mm:ss" // Adjust the pattern as per your requirement
+		  });
+			debugger;
+	  	return oDateFormat.format(new Date(date));
+		},
 		getFormattedSDate: function(monthInc) {
 			var dateObj = new Date();
 			dateObj.setDate(dateObj.getDate());

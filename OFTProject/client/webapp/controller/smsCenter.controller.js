@@ -90,7 +90,7 @@ sap.ui.define([
 				url: 'sendPromoSms?number='+numberList[index],
 				success: function(data) {
 					if(++index < numberList.length){
-						sendSms(numberList, index);
+						that.sendSms(numberList, index);
 					}else{
 						that.getView().byId("idRecent").removeSelections();
 						that.getView().byId("idRecent").getModel().refresh();
@@ -117,6 +117,9 @@ sap.ui.define([
 				numberList.push(that.getView().getModel().getProperty(item).phoneNo);
 			});
 			that.sendSms(numberList, 0);
+		},
+		onSearchContact: function(oEvent){
+			this.getView().byId("idRecent").getBinding("items").filter([new sap.ui.model.Filter("phoneNo", "Contains", oEvent.getParameter("query").trim())]);
 		},
 		onBack: function() {
 			sap.ui.getCore().byId("idApp").to("idView1");
@@ -175,7 +178,7 @@ sap.ui.define([
 				path: '/SMSTexts',
 				template: new sap.m.DisplayListItem({
 					label: "{phoneNo}",
-					value: "{type} / {CreatedOn} / {blocked} / {ChangedOn}"
+					value: "{type} / {path: 'CreatedOn', formatter: 'formatter.formatDateTime'} / {blocked} / {ChangedOn}"
 				}),
 				//filters: [new Filter("CreatedOn", "GE", newDate)],
 				sorter: oSorter

@@ -68,7 +68,8 @@
 				<List id="idRecent" growing="true" mode="MultiSelect" growingThreshold="100" growingScrollToLoad="false" class="sapUiSizeCompact">
 					<headerToolbar>
 						<Toolbar>
-							<Title id="titletext2"/>
+							<Title id="titletext2" text="Contacts"/>
+							<SearchField width="70%" search="onSearchContact"/>
 							<ToolbarSpacer></ToolbarSpacer>
 							<Button icon="sap-icon://iphone" tooltip="Send SMS" text="Send" id="sendSMS" press="onSendSMS"/>
 							<Button icon="sap-icon://delete" tooltip="Delete Selected" type="Attention" text="Delete" id="deleteSelected" press="onSelectedDelete"/>
