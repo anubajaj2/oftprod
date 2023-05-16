@@ -1033,7 +1033,7 @@ app.start = function() {
 			const hours = now.getHours();
 			const minutes = now.getMinutes();
 
-			Check if the current time is between 10am and 8:45pm
+			// Check if the current time is between 10am and 8:45pm
 			if (hours >= 10 && (hours < 20 || (hours === 20 && minutes <= 45))) {
 			  //console.log("The current time is between 10am and 8:45pm.");
 			} else {
