@@ -103,8 +103,9 @@ sap.ui.define([
 					}else{
 						that.getView().byId("idRecent").removeSelections();
 						that.getView().byId("idRecent").getModel().refresh();
-						MessageToast.show("SMS Sent Successfully");
+						// MessageToast.show(xhr.responseText);
 					}
+					MessageToast.show(xhr.responseText);
 				}
 			});
 		},
