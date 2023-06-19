@@ -1104,7 +1104,7 @@ app.start = function() {
 		app.get("/sendPromotionsSMS", function () {
 			var where = {};
 			var startDate = new Date();
-			startDate.setMonth(startDate.getMonth() - 3);
+			startDate.setMonth(startDate.getMonth() - 5);
 			//var startDate = new Date(new Date(parseInt(req.query.date)));
 			if (startDate.toDateString() !== (new Date()).toDateString()) {
 				var where = {
@@ -1115,7 +1115,7 @@ app.start = function() {
 															SoftDelete : false
 														},
 														{
-															CourseName: 'UI5 and Fiori'
+															CourseName: 'ABAP on HANA'
 														},
 														{
 															Country: 'IN'
@@ -1200,7 +1200,7 @@ app.start = function() {
 		app.get("/newDemoSendSMS", function () {
 			var where = {};
 			var startDate = new Date();
-			startDate.setMonth(startDate.getMonth() - 4);
+			startDate.setMonth(startDate.getMonth() - 5);
 			//var startDate = new Date(new Date(parseInt(req.query.date)));
 			if (startDate.toDateString() !== (new Date()).toDateString()) {
 				var where = {
@@ -1211,7 +1211,7 @@ app.start = function() {
 															SoftDelete : false
 														},
 														{
-															CourseName: 'UI5 and Fiori'
+															CourseName: 'ABAP on HANA'
 														},
 														{
 															Country: 'IN'
@@ -1249,7 +1249,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Dear #FirstName#, Greetings www.anubhavtrainings.com,Free Demo on SAP UI5 Fiori is going to start on Monday. kindly email contact@anubhavtrainings.com";
+									var msg = "Hi #FirstName#, A new Batch of ABAPonHANA is Starring from Today      7 PM , Sign up now for free demo. Mail us contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -1301,7 +1301,8 @@ app.start = function() {
 				case "inquiry":
 					//msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details to your email id, please write to us on contact@anubhavtrainings.com";
 					msg = "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details of #COURSE# to your email id, please write to us on contact@anubhavtrainings.com";
-					msg = msg.replace("#COURSE#", req.body.userName.substring(0, 15));
+					msg - "Dear #FirstName#, Greetings from www.anubhavtrainings.com, we have sent the course details of #COURSE# to your email id. Soyuz Technologies LLP."
+					msg = msg.replace("#COURSE#", req.body.courseName.substring(0, 11));
 					break;
 				case "courseapprove":
 					msg = 'Dear #FirstName#, Greetings www.anubhavtrainings.com, your course details have been sent to your email id. mail us on contact@anubhavtrainings.com for more queries';;
@@ -1317,10 +1318,11 @@ app.start = function() {
 					return;
 
 			}
-			msg = msg.replace("#FirstName#", req.body.userName.substring(0, 15));
+			msg = msg.replace("#FirstName#", req.body.userName.substring(0, 10));
 			var http = require('https');
 			var urlencode = require('urlencode');
 			msg = urlencode(msg);
+			console.log("SMS Sending --- " + msg);
 			var number = req.body.Number;
 			//var username='anubhav.abap@gmail.com';
 			var username = 'contact@soyuztechnologies.com';
@@ -1331,6 +1333,9 @@ app.start = function() {
 			//var hash = 'eef684d01be7535d39d7f409a1b8e888f874e9a05243b4fb3db2426f99aed5ba';
 			//var sender='ONLTRN';
 			var sender = "395558";
+			if(typeMsg === "inquiry"){
+				sender = "SOYUZT";
+			}
 			var data = 'username=' + username + '&hash=' + hash + '&sender=' + sender + '&numbers=' + number + '&message=' + msg
 			var options = {
 				host: 'api.textlocal.in',
@@ -3433,6 +3438,9 @@ app.start = function() {
 						case "Analytics Cloud":
 							Subject = "Analytics Cloud training";
 							break;
+						case "Datasphere":
+								Subject = "Datasphere / DataWarehouse Cloud training";
+								break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3473,6 +3481,7 @@ app.start = function() {
 					req.body.CourseName != "HANA Cloud Integration" &&
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
+					req.body.CourseName != "Datasphere" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -3722,6 +3731,9 @@ app.start = function() {
 						case "Analytics Cloud":
 							Subject = "Analytics Cloud training";
 							break;
+						case "Datasphere":
+								Subject = "Datasphere / DataWarehouse Cloud training";
+								break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3760,6 +3772,7 @@ app.start = function() {
 					req.body.CourseName != "HANA Cloud Integration" &&
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
+					req.body.CourseName != "Datasphere" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -5410,6 +5423,15 @@ app.start = function() {
 													newRec.currency = "INR";
 												} else {
 													newRec.fees = "400";
+													newRec.currency = "USD";
+												}
+											} else if (singleRec.url.indexOf("sap-datasphere-training") !== -1) {
+												singleRec.url = "Datasphere";
+												if (singleRec.country_code === "IN") {
+													newRec.fees = "22 k";
+													newRec.currency = "INR";
+												} else {
+													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
 											} else if (singleRec.url.indexOf("hana-cloud-integration-training") !== -1) {

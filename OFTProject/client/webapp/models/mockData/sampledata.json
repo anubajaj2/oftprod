@@ -64,6 +64,11 @@
 			"usdFee": 380
 		},
 		{
+			"courseName": "Datasphere",
+			"fee": "22 k",
+			"usdFee": 380
+		},
+		{
 			"courseName": "Launchpad",
 			"fee": "25 k",
 			"usdFee": 400
