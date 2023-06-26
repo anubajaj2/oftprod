@@ -1211,7 +1211,7 @@ app.start = function() {
 															SoftDelete : false
 														},
 														{
-															CourseName: 'ABAP on HANA'
+															CourseName: 'UI5 and Fiori'
 														},
 														{
 															Country: 'IN'
@@ -1231,6 +1231,7 @@ app.start = function() {
 							Records.sort(function(a, b) {
 								return new Date(b.__data.Date) - new Date(a.__data.Date)
 							})
+							//Records["length"]
 							for (var i = 0; i < Records["length"]; i++) {
 								if(new Date(Records[i].__data.Date) >= startDate){
 									//console.log(Records[i].__data);
@@ -1249,7 +1250,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Hi #FirstName#, A new Batch of ABAPonHANA is Starring from Today      7 PM , Sign up now for free demo. Mail us contact@anubhavtrainings.com";
+									var msg = "Hi%20#FirstName#,%20%nA%20new%20Batch%20of%20UI5Fiori%20is%20Starring%20from%20Friday%207AM%20,%20Sign%20up%20now%20for%20free%20demo.%20%nMail%20us%20contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
