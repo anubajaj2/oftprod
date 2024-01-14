@@ -5112,20 +5112,20 @@ app.start = function() {
 				var uploadKind  = "";
 				var createdOn  = "";
 				var type  = "";
-				var finalData = JSON.parse(req.body.data);
-				if (finalData.type) {
-					uploadKind = finalData.kind;
-					createdOn = finalData.createdOn;
-					type = finalData.type;
-				}else{
-					if (createdBy === "" || createdBy === null) {
-						res.json({
-							error_code: 1,
-							err_desc: "Name is empty"
-						});
-						return "Error";
-					}
-				}
+				// var finalData = JSON.parse(req.body.data);
+				// if (finalData.type) {
+				// 	uploadKind = finalData.kind;
+				// 	createdOn = finalData.createdOn;
+				// 	type = finalData.type;
+				// }else{
+				// 	if (createdBy === "" || createdBy === null) {
+				// 		res.json({
+				// 			error_code: 1,
+				// 			err_desc: "Name is empty"
+				// 		});
+				// 		return "Error";
+				// 	}
+				// }
 
 				sampleFile.mv('./uploads/' + req.files.myFileUpload.name, function(err) {
 					if (err) {

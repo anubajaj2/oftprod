@@ -125,7 +125,10 @@
 			</VBox>
 			<VBox class="sapUiSmallMargin">
 				<l:VerticalLayout>
-					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress" tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+					<u:FileUploader id="fileUploader" name="myFileUpload"
+					 uploadUrl="/upload" 
+					 tooltip="Upload your file to the local server" 
+					 uploadComplete="handleUploadComplete">
 						<u:parameters>
 							<u:FileUploaderParameter name="createdBy"/>
 						</u:parameters>

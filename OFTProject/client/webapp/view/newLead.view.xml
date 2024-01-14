@@ -10,7 +10,7 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="New Lead (Version 1.0.52 - 05 Sep 2023)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
+	<Page title="New Lead (Version 1.0.53 - 14 Jan 2024)" showHeader="true" showNavButton="{local>/IsPhone}" navButtonPress="handleNavButtonPress">
 		<headerContent>
 			<Text id="idUser"></Text>
 			<Button icon="sap-icon://log" text="Logout" type="Emphasized" tooltip="Logout" press="logOutApp"/>
@@ -125,7 +125,10 @@
 			</VBox>
 			<VBox class="sapUiSmallMargin">
 				<l:VerticalLayout>
-					<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="/upload" uploadPress="handleUploadPress" tooltip="Upload your file to the local server" uploadComplete="handleUploadComplete">
+					<u:FileUploader id="fileUploader" name="myFileUpload"
+					 uploadUrl="/upload" 
+					 tooltip="Upload your file to the local server" 
+					 uploadComplete="handleUploadComplete">
 						<u:parameters>
 							<u:FileUploaderParameter name="createdBy"/>
 						</u:parameters>
