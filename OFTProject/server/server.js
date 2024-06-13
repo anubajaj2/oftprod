@@ -1211,7 +1211,7 @@ app.start = function() {
 															SoftDelete : false
 														},
 														{
-															CourseName: 'UI5 and Fiori'
+															CourseName: 'ABAP on HANA'
 														},
 														{
 															Country: 'IN'
@@ -1238,7 +1238,7 @@ app.start = function() {
 									var loginPayload = {};
 									loginPayload.msgType = "demostart";
 									loginPayload.userName = Records[i].__data.FirstName;
-									loginPayload.courseName = "SAP BTP";
+									loginPayload.courseName = "UI5 and Fiori";
 									loginPayload.Number = Records[i].__data.Phone;
 
 									count = count + 1;
@@ -1250,7 +1250,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Hi%20#FirstName#,%20%nA%20new%20Batch%20of%20UI5Fiori%20is%20Starring%20from%20Friday%207AM%20,%20Sign%20up%20now%20for%20free%20demo.%20%nMail%20us%20contact@anubhavtrainings.com";
+									var msg = "Hi%20#FirstName#,%20%nA%20new%20Batch%20of%20ABAPonHANA%20is%20Starring%20from%20Today%207AM%20,%20Sign%20up%20now%20for%20free%20demo.%20%nMail%20us%20contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -3122,7 +3122,11 @@ app.start = function() {
 							auth: {
 								user: 'server@anubhavtrainings.com',
 								pass: that.password
-							}
+							},
+							tls: {
+								rejectUnauthorized: false // do not fail on invalid certs
+							},
+							secure: false
 						}));
 						var Subject = "[CONFIDENTIAL] 🚀 SAP Server Subscription";
 						//https://myaccount.google.com/lesssecureapps?pli=1
@@ -3380,7 +3384,11 @@ app.start = function() {
 						auth: {
 							user: 'install.abap@gmail.com',
 							pass: req.body.password
-						}
+						},
+						tls: {
+							rejectUnauthorized: false // do not fail on invalid certs
+						},
+						secure: false
 					}));
 				} else {
 					var transporter = nodemailer.createTransport(smtpTransport({
@@ -4052,7 +4060,11 @@ app.start = function() {
 								auth: {
 									user: 'no-reply@anubhavtrainings.com',
 									pass: that.password
-								}
+								},
+								tls: {
+									rejectUnauthorized: false // do not fail on invalid certs
+								},
+								secure: false
 							}));
 
 							var Subject = "[Welcome Onboard] ✈️" + courseStr.Name + " Training Subscription";
