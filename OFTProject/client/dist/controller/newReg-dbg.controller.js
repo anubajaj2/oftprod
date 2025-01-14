@@ -494,13 +494,13 @@ sap.ui.define([
 			var that = this;
 			var leadData = this.getView().getModel("local").getProperty("/newRegistration");
 			var futureDateCheck = false;
-			if (this.getView().byId("idPayDate").getDateValue()) {
-				futureDateCheck = this.formatter.getDateCheck(this.getView().byId("idPayDate").getDateValue());
-				if (futureDateCheck == true) {
-					sap.m.MessageToast.show("Payment Date can't be in future");
-					return "";
-				}
-			}
+			// if (this.getView().byId("idPayDate").getDateValue()) {
+			// 	futureDateCheck = this.formatter.getDateCheck(this.getView().byId("idPayDate").getDateValue());
+			// 	if (futureDateCheck == true) {
+			// 		sap.m.MessageToast.show("Payment Date can't be in future");
+			// 		return "";
+			// 	}
+			// }
 			if (this.getView().byId("idRegDate").getDateValue()) {
 
 				futureDateCheck = false;
