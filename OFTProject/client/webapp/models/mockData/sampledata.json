@@ -69,6 +69,11 @@
 			"usdFee": 400
 		},
 		{
+			"courseName": "Build BPA",
+			"fee": "30 k",
+			"usdFee": 450
+		},
+		{
 			"courseName": "Launchpad",
 			"fee": "25 k",
 			"usdFee": 400

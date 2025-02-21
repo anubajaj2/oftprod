@@ -1200,12 +1200,12 @@ app.start = function() {
 		app.get("/newDemoSendSMS", function () {
 			var where = {};
 			var startDate = new Date();
-			startDate.setMonth(startDate.getMonth() - 5);
+			startDate.setMonth(startDate.getMonth() - 8);
 			//var startDate = new Date(new Date(parseInt(req.query.date)));
 			if (startDate.toDateString() !== (new Date()).toDateString()) {
 				var where = {
 										$and: [ {
-																$or: [ { source : 'C' }, { source : 'W' }, { source : 'R' } ]
+																$or: [ { source : 'C' }, { source : 'N' }, { source : 'W' }, { source : 'R' } ]
 														},
 														{
 															SoftDelete : false
@@ -1250,7 +1250,7 @@ app.start = function() {
 									//var username='anubhav.abap@gmail.com';
 									var username = 'contact@soyuztechnologies.com';
 									var hash = 'ed5385054838bb0d98685409492911dfcc4efade08f2d75e4583ae61fa54c2f2';
-									var msg = "Hi%20#FirstName#,%20%nA%20new%20Batch%20of%20ABAPonHANA%20is%20Starring%20from%20Today%207AM%20,%20Sign%20up%20now%20for%20free%20demo.%20%nMail%20us%20contact@anubhavtrainings.com";
+									var msg = "Hi%20#FirstName#,%20%nA%20new%20Batch%20of%20CDSViews%20is%20Starring%20from%20Saturday%207PM%20,%20Sign%20up%20now%20for%20free%20demo.%20%nMail%20us%20contact@anubhavtrainings.com";
 									           //Dear            , Greetings www.anubhavtrainings.com,Free Demo on              is going to start on         . kindly email contact@anubhavtrainings.com
 									if(loginPayload.userName === "null"){
 										loginPayload.userName = "Sir";
@@ -1638,7 +1638,7 @@ app.start = function() {
 				}
 			);
 		});
-
+		
 		app.post('/getAmountForAccount', function(req, res) {
 			var responseData = [];
 			var accountNo = req.body.AccountNo;
@@ -3450,6 +3450,9 @@ app.start = function() {
 						case "Datasphere":
 								Subject = "Datasphere / DataWarehouse Cloud training";
 								break;
+						case "Build BPA":
+							Subject = "Build Process Automation cum Workzone training";
+							break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3491,6 +3494,7 @@ app.start = function() {
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
+					req.body.CourseName != "Build BPA" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -3743,6 +3747,9 @@ app.start = function() {
 						case "Datasphere":
 								Subject = "Datasphere / DataWarehouse Cloud training";
 								break;
+						case "Build BPA":
+							Subject = "Build Process Automation cum Workzone training";
+							break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3782,6 +3789,7 @@ app.start = function() {
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
+					req.body.CourseName != "Build BPA" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -5447,13 +5455,13 @@ app.start = function() {
 													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
-											} else if (singleRec.url.indexOf("hana-cloud-integration-training") !== -1) {
-												singleRec.url = "HANA Cloud Integration";
+											} else if (singleRec.url.indexOf("sap-build-process-automation") !== -1) {
+												singleRec.url = "Build BPA";
 												if (singleRec.country_code === "IN") {
-													newRec.fees = "25 k";
+													newRec.fees = "30 k";
 													newRec.currency = "INR";
 												} else {
-													newRec.fees = "400";
+													newRec.fees = "450";
 													newRec.currency = "USD";
 												}
 											} else if (singleRec.url.indexOf("launchpad") !== -1) {
