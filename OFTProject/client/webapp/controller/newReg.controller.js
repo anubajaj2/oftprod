@@ -287,14 +287,14 @@ sap.ui.define([
 				var payload3 = {
 					"Status": "Access Granted"
 				};
-				if (this.passwords === "") {
-					this.passwords = prompt("Please enter your password", "");
-					if (this.passwords === "") {
-						sap.m.MessageBox.error("Blank Password not allowed");
-						return;
-					}
-				}
-				loginPayload.password = that.passwords;
+				// if (this.passwords === "") {
+				// 	this.passwords = prompt("Please enter your password", "");
+				// 	if (this.passwords === "") {
+				// 		sap.m.MessageBox.error("Blank Password not allowed");
+				// 		return;
+				// 	}
+				// }
+				loginPayload.password = "";
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
 				loginPayload.Member = that.getView().byId('idSubsRecent').getSelectedItems()[i].getCells()[8].getProperty("state");
 				//console.log(loginPayload.Member);
@@ -1044,11 +1044,11 @@ sap.ui.define([
 					"Status": "Access Granted"
 				};
 				var loginPayload = that.oEvent_approve.getSource().getBindingContext().getModel().getProperty(that.oEvent_approve.getSource().getBindingContext().getPath());
-				if (!that.passwords) {
-					that.passwords = prompt("Please enter your password", "");
-				}
+				// if (!that.passwords) {
+				// 	that.passwords = prompt("Please enter your password", "");
+				// }
 
-				loginPayload.password = that.passwords;
+				loginPayload.password = "";
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
 				console.log(loginPayload.Member);
 

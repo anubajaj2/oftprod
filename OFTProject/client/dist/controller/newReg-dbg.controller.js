@@ -287,14 +287,14 @@ sap.ui.define([
 				var payload3 = {
 					"Status": "Access Granted"
 				};
-				if (this.passwords === "") {
-					this.passwords = prompt("Please enter your password", "");
-					if (this.passwords === "") {
-						sap.m.MessageBox.error("Blank Password not allowed");
-						return;
-					}
-				}
-				loginPayload.password = that.passwords;
+				// if (this.passwords === "") {
+				// 	this.passwords = prompt("Please enter your password", "");
+				// 	if (this.passwords === "") {
+				// 		sap.m.MessageBox.error("Blank Password not allowed");
+				// 		return;
+				// 	}
+				// }
+				loginPayload.password = "";
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
 				loginPayload.Member = that.getView().byId('idSubsRecent').getSelectedItems()[i].getCells()[8].getProperty("state");
 				//console.log(loginPayload.Member);
@@ -494,13 +494,13 @@ sap.ui.define([
 			var that = this;
 			var leadData = this.getView().getModel("local").getProperty("/newRegistration");
 			var futureDateCheck = false;
-			// if (this.getView().byId("idPayDate").getDateValue()) {
-			// 	futureDateCheck = this.formatter.getDateCheck(this.getView().byId("idPayDate").getDateValue());
-			// 	if (futureDateCheck == true) {
-			// 		sap.m.MessageToast.show("Payment Date can't be in future");
-			// 		return "";
-			// 	}
-			// }
+			if (this.getView().byId("idPayDate").getDateValue()) {
+				futureDateCheck = this.formatter.getDateCheck(this.getView().byId("idPayDate").getDateValue());
+				if (futureDateCheck == true) {
+					sap.m.MessageToast.show("Payment Date can't be in future");
+					return "";
+				}
+			}
 			if (this.getView().byId("idRegDate").getDateValue()) {
 
 				futureDateCheck = false;
@@ -1044,11 +1044,11 @@ sap.ui.define([
 					"Status": "Access Granted"
 				};
 				var loginPayload = that.oEvent_approve.getSource().getBindingContext().getModel().getProperty(that.oEvent_approve.getSource().getBindingContext().getPath());
-				if (!that.passwords) {
-					that.passwords = prompt("Please enter your password", "");
-				}
+				// if (!that.passwords) {
+				// 	that.passwords = prompt("Please enter your password", "");
+				// }
 
-				loginPayload.password = that.passwords;
+				loginPayload.password = "";
 				loginPayload.includeX = that.getView().byId("includeX").getSelected();
 				console.log(loginPayload.Member);
 

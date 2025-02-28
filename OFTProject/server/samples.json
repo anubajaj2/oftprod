@@ -1,6 +1,14 @@
 {
+  "inq":{
   "user": "contact@anubhavtrainings.com",
   "clientId": "275646007499-2hfmo1j4ot1ds89saqrk8pn1pdh4v5sp.apps.googleusercontent.com",
   "clientSecret": "WIajP-Wif3OWVahkRt--aj73",
   "refreshToken": "1//04lEo3kL0iINeCgYIARAAGAQSNwF-L9Ir3Z9_XdRkU-1SH0UyoU2-_96C4rC8v6sUUBuuF5LJrWFL1adQCFFrt3X_QcXa2Eo9T_o"
+},
+"subs":{
+  "user": "no-reply@anubhavtrainings.com",
+  "clientId": "280534947036-4r5idmhd5qghtfgs86d2dq2kkco89e6n.apps.googleusercontent.com",
+  "clientSecret": "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",
+  "refreshToken": "1//04F2D6e92yhtrCgYIARAAGAQSNwF-L9Ir5EWZhDrl6V56XMWMxrEvOQOl3As5p_9NFYG9JlyxloNwjHxw8XJYY0HQgk_EZo36SpQ"
+}
 }

@@ -3374,9 +3374,10 @@ app.start = function() {
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				const xoauth2 = require('xoauth2');
-				const key = require('./samples.json');
-				console.log(req.body);
-
+				var key = require('./samples.json');
+				//console.log(req.body);
+				key = key.inq;
+				
 				if (req.body.IsMinakshi === "X") {
 					var transporter = nodemailer.createTransport(smtpTransport({
 						service: 'gmail',
@@ -3678,7 +3679,8 @@ app.start = function() {
 				var nodemailer = require('nodemailer');
 				var smtpTransport = require('nodemailer-smtp-transport');
 				const xoauth2 = require('xoauth2');
-				const key = require('./samples.json');
+				var key = require('./samples.json');
+				key = key.inq;
 				console.log(req.body);
 
 				if (req.body.IsMinakshi === "X") {
@@ -4057,23 +4059,45 @@ app.start = function() {
 							} else {
 								that2.isCalRequire = true;
 							}
+
+							///new code 28-02
 							var nodemailer = require('nodemailer');
 							var smtpTransport = require('nodemailer-smtp-transport');
+							const xoauth2 = require('xoauth2');
+							var key = require('./samples.json');
+							debugger;
+							key = key.subs;
 
-
-							var transporter = nodemailer.createTransport(smtpTransport({
-								service: 'gmail',
-								host: 'smtp.gmail.com',
-								secureConnection: true,
-								auth: {
-									user: 'no-reply@anubhavtrainings.com',
-									pass: that.password
-								},
-								tls: {
-									rejectUnauthorized: false // do not fail on invalid certs
-								},
-								secure: false
-							}));
+							// if (that.password !== "") {
+							// 	var transporter = nodemailer.createTransport(smtpTransport({
+							// 		service: 'gmail',
+							// 		host: 'smtp.gmail.com',
+							// 		secureConnection: true,
+							// 		auth: {
+							// 			user: 'no-reply@anubhavtrainings.com',
+							// 			pass: that.password
+							// 		},
+							// 		tls: {
+							// 			rejectUnauthorized: false // do not fail on invalid certs
+							// 		},
+							// 		secure: false
+							// 	}));
+							// } else {
+								debugger;
+								var transporter = nodemailer.createTransport(smtpTransport({
+									service: 'gmail',
+									host: 'smtp.gmail.com',
+									auth: {
+										xoauth2: xoauth2.createXOAuth2Generator({
+											user: key.user,
+											clientId: key.clientId,
+											clientSecret: key.clientSecret,
+											refreshToken: key.refreshToken
+										})
+									}
+								}));
+							// }
+							
 
 							var Subject = "[Welcome Onboard] ✈️" + courseStr.Name + " Training Subscription";
 							//https://myaccount.google.com/lesssecureapps?pli=1

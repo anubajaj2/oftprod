@@ -328,25 +328,25 @@ sap.ui.define([
 			for (var i = 0; i < items["length"]; i++) {
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
 
-				if (this.getView().byId("isMinakshi").getSelected()) {
-					if (this.passwords === "") {
-						this.passwords = prompt("Please enter your password", "");
-						if (this.passwords === "") {
-							sap.m.MessageBox.error("Blank Password not allowed");
-							return;
-						}
-					}
-				} else {
-					this.passwords = "na";
-				}
+				// if (this.getView().byId("isMinakshi").getSelected()) {
+				// 	if (this.passwords === "") {
+				// 		this.passwords = prompt("Please enter your password", "");
+				// 		if (this.passwords === "") {
+				// 			sap.m.MessageBox.error("Blank Password not allowed");
+				// 			return;
+				// 		}
+				// 	}
+				// } else {
+				// 	this.passwords = "na";
+				// }
 
 				loginPayload.password = this.passwords;
 				loginPayload.DollerQuote = this.getView().byId("doller").getSelected();
-				if (this.getView().byId("isMinakshi").getSelected()) {
-					loginPayload.IsMinakshi = "X";
-				} else {
-					loginPayload.IsMinakshi = "";
-				}
+				// if (this.getView().byId("isMinakshi").getSelected()) {
+				// 	loginPayload.IsMinakshi = "X";
+				// } else {
+				// 	loginPayload.IsMinakshi = "";
+				// }
 
 				var x = this.getView().byId("rbg");
 				loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
@@ -775,16 +775,16 @@ sap.ui.define([
 						oLeadDuplicate.addButton(new sap.m.Button({
 							text: "Yes",
 							press: function() {
-								if (that2.passwords === "") {
-									that2.passwords = prompt("Please enter your password", "");
-									if (that2.passwords === "") {
-										sap.m.MessageBox.error("Blank Password not allowed");
-										return;
-									}
-								}
+								// if (that2.passwords === "") {
+								// 	that2.passwords = prompt("Please enter your password", "");
+								// 	if (that2.passwords === "") {
+								// 		sap.m.MessageBox.error("Blank Password not allowed");
+								// 		return;
+								// 	}
+								// }
 								var loginPayload = JSON.parse(JSON.stringify(payload));
 								if (payload.EmailId === "") {
-									sap.m.MessageBox.error("Email id is empty, please contact ANubhav");
+									sap.m.MessageBox.error("Email id is empty, please contact Anubhav");
 								}
 								loginPayload.password = that2.passwords;
 								loginPayload.DollerQuote = that2.getView().byId("doller").getSelected();
@@ -833,11 +833,11 @@ sap.ui.define([
 
 								var x = that2.getView().byId("rbg");
 								loginPayload.mailType = x.getSelectedButton().getId().split("--")[x.getSelectedButton().getId().split("--").length - 1];
-								if (that2.getView().byId("isMinakshi").getSelected()) {
-									loginPayload.IsMinakshi = "X";
-								} else {
-									loginPayload.IsMinakshi = "";
-								}
+								// if (that2.getView().byId("isMinakshi").getSelected()) {
+								// 	loginPayload.IsMinakshi = "X";
+								// } else {
+								// 	loginPayload.IsMinakshi = "";
+								// }
 								loginPayload.source = "";
 
 								$.post('/sendInquiryEmail', loginPayload)
