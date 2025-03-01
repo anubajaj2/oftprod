@@ -25,3 +25,5 @@ n_odata_server.log.4
 n_odata_server.log.5
 datasource.json
 uploads
+server/samples.json
+server/datasources.json
