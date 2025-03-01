@@ -3073,7 +3073,7 @@ app.start = function() {
 						res.status(500).send('Template Not found for the course');
 					}
 					this.mailContent = data.Template;
-					//this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'server.html', 'utf8');
+					//this.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'server.html', 'utf8');
 					//if partial payment is true update the due amount and due values
 					Date.prototype.toShortFormat = function() {
 						var month_names = ["Jan", "Feb", "Mar",
@@ -3553,7 +3553,7 @@ app.start = function() {
 						}]
 					}
 				}).then(function(data) {
-					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
+					//var contents = fs.readFileSync(__dirname + "\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
 
 					if (!data) {
 						res.status(500).send('Template Not found for the course');
@@ -3615,7 +3615,7 @@ app.start = function() {
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
-							//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+							//contents = fs.readFileSync(__dirname + "\\sampledata\\promotion.html", 'utf8');
 							Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
 						} else {
 							contents = contents.replace("$$fees$$", req.body.fees);
@@ -3840,7 +3840,7 @@ app.start = function() {
 						}]
 					}
 				}).then(function(data) {
-					//var contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
+					//var contents = fs.readFileSync(__dirname + "\\sampledata\\" + req.body.CourseName + '.html', 'utf8');
 
 					if (!data) {
 						res.status(500).send('Template Not found for the course');
@@ -3888,7 +3888,7 @@ app.start = function() {
 							// contents = contents.replace("Please consider the fee for the course as $$fees$$ $$currency$$. (same fee for any option chosen)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$ (same for any option as mentioned below)", "");
 							// contents = contents.replace("The course fee is $$fees$$ $$currency$$.", "");
-							//contents = fs.readFileSync(process.cwd() + "\\server\\sampledata\\promotion.html", 'utf8');
+							//contents = fs.readFileSync(__dirname + "\\sampledata\\promotion.html", 'utf8');
 							Subject = "Hey " + req.body.FirstName + "!! Boost your skills"
 						} else {
 							contents = contents.replace("$$fees$$", req.body.fees);
@@ -3965,9 +3965,9 @@ app.start = function() {
 					var that = this;
 					if (payload.Member === "true") {
 
-						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'paymentM.html', 'utf8');
+						this.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'paymentM.html', 'utf8');
 						if (payload.includeX.indexOf("Renewal") !== -1) {
-							this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
+							this.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'renewalPayment.html', 'utf8');
 							var x = new Date(payload.EndDate);
 							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
 						}
@@ -3982,9 +3982,9 @@ app.start = function() {
 						}
 					}else{
 
-						this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'payment.html', 'utf8');
+						this.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'payment.html', 'utf8');
 						if (payload.includeX.indexOf("Renewal") !== -1) {
-							this.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'renewalPayment.html', 'utf8');
+							this.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'renewalPayment.html', 'utf8');
 							var x = new Date(payload.EndDate);
 							this.mailContent = this.mailContent.replace("$$DueDate$$", x.toShortFormat());
 						}
@@ -4025,7 +4025,7 @@ app.start = function() {
 								courseStr.Name === "FPM" ||
 								courseStr.Name === "BRF" ||
 								courseStr.Name === "Adobe Forms") {
-								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayment.html', 'utf8');;
+								that2.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'otherPayment.html', 'utf8');;
 								that2.mailContent = that2.mailContent.replace("$$MLink$$", '<a href="' + courseStr.DriveId + '">' + courseStr.DriveId + '</a>');
 							}
 							if(courseStr.Name === "MM" ||
@@ -4042,7 +4042,7 @@ app.start = function() {
 							courseStr.Name === "EWM" ||
 							courseStr.Name === "GRC" ||
 							courseStr.Name === "HCM" ){
-								that2.mailContent = fs.readFileSync(process.cwd() + "\\server\\sampledata\\" + 'otherPayments.html', 'utf8');;
+								that2.mailContent = fs.readFileSync(__dirname + "\\sampledata\\" + 'otherPayments.html', 'utf8');;
 							}
 
 							///Replace the link in the contents
