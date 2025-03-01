@@ -8,3 +8,7 @@ fioriHtmlRunner.html
 visual_ext_index.html
 /webapp/visual_ext_index.html
 /OFTProject/client/fragments/ServerDetails.fragment.xml
+OFTProject/server/samples.json
+OFTProject/server/datasources.json
+.*/samples.json
+.*/datasources.json
