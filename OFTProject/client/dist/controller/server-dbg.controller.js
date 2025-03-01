@@ -694,14 +694,14 @@ sap.ui.define([	"oft/fiori/controller/BaseController",
 			var items =	that.getView().byId('serverTable').getSelectedContexts();
 			for(var i = 0; i<items["length"]; i++){
 				var loginPayload = items[i].getModel().getProperty(items[i].getPath());
-				if(this.passwords === ""){
-					this.passwords = prompt("Please enter your password", "");
-					if(this.passwords === ""){
-						sap.m.MessageBox.error("Blank Password not allowed");
-						return;
-					}
-				}
-				loginPayload.password = this.passwords;
+				// if(this.passwords === ""){
+				// 	this.passwords = prompt("Please enter your password", "");
+				// 	if(this.passwords === ""){
+				// 		sap.m.MessageBox.error("Blank Password not allowed");
+				// 		return;
+				// 	}
+				// }
+				loginPayload.password = "";
 				loginPayload.isServer2 = this.getView().byId("server2").getSelected();
 				$.post('/sendServerEmail', loginPayload)
 					.done(function(data, status) {

@@ -3116,18 +3116,38 @@ app.start = function() {
 						// 		pass: that.password
 						// 	}
 						// }));
+
+						//old code before 01-03-25
+						// var transporter = nodemailer.createTransport(smtpTransport({
+						// 	service: 'gmail',
+						// 	host: 'smtp.gmail.com',
+						// 	auth: {
+						// 		user: 'server@anubhavtrainings.com',
+						// 		pass: that.password
+						// 	},
+						// 	tls: {
+						// 		rejectUnauthorized: false // do not fail on invalid certs
+						// 	},
+						// 	secure: false
+						// }));
+						
+						const xoauth2 = require('xoauth2');
+						var key = require('./samples.json');
+						key = key.serv;
+
 						var transporter = nodemailer.createTransport(smtpTransport({
 							service: 'gmail',
 							host: 'smtp.gmail.com',
 							auth: {
-								user: 'server@anubhavtrainings.com',
-								pass: that.password
-							},
-							tls: {
-								rejectUnauthorized: false // do not fail on invalid certs
-							},
-							secure: false
+								xoauth2: xoauth2.createXOAuth2Generator({
+									user: key.user,
+									clientId: key.clientId,
+									clientSecret: key.clientSecret,
+									refreshToken: key.refreshToken
+								})
+							}
 						}));
+
 						var Subject = "[CONFIDENTIAL] 🚀 SAP Server Subscription";
 						//https://myaccount.google.com/lesssecureapps?pli=1
 						that.mailContent = that.mailContent.replace('$$Name$$', that.studentName)
@@ -4083,7 +4103,6 @@ app.start = function() {
 							// 		secure: false
 							// 	}));
 							// } else {
-								debugger;
 								var transporter = nodemailer.createTransport(smtpTransport({
 									service: 'gmail',
 									host: 'smtp.gmail.com',
