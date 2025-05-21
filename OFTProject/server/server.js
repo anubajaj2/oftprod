@@ -3474,6 +3474,9 @@ app.start = function() {
 						case "Build BPA":
 							Subject = "Build Process Automation cum Workzone training";
 							break;
+						case "Build Apps":
+							Subject = "Build Apps LCNC with Workzone training";
+							break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3516,6 +3519,7 @@ app.start = function() {
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
 					req.body.CourseName != "Build BPA" &&
+					req.body.CourseName != "Build Apps" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -3772,6 +3776,9 @@ app.start = function() {
 						case "Build BPA":
 							Subject = "Build Process Automation cum Workzone training";
 							break;
+						case "Build Apps":
+							Subject = "Build Apps LCNC and Workzone training";
+							break;
 						case "SAC Premium":
 							Subject = "SAC Premium training";
 							break;
@@ -3812,6 +3819,7 @@ app.start = function() {
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
 					req.body.CourseName != "Build BPA" &&
+					req.body.CourseName != "Build Apps" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
 					req.body.CourseName != "ABAP" &&
@@ -5500,6 +5508,15 @@ app.start = function() {
 												}
 											} else if (singleRec.url.indexOf("sap-build-process-automation") !== -1) {
 												singleRec.url = "Build BPA";
+												if (singleRec.country_code === "IN") {
+													newRec.fees = "30 k";
+													newRec.currency = "INR";
+												} else {
+													newRec.fees = "450";
+													newRec.currency = "USD";
+												}
+											} else if (singleRec.url.indexOf("btp-build-apps-training") !== -1) {
+												singleRec.url = "Build Apps";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "30 k";
 													newRec.currency = "INR";
