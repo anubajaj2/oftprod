@@ -62,11 +62,20 @@
 			"courseName": "ABAP on HANA",
 			"fee": "22 k",
 			"usdFee": 380
+		}, {
+			"courseName": "ABAP on Cloud",
+			"fee": "22 k",
+			"usdFee": 380
 		},
 		{
-			"courseName": "Datasphere",
+			"courseName": "SAP Cloud Platform",
 			"fee": "25 k",
 			"usdFee": 400
+		},
+		{
+			"courseName": "SAP Gen AI",
+			"fee": "40 k",
+			"usdFee": 500
 		},
 		{
 			"courseName": "Build Apps",
@@ -83,15 +92,16 @@
 			"fee": "25 k",
 			"usdFee": 400
 		}, {
-			"courseName": "ABAP on Cloud",
-			"fee": "22 k",
-			"usdFee": 380
-		}, {
-			"courseName": "HANA Cloud CAPM",
+			"courseName": "Analytics Cloud",
+			"fee": "25 k",
+			"usdFee": 400
+		},
+		{
+			"courseName": "Datasphere",
 			"fee": "25 k",
 			"usdFee": 400
 		}, {
-			"courseName": "Analytics Cloud",
+			"courseName": "HANA Cloud CAPM",
 			"fee": "25 k",
 			"usdFee": 400
 		}, {
@@ -128,11 +138,6 @@
 			"courseName": "Hybris C4C",
 			"fee": "22 k",
 			"usdFee": 350
-		},
-		{
-			"courseName": "SAP Cloud Platform",
-			"fee": "25 k",
-			"usdFee": 400
 		},
 		{
 			"courseName": "Leonardo ML",

@@ -3471,6 +3471,9 @@ app.start = function() {
 						case "Datasphere":
 								Subject = "Datasphere / DataWarehouse Cloud training";
 								break;
+						case "SAP Gen AI":
+							Subject = "SAP BTP Generative AI Training";
+							break;
 						case "Build BPA":
 							Subject = "Build Process Automation cum Workzone training";
 							break;
@@ -3519,6 +3522,7 @@ app.start = function() {
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
 					req.body.CourseName != "Build BPA" &&
+					req.body.CourseName != "SAP Gen AI" &&
 					req.body.CourseName != "Build Apps" &&
 					req.body.CourseName != "SAC Premium" &&
 					req.body.CourseName != "SAP Cloud Platform" &&
@@ -3773,6 +3777,9 @@ app.start = function() {
 						case "Datasphere":
 								Subject = "Datasphere / DataWarehouse Cloud training";
 								break;
+						case "SAP Gen AI":
+								Subject = "SAP BTP Generative AI Training"
+								break;
 						case "Build BPA":
 							Subject = "Build Process Automation cum Workzone training";
 							break;
@@ -3818,6 +3825,7 @@ app.start = function() {
 					req.body.CourseName != "ABAP on Cloud" &&
 					req.body.CourseName != "Analytics Cloud" &&
 					req.body.CourseName != "Datasphere" &&
+					req.body.CourseName != "SAP Gen AI" &&
 					req.body.CourseName != "Build BPA" &&
 					req.body.CourseName != "Build Apps" &&
 					req.body.CourseName != "SAC Premium" &&
@@ -5506,7 +5514,16 @@ app.start = function() {
 													newRec.fees = "380";
 													newRec.currency = "USD";
 												}
-											} else if (singleRec.url.indexOf("sap-build-process-automation") !== -1) {
+											} else if (singleRec.url.indexOf("btp-gen-ai-training") !== -1) {
+												singleRec.url = "SAP Gen AI";
+												if (singleRec.country_code === "IN") {
+													newRec.fees = "40 k";
+													newRec.currency = "INR";
+												} else {
+													newRec.fees = "500";
+													newRec.currency = "USD";
+												}
+											}else if (singleRec.url.indexOf("sap-build-process-automation") !== -1) {
 												singleRec.url = "Build BPA";
 												if (singleRec.country_code === "IN") {
 													newRec.fees = "30 k";
