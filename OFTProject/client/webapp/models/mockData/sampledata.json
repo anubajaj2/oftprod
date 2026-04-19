@@ -55,13 +55,13 @@
 	},
 	"courses": [{
 			"courseName": "UI5 and Fiori",
-			"fee": "22 k",
-			"usdFee": 380
+			"fee": "25 k",
+			"usdFee": 400
 		},
 		{
 			"courseName": "ABAP on HANA",
-			"fee": "22 k",
-			"usdFee": 380
+			"fee": "25 k",
+			"usdFee": 400
 		}, {
 			"courseName": "ABAP on Cloud",
 			"fee": "25 k",
