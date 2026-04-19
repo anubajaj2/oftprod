@@ -19,7 +19,9 @@
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"tags": {
-			"keywords": ["{{keywords1}}"]
+			"keywords": [
+				"{{keywords1}}"
+			]
 		},
 		"ach": "SAP-HR"
 	},
@@ -31,7 +33,9 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_bluecrystal"],
+		"supportedThemes": [
+			"sap_bluecrystal"
+		],
 		"icons": {
 			"icon": "sap-icon://retail-store"
 		}
@@ -58,10 +62,12 @@
 			"cozy": true
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css",
-				"id": "mystyle"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css",
+					"id": "mystyle"
+				}
+			]
 		},
 		"models": {
 			"local": {
@@ -79,7 +85,6 @@
 				"settings": {
 					"bundleName": "oft.fiori.i18n.i18n"
 				},
-
 				"preload": true,
 				"async": true
 			}
@@ -94,147 +99,214 @@
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"viewPath": "oft.fiori.view"
-
 			},
 			"routes": [
-					  {
-				"pattern": "split",
-				"name": "App",
-				"target": ["App"],
-				"subroutes": [{
-						"pattern": "master",
-						"name": "master",
-						"targetControl":"__xmlview0--idSplitApp",
-						"target": ["donald"],
-						"subroutes": [{
-								"pattern": "newlead",
-								"name": "newlead",
-								"target": ["donald", "newlead"]
-							},
-							{
+				{
+					"pattern": "split",
+					"name": "App",
+					"target": [
+						"App"
+					],
+					"subroutes": [
+						{
+							"pattern": "master",
+							"name": "master",
+							"targetControl": "__xmlview0--idSplitApp",
+							"target": [
+								"donald"
+							],
+							"subroutes": [
+								{
+									"pattern": "newlead",
+									"name": "newlead",
+									"target": [
+										"donald",
+										"newlead"
+									]
+								},
+								{
 									"pattern": "GSTInvoices",
 									"name": "GSTInvoices",
-									"target": ["donald", "GSTInvoices"]
-							},
-							{
+									"target": [
+										"donald",
+										"GSTInvoices"
+									]
+								},
+								{
 									"pattern": "InvoiceBuilder",
 									"name": "InvoiceBuilder",
-									"target": ["donald", "InvoiceBuilder"]
-							},
-							{
+									"target": [
+										"donald",
+										"InvoiceBuilder"
+									]
+								},
+								{
 									"pattern": "InquiryLookup",
 									"name": "InquiryLookup",
-									"target": ["donald", "InquiryLookup"]
-							},
-							{
-								"pattern": "newreg",
-								"name": "newreg",
-
-								"target": ["donald", "newreg"]
-							},
-							{
-								"pattern": "server",
-								"name": "server",
-
-								"target": ["donald", "server"]
-							},
-							{
-								"pattern": "serverDetails",
-								"name": "serverDetails",
-
-								"target": ["donald", "serverDet"]
-							},
-
-							{
-								"pattern": "batch",
-								"name": "batch",
-
-								"target": ["donald", "batch"]
-							},
-							{
-								"pattern": "adminPanel",
-								"name": "adminPanel",
-
-								"target": ["donald", "adminPanel"]
-							},
-							{
-								"pattern": "downloadQueries",
-								"name": "downloadQueries",
-								"target": ["donald", "downloadQueries"]
-							},
-							{
-								"pattern": "dataMaintenance",
-								"name": "dataMaintenance",
-								"target": ["donald", "dataMaintenance"]
-							},
-							{
-								"pattern": "subsSearch",
-								"name": "subsSearch",
-								"target": ["donald", "subsSearch"]
-							},
-							{
-								"pattern": "analytical",
-								"name": "analytical",
-
-								"target": ["analytical", "analytical"]
-							},
-							{
-								"pattern": "newCustomer",
-								"name": "newCustomer",
-								"target": ["analytical", "newCustomer"]
-							},
-							{
-								"pattern": "serverPayment",
-								"name": "serverPayment",
-								"target": ["analytical", "serverPayment"]
-							},
-							{
-								"pattern": "ServerOverview",
-								"name": "ServerOverview",
-								"target": ["analytical", "ServerOverview"]
-							},
-							{
-								"pattern": "BankAccount",
-								"name": "BankAccount",
-								"target": ["donald", "BankAccount"]
-							},
-							{
-								"pattern": "mobileView",
-								"name": "mobileView",
-								"target": ["donald", "mobileView"]
-							},
-							{
-								"pattern": "dumps",
-								"name": "dumps",
-								"target": ["donald", "dumps"]
-							},
-							{
-								"pattern": "newTemplate",
-								"name": "newTemplate",
-								"target": ["donald", "newTemplate"]
-							},
-							{
-								"pattern": "accessProcessor",
-								"name": "accessProcessor",
-								"target": ["donald", "accessProcessor"]
-							},
-							{
-								"pattern": "blacklisted",
-								"name": "blacklisted",
-								"target": ["donald", "blacklisted"]
-							},
-							{
-								"pattern": "smsCenter",
-								"name": "smsCenter",
-								"target": ["donald", "smsCenter"]
-							}
-						]
-					}
-
-				]
-			}],
+									"target": [
+										"donald",
+										"InquiryLookup"
+									]
+								},
+								{
+									"pattern": "newreg",
+									"name": "newreg",
+									"target": [
+										"donald",
+										"newreg"
+									]
+								},
+								{
+									"pattern": "server",
+									"name": "server",
+									"target": [
+										"donald",
+										"server"
+									]
+								},
+								{
+									"pattern": "serverDetails",
+									"name": "serverDetails",
+									"target": [
+										"donald",
+										"serverDet"
+									]
+								},
+								{
+									"pattern": "batch",
+									"name": "batch",
+									"target": [
+										"donald",
+										"batch"
+									]
+								},
+								{
+									"pattern": "adminPanel",
+									"name": "adminPanel",
+									"target": [
+										"donald",
+										"adminPanel"
+									]
+								},
+								{
+									"pattern": "downloadQueries",
+									"name": "downloadQueries",
+									"target": [
+										"donald",
+										"downloadQueries"
+									]
+								},
+								{
+									"pattern": "dataMaintenance",
+									"name": "dataMaintenance",
+									"target": [
+										"donald",
+										"dataMaintenance"
+									]
+								},
+								{
+									"pattern": "subsSearch",
+									"name": "subsSearch",
+									"target": [
+										"donald",
+										"subsSearch"
+									]
+								},
+								{
+									"pattern": "analytical",
+									"name": "analytical",
+									"target": [
+										"analytical",
+										"analytical"
+									]
+								},
+								{
+									"pattern": "newCustomer",
+									"name": "newCustomer",
+									"target": [
+										"analytical",
+										"newCustomer"
+									]
+								},
+								{
+									"pattern": "serverPayment",
+									"name": "serverPayment",
+									"target": [
+										"analytical",
+										"serverPayment"
+									]
+								},
+								{
+									"pattern": "ServerOverview",
+									"name": "ServerOverview",
+									"target": [
+										"analytical",
+										"ServerOverview"
+									]
+								},
+								{
+									"pattern": "BankAccount",
+									"name": "BankAccount",
+									"target": [
+										"donald",
+										"BankAccount"
+									]
+								},
+								{
+									"pattern": "mobileView",
+									"name": "mobileView",
+									"target": [
+										"donald",
+										"mobileView"
+									]
+								},
+								{
+									"pattern": "dumps",
+									"name": "dumps",
+									"target": [
+										"donald",
+										"dumps"
+									]
+								},
+								{
+									"pattern": "newTemplate",
+									"name": "newTemplate",
+									"target": [
+										"donald",
+										"newTemplate"
+									]
+								},
+								{
+									"pattern": "accessProcessor",
+									"name": "accessProcessor",
+									"target": [
+										"donald",
+										"accessProcessor"
+									]
+								},
+								{
+									"pattern": "blacklisted",
+									"name": "blacklisted",
+									"target": [
+										"donald",
+										"blacklisted"
+									]
+								},
+								{
+									"pattern": "smsCenter",
+									"name": "smsCenter",
+									"target": [
+										"donald",
+										"smsCenter"
+									]
+								}
+							]
+						}
+					]
+				}
+			],
 			"targets": {
-				"App":{
+				"App": {
 					"viewName": "App",
 					"controlId": "idMainApp",
 					"controlAggregation": "pages",
@@ -242,32 +314,32 @@
 				},
 				"donald": {
 					"viewName": "View1",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"controlAggregation": "masterPages",
 					"viewId": "idView1",
 					"viewLevel": 1
 				},
 				"newlead": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "newLead",
 					"viewId": "idNewLead",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"GSTInvoices":{
+				"GSTInvoices": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "GSTInvoices",
 					"viewId": "idGSTInvoices",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"InvoiceBuilder":{
+				"InvoiceBuilder": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "InvoiceBuilder",
 					"viewId": "idInvoiceBuilder",
@@ -276,16 +348,16 @@
 				},
 				"InquiryLookup": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "InquiryLookup",
 					"viewId": "idInquiryLookup",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"blacklisted":{
+				"blacklisted": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "blacklisted",
 					"viewId": "idBlack",
@@ -294,7 +366,7 @@
 				},
 				"newreg": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "newreg",
 					"viewId": "idnewreg",
@@ -303,7 +375,7 @@
 				},
 				"server": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "server",
 					"viewId": "idserver",
@@ -312,7 +384,7 @@
 				},
 				"serverDet": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "ServerDetails",
 					"viewId": "idserverDet",
@@ -321,7 +393,7 @@
 				},
 				"batch": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "batch",
 					"viewId": "idbatch",
@@ -330,7 +402,7 @@
 				},
 				"adminPanel": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "adminPanel",
 					"viewId": "idAdminPanel",
@@ -339,7 +411,7 @@
 				},
 				"downloadQueries": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "downloadQueries",
 					"viewId": "idDownloadQueries",
@@ -348,16 +420,16 @@
 				},
 				"dataMaintenance": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "dataMaintenance",
 					"viewId": "idDataMaintenance",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"subsSearch":{
+				"subsSearch": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "subsSearch",
 					"viewId": "idSubsSearch",
@@ -366,7 +438,7 @@
 				},
 				"analytical": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "analytical",
 					"viewId": "idanalytical",
@@ -375,7 +447,7 @@
 				},
 				"newCustomer": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "newCustomer",
 					"viewId": "idNewCustomer",
@@ -384,7 +456,7 @@
 				},
 				"serverPayment": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "serverPayment",
 					"viewId": "idServerPayment",
@@ -393,61 +465,61 @@
 				},
 				"ServerOverview": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "ServerOverview",
 					"viewId": "idServerOverview",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"BankAccount":{
+				"BankAccount": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "BankAccount",
 					"viewId": "idBankAccount",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"mobileView":{
+				"mobileView": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "mobileView",
 					"viewId": "idMobileView",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"dumps":{
+				"dumps": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "dumps",
 					"viewId": "idDumps",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"newTemplate":{
+				"newTemplate": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "newTemplate",
 					"viewId": "idNewTemplate",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"accessProcessor":{
+				"accessProcessor": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "accessProcessor",
 					"viewId": "idaccessProcessor",
 					"viewLevel": 2,
 					"controlAggregation": "detailPages"
 				},
-				"smsCenter":{
+				"smsCenter": {
 					"transition": "slide",
-					"controlId":"__xmlview0--idSplitApp",
+					"controlId": "__xmlview0--idSplitApp",
 					"clearAggregation": true,
 					"viewName": "smsCenter",
 					"viewId": "idSmsCenter",
@@ -455,6 +527,7 @@
 					"controlAggregation": "detailPages"
 				}
 			}
-		}
+		},
+		"flexBundle": false
 	}
 }
