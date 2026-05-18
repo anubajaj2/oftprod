@@ -4724,152 +4724,306 @@ app.start = function() {
 				});
 			});
 
-			app.post('/giveAccessNew',
-				function(req, res) {
-					var app = require('../server/server');
-					var Student = app.models.Student;
-					this.StudentId = req.body.StudentId;
-					this.CourseId = req.body.CourseId;
-					var that = this;
-					Student.findById(this.StudentId).then(function(singleStu) {
-						var app = require('../server/server');
-						var Course = app.models.Course;
-						var that2 = that;
-						that.studentEmailId = singleStu.GmailId;
-						that.studentName = singleStu.Name.split(" ")[0];
-						Course.findById(that.CourseId).then(function(courseStr) {
-							console.log(that2.studentEmailId + "," + that2.studentName);
-							console.log(courseStr);
-							console.log(that2.mailContent);
-							var endDate = new Date(courseStr.EndDate);
-							var abhi = new Date();
-							if (abhi > endDate) {
-								that2.isCalRequire = false;
-							} else {
-								that2.isCalRequire = true;
+			// app.post('/giveAccessNew',
+			// 	function(req, res) {
+			// 		var app = require('../server/server');
+			// 		var Student = app.models.Student;
+			// 		this.StudentId = req.body.StudentId;
+			// 		this.CourseId = req.body.CourseId;
+			// 		var that = this;
+			// 		Student.findById(this.StudentId).then(function(singleStu) {
+			// 			var app = require('../server/server');
+			// 			var Course = app.models.Course;
+			// 			var that2 = that;
+			// 			that.studentEmailId = singleStu.GmailId;
+			// 			that.studentName = singleStu.Name.split(" ")[0];
+			// 			Course.findById(that.CourseId).then(function(courseStr) {
+			// 				console.log(that2.studentEmailId + "," + that2.studentName);
+			// 				console.log(courseStr);
+			// 				console.log(that2.mailContent);
+			// 				var endDate = new Date(courseStr.EndDate);
+			// 				var abhi = new Date();
+			// 				if (abhi > endDate) {
+			// 					that2.isCalRequire = false;
+			// 				} else {
+			// 					that2.isCalRequire = true;
+			// 				}
+			// 				//const sampleClient = require('../google/sampleclient');
+			// 				//new codee starts OtherEmail1
+			// 				const fs = require('fs');
+			// 				const {
+			// 					google
+			// 				} = require('googleapis');
+			// 				var xoauth2 = require("xoauth2"),
+			// 					xoauth2gen;
+			// 				// If modifying these scopes, delete token.json.
+			// 				const SCOPES = ['https://www.googleapis.com/auth/calendar',
+			// 					'https://www.googleapis.com/auth/drive'
+			// 				];
+			// 				const key = require('./samples.json');
+			// 				// Load client secrets from a local file.
+			// 				console.log(key);
+			// 				xoauth2gen = xoauth2.createXOAuth2Generator({
+			// 					user: key.user,
+			// 					clientId: key.clientId,
+			// 					clientSecret: key.clientSecret,
+			// 					refreshToken: key.refreshToken,
+			// 					scope: SCOPES
+			// 				});
+			// 				const oauth2Client = new google.auth.OAuth2();
+			// 				xoauth2gen.getToken(function(err, token, accessToken) {
+			// 					//console.log(token + ' ==============>>> ' + accessToken)
+			// 					if (err) {
+			// 						return console.log(err);
+			// 					}
+			// 					//console.log("Authorization: Bearer " + accessToken);
+			// 					var tokenAuth = {
+			// 						"access_token": accessToken,
+			// 						"scope": ["https://www.googleapis.com/auth/drive",
+			// 							"https://www.googleapis.com/auth/calendar"
+			// 						],
+			// 						"token_type": "Bearer",
+			// 						"expires_in": 3599,
+			// 						"refresh_token": "1//04KHYEQyBDMOwCgYIARAAGAQSNwF-L9IrqyiSM9pXWseKqZE2F2oySo3USLsGwF8hgpwsKcMqn4LOEt2PCjNxuI8cFBtoP_1WwxQ"
+			// 					};
+			// 					//accessToken = "Bearer " + accessToken;
+			// 					oauth2Client.setCredentials(tokenAuth);
+			// 					const drive = google.drive({
+			// 						version: 'v3',
+			// 						auth: oauth2Client
+			// 					});
+			// 					if (that2.isCalRequire === true &&
+			// 						(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
+			// 							courseStr.EventId != "null" && courseStr.EventId != "")
+			// 					) {
+			// 						const calendar = google.calendar({
+			// 							version: 'v3',
+			// 							auth: oauth2Client
+			// 						});
+			// 						that2.CalendarId = courseStr.CalendarId;
+			// 						that2.EventId = courseStr.EventId;
+			// 						that2.calendar = calendar;
+			// 					}
+
+			// 					that2.DriveId = courseStr.DriveId;
+
+			// 					var that3 = that2;
+			// 					console.log("trying mail " + that3.studentEmailId + "----<>"  + that3.DriveId);
+			// 					drive.permissions.create({
+			// 						fileId: that3.DriveId,
+			// 						sendNotificationEmail: false,
+			// 						resource: {
+			// 							role: 'reader',
+			// 							type: 'user',
+			// 							emailAddress: that3.studentEmailId,
+			// 						}
+			// 					}, (error, permissionResponse) => {
+			// 						if (error) {
+			// 							console.log(error);
+			// 						} else {
+			// 							res.send("drive access granted");
+			// 						}
+			// 					});
+
+			// 					if (that2.isCalRequire === true &&
+			// 						(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
+			// 							courseStr.EventId != "null" && courseStr.EventId != "")) {
+			// 						that2.calendar.events.get({
+			// 							calendarId: that2.CalendarId + 'roup.calendar.google.com',
+			// 							eventId: that2.EventId
+			// 						}, function(err, something) {
+			// 							if (err) {
+			// 								console.log("CALENDAR NOT FOUND");
+			// 								res.send("calendar not found");
+			// 								return;
+			// 							}
+			// 							something.data.attendees.push({
+			// 								"email": that3.studentEmailId
+			// 							});
+			// 							that3.calendar.events.patch({
+			// 								calendarId: that3.CalendarId + 'roup.calendar.google.com',
+			// 								eventId: that3.EventId,
+			// 								resource: {
+			// 									attendees: something.data.attendees,
+			// 									recurrence: something.data.recurrence,
+			// 									end: something.data.end,
+			// 									start: something.data.start
+			// 								}
+			// 							}, function(err, something) {
+			// 								if (err) {
+			// 									console.error(err);
+			// 								} else {
+			// 									res.send("calendar access granted");
+			// 								}
+			// 							});
+			// 						});
+			// 					}
+
+			// 				});
+
+
+			// 				///new code ends OtherEmail1
+			// 				// const drive = google.drive({
+			// 				// 	version: 'v3',
+			// 				// 	auth: sampleClient.oAuth2Client,
+			// 				// });
+			// 			});
+			// 		});
+			// 	});
+		
+		app.post('/giveAccessNew', function(req, res) {
+			var app = require('../server/server');
+			var Student = app.models.Student;
+			this.StudentId = req.body.StudentId;
+			this.CourseId = req.body.CourseId;
+			var that = this;
+
+			Student.findById(this.StudentId).then(function(singleStu) {
+				var app = require('../server/server');
+				var Course = app.models.Course;
+				var that2 = that;
+				that.studentEmailId = singleStu.GmailId;
+				that.studentName = singleStu.Name.split(" ")[0];
+
+				Course.findById(that.CourseId).then(function(courseStr) {
+					console.log(that2.studentEmailId + "," + that2.studentName);
+					console.log(courseStr);
+
+					var endDate = new Date(courseStr.EndDate);
+					var abhi = new Date();
+					that2.isCalRequire = abhi <= endDate;
+
+					const { google } = require('googleapis');
+					const xoauth2 = require("xoauth2");
+
+					const SCOPES = [
+						'https://www.googleapis.com/auth/calendar',
+						'https://www.googleapis.com/auth/drive'
+					];
+					const key = require('./samples.json');
+
+					var xoauth2gen = xoauth2.createXOAuth2Generator({
+						user: key.inq.user,
+						clientId: key.inq.clientId,
+						clientSecret: key.inq.clientSecret,
+						refreshToken: key.inq.refreshToken,
+						scope: SCOPES
+					});
+
+					const oauth2Client = new google.auth.OAuth2(
+						key.inq.clientId,
+						key.inq.clientSecret
+					);
+
+					debugger;
+					xoauth2gen.getToken(function(err, token, accessToken) {
+
+						debugger;
+						if (err) {
+							console.log(err);
+							return res.status(500).send("token generation failed");
+						}
+
+						// FIX #2: use refresh token from config, not hardcoded
+						oauth2Client.setCredentials({
+							access_token: accessToken,
+							scope: SCOPES.join(' '),
+							token_type: "Bearer",
+							expires_in: 3599,
+							refresh_token: key.inq.refreshToken
+						});
+
+						const drive = google.drive({
+							version: 'v3',
+							auth: oauth2Client
+						});
+
+						// Decide if calendar work is needed
+						var calendarNeeded = that2.isCalRequire === true &&
+							courseStr.CalendarId && courseStr.CalendarId !== "null" && courseStr.CalendarId !== "" &&
+							courseStr.EventId && courseStr.EventId !== "null" && courseStr.EventId !== "";
+
+						if (calendarNeeded) {
+							that2.calendar = google.calendar({
+								version: 'v3',
+								auth: oauth2Client
+							});
+							that2.CalendarId = courseStr.CalendarId;
+							that2.EventId = courseStr.EventId;
+						}
+
+						that2.DriveId = courseStr.DriveId;
+						var that3 = that2;
+						console.log("trying mail " + that3.studentEmailId + "----<>" + that3.DriveId);
+
+						// FIX #3: Sequential flow — one res.send() per request path
+						drive.permissions.create({
+							fileId: that3.DriveId,
+							sendNotificationEmail: false,
+							resource: {
+								role: 'reader',
+								type: 'user',
+								emailAddress: that3.studentEmailId
 							}
-							//const sampleClient = require('../google/sampleclient');
-							//new codee starts OtherEmail1
-							const fs = require('fs');
-							const {
-								google
-							} = require('googleapis');
-							var xoauth2 = require("xoauth2"),
-								xoauth2gen;
-							// If modifying these scopes, delete token.json.
-							const SCOPES = ['https://www.googleapis.com/auth/calendar',
-								'https://www.googleapis.com/auth/drive'
-							];
-							const key = require('./samples.json');
-							// Load client secrets from a local file.
-							console.log(key);
-							xoauth2gen = xoauth2.createXOAuth2Generator({
-								user: key.user,
-								clientId: key.clientId,
-								clientSecret: key.clientSecret,
-								refreshToken: key.refreshToken,
-								scope: SCOPES
-							});
-							const oauth2Client = new google.auth.OAuth2();
-							xoauth2gen.getToken(function(err, token, accessToken) {
-								//console.log(token + ' ==============>>> ' + accessToken)
-								if (err) {
-									return console.log(err);
+						}, function(driveErr, permissionResponse) {
+							debugger;
+							if (driveErr) {
+								console.log(driveErr);
+								return res.status(500).send("drive access failed: " + driveErr.message);
+							}
+
+							// No calendar needed → respond and exit
+							if (!calendarNeeded) {
+								return res.send("drive access granted");
+							}
+
+							// FIX #1: correct '@group.calendar.google.com' suffix
+							// (Adjust below if CalendarId already includes the suffix in DB)
+							var fullCalendarId = that3.CalendarId + '@group.calendar.google.com';
+
+							that3.calendar.events.get({
+								calendarId: fullCalendarId,
+								eventId: that3.EventId
+							}, function(getErr, something) {
+								if (getErr) {
+									console.log("CALENDAR NOT FOUND", getErr);
+									return res.send("drive granted, calendar not found");
 								}
-								//console.log("Authorization: Bearer " + accessToken);
-								var tokenAuth = {
-									"access_token": accessToken,
-									"scope": ["https://www.googleapis.com/auth/drive",
-										"https://www.googleapis.com/auth/calendar"
-									],
-									"token_type": "Bearer",
-									"expires_in": 3599,
-									"refresh_token": "1//04KHYEQyBDMOwCgYIARAAGAQSNwF-L9IrqyiSM9pXWseKqZE2F2oySo3USLsGwF8hgpwsKcMqn4LOEt2PCjNxuI8cFBtoP_1WwxQ"
-								};
-								//accessToken = "Bearer " + accessToken;
-								oauth2Client.setCredentials(tokenAuth);
-								const drive = google.drive({
-									version: 'v3',
-									auth: oauth2Client
+
+								// FIX #4: guard against undefined attendees
+								something.data.attendees = something.data.attendees || [];
+								something.data.attendees.push({
+									email: that3.studentEmailId
 								});
-								if (that2.isCalRequire === true &&
-									(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
-										courseStr.EventId != "null" && courseStr.EventId != "")
-								) {
-									const calendar = google.calendar({
-										version: 'v3',
-										auth: oauth2Client
-									});
-									that2.CalendarId = courseStr.CalendarId;
-									that2.EventId = courseStr.EventId;
-									that2.calendar = calendar;
-								}
 
-								that2.DriveId = courseStr.DriveId;
-
-								var that3 = that2;
-								console.log("trying mail " + that3.studentEmailId + "----<>"  + that3.DriveId);
-								drive.permissions.create({
-									fileId: that3.DriveId,
-									sendNotificationEmail: false,
+								that3.calendar.events.patch({
+									calendarId: fullCalendarId,
+									eventId: that3.EventId,
 									resource: {
-										role: 'reader',
-										type: 'user',
-										emailAddress: that3.studentEmailId,
+										attendees: something.data.attendees,
+										recurrence: something.data.recurrence,
+										end: something.data.end,
+										start: something.data.start
 									}
-								}, (error, permissionResponse) => {
-									if (error) {
-										console.log(error);
-									} else {
-										res.send("drive access granted");
+								}, function(patchErr, patchResp) {
+									if (patchErr) {
+										console.error(patchErr);
+										return res.send("drive granted, calendar patch failed");
 									}
+									res.send("drive and calendar access granted");
 								});
-
-								if (that2.isCalRequire === true &&
-									(courseStr.CalendarId != "null" && courseStr.CalendarId != "" &&
-										courseStr.EventId != "null" && courseStr.EventId != "")) {
-									that2.calendar.events.get({
-										calendarId: that2.CalendarId + 'roup.calendar.google.com',
-										eventId: that2.EventId
-									}, function(err, something) {
-										if (err) {
-											console.log("CALENDAR NOT FOUND");
-											res.send("calendar not found");
-											return;
-										}
-										something.data.attendees.push({
-											"email": that3.studentEmailId
-										});
-										that3.calendar.events.patch({
-											calendarId: that3.CalendarId + 'roup.calendar.google.com',
-											eventId: that3.EventId,
-											resource: {
-												attendees: something.data.attendees,
-												recurrence: something.data.recurrence,
-												end: something.data.end,
-												start: something.data.start
-											}
-										}, function(err, something) {
-											if (err) {
-												console.error(err);
-											} else {
-												res.send("calendar access granted");
-											}
-										});
-									});
-								}
-
 							});
-
-
-							///new code ends OtherEmail1
-							// const drive = google.drive({
-							// 	version: 'v3',
-							// 	auth: sampleClient.oAuth2Client,
-							// });
 						});
 					});
+				}).catch(function(courseErr) {
+					console.error("Course lookup failed:", courseErr);
+					res.status(500).send("course not found");
 				});
+			}).catch(function(studentErr) {
+				console.error("Student lookup failed:", studentErr);
+				res.status(500).send("student not found");
+			});
+		});
 
 		app.post('/giveAccessNewBackup',
 			function(req, res) {
