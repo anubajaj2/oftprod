@@ -82,8 +82,8 @@
 						<ToolbarSpacer/>
 						<CheckBox id="includeX" tooltip="Include in CC" text="cc"/>
 						<Button icon="sap-icon://delete" visible="{= ${local>/Role} === 'Admin'}" press="onDelete"/>
-						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExport"/>
-						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExport"/>
+						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="All" press="onDataExportClient"/>
+						<Button icon="sap-icon://download" visible="{= ${local>/Role} === 'Admin'}" tooltip="Exclude Expired" press="onExpiredExportClient"/>
 						<Button icon="sap-icon://action" id="sendEmail" tooltip="Send Email" press="onSendEmail"/>
 						<Button icon="sap-icon://accept" id="giveAccess" tooltip="Provide access" press="onGiveAccess"/>
 						<Button icon="sap-icon://kpi-managing-my-area" id="idAddMember" tooltip="Add Member" press="onAddMember"/>

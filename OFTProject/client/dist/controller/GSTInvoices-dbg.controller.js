@@ -1565,6 +1565,49 @@ sap.ui.define([
 				}
 			});
 		},
+		onDownloadExcelClient: function(oEvent) {
+			if (typeof XLSX === "undefined") {
+				MessageBox.error("Excel library not loaded");
+				return;
+			}
+			var accountNo = this.getView().getModel("local").getProperty("/GSTInvoices/AccountNo");
+			var aRecords = this.getView().getModel("viewModel") ? this.getView().getModel("viewModel").getProperty("/records") : null;
+			if (!aRecords || aRecords.length === 0) {
+				MessageToast.show("No data available to download");
+				return;
+			}
+			var aExportData = aRecords.map(function(oItem) {
+				return {
+					"Payment Date": oItem.PaymentDate,
+					"Email": oItem.Email,
+					"Name": oItem.Name,
+					"Contact No": oItem.ContactNo,
+					"Course Name": oItem.CourseName,
+					"Batch No": oItem.BatchNo,
+					"GSTIN": oItem.GSTIN,
+					"Address": oItem.Address,
+					"Country": oItem.Country,
+					"City": oItem.City,
+					"Payment Mode": oItem.PaymentMode,
+					"Full Amount": oItem.FullAmount,
+					"USD Amount": oItem.USDAmount,
+					"Currency Code": oItem.CurrencyCode,
+					"Exchange": oItem.Exchange,
+					"Charges": oItem.Charges,
+					"Settle Date": oItem.SettleDate,
+					"Settle Amount": oItem.SettleAmount,
+					"Amount": oItem.Amount,
+					"SGST": oItem.SGST,
+					"CGST": oItem.CGST,
+					"Reference": oItem.Reference,
+					"Invoice No": oItem.InvoiceNo
+				};
+			});
+			var oWorksheet = XLSX.utils.json_to_sheet(aExportData);
+			var oWorkbook = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Sales Summary");
+			XLSX.writeFile(oWorkbook, "GST_Sales_Summary_" + accountNo + ".xlsx");
+		},
 		onCopyEmail: function() {
 			if (!this.missingAddressEmails) {
 				MessageToast.show("No record with missing address");

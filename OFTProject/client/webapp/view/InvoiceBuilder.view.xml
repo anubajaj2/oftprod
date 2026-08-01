@@ -178,7 +178,7 @@
 											<Text text="{CreatedBy}"/>
 											<!-- <Link text="{viewModel>Reference}" subtle="{=${viewModel>IsWallet}===true ? false : true}" enabled="{viewModel>IsWallet}" press="onReference"></Link> -->
 											<!-- <Button icon="sap-icon://edit" press="onEditInfo" text="Edit" type="{path : 'viewModel>IsWallet', formatter: '.formatter.buttonTypeforInvoice' }"></Button> -->
-											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onPerformaInvoice" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
+											<Button icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }" text="DNLD" press="onPerformaInvoiceClient" type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 											<!-- <RatingIndicator maxValue="2" value="{viewModel>ChartedValid}" change="onVerifyRating"/> -->
 										</cells>
 									</ColumnListItem>
@@ -283,7 +283,7 @@
 											<Button
 												icon="{path : 'InvoiceNo', formatter: '.formatter.buttonIconforDownload' }"
 												text="{path : 'InvoiceNo', formatter: '.formatter.buttonTextforDownload' }"
-												press="onDownloadInvoice"
+												press="onDownloadInvoiceClient"
 												type="{path : 'viewModel>InvoiceNo', formatter: '.formatter.buttonTypeforInvoice' }"></Button>
 										</cells>
 									</ColumnListItem>

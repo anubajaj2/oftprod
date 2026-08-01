@@ -1919,6 +1919,29 @@ sap.ui.define([
 			});
 
 		},
+		onDataExportClient: function(oEvent) {
+			if (typeof XLSX === "undefined") {
+				MessageBox.error("Excel library not loaded");
+				return;
+			}
+			$.ajax({
+				type: 'GET',
+				url: 'SubDownloadJSON',
+				success: function(data) {
+					if (!data || data.length === 0) {
+						MessageToast.show("No data available to download");
+						return;
+					}
+					var oWorksheet = XLSX.utils.json_to_sheet(data);
+					var oWorkbook = XLSX.utils.book_new();
+					XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Subscriptions");
+					XLSX.writeFile(oWorkbook, "Subscriptions_Export.xlsx");
+				},
+				error: function(xhr, status, error) {
+					MessageToast.show("error in downloading the excel file");
+				}
+			});
+		},
 		onMemberStateChange: function(oEvent) {
 			var sPath = oEvent.getSource().getBindingContext().sPath;
 			var that = this;
@@ -1970,6 +1993,29 @@ sap.ui.define([
 				}
 			});
 
+		},
+		onExpiredExportClient: function(oEvent) {
+			if (typeof XLSX === "undefined") {
+				MessageBox.error("Excel library not loaded");
+				return;
+			}
+			$.ajax({
+				type: 'GET',
+				url: 'SubNotExpiredJSON',
+				success: function(data) {
+					if (!data || data.length === 0) {
+						MessageToast.show("No data available to download");
+						return;
+					}
+					var oWorksheet = XLSX.utils.json_to_sheet(data);
+					var oWorkbook = XLSX.utils.book_new();
+					XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Subscriptions");
+					XLSX.writeFile(oWorkbook, "Subscriptions_NotExpired_Export.xlsx");
+				},
+				error: function(xhr, status, error) {
+					MessageToast.show("error in downloading the excel file");
+				}
+			});
 		}
 
 	});

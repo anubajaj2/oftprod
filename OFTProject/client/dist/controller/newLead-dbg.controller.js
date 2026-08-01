@@ -389,6 +389,30 @@ sap.ui.define([
 			});
 
 		},
+		onDataExportClient: function(oEvent) {
+			var date = this.getView().byId("inqDate").getDateValue().getTime();
+			if (typeof XLSX === "undefined") {
+				MessageBox.error("Excel library not loaded");
+				return;
+			}
+			$.ajax({
+				type: 'GET',
+				url: 'InquiryDownloadJSON?date=' + date,
+				success: function(data) {
+					if (!data || data.length === 0) {
+						MessageToast.show("No data available to download");
+						return;
+					}
+					var oWorksheet = XLSX.utils.json_to_sheet(data);
+					var oWorkbook = XLSX.utils.book_new();
+					XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Inquiries");
+					XLSX.writeFile(oWorkbook, "Inquiry_Export.xlsx");
+				},
+				error: function(xhr, status, error) {
+					MessageToast.show("error in downloading the excel file");
+				}
+			});
+		},
 		onDelete: function(oEvent) {
 			var that = this;
 			MessageBox.confirm("Do you want to delete the selected records?", function(conf) {

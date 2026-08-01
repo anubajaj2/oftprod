@@ -47,6 +47,8 @@
 							<Button text = "Calculater" icon="sap-icon://simulate" width = "35%" press="onWalletCalculator" type = "Accept"/>
 							<Label text="Download" visible="{=${local>/Role}==='Admin' ? true : false}"/>
 							<Button text = "Excel" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExel" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Label text="Download (Client)" visible="{=${local>/Role}==='Admin' ? true : false}"/>
+							<Button text = "Excel (Client)" icon="sap-icon://excel-attachment" enabled = "{=${local>/GSTInvoices/AccountNo}==='' ? false : true}" width = "35%" press="onDownloadExcelClient" visible="{=${local>/Role}==='Admin' ? true : false}"/>
 							<Label text="Invoice History" visible="{=${local>/Role}==='Admin' ? true : false}"/>
 							<Button text = "Clear" icon="sap-icon://sys-cancel-2" width = "35%" press="onClearInvoice" type = "Reject" visible="{=${local>/Role}==='Admin' ? true : false}"/>
 						</f:content>

@@ -2372,6 +2372,33 @@ app.start = function() {
 
 				);
 		});
+		app.get('/InquiryDownloadJSON', function(req, res) {
+			var where = {};
+			var startDate = new Date(new Date(parseInt(req.query.date)));
+			if (startDate.toDateString() !== (new Date()).toDateString()) {
+				var where = {
+					Date: {
+						gte: startDate
+					}
+				};
+			}
+			Inquiry.find({
+					where: where
+				})
+				.then(function(Records, err) {
+						if (Records) {
+							Records.sort(function(a, b) {
+								return new Date(b.__data.Date) - new Date(a.__data.Date)
+							});
+							res.json(Records.map(function(r) {
+								return r.__data;
+							}));
+						} else {
+							res.json([]);
+						}
+					}
+				);
+		});
 		var Block = app.models.Block;
 		app.get('/BlackDownload', function(req, res) {
 
@@ -2502,6 +2529,81 @@ app.start = function() {
 			});
 		});
 
+		app.get('/SubNotExpiredJSON', function(req, res) {
+
+			var app = require('../server/server');
+			var Sub = app.models.Sub;
+			var Students = app.models.Student;
+			var Courses = app.models.Course;
+			var async = require('async');
+
+			async.waterfall([
+				function(callback) {
+					Students.find().then(function(students) {
+						var allStudents = [];
+						for (var i = 0; i < students.length; i++) {
+							allStudents[students[i].id] = students[i];
+						}
+						callback(null, allStudents);
+					});
+
+				},
+				function(students, callback) {
+					// arg1 now equals 'one' and arg2 now equals 'two'
+					Courses.find().then(function(courses) {
+						var allCourses = [];
+						for (var i = 0; i < courses.length; i++) {
+							allCourses[courses[i].id] = courses[i];
+						}
+						callback(null, students, allCourses);
+					});
+
+				},
+				function(students, courses, callback) {
+					// arg1 now equals 'three'
+					var today = new Date();
+
+					Sub.find({
+						where: {
+							and: [{
+									MostRecent: true
+								},
+								{
+									EndDate: {
+										gte: today
+									}
+								}
+							]
+						}
+					}).then(function(Subs) {
+						var allSubs = [];
+						for (var i = 0; i < Subs.length; i++) {
+							var record = Subs[i];
+							try {
+								allSubs.push({
+									"BlogEndDate": record.EndDate,
+									"Batch": courses[record.CourseId].BatchNo,
+									"Student": students[record.StudentId].GmailId,
+									"IsDue": record.PartialPayment,
+									"Name": students[record.StudentId].Name,
+									"Course": courses[record.CourseId].Name,
+									"DueAmount": record.PendingAmount,
+									"DueDate": record.PaymentDueDate
+								});
+							} catch (e) {
+
+							}
+						}
+						callback(null, allSubs);
+					});
+
+				}
+			], function(err, Records) {
+				// result now equals 'done'
+				res.json(Records || []);
+			});
+		});
+
 		app.get('/SubDownload', function(req, res) {
 
 			var app = require('../server/server');
@@ -2593,6 +2695,74 @@ app.start = function() {
 				} finally {
 
 				}
+			});
+		});
+
+		app.get('/SubDownloadJSON', function(req, res) {
+
+			var app = require('../server/server');
+			var Sub = app.models.Sub;
+			var Students = app.models.Student;
+			var Courses = app.models.Course;
+			var async = require('async');
+
+			async.waterfall([
+				function(callback) {
+					Students.find({
+						where: {
+							Defaulter: false
+						}
+					}).then(function(students) {
+						var allStudents = [];
+						for (var i = 0; i < students.length; i++) {
+							allStudents[students[i].id] = students[i];
+						}
+						callback(null, allStudents);
+					});
+
+				},
+				function(students, callback) {
+					// arg1 now equals 'one' and arg2 now equals 'two'
+					Courses.find().then(function(courses) {
+						var allCourses = [];
+						for (var i = 0; i < courses.length; i++) {
+							allCourses[courses[i].id] = courses[i];
+						}
+						callback(null, students, allCourses);
+					});
+
+				},
+				function(students, courses, callback) {
+					// arg1 now equals 'three'
+					Sub.find({
+						where: {
+							MostRecent: true
+						}
+					}).then(function(Subs) {
+						var allSubs = [];
+						for (var i = 0; i < Subs.length; i++) {
+							var record = Subs[i];
+							try {
+								allSubs.push({
+									"Batch": courses[record.CourseId].BatchNo,
+									"Student": students[record.StudentId].GmailId,
+									"IsDue": record.PartialPayment,
+									"Name": students[record.StudentId].Name,
+									"Course": courses[record.CourseId].Name,
+									"DueAmount": record.PendingAmount,
+									"DueDate": record.PaymentDueDate
+								});
+							} catch (e) {
+
+							}
+						}
+						callback(null, allSubs);
+					});
+
+				}
+			], function(err, Records) {
+				// result now equals 'done'
+				res.json(Records || []);
 			});
 		});
 
@@ -3454,7 +3624,7 @@ app.start = function() {
 							Subject = "C4 Customer Experience training";
 							break;
 						case "SAP Cloud Platform":
-							Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+							Subject = "BTP/BAIP - Cloud Fondary CAPM Training";
 							break;
 						case "S4HANA Extension":
 							Subject = "S4 Cloud Extensions training";
@@ -3760,7 +3930,7 @@ app.start = function() {
 							Subject = "C4 Customer Experience training";
 							break;
 						case "SAP Cloud Platform":
-							Subject = "Cloud Platform - Cloud Fondary CAPM Training";
+							Subject = "BTP/BAIP - Cloud Fondary CAPM Training";
 							break;
 						case "S4HANA Extension":
 							Subject = "S4 Cloud Extensions training";
