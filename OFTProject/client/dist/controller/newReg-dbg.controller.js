@@ -606,6 +606,13 @@ sap.ui.define([
 				vStatus = "Pending";
 			}
 
+			//other course allow auto approval
+			if(this.courseId === "5f9718653fb2a86ca4ad946b" || this.courseId === "5f971b523fb2a86ca4ad946e"){
+				vStatus = "Access Granted";
+			}else {
+				vStatus = "Pending";
+			}
+
 			var payload = {
 				"StudentId": this.customerId, //customerGUID, //leadData.StudentId,
 				"CourseId": this.courseId, //courseGUID, //leadData.CourseId,
@@ -650,7 +657,7 @@ sap.ui.define([
 				}, {}, that)
 				.then(function(oData) {
 					// debugger;
-					if (oData.results.length > 0) {
+					if (oData.results.length > 0 && payload.Status !== "Approved") {
 						MessageBox.error("Payment Pending for previous course");
 					} else {
 						if (!that.isDefaulter) {
