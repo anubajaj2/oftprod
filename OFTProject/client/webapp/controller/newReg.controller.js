@@ -657,7 +657,7 @@ sap.ui.define([
 				}, {}, that)
 				.then(function(oData) {
 					// debugger;
-					if (oData.results.length > 0 && payload.Status !== "Approved") {
+					if (oData.results.length > 0 && payload.Status !== "Access Granted") {
 						MessageBox.error("Payment Pending for previous course");
 					} else {
 						if (!that.isDefaulter) {
